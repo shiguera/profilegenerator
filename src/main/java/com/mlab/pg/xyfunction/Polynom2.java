@@ -29,15 +29,15 @@ public class Polynom2 implements XYFunction {
 		this.a1 = a1;
 		this.a2 = a2;
 	}
-	
+	@Override
 	public double getY(double x) {
 		return a0+a1*x+a2*x*x;
 	}
-
+	@Override
 	public double getTangent(double x) {
 		return a1+2*a2*x;
 	}
-
+	@Override
 	public double getCurvature(double x) {
 		double f1 = a1 + 2* a2 * x;
 		double f2 = 2 * a2;
