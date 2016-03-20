@@ -14,28 +14,28 @@ public class TestXYSample {
 
 	private final Logger LOG = Logger.getLogger(TestXYSample.class);
 	
-//	@Test
-//	public void test() {
-//		LOG.debug("test()");
-//		XYSample f = new XYSampleImpl();
-//		Assert.assertNotNull(f);
-//		
-//		URL url = ClassLoader.getSystemResource("M607VerticalProfile_AlzadoProyecto_1m.csv");
-//		XYSampleCsvReader reader = new XYSampleCsvReader(new File(url.getPath()), ',');
-//		f = reader.read();
-//		
-//		Assert.assertNotNull(f);	
-//		Assert.assertEquals(12807, f.size());
-//		System.out.println("Size = " + f.size());
-//
-//		Assert.assertEquals(0.0, f.getStartX());
-//		//System.out.println("startStation = " + f.getStartX());
-//		
-//		Assert.assertEquals(12803.0, f.getEndX());
-//		//System.out.println("Size = " + f.getEndX());
-//		
-//
-//	}
+	@Test
+	public void test() {
+		LOG.debug("test()");
+		XYSample f = new XYSampleImpl();
+		Assert.assertNotNull(f);
+		
+		URL url = ClassLoader.getSystemResource("M607VerticalProfile_AlzadoProyecto_1m.csv");
+		XYSampleCsvReader reader = new XYSampleCsvReader(new File(url.getPath()), ',');
+		f = reader.read();
+		
+		Assert.assertNotNull(f);	
+		Assert.assertEquals(12807, f.size());
+		System.out.println("Size = " + f.size());
+
+		Assert.assertEquals(0.0, f.getStartX());
+		//System.out.println("startStation = " + f.getStartX());
+		
+		Assert.assertEquals(12803.0, f.getEndX());
+		//System.out.println("Size = " + f.getEndX());
+		
+
+	}
 	@Test
 	public void testContainsInterval() {
 		LOG.debug("testContainsInterval()");
