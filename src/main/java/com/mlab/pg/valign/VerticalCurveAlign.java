@@ -1,5 +1,6 @@
 package com.mlab.pg.valign;
 
+import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Parabole;
 
 /**
@@ -11,8 +12,8 @@ import com.mlab.pg.xyfunction.Parabole;
 public class VerticalCurveAlign extends AbstractVAlign {
 
 	
-	public VerticalCurveAlign(Parabole parabole, double startx, double endx) {
-		super(parabole, startx, endx);
+	public VerticalCurveAlign(DesignSpeed dspeed, Parabole parabole, double startx, double endx) {
+		super(dspeed, parabole, startx, endx);
 	}
 	
 	@Override

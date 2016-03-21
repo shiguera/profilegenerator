@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Straight;
 
 import junit.framework.Assert;
@@ -18,7 +19,7 @@ public class TestGradeAlign {
 		Straight straight = new Straight(0.0, 0.04);
 		double startx = 0.0;
 		double endx = 1200.0;
-		GradeAlign tangent1 = new GradeAlign(straight, startx, endx);
+		GradeAlign tangent1 = new GradeAlign(DesignSpeed.DS100, straight, startx, endx);
 		Assert.assertNotNull(tangent1);
 		Assert.assertNotNull(tangent1.polynom);
 		System.out.println(tangent1.polynom.getClass().getName());

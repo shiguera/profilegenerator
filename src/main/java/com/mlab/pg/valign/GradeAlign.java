@@ -1,5 +1,6 @@
 package com.mlab.pg.valign;
 
+import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Straight;
 
 /**
@@ -11,8 +12,8 @@ import com.mlab.pg.xyfunction.Straight;
 public class GradeAlign extends AbstractVAlign {
 
 	
-	public GradeAlign(Straight straight, double starts, double ends) {
-		super(straight, starts, ends);
+	public GradeAlign(DesignSpeed dspeed,Straight straight, double starts, double ends) {
+		super(dspeed, straight, starts, ends);
 	}
 
 	

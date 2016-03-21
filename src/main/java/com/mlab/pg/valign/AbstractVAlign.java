@@ -3,18 +3,20 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Polynom2;
 import com.mlab.pg.xyfunction.XYSample;
 import com.mlab.pg.xyfunction.XYSampleImpl;
 
 public abstract class AbstractVAlign implements VAlign{
 
+	protected DesignSpeed designSpeed;
 	protected double startX;
 	protected double endX;
 	protected Polynom2 polynom;
 
 	// Constructor
-	protected AbstractVAlign(Polynom2 polynom, double startx, double endx) {
+	protected AbstractVAlign(DesignSpeed dspeed, Polynom2 polynom, double startx, double endx) {
 		this.polynom = polynom;
 		this.startX = startx;
 		this.endX = endx;
@@ -38,6 +40,10 @@ public abstract class AbstractVAlign implements VAlign{
 	}
 
 	// Interface VAlign
+	@Override
+	public DesignSpeed getDesignSpeed() {
+		return designSpeed;
+	}
 	@Override
 	public Polynom2 getPolynom2() {
 		return polynom;

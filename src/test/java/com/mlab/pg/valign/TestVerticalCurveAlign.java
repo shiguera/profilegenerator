@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Parabole;
 
 import junit.framework.Assert;
@@ -18,7 +19,7 @@ public class TestVerticalCurveAlign {
 		Parabole parabole = new Parabole(0.0, 0.04, 0.0001);
 		double startx = 1200.0;
 		double endx = 1800.0;
-		VerticalCurveAlign p1 = new VerticalCurveAlign(parabole, startx, endx);
+		VerticalCurveAlign p1 = new VerticalCurveAlign(DesignSpeed.DS100, parabole, startx, endx);
 		Assert.assertNotNull(p1);
 		Assert.assertNotNull(p1.polynom);
 		Assert.assertTrue(p1.polynom.getClass().isAssignableFrom(Parabole.class));
