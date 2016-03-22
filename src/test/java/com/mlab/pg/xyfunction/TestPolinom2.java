@@ -3,11 +3,17 @@ package com.mlab.pg.xyfunction;
 import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestPolinom2 {
 
-	private final Logger LOG = Logger.getLogger(TestPolinom2.class);
+	private final static Logger LOG = Logger.getLogger(TestPolinom2.class);
+	@BeforeClass
+	public static void befor() {
+		PropertyConfigurator.configure("log4j.properties");
+	}
 
 	@Test
 	public void testConstructorAndGettersSetters() {
