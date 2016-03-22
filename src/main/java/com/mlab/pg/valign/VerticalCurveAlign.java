@@ -18,7 +18,7 @@ public class VerticalCurveAlign extends AbstractVAlign {
 	
 	@Override
 	public Parabole getPolynom2() {
-		return (Parabole)super.getPolynom2();
+		return (Parabole)(super.getPolynom2());
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class VerticalCurveAlign extends AbstractVAlign {
 
 	@Override
 	public double getKv() {
-		return 1.0/2/polynom.getA2();
+		return 1.0/2.0/polynom.getA2();
 	}
 
 }

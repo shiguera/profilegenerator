@@ -6,8 +6,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
+import com.mlab.pg.norma.SagCurveLimits;
+import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.GradeAlign;
 
 
@@ -20,6 +23,91 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 	public static void before() {
 		PropertyConfigurator.configure("log4j.properties");
 	}
+	// Vertical Curves
+	@Test
+	public void testRandomSagCurveKv() {
+		LOG.debug("testRandomSagCurveKv()");
+		for(int i=0; i<100; i++) {
+			DesignSpeed dspeed = DesignSpeed.DS120;
+			VerticalCurveLimits limits = new SagCurveLimits(dspeed);
+			double kv = RandomFactory.randomSagCurveKv(dspeed);
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS100;
+			limits = new SagCurveLimits(dspeed);
+			kv = RandomFactory.randomSagCurveKv(dspeed);
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+
+			dspeed = DesignSpeed.DS80;
+			limits = new SagCurveLimits(dspeed);
+			kv = RandomFactory.randomSagCurveKv(dspeed);
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS60;
+			limits = new SagCurveLimits(dspeed);
+			kv = RandomFactory.randomSagCurveKv(dspeed);
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS40;
+			limits = new SagCurveLimits(dspeed);
+			kv = RandomFactory.randomSagCurveKv(dspeed);
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+
+			
+		}
+	}
+	@Test
+	public void testRandomCrestCurveKv() {
+		LOG.debug("testRandomCrestCurveKv()");
+		for(int i=0; i<100; i++) {
+			DesignSpeed dspeed = DesignSpeed.DS120;
+			VerticalCurveLimits limits = new CrestCurveLimits(dspeed);
+			double kv = Math.abs(RandomFactory.randomCrestCurveKv(dspeed));
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS100;
+			limits = new CrestCurveLimits(dspeed);
+			kv = Math.abs(RandomFactory.randomCrestCurveKv(dspeed));
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+
+			dspeed = DesignSpeed.DS80;
+			limits = new CrestCurveLimits(dspeed);
+			kv = Math.abs(RandomFactory.randomCrestCurveKv(dspeed));
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS60;
+			limits = new CrestCurveLimits(dspeed);
+			kv = Math.abs(RandomFactory.randomCrestCurveKv(dspeed));
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+			
+			dspeed = DesignSpeed.DS40;
+			limits = new CrestCurveLimits(dspeed);
+			kv = Math.abs(RandomFactory.randomCrestCurveKv(dspeed));
+			//System.out.println(limits.getMinKv()+", " + kv);
+			Assert.assertTrue(kv>=limits.getMinKv());
+			Assert.assertTrue(kv<=limits.getMaxKv());
+
+		}
+	}
+	// Grades
 	@Test
 	public void testRandomGradeAlign() {
 		LOG.debug("testRandomGradeAlign()");

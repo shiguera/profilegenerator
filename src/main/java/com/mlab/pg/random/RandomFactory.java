@@ -2,14 +2,59 @@ package com.mlab.pg.random;
 
 import java.util.Random;
 
+import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
+import com.mlab.pg.norma.SagCurveLimits;
+import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.GradeAlign;
 import com.mlab.pg.xyfunction.Straight;
 
 public class RandomFactory {
 
+	// Alineaciones VerticalCurve
+	/**
+	 * Calcula un parámetro aleatorio para una crest curve correspondiente a 
+	 * una velocidad de diseño dada. El signo del parámetro devuelto es negativo
+	 * 
+	 * @param dspeed
+	 * @return
+	 */
+	public static double randomCrestCurveKv(DesignSpeed dspeed) {
+		VerticalCurveLimits limits = new CrestCurveLimits(dspeed);
+		double minKv = limits.getMinKv();
+		double maxKv= limits.getMaxKv();
+		double inc = limits.getKvIncrements();
+		return -randomDoubleByIncrements(minKv, maxKv,inc);
+	}
+	/**
+	 * Calcula un parámetro aleatorio para una sag curve correspondiente a 
+	 * una velocidad de diseño dada. El signo del parámetro devuelto es positivo
+	 * 
+	 * @param dspeed
+	 * @return
+	 */
+	public static double randomSagCurveKv(DesignSpeed dspeed) {
+		VerticalCurveLimits limits = new SagCurveLimits(dspeed);
+		double minKv = limits.getMinKv();
+		double maxKv= limits.getMaxKv();
+		double inc = limits.getKvIncrements();
+		return randomDoubleByIncrements(minKv, maxKv,inc);
+	}
+
 	
+	// Alineaciones Grade
+	/**
+	 * Genera una alineación grade aleatoria para una velocidad de proyecto
+	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
+	 * y el maxSlope de la categoría. La pendiente puede ser positiva o negativa.
+	 * La longitud será aleatoria entre el minLength y el maxLength de la 
+	 * categoría.
+	 * @param dspeed Velocidad de proyecto
+	 * @param s0 Abscisa inicial de la alineación
+	 * @param z0 Altitud inicial de la alineación
+	 * @return GradeAlign resultado
+	 */
 	public static GradeAlign randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
 		double slope = RandomFactory.randomGradeSlope(dspeed);
 		double length = RandomFactory.randomGradeLength(dspeed);
@@ -51,7 +96,8 @@ public class RandomFactory {
 		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc));
 		return length;
 	}
-	
+
+	// Funciones utilitarias
 	/**
 	 * Calcula un signo positivo o negativo aleatoriamente. 
 	 * @return Devuelve un double que es o +1.0 o -1.0 para utilizar
