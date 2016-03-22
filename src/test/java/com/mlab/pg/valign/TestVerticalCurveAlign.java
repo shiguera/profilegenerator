@@ -1,6 +1,8 @@
 package com.mlab.pg.valign;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
@@ -10,8 +12,11 @@ import junit.framework.Assert;
 
 public class TestVerticalCurveAlign {
 
-	private final Logger LOG = Logger.getLogger(TestVerticalCurveAlign.class);
-
+	private final static Logger LOG = Logger.getLogger(TestVerticalCurveAlign.class);
+	@BeforeClass
+	public static void before() {
+		PropertyConfigurator.configure("log4j.properties");
+	}
 	@Test
 	public void test() {
 		LOG.debug("test()");
@@ -21,6 +26,10 @@ public class TestVerticalCurveAlign {
 		double endx = 1800.0;
 		VerticalCurveAlign p1 = new VerticalCurveAlign(DesignSpeed.DS100, parabole, startx, endx);
 		Assert.assertNotNull(p1);
+		Assert.assertNotNull(p1.getDesignSpeed());
+		Assert.assertNotNull(p1.getStartS());
+		Assert.assertNotNull(p1.getEndS());
+		
 		Assert.assertNotNull(p1.polynom);
 		Assert.assertTrue(p1.polynom.getClass().isAssignableFrom(Parabole.class));
 		Assert.assertEquals(1200.0, p1.getStartS(), 0.0001);

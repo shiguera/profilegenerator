@@ -17,6 +17,7 @@ public abstract class AbstractVAlign implements VAlign{
 
 	// Constructor
 	protected AbstractVAlign(DesignSpeed dspeed, Polynom2 polynom, double startx, double endx) {
+		this.designSpeed = dspeed;
 		this.polynom = polynom;
 		this.startX = startx;
 		this.endX = endx;

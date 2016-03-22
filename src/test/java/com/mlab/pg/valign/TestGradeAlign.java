@@ -1,6 +1,8 @@
 package com.mlab.pg.valign;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
@@ -10,8 +12,11 @@ import junit.framework.Assert;
 
 public class TestGradeAlign {
 
-	private final Logger LOG = Logger.getLogger(TestGradeAlign.class);
-
+	private final static Logger LOG = Logger.getLogger(TestGradeAlign.class);
+	@BeforeClass
+	public static void before() {
+		PropertyConfigurator.configure("log4j.properties");
+	}
 	@Test
 	public void test() {
 		LOG.debug("test()");
@@ -21,6 +26,10 @@ public class TestGradeAlign {
 		double endx = 1200.0;
 		GradeAlign tangent1 = new GradeAlign(DesignSpeed.DS100, straight, startx, endx);
 		Assert.assertNotNull(tangent1);
+		Assert.assertNotNull(tangent1.getDesignSpeed());
+		Assert.assertNotNull(tangent1.getStartS());
+		Assert.assertNotNull(tangent1.getEndS());
+						
 		Assert.assertNotNull(tangent1.polynom);
 		System.out.println(tangent1.polynom.getClass().getName());
 		Assert.assertTrue(tangent1.polynom.getClass().isAssignableFrom(Straight.class));

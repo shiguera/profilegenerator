@@ -12,6 +12,8 @@ import com.mlab.pg.xyfunction.Straight;
 
 public class RandomFactory {
 
+	// Perfiles básicos
+	
 	// Alineaciones VerticalCurve
 	/**
 	 * Calcula un parámetro aleatorio para una crest curve correspondiente a 
