@@ -43,6 +43,7 @@ public class RandomFactory {
 	}
 
 	
+	
 	// Alineaciones Grade
 	/**
 	 * Genera una alineación grade aleatoria para una velocidad de proyecto
