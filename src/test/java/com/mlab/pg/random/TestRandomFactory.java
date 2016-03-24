@@ -12,6 +12,7 @@ import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.GradeAlign;
+import com.mlab.pg.valign.VAlign;
 import com.mlab.pg.valign.VerticalCurveAlign;
 import com.mlab.pg.valign.VerticalProfile;
 
@@ -27,15 +28,122 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 	}
 	// VerticalProfiles
 	@Test
-	public void testRandomVerticalProfileType_I() {
-		LOG.debug("testRandomVerrticalProfileType_I");
+	public void testRandomVerticalProfileType_I_DS120() {
+		LOG.debug("testRandomVerrticalProfileType_I_DS120");
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0 = 0.0;
 		double z0 = 1000.0;
-		int verticalCurvesCount = 3;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertEquals(3, vp.size());
+		VAlign align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		GradeAlign grade = (GradeAlign)vp.get(0);
+		Assert.assertTrue(grade.getSlope()>0);
+		align = vp.get(1);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlign.class));
+		VerticalCurveAlign vc = (VerticalCurveAlign)vp.get(1);
+		Assert.assertTrue(vc.getKv()<0);
+		align = vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		grade = (GradeAlign)vp.get(2);
+		Assert.assertTrue(grade.getSlope()<0);
+		
 		//Assert.assertNotNull(vp);
 	}
+	@Test
+	public void testRandomVerticalProfileType_I_DS100() {
+		LOG.debug("testRandomVerrticalProfileType_I_DS100");
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertEquals(3, vp.size());
+		VAlign align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		GradeAlign grade = (GradeAlign)vp.get(0);
+		Assert.assertTrue(grade.getSlope()>0);
+		align = vp.get(1);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlign.class));
+		VerticalCurveAlign vc = (VerticalCurveAlign)vp.get(1);
+		Assert.assertTrue(vc.getKv()<0);
+		align = vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		grade = (GradeAlign)vp.get(2);
+		Assert.assertTrue(grade.getSlope()<0);
+		
+		//Assert.assertNotNull(vp);
+	}
+	@Test
+	public void testRandomVerticalProfileType_I_DS80() {
+		LOG.debug("testRandomVerrticalProfileType_I_DS80");
+		DesignSpeed dspeed = DesignSpeed.DS80;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertEquals(3, vp.size());
+		VAlign align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		GradeAlign grade = (GradeAlign)vp.get(0);
+		Assert.assertTrue(grade.getSlope()>0);
+		align = vp.get(1);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlign.class));
+		VerticalCurveAlign vc = (VerticalCurveAlign)vp.get(1);
+		Assert.assertTrue(vc.getKv()<0);
+		align = vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		grade = (GradeAlign)vp.get(2);
+		Assert.assertTrue(grade.getSlope()<0);
+		
+		//Assert.assertNotNull(vp);
+	}
+	@Test
+	public void testRandomVerticalProfileType_I_DS60() {
+		LOG.debug("testRandomVerrticalProfileType_I_DS60");
+		DesignSpeed dspeed = DesignSpeed.DS60;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertEquals(3, vp.size());
+		VAlign align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		GradeAlign grade = (GradeAlign)vp.get(0);
+		Assert.assertTrue(grade.getSlope()>0);
+		align = vp.get(1);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlign.class));
+		VerticalCurveAlign vc = (VerticalCurveAlign)vp.get(1);
+		Assert.assertTrue(vc.getKv()<0);
+		align = vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		grade = (GradeAlign)vp.get(2);
+		Assert.assertTrue(grade.getSlope()<0);
+		
+		//Assert.assertNotNull(vp);
+	}
+	@Test
+	public void testRandomVerticalProfileType_I_DS40() {
+		LOG.debug("testRandomVerrticalProfileType_I_DS40");
+		DesignSpeed dspeed = DesignSpeed.DS40;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertEquals(3, vp.size());
+		VAlign align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		GradeAlign grade = (GradeAlign)vp.get(0);
+		Assert.assertTrue(grade.getSlope()>0);
+		align = vp.get(1);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlign.class));
+		VerticalCurveAlign vc = (VerticalCurveAlign)vp.get(1);
+		Assert.assertTrue(vc.getKv()<0);
+		align = vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
+		grade = (GradeAlign)vp.get(2);
+		Assert.assertTrue(grade.getSlope()<0);
+		
+		//Assert.assertNotNull(vp);
+	}
+
+	// Vertical Curves
 	@Test
 	public void testRandomVerticalCurveDS120() {
 		LOG.debug("testRandomVerticalCurveDS120()");
@@ -192,7 +300,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		//System.out.println(vc);
 	}
 
-	// Vertical Curves
+	
 	@Test
 	public void testRandomSagCurveKv() {
 		LOG.debug("testRandomSagCurveKv()");

@@ -29,4 +29,13 @@ public class VerticalProfile extends ArrayList<VAlign> {
 			return false;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for(int i=0; i<this.size(); i++) {
+			builder.append(this.get(i).toString());
+		}
+		return builder.toString();
+	}
 }

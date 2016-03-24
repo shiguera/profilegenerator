@@ -21,8 +21,20 @@ public class RandomFactory {
 	
 	// Perfiles básicos
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
-		
-		return null;
+		GradeAlign grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
+		double g2 = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurveAlign crestcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		double starts2 = crestcurve.getEndS();
+		double startz2 = crestcurve.getEndZ();
+		double length2 = RandomFactory.randomGradeLength(dspeed);
+		double ends2 = starts2 + length2;
+		Straight straight2 = new Straight(starts2, startz2, g2);
+		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts2, ends2);
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		profile.add(grade1);
+		profile.add(crestcurve);
+		profile.add(grade2);
+		return profile;
 	}
 	// Alineaciones VerticalCurve
 	/**
