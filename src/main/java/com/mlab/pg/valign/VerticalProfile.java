@@ -33,8 +33,14 @@ public class VerticalProfile extends ArrayList<VAlign> {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		builder.append("Vertical Profile (DesignSpeed= ");
+		builder.append(designSpeed);
+		builder.append(")\n");
+		builder.append(VAlign.CABECERA);
+		builder.append('\n');
 		for(int i=0; i<this.size(); i++) {
 			builder.append(this.get(i).toString());
+			builder.append('\n');
 		}
 		return builder.toString();
 	}

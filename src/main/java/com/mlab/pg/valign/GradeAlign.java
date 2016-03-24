@@ -36,8 +36,7 @@ public class GradeAlign extends AbstractVAlign {
 	}
 
 
-	public static String CABECERA = String.format("%12s %12s %12s %12s %12s %12s %12s %12s %12s %12s", 
-			"SE","ZE", "PE", "L", "SS", "ZS", "PS", "a0", "a1x", "a2x^2");
+	
 	@Override
 	public String toString() {
 		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 

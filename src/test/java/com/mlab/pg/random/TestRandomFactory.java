@@ -34,6 +34,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 		VAlign align = vp.get(0);
 		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
@@ -48,7 +49,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		grade = (GradeAlign)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
-		//Assert.assertNotNull(vp);
+		//System.out.println(vp);
 	}
 	@Test
 	public void testRandomVerticalProfileType_I_DS100() {
@@ -57,6 +58,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 		VAlign align = vp.get(0);
 		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
@@ -71,7 +73,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		grade = (GradeAlign)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
-		//Assert.assertNotNull(vp);
+		//System.out.println(vp);
 	}
 	@Test
 	public void testRandomVerticalProfileType_I_DS80() {
@@ -80,6 +82,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 		VAlign align = vp.get(0);
 		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
@@ -94,7 +97,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		grade = (GradeAlign)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
-		//Assert.assertNotNull(vp);
+		Assert.assertNotNull(vp);
 	}
 	@Test
 	public void testRandomVerticalProfileType_I_DS60() {
@@ -103,6 +106,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 		VAlign align = vp.get(0);
 		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));
@@ -126,6 +130,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 		VAlign align = vp.get(0);
 		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlign.class));

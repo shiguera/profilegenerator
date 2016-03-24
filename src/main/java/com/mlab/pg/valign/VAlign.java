@@ -13,6 +13,8 @@ import com.mlab.pg.xyfunction.XYSample;
  *
  */
 public interface VAlign extends XYFunction{
+	public static String CABECERA = String.format("%12s %12s %12s %12s %12s %12s %12s %12s %12s %12s", 
+			"SE","ZE", "PE", "L", "SS", "ZS", "PS", "a0", "a1x", "a2x^2");
 	
 	DesignSpeed getDesignSpeed();
 	Polynom2 getPolynom2();
