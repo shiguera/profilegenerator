@@ -33,7 +33,7 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		int verticalCurvesCount = 3;
-		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0, verticalCurvesCount);
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		//Assert.assertNotNull(vp);
 	}
 	@Test
@@ -316,7 +316,94 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 		//System.out.println(ga);
 
 	}	
-	
+	@Test
+	public void testRandomUpGradeAlign() {
+		LOG.debug("testRandomUpGradeAlign()");
+		DesignSpeed ds = DesignSpeed.DS120;
+		double s0 = 0.0;
+		double z0 = 0.0;
+		GradeAlign ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()>0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS100;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()>0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS80;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()>0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS60;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()>0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS40;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()>0);
+		//System.out.println(ga);
+
+	}	
+	@Test
+	public void testRandomDownGradeAlign() {
+		LOG.debug("testRandomDownGradeAlign()");
+		DesignSpeed ds = DesignSpeed.DS120;
+		double s0 = 0.0;
+		double z0 = 0.0;
+		GradeAlign ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()<0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS100;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()<0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS80;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()<0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS60;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()<0);
+		//System.out.println(ga);
+
+		ds = DesignSpeed.DS40;
+		s0 = 0.0;
+		z0 = 0.0;
+		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
+		Assert.assertNotNull(ga);
+		Assert.assertTrue(ga.getSlope()<0);
+		//System.out.println(ga);
+
+	}		
 	@Test
 	public void testRandomGradeSlope() {
 		LOG.debug("testRandomGradeSlope()");

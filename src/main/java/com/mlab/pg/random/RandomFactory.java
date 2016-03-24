@@ -20,7 +20,8 @@ public class RandomFactory {
 	private static Logger LOG = Logger.getLogger(RandomFactory.class);
 	
 	// Perfiles básicos
-	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0, int verticalCurvesCount) {
+	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
+		
 		return null;
 	}
 	// Alineaciones VerticalCurve
@@ -111,6 +112,44 @@ public class RandomFactory {
 	 */
 	public static GradeAlign randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
 		double slope = RandomFactory.randomGradeSlope(dspeed);
+		double length = RandomFactory.randomGradeLength(dspeed);
+		Straight r = new Straight(s0, z0, slope);
+		double ends =s0 + length;
+		GradeAlign align = new GradeAlign(dspeed, r, s0, ends);
+		return align;
+	}
+	/**
+	 * Genera una alineación up-grade aleatoria para una velocidad de proyecto
+	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
+	 * y el maxSlope de la categoría. La pendiente será positiva.
+	 * La longitud será aleatoria entre el minLength y el maxLength de la 
+	 * categoría.
+	 * @param dspeed Velocidad de proyecto
+	 * @param s0 Abscisa inicial de la alineación
+	 * @param z0 Altitud inicial de la alineación
+	 * @return GradeAlign resultado
+	 */
+	public static GradeAlign randomUpGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+		double slope = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		double length = RandomFactory.randomGradeLength(dspeed);
+		Straight r = new Straight(s0, z0, slope);
+		double ends =s0 + length;
+		GradeAlign align = new GradeAlign(dspeed, r, s0, ends);
+		return align;
+	}
+	/**
+	 * Genera una alineación down-grade aleatoria para una velocidad de proyecto
+	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
+	 * y el maxSlope de la categoría. La pendiente será negativa.
+	 * La longitud será aleatoria entre el minLength y el maxLength de la 
+	 * categoría.
+	 * @param dspeed Velocidad de proyecto
+	 * @param s0 Abscisa inicial de la alineación
+	 * @param z0 Altitud inicial de la alineación
+	 * @return GradeAlign resultado
+	 */
+	public static GradeAlign randomDownGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+		double slope = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
 		double length = RandomFactory.randomGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
