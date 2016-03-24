@@ -2,19 +2,70 @@ package com.mlab.pg.random;
 
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.GradeAlign;
+import com.mlab.pg.valign.VerticalCurveAlign;
+import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 
 public class RandomFactory {
 
-	// Perfiles básicos
+	private static Logger LOG = Logger.getLogger(RandomFactory.class);
 	
+	// Perfiles básicos
+	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0, int verticalCurvesCount) {
+		return null;
+	}
 	// Alineaciones VerticalCurve
+	/**
+	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
+	 * salida g2. El parámetro es aleatorio entre el mínimo correspondiente a la categoría . 
+	 * La pendiente de salida tiene que ser del signo contrario que la pendiente de entrada. 
+	 * @param dspeed
+	 * @param grade1
+	 * @param g2
+	 * @return
+	 */
+	public static VerticalCurveAlign randomVerticalCurve(DesignSpeed dspeed, GradeAlign grade1, double g2) {
+		double g1 = grade1.getStartTangent();
+		if(g1*g2 > 0) {
+			LOG.error("randomVerticalCurve() ERROR: slopes have same sign");
+			return null;
+		}
+		VerticalCurveLimits limits = null;
+		if(g1>0) {
+			LOG.debug("randomVerticalCurve(): generating crest curve");
+			limits = new CrestCurveLimits(dspeed);
+		} else {
+			LOG.debug("randomVerticalCurve(): generating sag curve");
+			limits = new SagCurveLimits(dspeed);
+		}
+		double kvmin = limits.getMinKv();
+		double kvmax = limits.getMaxKv();
+		double minlength = limits.getMinLength();
+		double maxlength = limits.getMaxLength();
+		double lengthIncrement = minlength;
+		double theta = g2-g1;
+		double kv=0.0;
+		double length = 0.0;
+		while(Math.abs(kv)<kvmin || Math.abs(kv)>kvmax) {
+			length = RandomFactory.randomDoubleByIncrements(minlength, maxlength, lengthIncrement);			
+			kv = length / theta;
+		}
+		double starts = grade1.getEndS();
+		double startz = grade1.getEndZ();
+		double ends = starts +length;
+		Parabole p = new Parabole(starts, startz, g1, kv);
+		VerticalCurveAlign align = new VerticalCurveAlign(dspeed, p, starts, ends);
+		return align;
+	}
 	/**
 	 * Calcula un parámetro aleatorio para una crest curve correspondiente a 
 	 * una velocidad de diseño dada. El signo del parámetro devuelto es negativo

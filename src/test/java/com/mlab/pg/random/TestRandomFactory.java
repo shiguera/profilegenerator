@@ -12,6 +12,8 @@ import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.GradeAlign;
+import com.mlab.pg.valign.VerticalCurveAlign;
+import com.mlab.pg.valign.VerticalProfile;
 
 
 
@@ -23,6 +25,173 @@ static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 	public static void before() {
 		PropertyConfigurator.configure("log4j.properties");
 	}
+	// VerticalProfiles
+	@Test
+	public void testRandomVerticalProfileType_I() {
+		LOG.debug("testRandomVerrticalProfileType_I");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		int verticalCurvesCount = 3;
+		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0, verticalCurvesCount);
+		//Assert.assertNotNull(vp);
+	}
+	@Test
+	public void testRandomVerticalCurveDS120() {
+		LOG.debug("testRandomVerticalCurveDS120()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double s0= 0.0;
+		double z0= 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g1 = grade1.getSlope();
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		if(g1>0) {
+			g2 = - g2;
+		} 
+		VerticalCurveAlign vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(vc);
+		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
+		VerticalCurveLimits limits = null;
+		if(vc.getKv()>0) {
+			limits = new SagCurveLimits(dspeed);
+		} else {
+			limits = new CrestCurveLimits(dspeed);
+		}
+		//System.out.println(vc.getKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
+		//System.out.println(vc);
+	}
+	@Test
+	public void testRandomVerticalCurveDS100() {
+		LOG.debug("testRandomVerticalCurveDS100()");
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double s0= 0.0;
+		double z0= 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g1 = grade1.getSlope();
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		if(g1>0) {
+			g2 = - g2;
+		} 
+		VerticalCurveAlign vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(vc);
+		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
+		VerticalCurveLimits limits = null;
+		if(vc.getKv()>0) {
+			limits = new SagCurveLimits(dspeed);
+		} else {
+			limits = new CrestCurveLimits(dspeed);
+		}
+		//System.out.println(vc.getKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
+		//System.out.println(vc);
+	}
+	@Test
+	public void testRandomVerticalCurveDS80() {
+		LOG.debug("testRandomVerticalCurveDS80()");
+		DesignSpeed dspeed = DesignSpeed.DS80;
+		double s0= 0.0;
+		double z0= 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g1 = grade1.getSlope();
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		if(g1>0) {
+			g2 = - g2;
+		} 
+		VerticalCurveAlign vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(vc);
+		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
+		VerticalCurveLimits limits = null;
+		if(vc.getKv()>0) {
+			limits = new SagCurveLimits(dspeed);
+		} else {
+			limits = new CrestCurveLimits(dspeed);
+		}
+		//System.out.println(vc.getKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
+		//System.out.println(vc);
+	}
+	@Test
+	public void testRandomVerticalCurveDS60() {
+		LOG.debug("testRandomVerticalCurveDS60()");
+		DesignSpeed dspeed = DesignSpeed.DS60;
+		double s0= 0.0;
+		double z0= 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g1 = grade1.getSlope();
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		if(g1>0) {
+			g2 = - g2;
+		} 
+		VerticalCurveAlign vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(vc);
+		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
+		VerticalCurveLimits limits = null;
+		if(vc.getKv()>0) {
+			limits = new SagCurveLimits(dspeed);
+		} else {
+			limits = new CrestCurveLimits(dspeed);
+		}
+		//System.out.println(vc.getKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
+		//System.out.println(vc);
+	}
+	@Test
+	public void testRandomVerticalCurveDS40() {
+		LOG.debug("testRandomVerticalCurveDS40()");
+		DesignSpeed dspeed = DesignSpeed.DS40;
+		double s0= 0.0;
+		double z0= 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g1 = grade1.getSlope();
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		if(g1>0) {
+			g2 = - g2;
+		} 
+		VerticalCurveAlign vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(vc);
+		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
+		VerticalCurveLimits limits = null;
+		if(vc.getKv()>0) {
+			limits = new SagCurveLimits(dspeed);
+		} else {
+			limits = new CrestCurveLimits(dspeed);
+		}
+		//System.out.println(vc.getKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
+		//System.out.println(vc);
+	}
+
 	// Vertical Curves
 	@Test
 	public void testRandomSagCurveKv() {

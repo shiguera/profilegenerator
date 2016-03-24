@@ -3,7 +3,7 @@ package com.mlab.pg.norma;
 public abstract class AbstractVAlignLimits implements VAlignLimits {
 
 	protected DesignSpeed designSpeed;
-	protected double maxLength = 6000.0;
+	protected double maxLength = 3000.0;
 	protected double minLength;
 	protected double maxSlope;
 	protected double MIN_SLOPE = 0.005;
