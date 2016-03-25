@@ -2,6 +2,11 @@ package com.mlab.pg.xyfunction;
 
 import java.util.ArrayList;
 
+/**
+ * ArrayList de parejas de valores (x,y)
+ * @author shiguera
+ *
+ */
 public class XYVector extends ArrayList<double[]>  {
 
 	private static final long serialVersionUID = 1L;
