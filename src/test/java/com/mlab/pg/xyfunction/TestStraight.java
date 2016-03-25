@@ -1,14 +1,21 @@
 package com.mlab.pg.xyfunction;
 
-import static org.junit.Assert.*;
-import junit.framework.Assert;
-
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import junit.framework.Assert;
 
 public class TestStraight {
 
-	private final Logger LOG = Logger.getLogger(TestStraight.class);
+	private final static Logger LOG = Logger.getLogger(TestStraight.class);
+	
+	@BeforeClass
+	public static void before() {
+		PropertyConfigurator.configure("log4j.properties");
+	}
+
 
 	@Test
 	public void test() {

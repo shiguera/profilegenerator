@@ -11,7 +11,7 @@ public class TestPolinom2 {
 
 	private final static Logger LOG = Logger.getLogger(TestPolinom2.class);
 	@BeforeClass
-	public static void befor() {
+	public static void before() {
 		PropertyConfigurator.configure("log4j.properties");
 	}
 

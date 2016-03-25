@@ -10,17 +10,8 @@ import java.util.List;
  * @author shiguera
  *
  */
-public interface XYSample extends XYFunction {
+public interface XYSample extends XYFunction, InInterval {
 
-	/**
-	 * Devuelve la x del primer punto de la XYSample
-	 */
-	public double getStartX();
-	/**
-	 * Devuelve la x del último punto de la XYSample
-	 * @return
-	 */
-	public double getEndX();
 
 	/**
 	 * Devuelve la coordenada x correspondiente al índice 'index' de la XYSample
