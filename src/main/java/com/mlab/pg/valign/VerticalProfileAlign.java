@@ -23,4 +23,5 @@ public interface VerticalProfileAlign extends VAlign {
 	 */
 	double getKv();
 
+	GradeProfileAlign derivative();
 }

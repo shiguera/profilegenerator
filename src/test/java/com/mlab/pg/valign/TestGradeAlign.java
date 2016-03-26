@@ -44,4 +44,39 @@ public class TestGradeAlign {
 
 	}
 
+	@Test
+	public void testDerivative() {
+		// With up grade
+		double starts =0.0;
+		double startz = 900.0;
+		double slope = 0.05;
+		Straight r = new Straight(starts, startz, slope);
+		double ends = 1000.0;
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		GradeAlign align = new GradeAlign(dspeed, r, starts, ends);
+
+		GradeProfileAlign galign = align.derivative();
+		Assert.assertEquals(dspeed, galign.getDesignSpeed());
+		Assert.assertEquals(galign.startS, starts, 0.001);
+		Assert.assertEquals(galign.endS, ends, 0.001);
+		Assert.assertEquals(galign.getStartGrade(), 0.05, 0.001);
+		Assert.assertEquals(galign.getEndGrade(), 0.05, 0.001);
+
+		// With down grade
+		starts =100.0;
+		startz = 900.0;
+		slope = -0.03;
+		r = new Straight(starts, startz, slope);
+		ends = 1300.0;
+		dspeed = DesignSpeed.DS80;
+		align = new GradeAlign(dspeed, r, starts, ends);
+
+		galign = align.derivative();
+		Assert.assertEquals(dspeed, galign.getDesignSpeed());
+		Assert.assertEquals(galign.startS, starts, 0.001);
+		Assert.assertEquals(galign.endS, ends, 0.001);
+		Assert.assertEquals(galign.getStartGrade(), -0.03, 0.001);
+		Assert.assertEquals(galign.getEndGrade(), -0.03, 0.001);
+
+	}
 }

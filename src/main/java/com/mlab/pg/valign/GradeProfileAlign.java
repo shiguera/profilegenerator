@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -21,17 +22,54 @@ public class GradeProfileAlign implements VAlign {
 	DesignSpeed designSpeed;
 	Straight straight;
 	double startS;
-	double startGrade;
 	double endS;
-	double endGrade;
+	
+	public GradeProfileAlign(DesignSpeed dspeed, Straight straight, double starts, double ends) {
+		this.designSpeed = dspeed;
+		this.straight = straight;
+		this.startS = starts;
+		this.endS = ends;
+	}
 
 	public double getStartGrade() {
-		return startGrade;
+		return straight.getY(startS);
 	}
 	public double getEndGrade() {
-		return endGrade;
+		return straight.getY(endS);
 	}
 
+	/**
+	 * Obtiene la alineación resultante de integrar.
+	 * Para realizar la integración necesita conocer la cota del primer punto 
+	 * de la alineación. 
+	 * @param galign
+	 * @param startZ
+	 * @return
+	 */
+	public VerticalProfileAlign integrate(double startZ) {
+		VerticalProfileAlign valign = null;
+		double s1 = getStartS();
+		double g1 = getStartGrade();
+		double s2 = getEndS();
+		double g2 = getEndGrade();
+		if(isHorizontal()) {
+			double a1 = g1;
+			double a0 = startZ - a1*g1;
+			Straight r = new Straight(a0,a1);
+			valign = new GradeAlign(designSpeed, r, s1, s2);
+		} else {
+			double a2 = (g2-g1)/2/(s2-s1);
+			double a1 = g2 - 2*a2*s2;
+			double a0 = startZ - a1*s1 - a2 * s1 * s1;
+			Parabole p = new Parabole(a0,a1,a2);
+			valign = new VerticalCurveAlign(designSpeed, p,s1,s2);
+		}
+		return valign;
+	}
+	
+	public boolean isHorizontal() {
+		return straight.getA1() == 0;
+	}
 	// Interface XYFunction
 	@Override
 	public double getY(double x) {

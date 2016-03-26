@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Polynom2;
+import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public abstract class AbstractVerticalProfileAlign implements VerticalProfileAlign{
@@ -23,6 +24,8 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 		
 	}
 
+
+	
 	// Interface XYFunction
 	@Override
 	public double getY(double x) {
@@ -124,6 +127,26 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	 * de su parámetro Kv 
 	 */
 	public abstract double getKv();
-	 
+
+	/**
+	 * Obtiene la alineación GradeProfileAlign derivada
+	 * 
+	 * @param align
+	 * @return
+	 */
+	@Override
+	public GradeProfileAlign derivative() {
+		GradeProfileAlign galign = null;
+		if(getClass().isAssignableFrom(GradeAlign.class)) {
+			double g = getSlope();
+			Straight r = new Straight(g,0.0);
+			galign = new GradeProfileAlign(designSpeed, r, getStartS(), getEndS());
+		} else if (getClass().isAssignableFrom(VerticalCurveAlign.class)) {
+			Straight r = new Straight(getPolynom2().getA1(), getPolynom2().getA2()*2.0);
+			galign = new GradeProfileAlign(designSpeed, r, getStartS(), getEndS());
+		}
+		return galign;
+	}
+
 	
 }
