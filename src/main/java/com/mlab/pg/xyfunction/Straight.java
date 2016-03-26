@@ -7,7 +7,7 @@ package com.mlab.pg.xyfunction;
  * @author shiguera
  *
  */
-public class Straight extends Polynom2 {
+public class Straight extends Parabole {
 
 	public Straight(double a0, double a1x) {
 		super(a0, a1x, 0.0);
