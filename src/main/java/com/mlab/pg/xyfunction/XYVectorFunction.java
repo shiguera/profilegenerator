@@ -1,5 +1,7 @@
 package com.mlab.pg.xyfunction;
 
+import java.util.List;
+
 /**
  * Extiende XYVector en el sentido de que las parejas de doubles (x,y)
  * representan los valores (x,y) de una determinada función en un intervalo.
@@ -12,6 +14,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 
 	private static final long serialVersionUID = 1L;
 
+	public XYVectorFunction(List<double[]> values) {
+		super(values);
+	}
 
 	@Override
 	public boolean add(double[] e) {

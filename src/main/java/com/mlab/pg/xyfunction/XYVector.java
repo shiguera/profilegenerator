@@ -1,6 +1,7 @@
 package com.mlab.pg.xyfunction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ArrayList de parejas de valores (x,y)
@@ -11,6 +12,12 @@ public class XYVector extends ArrayList<double[]>  {
 
 	private static final long serialVersionUID = 1L;
 
+	public XYVector() {
+		
+	}
+	public XYVector(List<double[]> values) {
+		this.setValues(values);
+	}
 	@Override
 	public double[] get(int index) {
 		if(contains(index)) {
@@ -72,7 +79,21 @@ public class XYVector extends ArrayList<double[]>  {
 		}
 		return yvalues;
 	}
-
+	/**
+	 * Establece los valores {x, y} de la función
+	 * 
+	 * @param newvalues List<double[]> con los valores de la serie
+	 */
+	public void setValues(List<double[]> newvalues) {
+		this.clear();
+		if(newvalues==null || newvalues.size()==0) {
+			return;
+		}
+		if(newvalues.get(0).length!=2) {
+			return;
+		}
+		addAll(newvalues);
+	}
 	/**
 	 * Devuelve true si el índice i es uno de los índices
 	 * válidos del ArrayList

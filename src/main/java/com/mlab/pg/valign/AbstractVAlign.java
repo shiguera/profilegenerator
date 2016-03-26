@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Polynom2;
-import com.mlab.pg.xyfunction.XYSample;
 import com.mlab.pg.xyfunction.XYSampleImpl;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public abstract class AbstractVAlign implements VAlign{
 
@@ -98,9 +98,10 @@ public abstract class AbstractVAlign implements VAlign{
 	 
 	
 	@Override
-	public XYSample getSample(double startx, double endx, double space) {
+	public XYVectorFunction getSample(double startx, double endx, double space) {
 		List<double[]> list = new ArrayList<double[]>();
-		if( (startx < this.startX) | (startx > this.endX) | (startx == this.endX) ) {
+		if( (startx < this.startX) | (startx > this.endX) | 
+				(startx == this.endX) ) {
 			startx = this.startX;
 		}
 		if( (endx < startx) | (endx > this.endX) ) {
@@ -111,7 +112,7 @@ public abstract class AbstractVAlign implements VAlign{
 			list.add(new double[]{pos, this.polynom.getY(pos)});
 			pos += space;
 		}
-		return new XYSampleImpl(list);
+		return new XYVectorFunction(list);
 	}
 
 	@Override

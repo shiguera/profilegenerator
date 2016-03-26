@@ -3,7 +3,7 @@ package com.mlab.pg.valign;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Polynom2;
 import com.mlab.pg.xyfunction.XYFunction;
-import com.mlab.pg.xyfunction.XYSample;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * Interface para los distintos tipos de alineaciones verticales
@@ -41,7 +41,7 @@ public interface VAlign extends XYFunction{
 	 */
 	double getKv();
 	
-	XYSample getSample(double startS, double endS, double space);
+	XYVectorFunction getSample(double startS, double endS, double space);
 
 	@Override
 	public String toString();
