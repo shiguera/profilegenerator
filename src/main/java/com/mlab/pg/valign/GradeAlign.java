@@ -9,7 +9,7 @@ import com.mlab.pg.xyfunction.Straight;
  * @author shiguera
  *
  */
-public class GradeAlign extends AbstractVAlign {
+public class GradeAlign extends AbstractVerticalProfileAlign {
 
 	
 	public GradeAlign(DesignSpeed dspeed,Straight straight, double starts, double ends) {
@@ -37,12 +37,5 @@ public class GradeAlign extends AbstractVAlign {
 
 
 	
-	@Override
-	public String toString() {
-		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
-				startX, polynom.getY(startX), polynom.getTangent(startX),
-				getLength(), endX, polynom.getY(endX), polynom.getTangent(endX),
-				polynom.getA0(), polynom.getA1(), polynom.getA2());
-	}
 
 }

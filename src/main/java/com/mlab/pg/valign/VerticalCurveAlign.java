@@ -9,7 +9,7 @@ import com.mlab.pg.xyfunction.Parabole;
  * @author shiguera
  *
  */
-public class VerticalCurveAlign extends AbstractVAlign {
+public class VerticalCurveAlign extends AbstractVerticalProfileAlign {
 
 	
 	public VerticalCurveAlign(DesignSpeed dspeed, Parabole parabole, double startx, double endx) {
@@ -21,14 +21,6 @@ public class VerticalCurveAlign extends AbstractVAlign {
 		return (Parabole)(super.getPolynom2());
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
-				startX, polynom.getY(startX), polynom.getTangent(startX),
-				endX, polynom.getY(endX), polynom.getTangent(endX),
-				polynom.getA0(), polynom.getA1(), polynom.getA2());
-	}
-
 	/**
 	 * En el caso de las vertical curves no tiene sentido
 	 * este parámetro. Devuelve Double.NaN

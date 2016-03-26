@@ -5,22 +5,21 @@ import java.util.List;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Polynom2;
-import com.mlab.pg.xyfunction.XYSampleImpl;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public abstract class AbstractVAlign implements VAlign{
+public abstract class AbstractVerticalProfileAlign implements VerticalProfileAlign{
 
 	protected DesignSpeed designSpeed;
-	protected double startX;
-	protected double endX;
+	protected double startS;
+	protected double endS;
 	protected Polynom2 polynom;
 
 	// Constructor
-	protected AbstractVAlign(DesignSpeed dspeed, Polynom2 polynom, double startx, double endx) {
+	protected AbstractVerticalProfileAlign(DesignSpeed dspeed, Polynom2 polynom, double starts, double ends) {
 		this.designSpeed = dspeed;
 		this.polynom = polynom;
-		this.startX = startx;
-		this.endX = endx;
+		this.startS = starts;
+		this.endS = ends;
 		
 	}
 
@@ -40,6 +39,7 @@ public abstract class AbstractVAlign implements VAlign{
 		return polynom.getCurvature(x);
 	}
 
+
 	// Interface VAlign
 	@Override
 	public DesignSpeed getDesignSpeed() {
@@ -51,34 +51,63 @@ public abstract class AbstractVAlign implements VAlign{
 	}
 
 	public double getStartS() {
-		return startX;
+		return startS;
 	}
 
 	public double getEndS() {
-		return endX;
+		return endS;
 	}
 
+	@Override
+	public XYVectorFunction getSample(double startx, double endx, double space) {
+		List<double[]> list = new ArrayList<double[]>();
+		if( (startx < this.startS) | (startx > this.endS) | 
+				(startx == this.endS) ) {
+			startx = this.startS;
+		}
+		if( (endx < startx) | (endx > this.endS) ) {
+			endx = this.endS;
+		}
+		double pos = startx;
+		while(pos <= endx) {
+			list.add(new double[]{pos, this.polynom.getY(pos)});
+			pos += space;
+		}
+		if (pos<endS) {
+			list.add(new double[]{endS, getY(endS)});
+		}
+		return new XYVectorFunction(list);
+	}
+	@Override
+	public String toString() {
+		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
+				startS, polynom.getY(startS), polynom.getTangent(startS),
+				getLength(), endS, polynom.getY(endS), polynom.getTangent(endS),
+				polynom.getA0(), polynom.getA1(), polynom.getA2());
+	}
+
+	// Interface VerticalProfileAlign
 	public double getStartZ() {
-		return polynom.getY(startX);
+		return polynom.getY(startS);
 	}
 
 	public double getEndZ() {
-		return polynom.getY(endX);
+		return polynom.getY(endS);
 	}
 
 	public double getStartTangent() {
-		return polynom.getTangent(startX);
+		return polynom.getTangent(startS);
 	}
 
 	public double getEndTangent() {
-		return polynom.getTangent(endX);
+		return polynom.getTangent(endS);
 	}
 
 	/**
 	 * Longitud medida a lo largo del eje X
 	 */
 	public double getLength() {
-		return endX - startX;
+		return endS - startS;
 	}
 
 	/**
@@ -97,28 +126,4 @@ public abstract class AbstractVAlign implements VAlign{
 	public abstract double getKv();
 	 
 	
-	@Override
-	public XYVectorFunction getSample(double startx, double endx, double space) {
-		List<double[]> list = new ArrayList<double[]>();
-		if( (startx < this.startX) | (startx > this.endX) | 
-				(startx == this.endX) ) {
-			startx = this.startX;
-		}
-		if( (endx < startx) | (endx > this.endX) ) {
-			endx = this.endX;
-		}
-		double pos = startx;
-		while(pos <= endx) {
-			list.add(new double[]{pos, this.polynom.getY(pos)});
-			pos += space;
-		}
-		return new XYVectorFunction(list);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		return builder.toString();
-	}
 }

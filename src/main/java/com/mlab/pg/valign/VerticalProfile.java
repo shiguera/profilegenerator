@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import com.mlab.pg.norma.DesignSpeed;
 
 /**
- * ArrayList de elementos VAlign para una categoría de carretera 
+ * ArrayList de elementos VerticalProfileAlign para una categoría de carretera 
  * definida por su velocidad de proyecto DesignSpeed
  * @author shiguera
  *
  */
-public class VerticalProfile extends ArrayList<VAlign> {
+public class VerticalProfile extends ArrayList<VerticalProfileAlign> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public class VerticalProfile extends ArrayList<VAlign> {
 	}
 	
 	@Override
-	public boolean add(VAlign align) {
+	public boolean add(VerticalProfileAlign align) {
 		if(align.getDesignSpeed()==this.designSpeed) {
 			return super.add(align);			
 		} else {

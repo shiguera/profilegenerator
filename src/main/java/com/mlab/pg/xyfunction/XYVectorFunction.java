@@ -14,6 +14,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 
 	private static final long serialVersionUID = 1L;
 
+	public XYVectorFunction() {
+		super();
+	}
 	public XYVectorFunction(List<double[]> values) {
 		super(values);
 	}
