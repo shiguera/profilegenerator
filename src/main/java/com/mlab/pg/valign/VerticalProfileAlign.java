@@ -6,7 +6,6 @@ public interface VerticalProfileAlign extends VAlign {
 	double getEndZ();
 	double getStartTangent();
 	double getEndTangent();
-	double getLength();
 	/**
 	 * Devuelve la pendiente de la alineación. Sólo tiene sentido en
 	 * el caso de la rampas o pendientes. En el caso de los acuerdos parabólicos 

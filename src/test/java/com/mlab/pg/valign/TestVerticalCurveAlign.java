@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.xyfunction.Parabole;
 
 import junit.framework.Assert;
@@ -43,4 +44,34 @@ public class TestVerticalCurveAlign {
 
 	}
 
+	@Test
+	public void testDerivative() {
+		LOG.debug("testDerivative()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double s0 = 1000.0;
+		double z0 = 1000.0;
+		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		double g2 = RandomFactory.randomGradeSlope(dspeed);
+		if (grade1.getSlope() > 0) {
+			g2 = - Math.abs(g2);
+		} else {
+			g2 = Math.abs(g2);
+		}
+		VerticalCurveAlign align = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		Assert.assertNotNull(align);
+		Assert.assertEquals(grade1.getEndS(), align.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), align.getStartZ(), 0.001);
+		Assert.assertEquals(grade1.getSlope(), align.getStartTangent(), 0.001);
+		Assert.assertEquals(g2, align.getEndTangent(), 0.001);
+		
+		GradeProfileAlign galign = align.derivative();
+		Assert.assertNotNull(galign);
+		Assert.assertEquals(align.getStartS(), galign.getStartS(), 0.001);
+		Assert.assertEquals(align.getStartTangent(), galign.getStartGrade(), 0.001);
+		Assert.assertEquals(align.getEndS(), galign.getEndS(), 0.001);
+		Assert.assertEquals(align.getEndTangent(), galign.getEndGrade(), 0.001);
+		Assert.assertEquals(align.getLength(), galign.getLength(), 0.001);
+
+		
+	}
 }

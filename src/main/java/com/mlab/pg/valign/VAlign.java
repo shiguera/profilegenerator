@@ -21,6 +21,7 @@ public interface VAlign extends XYFunction{
 	
 	double getStartS();
 	double getEndS();
+	double getLength();
 
 	XYVectorFunction getSample(double startS, double endS, double space);
 

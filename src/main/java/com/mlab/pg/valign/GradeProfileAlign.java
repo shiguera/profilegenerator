@@ -54,7 +54,7 @@ public class GradeProfileAlign implements VAlign {
 		double g2 = getEndGrade();
 		if(isHorizontal()) {
 			double a1 = g1;
-			double a0 = startZ - a1*g1;
+			double a0 = startZ - s1*g1;
 			Straight r = new Straight(a0,a1);
 			valign = new GradeAlign(designSpeed, r, s1, s2);
 		} else {
@@ -97,6 +97,10 @@ public class GradeProfileAlign implements VAlign {
 		return endS;
 	}
 
+	@Override
+	public double getLength() {
+		return getEndS() - getStartS();
+	}
 	@Override
 	public DesignSpeed getDesignSpeed() {
 		return designSpeed;
