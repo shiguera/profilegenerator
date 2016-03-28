@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.xyfunction.XYVector;
 
 /**
  * ArrayList de elementos VerticalProfileAlign para una categoría de carretera 
@@ -47,6 +48,28 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 		} else {
 			return null;
 		}
+	}
+	public VerticalProfileAlign getAlign(double x) {
+		if(size()==0 || x<getStartS() || x>getEndS()) {
+			return null;
+		}
+		for(int i=0; i<size(); i++) {
+			if(x>=get(i).getStartS() && x<=get(i).getEndS()) {
+				return get(i);
+			}
+		}
+		return null;
+	}
+	public int getAlignIndex(double x) {
+		if(size()==0 || x<getStartS() || x>getEndS()) {
+			return -1;
+		}
+		for(int i=0; i<size(); i++) {
+			if(x>=get(i).getStartS() && x<=get(i).getEndS()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	public double getStartS() {
 		if (size() > 0) {
@@ -96,4 +119,29 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 		return builder.toString();
 	}
 
+	/**
+	 * Calcula el error cuadrático medio entre los puntos de dos perfiles longitudinales. 
+	 * Los perfiles tienen que tener el mismo número de puntos.
+	 * 
+	 * @param vp1
+	 * @param vp2
+	 * @param spaceBetweenPoints Separación entre los puntos de los perfiles sobre los
+	 * que se medirá el error cuadrático
+	 * @return
+	 */
+//	public static double ecm(VerticalProfile vp1, VerticalProfile vp2, double spaceBetweenPoints) {
+//		
+//		XYVector sample1 = vp1.getSample(vp1.getStartS(), vp1.getEndS(), spaceBetweenPoints);
+//		XYVector sample2 = vp2.getSample(vp2.getStartS(), vp2.getEndS(), spaceBetweenPoints);
+//		if(sample1.size() != sample2.size()) {
+//			return -1.0;
+//		}
+//		double ecm = 0.0;
+//		for(int i=0; i<sample1.size(); i++) {
+//			double dif = sample1.getY(i)-sample2.getY(i);
+//			ecm = ecm + dif*dif;
+//		}
+//		ecm = ecm / sample1.size();
+//		return ecm;
+//	}
 }

@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
+import com.mlab.pg.xyfunction.Parabole;
+import com.mlab.pg.xyfunction.Straight;
 
 import junit.framework.Assert;
 
@@ -62,5 +64,88 @@ public class TestGradeProfileAlign {
 		
 		
 
+	}
+
+	@Test
+	public void testGetAlign() {
+		LOG.debug("testGetAlign()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double starts1 = 1000.0;
+		double startz1 = 900.0;
+		double startslope1 = 0.03;
+		Straight straight1 = new Straight(starts1, startz1, startslope1);
+		double ends1 = 1400.0; 
+		GradeAlign grade1 = new GradeAlign(dspeed, straight1, starts1, ends1);
+		double starts2 = ends1;
+		double startz2 = grade1.getEndZ();
+		double startslope2 = startslope1;
+		double kv = -8000.0;
+		Parabole parabole = new Parabole(starts2, startz2, startslope2, kv);
+		double length = 400;
+		double ends2 = starts2 + length;
+		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, parabole, starts2, ends2);
+		double starts3 = vc.getEndS();
+		double startz3 = vc.getEndZ();
+		double startslope3 = vc.getEndTangent();
+		Straight straight2 = new Straight(starts3, startz3, startslope3);
+		double ends3 = starts3 + 300.0;
+		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts3, ends3);
+
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		Assert.assertTrue(profile.add(grade1));
+		Assert.assertTrue(profile.add(vc));
+		Assert.assertTrue(profile.add(grade2));
+		
+		Assert.assertNull(profile.getAlign(0.0));
+		Assert.assertEquals(grade1, profile.getAlign(1000.0));
+		Assert.assertEquals(grade1, profile.getAlign(1400.0));
+		Assert.assertEquals(vc, profile.getAlign(1400.5));
+		Assert.assertEquals(vc, profile.getAlign(1500.0));
+		Assert.assertEquals(vc, profile.getAlign(1800.0));
+		Assert.assertEquals(grade2, profile.getAlign(1801.0));
+		Assert.assertEquals(grade2, profile.getAlign(2100.0));
+		Assert.assertNull(profile.getAlign(2101.0));
+		
+	}
+	@Test
+	public void testGetAlignIndex() {
+		LOG.debug("testGetAlignIndex()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double starts1 = 1000.0;
+		double startz1 = 900.0;
+		double startslope1 = 0.03;
+		Straight straight1 = new Straight(starts1, startz1, startslope1);
+		double ends1 = 1400.0; 
+		GradeAlign grade1 = new GradeAlign(dspeed, straight1, starts1, ends1);
+		double starts2 = ends1;
+		double startz2 = grade1.getEndZ();
+		double startslope2 = startslope1;
+		double kv = -8000.0;
+		Parabole parabole = new Parabole(starts2, startz2, startslope2, kv);
+		double length = 400;
+		double ends2 = starts2 + length;
+		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, parabole, starts2, ends2);
+		double starts3 = vc.getEndS();
+		double startz3 = vc.getEndZ();
+		double startslope3 = vc.getEndTangent();
+		Straight straight2 = new Straight(starts3, startz3, startslope3);
+		double ends3 = starts3 + 300.0;
+		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts3, ends3);
+
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		Assert.assertTrue(profile.add(grade1));
+		Assert.assertTrue(profile.add(vc));
+		Assert.assertTrue(profile.add(grade2));
+		
+		Assert.assertEquals(-1, profile.getAlignIndex(0.0));
+		Assert.assertEquals(0, profile.getAlignIndex(1000.0));
+		Assert.assertEquals(0, profile.getAlignIndex(1400.0));
+		Assert.assertEquals(1, profile.getAlignIndex(1400.5));
+		Assert.assertEquals(1, profile.getAlignIndex(1500.0));
+		Assert.assertEquals(1, profile.getAlignIndex(1800.0));
+		Assert.assertEquals(2, profile.getAlignIndex(1801.0));
+		Assert.assertEquals(2, profile.getAlignIndex(2100.0));
+		Assert.assertEquals(-1, profile.getAlignIndex(2101.0));
+		
 	}
 }
