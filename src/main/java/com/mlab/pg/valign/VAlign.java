@@ -20,7 +20,9 @@ public interface VAlign extends XYFunction{
 	Polynom2 getPolynom2();
 	
 	double getStartS();
+	void setStartS(double starts);
 	double getEndS();
+	void setEndS(double ends);
 	double getLength();
 
 	XYVectorFunction getSample(double startS, double endS, double space);

@@ -34,6 +34,7 @@ public class GradeProfileAlign implements VAlign {
 	public double getStartGrade() {
 		return straight.getY(startS);
 	}
+	
 	public double getEndGrade() {
 		return straight.getY(endS);
 	}
@@ -93,10 +94,17 @@ public class GradeProfileAlign implements VAlign {
 	}
 
 	@Override
+	public void setStartS(double starts) {
+		this.startS = starts;
+	}
+	@Override
 	public double getEndS() {
 		return endS;
 	}
-
+	@Override
+	public void setEndS(double ends) {
+		this.endS = ends;
+	}
 	@Override
 	public double getLength() {
 		return getEndS() - getStartS();

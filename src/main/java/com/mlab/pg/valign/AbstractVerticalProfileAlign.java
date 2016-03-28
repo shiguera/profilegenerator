@@ -52,13 +52,22 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	public Polynom2 getPolynom2() {
 		return polynom;
 	}
-
+	@Override
 	public double getStartS() {
 		return startS;
 	}
+	@Override
+	public void setStartS(double starts) {
+		this.startS = starts;
+	}
 
+	@Override
 	public double getEndS() {
 		return endS;
+	}
+	@Override
+	public void setEndS(double ends) {
+		this.endS = ends;
 	}
 
 	@Override
@@ -90,18 +99,19 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	}
 
 	// Interface VerticalProfileAlign
+	@Override
 	public double getStartZ() {
 		return polynom.getY(startS);
 	}
-
+	@Override
 	public double getEndZ() {
 		return polynom.getY(endS);
 	}
-
+	@Override
 	public double getStartTangent() {
 		return polynom.getTangent(startS);
 	}
-
+	@Override
 	public double getEndTangent() {
 		return polynom.getTangent(endS);
 	}
@@ -109,6 +119,7 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	/**
 	 * Longitud medida a lo largo del eje X
 	 */
+	@Override
 	public double getLength() {
 		return endS - startS;
 	}
@@ -118,6 +129,7 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	 * VStraightAlign devolverán el valor de su pendiente. Las 
 	 * vertical curves, VParaboleAlign, devolverán Double.NaN 
 	 */
+	@Override
 	public abstract double getSlope();
 	
 	/**
@@ -126,6 +138,7 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	 * vertical curves, VParaboleAlign, devolverán el valor 
 	 * de su parámetro Kv 
 	 */
+	@Override
 	public abstract double getKv();
 
 	/**
