@@ -10,7 +10,7 @@ import com.mlab.pg.norma.DesignSpeed;
  * @author shiguera
  *
  */
-public class VerticalProfile extends ArrayList<VerticalProfileAlign> {
+public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,9 +21,60 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign> {
 		this.designSpeed = dspeed;
 	}
 	
+	public boolean add(VerticalProfile vp) {
+		if (vp == null || vp.size() == 0) {
+			return false;
+		}
+		boolean globalResult = true;
+		for(int i=0; i<vp.size(); i++) {
+			boolean partialResult = this.add(vp.get(i));
+			if (partialResult == false) {
+				globalResult = false;
+			}
+		}
+		return globalResult;
+	}
+	public VerticalProfileAlign getFirstAlign() {
+		if (size() > 0) {
+			return get(0);
+		} else {
+			return null;
+		}
+	}
+	public VerticalProfileAlign getLastAlign() {
+		if (size() > 0) {
+			return get(size()-1);
+		} else {
+			return null;
+		}
+	}
+	public double getStartS() {
+		if (size() > 0) {
+			return get(0).getStartS();
+		} else {
+			return Double.NaN;
+		}
+	}
+	public double getEndS() {
+		if (size() > 0) {
+			return get(size()-1).getEndS();
+		} else {
+			return Double.NaN;
+		}
+	}
+	public double getLength() {
+		if (size() > 0) {
+			return getEndS() - getStartS();
+		} else {
+			return Double.NaN;
+		}
+	}
+
+	// Extend ArrayList
 	@Override
 	public boolean add(VerticalProfileAlign align) {
 		if(align.getDesignSpeed()==this.designSpeed) {
+			
 			return super.add(align);			
 		} else {
 			return false;
@@ -44,4 +95,5 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign> {
 		}
 		return builder.toString();
 	}
+
 }

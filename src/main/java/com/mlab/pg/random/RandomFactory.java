@@ -18,6 +18,89 @@ import com.mlab.pg.xyfunction.Straight;
 public class RandomFactory {
 
 	private static Logger LOG = Logger.getLogger(RandomFactory.class);
+	// Perfiles longitudinales
+	/**
+	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
+	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
+	 * perfiles básicos. El primer perfil básico será aleatoriamente
+	 * del tipo I o II.
+	 * @param vertexCount
+	 * @return
+	 */
+	public static VerticalProfile randomVerticalProfile(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
+		double sign = RandomFactory.randomSign();
+		if ( sign> 0) {
+			return RandomFactory.randomVerticalProfileBeginningOnType_I(dspeed, s0, z0, vertexCount);
+		} else {
+			return RandomFactory.randomVerticalProfileBeginningOnType_II(dspeed, s0, z0, vertexCount);
+		}
+	}
+	/**
+	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
+	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
+	 * perfiles básicos. El primer perfil básico será tipo I
+	 * @param vertexCount
+	 * @return
+	 */
+	public static VerticalProfile randomVerticalProfileBeginningOnType_I(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
+		if(vertexCount < 1) {
+			return null;
+		}
+		VerticalProfile generalProfile = new VerticalProfile(dspeed);
+		int count = 0;
+		double startS = s0;
+		double startZ = z0;
+		while (count < vertexCount) {
+			VerticalProfile vpI = RandomFactory.randomVerticalProfileType_I(dspeed, startS, startZ);
+			generalProfile.add(vpI);
+			count++;
+			if (count >= vertexCount) {
+				break;
+			}
+			startS = vpI.getEndS();
+			startZ = vpI.getLastAlign().getEndZ();
+			VerticalProfile vpII = RandomFactory.randomVerticalProfileType_II(dspeed, startS, startZ);
+			generalProfile.add(vpII);
+			startS = vpII.getEndS();
+			startZ = vpII.getLastAlign().getEndZ();
+			count++;
+		}
+		return generalProfile;
+	}
+	/**
+	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
+	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
+	 * perfiles básicos. El primer perfil básico será tipo II
+	 * @param vertexCount
+	 * @return
+	 */
+	public static VerticalProfile randomVerticalProfileBeginningOnType_II(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
+		if(vertexCount < 1) {
+			return null;
+		}
+		VerticalProfile generalProfile = new VerticalProfile(dspeed);
+		int count = 0;
+		double startS = s0;
+		double startZ = z0;
+		while (count < vertexCount) {
+			VerticalProfile vpI = RandomFactory.randomVerticalProfileType_II(dspeed, startS, startZ);
+			generalProfile.add(vpI);
+			count++;
+			if (count >= vertexCount) {
+				break;
+			}
+			startS = vpI.getEndS();
+			startZ = vpI.getLastAlign().getEndZ();
+			VerticalProfile vpII = RandomFactory.randomVerticalProfileType_I(dspeed, startS, startZ);
+			generalProfile.add(vpII);
+			startS = vpII.getEndS();
+			startZ = vpII.getLastAlign().getEndZ();
+			count++;
+		}
+		return generalProfile;
+	}
+	
+	
 	
 	// Perfiles básicos
 	/**
@@ -66,6 +149,7 @@ public class RandomFactory {
 		profile.add(grade2);
 		return profile;
 	}
+	
 	// Alineaciones VerticalCurve
 	/**
 	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
@@ -138,8 +222,6 @@ public class RandomFactory {
 		return randomDoubleByIncrements(minKv, maxKv,inc);
 	}
 
-	
-	
 	// Alineaciones Grade
 	/**
 	 * Genera una alineación grade aleatoria para una velocidad de proyecto
