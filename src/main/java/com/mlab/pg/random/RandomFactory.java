@@ -20,6 +20,13 @@ public class RandomFactory {
 	private static Logger LOG = Logger.getLogger(RandomFactory.class);
 	
 	// Perfiles básicos
+	/**
+	 * Genera unperfil aleatorio tipo I: upgrade-crestcurve-downgrade
+	 * @param dspeed
+	 * @param s0
+	 * @param z0
+	 * @return
+	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
 		GradeAlign grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
 		double g2 = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
@@ -33,6 +40,29 @@ public class RandomFactory {
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(grade1);
 		profile.add(crestcurve);
+		profile.add(grade2);
+		return profile;
+	}
+	/**
+	 * Genera un perfil aleatorio tipo II: downgrade - sagcurve - upgrade
+	 * @param dspeed
+	 * @param s0
+	 * @param z0
+	 * @return
+	 */
+	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
+		GradeAlign grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
+		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurveAlign sagcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		double starts2 = sagcurve.getEndS();
+		double startz2 = sagcurve.getEndZ();
+		double length2 = RandomFactory.randomGradeLength(dspeed);
+		double ends2 = starts2 + length2;
+		Straight straight2 = new Straight(starts2, startz2, g2);
+		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts2, ends2);
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		profile.add(grade1);
+		profile.add(sagcurve);
 		profile.add(grade2);
 		return profile;
 	}
