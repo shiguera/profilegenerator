@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * ArrayList de elementos GradeProfileAlign para una categoría de carretera 
@@ -28,6 +29,78 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 		} else {
 			return false;
 		}
+	}
+	public GradeProfileAlign getFirstAlign() {
+		if (size() > 0) {
+			return get(0);
+		} else {
+			return null;
+		}
+	}
+	public GradeProfileAlign getLastAlign() {
+		if (size() > 0) {
+			return get(size()-1);
+		} else {
+			return null;
+		}
+	}
+	public GradeProfileAlign getAlign(double x) {
+		if(size()==0 || x<getStartS() || x>getEndS()) {
+			return null;
+		}
+		for(int i=0; i<size(); i++) {
+			if(x>=get(i).getStartS() && x<=get(i).getEndS()) {
+				return get(i);
+			}
+		}
+		return null;
+	}
+	public int getAlignIndex(double x) {
+		if(size()==0 || x<getStartS() || x>getEndS()) {
+			return -1;
+		}
+		for(int i=0; i<size(); i++) {
+			if(x>=get(i).getStartS() && x<=get(i).getEndS()) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	public double getStartS() {
+		if (size() > 0) {
+			return get(0).getStartS();
+		} else {
+			return Double.NaN;
+		}
+	}
+	public double getEndS() {
+		if (size() > 0) {
+			return get(size()-1).getEndS();
+		} else {
+			return Double.NaN;
+		}
+	}
+	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
+		if(starts>getEndS() || ends<getStartS()) {
+			return null;
+		}
+		if(starts<getStartS()) {
+			starts=getStartS();
+		}
+		if(ends>getEndS()) {
+			ends = getEndS();
+		}
+		XYVectorFunction sample = new XYVectorFunction();
+		double x = starts;
+		GradeProfileAlign align = null;
+		for(x=starts; x<=ends; x+=space) {
+			align = getAlign(x);
+			sample.add(new double[]{x, align.getY(x)});
+		}
+		if(includeLastPoint && sample.getEndX()<ends) {
+			sample.add(new double[]{ends, align.getY(ends)});
+		}
+		return sample;
 	}
 	
 	@Override
