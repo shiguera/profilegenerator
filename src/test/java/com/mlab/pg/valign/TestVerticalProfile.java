@@ -52,4 +52,21 @@ public class TestVerticalProfile {
 		Assert.assertEquals(vp.getEndS(), function.getEndX(), 0.001);
 
 	}
+	@Test
+	public void testEcm() {
+		LOG.debug("testEcm()");
+		VerticalProfile vp = new VerticalProfile(DesignSpeed.DS120);
+		GradeAlign g1 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		vp.add(g1);
+		double space = (vp.getEndS() - vp.getStartS())/100.0;
+		double ecm = vp.ecm(vp, space);
+		Assert.assertEquals(0.0, ecm, 0.001);
+
+		VerticalProfile vp2 = new VerticalProfile(DesignSpeed.DS120);
+		GradeAlign g2 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		vp2.add(g2);
+		LOG.debug(vp.ecm(vp2, space));
+
+	}
+
 }

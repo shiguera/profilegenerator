@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.xyfunction.XYVector;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
@@ -149,30 +150,30 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 	 * que se medirá el error cuadrático
 	 * @return
 	 */
-//	public double ecm(VerticalProfile vp2, double spaceBetweenPoints) {
-//		
-//		// Ajustar al mismo punto de inicio
-//		if (vp2.getStartS() < this.getStartS()) {
-//			this.getFirstAlign().setStartS(vp2.getStartS());
-//		} else {
-//			vp2.getFirstAlign().setStartS(this.getStartS());
-//		}
-//		// Ajustar al mismo punto final
-//		if(vp2.getEndS() > this.getEndS()) {
-//			this.getLastAlign().setEndS(vp2.getEndS());
-//		} else {
-//			vp2.getLastAlign().setEndS(this.getEndS());
-//		}
-//		
-//		XYVector sample1 = vp1.getSample(vp1.getStartS(), vp1.getEndS(), spaceBetweenPoints);
-//		XYVector sample2 = vp2.getSample(vp2.getStartS(), vp2.getEndS(), spaceBetweenPoints);
-//
-//		double ecm = 0.0;
-//		for(int i=0; i<sample1.size(); i++) {
-//			double dif = sample1.getY(i)-sample2.getY(i);
-//			ecm = ecm + dif*dif;
-//		}
-//		ecm = ecm / sample1.size();
-//		return ecm;
-//	}
+	public double ecm(VerticalProfile vp2, double spaceBetweenPoints) {
+		
+		// Ajustar al mismo punto de inicio
+		if (vp2.getStartS() < this.getStartS()) {
+			this.getFirstAlign().setStartS(vp2.getStartS());
+		} else {
+			vp2.getFirstAlign().setStartS(this.getStartS());
+		}
+		// Ajustar al mismo punto final
+		if(vp2.getEndS() > this.getEndS()) {
+			this.getLastAlign().setEndS(vp2.getEndS());
+		} else {
+			vp2.getLastAlign().setEndS(this.getEndS());
+		}
+		
+		XYVector sample1 = getSample(getStartS(), getEndS(), spaceBetweenPoints, true);
+		XYVector sample2 = vp2.getSample(vp2.getStartS(), vp2.getEndS(), spaceBetweenPoints, true);
+
+		double ecm = 0.0;
+		for(int i=0; i<sample1.size(); i++) {
+			double dif = sample1.getY(i)-sample2.getY(i);
+			ecm = ecm + dif*dif;
+		}
+		ecm = ecm / sample1.size();
+		return ecm;
+	}
 }

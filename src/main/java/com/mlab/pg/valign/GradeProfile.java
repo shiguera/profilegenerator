@@ -3,6 +3,7 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.xyfunction.XYVector;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
@@ -101,6 +102,41 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 			sample.add(new double[]{ends, align.getY(ends)});
 		}
 		return sample;
+	}
+	/**
+	 * Calcula el error cuadrático medio entre los puntos de dos perfiles 
+	 * de pendientes. 
+	 * 
+	 * @param gp2
+	 * @param spaceBetweenPoints Separación entre los puntos de los perfiles sobre los
+	 * que se medirá el error cuadrático
+	 * @return
+	 */
+	public double ecm(GradeProfile gp2, double spaceBetweenPoints) {
+		
+		// Ajustar al mismo punto de inicio
+		if (gp2.getStartS() < this.getStartS()) {
+			this.getFirstAlign().setStartS(gp2.getStartS());
+		} else {
+			gp2.getFirstAlign().setStartS(this.getStartS());
+		}
+		// Ajustar al mismo punto final
+		if(gp2.getEndS() > this.getEndS()) {
+			this.getLastAlign().setEndS(gp2.getEndS());
+		} else {
+			gp2.getLastAlign().setEndS(this.getEndS());
+		}
+		
+		XYVector sample1 = getSample(getStartS(), getEndS(), spaceBetweenPoints, true);
+		XYVector sample2 = gp2.getSample(gp2.getStartS(), gp2.getEndS(), spaceBetweenPoints, true);
+
+		double ecm = 0.0;
+		for(int i=0; i<sample1.size(); i++) {
+			double dif = sample1.getY(i)-sample2.getY(i);
+			ecm = ecm + dif*dif;
+		}
+		ecm = ecm / sample1.size();
+		return ecm;
 	}
 	
 	@Override
