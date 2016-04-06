@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class TestVerticalProfile {
 
@@ -28,4 +29,27 @@ public class TestVerticalProfile {
 		Assert.assertFalse(vp.add(g2));
 	}
 
+	@Test
+	public void testGetSample() {
+		LOG.debug("testGetSample()");
+		VerticalProfile vp = new VerticalProfile(DesignSpeed.DS120);
+		GradeAlign g1 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		vp.add(g1);
+		XYVectorFunction function = vp.getSample(g1.getEndS()+1.0, 1000, 105, true);
+		Assert.assertNull(function);
+		function = vp.getSample(vp.getStartS(), g1.getStartS()-1.0, 105, true);
+		Assert.assertNull(function);
+		
+		function = vp.getSample(vp.getStartS()-1.0, g1.getEndS(), 105, true);
+		Assert.assertEquals(vp.getStartS(), function.getStartX(), 0.001);
+		function = vp.getSample(vp.getStartS(), g1.getEndS()+1.0, 105, true);
+		Assert.assertEquals(vp.getEndS(), function.getEndX(), 0.001);
+		
+		//LOG.debug(vp.getStartS());
+		//LOG.debug(vp.getEndS());
+		function = vp.getSample(vp.getStartS(), vp.getEndS(), 100, true);
+		Assert.assertEquals(vp.getStartS(), function.getStartX(), 0.001);
+		Assert.assertEquals(vp.getEndS(), function.getEndX(), 0.001);
+
+	}
 }

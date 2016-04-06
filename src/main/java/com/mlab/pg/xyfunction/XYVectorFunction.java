@@ -5,7 +5,8 @@ import java.util.List;
 /**
  * Extiende XYVector en el sentido de que las parejas de doubles (x,y)
  * representan los valores (x,y) de una determinada función en un intervalo.
- * Se sobrescribe el método add() de forma que cada valor x debe ser mayor que elanterior.
+ * Se sobrescribe el método add() de forma que cada valor x debe ser mayor 
+ * que el anterior.
  * 
  * @author shiguera
  *

@@ -3,7 +3,7 @@ package com.mlab.pg.valign;
 import java.util.ArrayList;
 
 import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.xyfunction.XYVector;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * ArrayList de elementos VerticalProfileAlign para una categoría de carretera 
@@ -93,6 +93,28 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 		}
 	}
 
+	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
+		if(starts>getEndS() || ends<getStartS()) {
+			return null;
+		}
+		if(starts<getStartS()) {
+			starts=getStartS();
+		}
+		if(ends>getEndS()) {
+			ends = getEndS();
+		}
+		XYVectorFunction sample = new XYVectorFunction();
+		double x = starts;
+		VerticalProfileAlign align = null;
+		for(x=starts; x<=ends; x+=space) {
+			align = getAlign(x);
+			sample.add(new double[]{x, align.getY(x)});
+		}
+		if(includeLastPoint && sample.getEndX()<ends) {
+			sample.add(new double[]{ends, align.getY(ends)});
+		}
+		return sample;
+	}
 	// Extend ArrayList
 	@Override
 	public boolean add(VerticalProfileAlign align) {
