@@ -168,10 +168,10 @@ public class RandomFactory {
 		}
 		VerticalCurveLimits limits = null;
 		if(g1>0) {
-			LOG.debug("randomVerticalCurve(): generating crest curve");
+			//LOG.debug("randomVerticalCurve(): generating crest curve");
 			limits = new CrestCurveLimits(dspeed);
 		} else {
-			LOG.debug("randomVerticalCurve(): generating sag curve");
+			//LOG.debug("randomVerticalCurve(): generating sag curve");
 			limits = new SagCurveLimits(dspeed);
 		}
 		double kvmin = limits.getMinKv();
