@@ -6,12 +6,12 @@ import org.apache.log4j.Logger;
 
 import com.mlab.pg.util.Ioutil;
 
-public class XYSampleCsvWriter {
-	private final Logger LOG = Logger.getLogger(XYSampleCsvWriter.class);
+public class XYVectorFunctionCsvWriter {
+	private final Logger LOG = Logger.getLogger(XYVectorFunctionCsvWriter.class);
 	
-	protected XYSample sample;
+	protected XYVectorFunction sample;
 	
-	public XYSampleCsvWriter(XYSample function) {
+	public XYVectorFunctionCsvWriter(XYVectorFunction function) {
 		this.sample = function;
 	}
 	public boolean write(File csvfile, int width, int precission, char separator) {

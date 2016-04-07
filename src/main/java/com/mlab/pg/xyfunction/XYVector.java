@@ -103,4 +103,7 @@ public class XYVector extends ArrayList<double[]>  {
 	public boolean contains(int i) {
 		return (i>=0 && i<size());
 	}
+
+
+
 }

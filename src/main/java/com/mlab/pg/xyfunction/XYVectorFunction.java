@@ -1,6 +1,9 @@
 package com.mlab.pg.xyfunction;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 /**
  * Extiende XYVector en el sentido de que las parejas de doubles (x,y)
@@ -14,6 +17,7 @@ import java.util.List;
 public class XYVectorFunction extends XYVector implements XYFunction, InInterval{
 
 	private static final long serialVersionUID = 1L;
+	private static Logger LOG = Logger.getLogger(XYVectorFunction.class);
 
 	public XYVectorFunction() {
 		super();
@@ -72,6 +76,39 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		} 
 		return -1;		
 	}
+
+	public boolean containsInterval(IntegerInterval interval) {
+		if(interval.getStart()>=0 && interval.getStart()<size() && 
+				interval.getEnd()>=0 && interval.getEnd()<size()) {
+			return true;
+		}
+		return false;
+	}
+	public List<double[]> getValues(IntegerInterval interval) {
+		if(!this.containsInterval(interval)) {
+			LOG.error("Error: sample doesn't contain interval "+ interval.toString());
+			return null;
+		}
+		List<double[]> l = new ArrayList<double[]>();
+		for(int i=interval.getStart(); i<=interval.getEnd(); i++) {
+			l.add(get(i));
+		}
+		return l;
+	}
+
+	public double[][] getValuesAsArray(IntegerInterval interval) {
+		if(!this.containsInterval(interval)) {
+			return null;
+		}
+		int size = interval.getEnd() - interval.getStart() +1;
+		double[][] d = new double[size][2];
+		List<double[]> l = getValues(interval);
+		for(int i=0; i<size;i++) {
+			d[i] = l.get(i);
+		}
+		return d;
+	}
+	
 	// Interface InInterval
 	@Override
 	public double getStartX() {

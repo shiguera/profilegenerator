@@ -8,29 +8,33 @@ import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class XYSampleCsvReader implements XYSampleReader {
-	private final Logger LOG = Logger.getLogger(XYSampleCsvReader.class);
+public class XYVectorFunctionCsvReader implements XYVectorFunctionReader {
+	private final Logger LOG = Logger.getLogger(XYVectorFunctionCsvReader.class);
 
 	protected File csvFile;
 	protected char separator;
+	protected boolean skipFirstLine;
 	
-	public XYSampleCsvReader(File file, char separator) {
+	public XYVectorFunctionCsvReader(File file, char separator, boolean skipfirstline) {
 		this.csvFile = file;
 		this.separator = separator;
+		this.skipFirstLine = skipfirstline;
 	}
 	
 	@Override
-	public XYSample read() {
+	public XYVectorFunction read() {
 		CSVReader reader = null;
-		XYSample result = new XYSampleImpl();
+		XYVectorFunction result = new XYVectorFunction();
 		try {
 			reader = new CSVReader(new FileReader(csvFile), separator);
 			String[] nextLine;
-			reader.readNext(); // Saltarse las cabeceras
+			if (skipFirstLine) {
+				reader.readNext(); // Saltarse las cabeceras
+			}
 			while ((nextLine = reader.readNext()) != null) {
 				double l = Double.parseDouble(nextLine[0].trim());
 				double z = Double.parseDouble(nextLine[1].trim());
-				result.getValues().add(new double[]{l,z});
+				result.add(new double[]{l,z});
 			}
 		} catch (Exception e1) {
 			LOG.error("read() :" + e1.getMessage());
