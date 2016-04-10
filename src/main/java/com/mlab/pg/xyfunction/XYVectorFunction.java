@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.util.MathUtil;
+
 /**
  * Extiende XYVector en el sentido de que las parejas de doubles (x,y)
  * representan los valores (x,y) de una determinada función en un intervalo.
@@ -192,6 +194,51 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	public double getCurvature(double x) {
 		// TODO Auto-generated method stub
 		return Double.NaN;
+	}
+	
+	// Aproximaciones mínimos cuadrados
+	/**
+	 * Calcula la recta que mejor ajusta por mínimos cuadrados los puntos de la
+	 * XYVectorFunction 'function' comprendidos en el intervalo [start, end], incluyendo
+	 * los extremos.
+	 * 
+	 * @param function XYVectorFunction con los valores de los puntos a ajustar
+	 * @param start Índice del primer punto de la XYSample que se quiere incluir en
+	 * la recta ajustada
+	 * @param end Índice del último punto de la XYVectorFunction que se quiere incluir en 
+	 * la recta ajustada
+	 * 
+	 * @return Coeficientes [a0, a1] de la recta que mejor ajusta por mínimos cuadrados a los 
+	 * puntos del intervalo en la forma y = a0 + a1x
+	 */
+	public double[] rectaMinimosCuadrados(int start, int end) {
+		IntegerInterval interval = new IntegerInterval(start, end);
+		return rectaMinimosCuadrados(interval);
+	}
+	public double[] rectaMinimosCuadrados(IntegerInterval interval) {
+		if(!containsInterval(interval)) {
+			return null;
+		}
+		double[][] xy = getValuesAsArray(interval);
+		return MathUtil.rectaMinimosCuadrados(xy);
+	}
+
+	/**
+	 * 
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public double[] parabolaMinimosCuadrados(int start, int end) {
+		IntegerInterval interval = new IntegerInterval(start, end);
+		return parabolaMinimosCuadrados(interval);
+	}
+	public double[] parabolaMinimosCuadrados(IntegerInterval interval) {
+		if(!containsInterval(interval)) {
+			return null;
+		}
+		double[][] xy = getValuesAsArray(interval);
+		return MathUtil.parabolaMinimosCuadrados(xy);
 	}
 
 }

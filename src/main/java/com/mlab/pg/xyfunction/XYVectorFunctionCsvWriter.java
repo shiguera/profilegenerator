@@ -14,6 +14,7 @@ public class XYVectorFunctionCsvWriter {
 	public XYVectorFunctionCsvWriter(XYVectorFunction function) {
 		this.sample = function;
 	}
+	
 	public boolean write(File csvfile, int width, int precission, char separator) {
 		double[][] valarray = sample.getValuesAsArray(new IntegerInterval(0, sample.size()-1));
 		LOG.info(valarray.length);
@@ -24,6 +25,7 @@ public class XYVectorFunctionCsvWriter {
 		} 
 		return false;
 	}
+	
 	public boolean write(File csvfile, int start, int end, int width, int precission, char separator) {
 		int result = (Ioutil.write(csvfile.getPath(), sample.getValuesAsArray(new IntegerInterval(start, end))
 				,width, precission, separator));

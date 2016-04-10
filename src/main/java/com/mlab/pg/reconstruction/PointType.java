@@ -1,0 +1,8 @@
+package com.mlab.pg.reconstruction;
+
+public enum PointType {
+
+	NULL, GRADE, VERTICAL_CURVE, VERTICALCURVE_BEGINNING, 
+	VERTICALCURVE_END, VERTICALCURVE_TO_VERTICALCURVE
+	
+}
