@@ -99,9 +99,7 @@ public class RandomFactory {
 		}
 		return generalProfile;
 	}
-	
-	
-	
+		
 	// Perfiles básicos
 	/**
 	 * Genera unperfil aleatorio tipo I: upgrade-crestcurve-downgrade

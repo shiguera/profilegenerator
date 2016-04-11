@@ -19,6 +19,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class GradeProfileAlign implements VAlign {
 
+	
 	DesignSpeed designSpeed;
 	Straight straight;
 	double startS;
@@ -138,6 +139,15 @@ public class GradeProfileAlign implements VAlign {
 			list.add(new double[]{endS, getY(endS)});
 		}
 		return new XYVectorFunction(list);
+	}
+	
+	@Override
+	public String toString() {
+		String cad = String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
+				startS, straight.getY(startS), straight.getTangent(startS),
+				getLength(), endS, straight.getY(endS), straight.getTangent(endS),
+				straight.getA0(), straight.getA1(), straight.getA2());
+		return cad;
 	}
 
 	

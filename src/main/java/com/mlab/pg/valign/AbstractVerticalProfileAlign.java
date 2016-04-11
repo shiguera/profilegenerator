@@ -90,13 +90,7 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 		}
 		return new XYVectorFunction(list);
 	}
-	@Override
-	public String toString() {
-		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
-				startS, polynom.getY(startS), polynom.getTangent(startS),
-				getLength(), endS, polynom.getY(endS), polynom.getTangent(endS),
-				polynom.getA0(), polynom.getA1(), polynom.getA2());
-	}
+	
 
 	// Interface VerticalProfileAlign
 	@Override
@@ -161,5 +155,12 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 		return galign;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
+				startS, polynom.getY(startS), polynom.getTangent(startS),
+				getLength(), endS, polynom.getY(endS), polynom.getTangent(endS),
+				polynom.getA0(), polynom.getA1(), polynom.getA2());
+	}
 	
 }

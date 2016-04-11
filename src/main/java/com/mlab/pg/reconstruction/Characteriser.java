@@ -27,6 +27,7 @@ public class Characteriser {
 	 */
 	List<PointType> characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
 		if(gpsample==null || gpsample.size()<2*mobileBaseSize-1) {
+			LOG.error("characterise() ERROR: NULL RESULT");
 			return null;
 		}
 		int sampleSize = gpsample.size();
@@ -42,13 +43,14 @@ public class Characteriser {
 		for(int i=first; i<=last; i++) {
 			types.set(i, findPointType(i,gpsample, mobileBaseSize,thresholdSlope));
 		}
-		return null;
+		return types;
 	}
 
 	private PointType findPointType(int i, XYVectorFunction gpsample,
 			int mobileBaseSize, double thresholdSlope) {
-
-		return null;
+		PointCharacteriser pch = new PointCharacteriser();
+		
+		return pch.characterise(i, gpsample, mobileBaseSize, thresholdSlope);
 	}
 	
 	/**
