@@ -10,7 +10,6 @@ import org.junit.Test;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.valign.GradeAlign;
-import com.mlab.pg.valign.GradeProfile;
 import com.mlab.pg.valign.GradeProfileAlign;
 import com.mlab.pg.valign.VAlign;
 import com.mlab.pg.valign.VerticalProfile;
@@ -59,6 +58,19 @@ public class TestCharacteriser {
 		}
 		
 		
+		
+	}
+
+	@Test
+	public void testVerticalCurveAlign() {
+		LOG.debug("testVerticalCurveAlign()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double s0 = 100.0;
+		double z0 = 1000.0;
+		VerticalProfile verticalprofile = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		System.out.println(VAlign.CABECERA);
+		System.out.println(verticalprofile.toString());
+
 		
 	}
 }

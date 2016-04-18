@@ -157,10 +157,10 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 
 	@Override
 	public String toString() {
-		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f", 
+		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %10s", 
 				startS, polynom.getY(startS), polynom.getTangent(startS),
 				getLength(), endS, polynom.getY(endS), polynom.getTangent(endS),
-				polynom.getA0(), polynom.getA1(), polynom.getA2());
+				polynom.getA0(), polynom.getA1(), polynom.getA2(), (Double.isNaN(getKv())?"-":String.format("%9.1f", getKv())));
 	}
 	
 }
