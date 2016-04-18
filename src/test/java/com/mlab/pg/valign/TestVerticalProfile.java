@@ -69,4 +69,23 @@ public class TestVerticalProfile {
 
 	}
 
+	@Test
+	public void testDerivative() {
+		LOG.debug("testDerivative()");
+		DesignSpeed dspeed = DesignSpeed.DS120;
+		double s0 = 100.0;
+		double z0 = 1000.0;
+		VerticalProfile vprofile = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
+		
+		GradeProfile gprofile = vprofile.derivative();
+		
+		for(int i=0; i<vprofile.size(); i++) {
+			Assert.assertEquals(vprofile.getAlign(i).getStartS(), gprofile.getAlign(i).getStartS(), 0.001);
+			Assert.assertEquals(vprofile.getAlign(i).getEndS(), gprofile.getAlign(i).getEndS(), 0.001);
+			Assert.assertEquals(vprofile.getAlign(i).getStartTangent(), gprofile.getAlign(i).getStartGrade(), 0.001);
+			Assert.assertEquals(vprofile.getAlign(i).getEndTangent(), gprofile.getAlign(i).getEndGrade(), 0.001);
+			
+			
+		}
+	}
 }

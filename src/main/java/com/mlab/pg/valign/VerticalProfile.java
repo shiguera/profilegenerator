@@ -18,6 +18,7 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 
 	protected DesignSpeed designSpeed;
 	
+
 	public VerticalProfile(DesignSpeed dspeed) {
 		super();
 		this.designSpeed = dspeed;
@@ -61,6 +62,12 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 		}
 		return null;
 	}
+	public VerticalProfileAlign getAlign(int i) {
+		if(i<0 || i>=size()) {
+			return null;
+		}
+		return get(i);
+	}
 	public int getAlignIndex(double x) {
 		if(size()==0 || x<getStartS() || x>getEndS()) {
 			return -1;
@@ -93,7 +100,14 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 			return Double.NaN;
 		}
 	}
+	public DesignSpeed getDesignSpeed() {
+		return designSpeed;
+	}
+	public void setDesignSpeed(DesignSpeed designSpeed) {
+		this.designSpeed = designSpeed;
+	}
 
+	
 	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
 		if(starts>getEndS() || ends<getStartS()) {
 			return null;
@@ -176,4 +190,14 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 		ecm = ecm / sample1.size();
 		return ecm;
 	}
+
+	public GradeProfile derivative() {
+		GradeProfile gprofile =new GradeProfile(getDesignSpeed());
+		for(int i=0; i<size(); i++) {
+			GradeProfileAlign galign = getAlign(i).derivative();
+			gprofile.add(galign);
+		}
+		return gprofile;
+	}
+
 }

@@ -56,6 +56,13 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 		}
 		return null;
 	}
+	public GradeProfileAlign getAlign(int i) {
+		if(i<0 || i>=size()) {
+			return null;
+		}
+		return get(i);
+	}
+
 	public int getAlignIndex(double x) {
 		if(size()==0 || x<getStartS() || x>getEndS()) {
 			return -1;
