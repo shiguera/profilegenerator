@@ -1,5 +1,12 @@
 package com.mlab.pg.norma;
 
+/**
+ * Valores límites para vertical curves adaptados a la 
+ * norma del año 2016
+ * 
+ * @author shiguera
+ *
+ */
 public abstract class VerticalCurveLimits extends AbstractVAlignLimits {
 
 

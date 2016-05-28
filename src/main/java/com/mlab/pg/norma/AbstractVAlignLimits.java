@@ -1,5 +1,13 @@
 package com.mlab.pg.norma;
 
+/**
+ * Implementa el interface VAlignLimits. Ofrece un constructor
+ * en función de la DesignSpeed, que establece valores por defecto 
+ * para los límites de los valores de la alineación.
+ * Los valores están adaptados a la norma de fecha 2016.
+ * @author shiguera
+ *
+ */
 public abstract class AbstractVAlignLimits implements VAlignLimits {
 
 	protected DesignSpeed designSpeed;
@@ -58,7 +66,15 @@ public abstract class AbstractVAlignLimits implements VAlignLimits {
 		return SLOPE_INCREMENTS;
 	}
 	@Override
+	public void setSlopeIncrements(double slopeIncrements) {
+		this.SLOPE_INCREMENTS = slopeIncrements;	
+	}
+	@Override
 	public double getKvIncrements() {
 		return KV_INCREMENTS;
+	}
+	@Override
+	public void setKvIncrements(double kvIncrements) {
+		this.KV_INCREMENTS = kvIncrements;
 	}
 }
