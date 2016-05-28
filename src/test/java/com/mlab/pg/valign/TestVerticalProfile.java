@@ -84,8 +84,6 @@ public class TestVerticalProfile {
 			Assert.assertEquals(vprofile.getAlign(i).getEndS(), gprofile.getAlign(i).getEndS(), 0.001);
 			Assert.assertEquals(vprofile.getAlign(i).getStartTangent(), gprofile.getAlign(i).getStartGrade(), 0.001);
 			Assert.assertEquals(vprofile.getAlign(i).getEndTangent(), gprofile.getAlign(i).getEndGrade(), 0.001);
-			
-			
 		}
 	}
 }
