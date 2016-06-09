@@ -24,8 +24,11 @@ public class RandomFactory {
 	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
 	 * perfiles básicos. El primer perfil básico será aleatoriamente
 	 * del tipo I o II.
-	 * @param vertexCount
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param vertexCount Número de vértices del perfil que se quiere generar
+	 * @param s0 Abscisa inicial
+	 * @param z0 altura inicial
+	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfile(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
 		double sign = RandomFactory.randomSign();
@@ -39,8 +42,11 @@ public class RandomFactory {
 	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
 	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
 	 * perfiles básicos. El primer perfil básico será tipo I
-	 * @param vertexCount
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param vertexCount Número de vértices del perfil que se quiere generar
+	 * @param s0 Abscisa inicial
+	 * @param z0 altura inicial
+	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileBeginningOnType_I(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
 		if(vertexCount < 1) {
@@ -71,8 +77,11 @@ public class RandomFactory {
 	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
 	 * de perfiles básicos tipo I y II. El perfil tendrá vertexCount 
 	 * perfiles básicos. El primer perfil básico será tipo II
-	 * @param vertexCount
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param vertexCount Número de vértices del perfil que se quiere generar
+	 * @param s0 Abscisa inicial
+	 * @param z0 altura inicial
+	 * @return VerticalProfile 
 	 */
 	public static VerticalProfile randomVerticalProfileBeginningOnType_II(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
 		if(vertexCount < 1) {
@@ -103,10 +112,10 @@ public class RandomFactory {
 	// Perfiles básicos
 	/**
 	 * Genera unperfil aleatorio tipo I: upgrade-crestcurve-downgrade
-	 * @param dspeed
-	 * @param s0
-	 * @param z0
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param s0 Abscisa inicial
+	 * @param z0 Altura inicial
+	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
 		GradeAlign grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
@@ -126,10 +135,10 @@ public class RandomFactory {
 	}
 	/**
 	 * Genera un perfil aleatorio tipo II: downgrade - sagcurve - upgrade
-	 * @param dspeed
-	 * @param s0
-	 * @param z0
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param s0 Abscisa inicial
+	 * @param z0 Altura inicial
+	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
 		GradeAlign grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
@@ -153,10 +162,10 @@ public class RandomFactory {
 	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
 	 * salida g2. El parámetro es aleatorio entre el mínimo correspondiente a la categoría . 
 	 * La pendiente de salida tiene que ser del signo contrario que la pendiente de entrada. 
-	 * @param dspeed
-	 * @param grade1
-	 * @param g2
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @param grade1 GradeAlign inicial
+	 * @param g2 Pendiente de la GradeAlign final
+	 * @return VerticalCurveAlign
 	 */
 	public static VerticalCurveAlign randomVerticalCurve(DesignSpeed dspeed, GradeAlign grade1, double g2) {
 		double g1 = grade1.getStartTangent();
@@ -195,8 +204,8 @@ public class RandomFactory {
 	 * Calcula un parámetro aleatorio para una crest curve correspondiente a 
 	 * una velocidad de diseño dada. El signo del parámetro devuelto es negativo
 	 * 
-	 * @param dspeed
-	 * @return
+	 * @param dspeed Velocidad de diseño
+	 * @return double con el Kv negativo generado
 	 */
 	public static double randomCrestCurveKv(DesignSpeed dspeed) {
 		VerticalCurveLimits limits = new CrestCurveLimits(dspeed);
@@ -209,8 +218,8 @@ public class RandomFactory {
 	 * Calcula un parámetro aleatorio para una sag curve correspondiente a 
 	 * una velocidad de diseño dada. El signo del parámetro devuelto es positivo
 	 * 
-	 * @param dspeed
-	 * @return
+	 * @param dspeed Velocodad de diseño
+	 * @return double con el Kv positivo generado
 	 */
 	public static double randomSagCurveKv(DesignSpeed dspeed) {
 		VerticalCurveLimits limits = new SagCurveLimits(dspeed);

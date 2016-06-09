@@ -1,5 +1,11 @@
 package com.mlab.pg.valign;
 
+/**
+ * Interface para las alineaciones de un VerticalProfile
+ * 
+ * @author shiguera
+ *
+ */
 public interface VerticalProfileAlign extends VAlign {
 
 	double getStartZ();
@@ -18,7 +24,7 @@ public interface VerticalProfileAlign extends VAlign {
 	 * Solo tiene sentido en el caso de tratarse de una vertical curve.
 	 * En el caso de tratarse de una rampa o pendiente, devolverá 
 	 * Double.NaN. 
-	 * @return
+	 * @return Valor de Kv si es una VerticalCurveAlign, NaN si es una GradeAlign
 	 */
 	double getKv();
 

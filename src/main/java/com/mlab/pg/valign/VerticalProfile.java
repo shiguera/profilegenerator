@@ -9,6 +9,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 /**
  * ArrayList de elementos VerticalProfileAlign para una categoría de carretera 
  * definida por su velocidad de proyecto DesignSpeed
+ * 
  * @author shiguera
  *
  */

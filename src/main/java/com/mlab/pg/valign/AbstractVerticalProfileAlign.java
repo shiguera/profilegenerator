@@ -8,6 +8,13 @@ import com.mlab.pg.xyfunction.Polynom2;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
+/**
+ * Implementación genérica del interface VerticalProfileAlign
+ * Incluye el método derivative()
+ * 
+ * @author shiguera
+ *
+ */
 public abstract class AbstractVerticalProfileAlign implements VerticalProfileAlign{
 
 	protected DesignSpeed designSpeed;
@@ -139,7 +146,7 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	 * Obtiene la alineación GradeProfileAlign derivada
 	 * 
 	 * @param align
-	 * @return
+	 * @return Un GradeProfileAlign derivada del VerticalProfileAlign 
 	 */
 	@Override
 	public GradeProfileAlign derivative() {
