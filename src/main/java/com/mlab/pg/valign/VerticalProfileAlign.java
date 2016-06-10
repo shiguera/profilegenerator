@@ -16,7 +16,7 @@ public interface VerticalProfileAlign extends VAlign {
 	 * Devuelve la pendiente de la alineación. Sólo tiene sentido en
 	 * el caso de la rampas o pendientes. En el caso de los acuerdos parabólicos 
 	 * devolverá Double.NaN
-	 * @return
+	 * @return pendiente de la alineación
 	 */
 	double getSlope();
 	/**

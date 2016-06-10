@@ -44,9 +44,8 @@ public class GradeProfileAlign implements VAlign {
 	 * Obtiene la alineación resultante de integrar.
 	 * Para realizar la integración necesita conocer la cota del primer punto 
 	 * de la alineación. 
-	 * @param galign
-	 * @param startZ
-	 * @return
+	 * @param startZ ordenada del primer punto del perfil longitudinal
+	 * @return VerticalProfileAlign que integra el GradeProfileAlign
 	 */
 	public VerticalProfileAlign integrate(double startZ) {
 		VerticalProfileAlign valign = null;

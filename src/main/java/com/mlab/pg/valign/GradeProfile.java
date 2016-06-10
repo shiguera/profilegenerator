@@ -114,10 +114,10 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 	 * Calcula el error cuadrático medio entre los puntos de dos perfiles 
 	 * de pendientes. 
 	 * 
-	 * @param gp2
+	 * @param gp2 segundo perfil
 	 * @param spaceBetweenPoints Separación entre los puntos de los perfiles sobre los
 	 * que se medirá el error cuadrático
-	 * @return
+	 * @return ecm
 	 */
 	public double ecm(GradeProfile gp2, double spaceBetweenPoints) {
 		

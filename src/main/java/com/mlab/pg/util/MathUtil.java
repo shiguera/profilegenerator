@@ -16,8 +16,8 @@ public class MathUtil {
 	 * Calcula el valor mínimo de una lista de Doubles. Si la
 	 * lista es nula o de tamaño cero devuelve NaN
 	 * 
-	 * @param values
-	 * @return
+	 * @param values vector original
+	 * @return double mínimo de la lista
 	 */
 	static public double min(List<Double> values) {
 		if(values==null || values.size()==0) {
@@ -35,8 +35,8 @@ public class MathUtil {
 	 * Calcula el valor mánimo de una lista de Doubles. Si la
 	 * lista es nula o de tamaño cero devuelve NaN
 	 * 
-	 * @param values
-	 * @return
+	 * @param values vector original
+	 * @return double máximo de la lista
 	 */
 	static public double max(List<Double> values) {
 		if(values==null || values.size()==0) {
@@ -118,8 +118,8 @@ public class MathUtil {
 	// Agregados
 	/**
 	 * Calcula la media de una serie de valores
-	 * @param values
-	 * @return
+	 * @param values vector de valores a promediar
+	 * @return double media de los valores
 	 */
 	static public double average(double[] values) {
 		int size = values.length;
@@ -131,9 +131,9 @@ public class MathUtil {
 	}
 	/**
 	 * Extrae como vector una columna de una matriz
-	 * @param a
-	 * @param col
-	 * @return
+	 * @param a Matriz original
+	 * @param col índice de la columna a extraer
+	 * @return array con la columna extraída
 	 */
 	static public double[] column(double[][] a, int col) {
 		double[] column = new double[a.length];
@@ -151,9 +151,9 @@ public class MathUtil {
 	}
 	/**
 	 * Suma de los productos de x*y
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x vector con los valores x
+	 * @param y vector con los valores y
+	 * @return double suma de los productos de xi por yi
 	 */
 	static public double sumOfProducts(double[] x, double[] y) {
 		double suma = 0.0;
@@ -164,8 +164,8 @@ public class MathUtil {
 	}
 	/**
 	 * Suma de los cuadrados de x
-	 * @param x
-	 * @return
+	 * @param x vector con los valores x
+	 * @return double suma de los cuadrados de los xi
 	 */
 	static public double sumOfSquares(double[] x) {
 		double suma=0.0;
@@ -199,12 +199,12 @@ public class MathUtil {
         return x;
     }
 	/**
-	 * Suma de las potencias 'power' de los elementos de un vector.<br/>
-	 * Por ejemplo, si x[]={1,2,3} y power=2, el método nos devolverá:<br>
+	 * Suma de las potencias 'power' de los elementos de un vector.
+	 * Por ejemplo, si x[]={1,2,3} y power=2, el método nos devolverá:
 	 * sumOfPower()=1²+2²+3²
-	 * @param x
-	 * @param power
-	 * @return
+	 * @param x vector con los valores x
+	 * @param power potencia a la que se quiere elevar los términos xi
+	 * @return double suma de las potencias power de los elementos xi
 	 */
 	static public double sumOfPower(double[] x, int power) {
 		double suma = 0.0;
@@ -219,9 +219,9 @@ public class MathUtil {
 	}
 	/**
 	 * Suma de los cuadrados de x multiplicados por y
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x vector con los valores x
+	 * @param y vector con los valores y
+	 * @return double suma de los cuadrados de xi multiplicados por los yi
 	 */
 	static public double sumOfX2Y(double[] x, double[] y) {
 		double suma = 0.0;
@@ -232,8 +232,8 @@ public class MathUtil {
 	}
 	/**
 	 * Copia un vector
-	 * @param source
-	 * @return
+	 * @param source vector original
+	 * @return vector copia
 	 */
 	static public double[] copy(double[] source) {
 		double[] dest= new double[source.length];
@@ -244,8 +244,8 @@ public class MathUtil {
 	}
 	/**
 	 * Copia una matriz
-	 * @param source
-	 * @return
+	 * @param source matriz original
+	 * @return matriz copia
 	 */
 	static public double[][] copy(double[][] source) {
 		double[][] dest= new double[source.length][source[0].length];

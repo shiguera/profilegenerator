@@ -1,7 +1,7 @@
 package com.mlab.pg.norma;
 
 /**
- * Límites básicos para las alineaciones verticales. </br>
+ * Límites básicos para las alineaciones verticales.
  * Cada tipo de alineación vertical y en función de su
  * velocidad de diseño, tendrá valores mínimos y máximos
  * para la longitud de la alineación y para la pendiente.

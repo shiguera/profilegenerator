@@ -19,8 +19,8 @@ public class IntegerInterval {
 	 * los guarda en el orden correcto haciendo this.start = end y 
 	 * this.end = start
 	 * Los parámetros pueden ser iguales.
-	 * @param start
-	 * @param end
+	 * @param start Valor del extremo izquierdo del intervalo
+	 * @param end Valor del extremo derecho del intervalo
 	 */
 	public IntegerInterval(int start, int end) {
 		if(start <= end) {
@@ -35,7 +35,7 @@ public class IntegerInterval {
 	// Getters and Setters
 	/**
 	 * Getter para la propiedad entera 'start'
-	 * @return
+	 * @return valor del extremo izquierdo del intervalo
 	 */
 	public int getStart() {
 		return start;
@@ -45,17 +45,17 @@ public class IntegerInterval {
 	 * Establece el valor del índice from si el valor pasado
 	 * es menor o igual que to
 	 * 
-	 * @param newfrom
+	 * @param newStart Nuevo valor para el extremo izquierdo del intervalo 
 	 */
-	public void setStart(int newfrom) {
-		if(newfrom<=end) {
-			this.start = newfrom;			
+	public void setStart(int newStart) {
+		if(newStart<=end) {
+			this.start = newStart;			
 		}
 	}
 
 	/**
 	 * Getter para la propiedad entera 'end'
-	 * @return
+	 * @return Valor del extremo derecho del intervalo
 	 */
 	public int getEnd() {
 		return end;
@@ -64,7 +64,7 @@ public class IntegerInterval {
 	/**
 	 * Establece el valor del índice 'end', si el valor pasado es mayor o igual que
 	 * el índice 'start' existente
-	 * @param end
+	 * @param newEnd Valor de extremo derecho del intervalo
 	 */
 	public void setEnd(int newEnd) {
 		if(newEnd >= start) {
@@ -75,8 +75,8 @@ public class IntegerInterval {
 	
 	/**
 	 * Indica si el index está comprendido en el segmento, incluidos los extremos
-	 * @param index
-	 * @return true si index>=start && index<=end
+	 * @param index Valor entero que se quiere comprobar si está comprendido en el intervalo
+	 * @return true si index mayor o igual que start y index menor o igual que end
 	 */
 	public boolean contains(int index) {
 		if(index >= start && index <= end) {
@@ -88,7 +88,7 @@ public class IntegerInterval {
 	/**
 	 * Indica si el 'index' es interior al intervalo, excluidos los extremos
 	 * @param index indice a evaluear
-	 * @return true si index>start && index<end
+	 * @return true si index mayor que start y index menor que end
 	 */
 	public boolean containsInterior(int index) {
 		if(index > start && index < end) {
@@ -100,8 +100,8 @@ public class IntegerInterval {
 	/**
 	 * Indica si el segmento 'other' está contenido en este (incluidos
 	 * los extremos)
-	 * @param other
-	 * @return
+	 * @param other Intervalo que se quiere comprobar si está comprendido en el intervalo
+	 * @return true, false
 	 */
 	public boolean contains(IntegerInterval other) {
 		if(contains(other.getStart()) && contains(other.getEnd())) {
@@ -112,8 +112,8 @@ public class IntegerInterval {
 	
 	/**
 	 * Indica si un segmento es interior a otro
-	 * @param other
-	 * @return
+	 * @param other Intervalo que se quiere comprobar si está comprendido en el intervalo
+	 * @return true, false
 	 */
 	public boolean containsInterior(IntegerInterval other) {
 		if(containsInterior(other.getStart()) && containsInterior(other.getEnd())) {
@@ -124,8 +124,8 @@ public class IntegerInterval {
 	
 	/**
 	 * Devuelve true si los intervalos tienen algún punto en común
-	 * @param other
-	 * @return
+	 * @param other Intervalo que se quiere comprobar si intersecta
+	 * @return true, false
 	 */
 	public boolean intersects(IntegerInterval other) {
 		if(contains(other.getStart()) || contains(other.getEnd()) 
@@ -138,8 +138,8 @@ public class IntegerInterval {
 	/**
 	 * Devuelve true si la parte interior de los intervalos, esto es, 
 	 * excluidos los extremos, tienen algún punto en común
-	 * @param other
-	 * @return
+	 * @param other Intervalo que se quiere evaluar
+	 * @return true, false
 	 */
 	public boolean intersectsInterior(IntegerInterval other) {
 		if(containsInterior(other.getStart()) || containsInterior(other.getEnd()) 
@@ -153,7 +153,7 @@ public class IntegerInterval {
 	/**
 	 * Calcula la intersección de un segmento con otro segmento
 	 * 
-	 * @param other
+	 * @param other Intervalo a intersectar
 	 * @return El FromToIndex intersección o nulo.
 	 */
 	public IntegerInterval intersection(IntegerInterval other) {
@@ -183,7 +183,7 @@ public class IntegerInterval {
 	 * segmento es impar, devuelve justo el punto central. Si el 
 	 * número de puntos del segmento es par, devuelve el punto que está
 	 * en la mitad superior, esto es, deja más pequeña la mitad inferior.
-	 * @return
+	 * @return valor del punto medio
 	 */
 	public int getMiddlePoint() {
 		int length = getEnd() - getStart() +1;
@@ -204,7 +204,7 @@ public class IntegerInterval {
 
 	/**
 	 * Devuelve el número de puntos del segmento
-	 * @return
+	 * @return número depuntos del segmento
 	 */
 	public int size() {
 		return (getEnd() - getStart() + 1);

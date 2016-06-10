@@ -15,7 +15,7 @@ public class Ioutil {
 	private static final Logger LOG = Logger.getLogger(Ioutil.class);
 	/**
 	 * Lee una matriz de doubles desde un fichero CSV
-	 * @param filename Nombre del fichero
+	 * @param file Nombre del fichero
 	 * @param delimiter Delimitador de campos
 	 * @return Matriz con los doubles leidos
 	 */
@@ -53,13 +53,13 @@ public class Ioutil {
 		return arrvpoint.toArray(result);
 	}
 	/**
-	 * Escribe una matriz de doubles en un fichero CSV 
-	 * @param filename
-	 * @param d
-	 * @param width
-	 * @param precission
-	 * @param delimiter
-	 * @return
+	 *  Escribe una matriz de doubles en un fichero CSV 
+	 * @param filename nombre del fichero
+	 * @param d matriz de doubles
+	 * @param width anchura de campo
+	 * @param precission número de decimales
+	 * @param separator separador de campos en el CSV
+	 * @return 1 si todo va bien, negativo si hay error
 	 */
 	static public int write(String filename, double[][] d, 
 			int width, int precission, char separator) {
@@ -119,13 +119,13 @@ public class Ioutil {
 	}
 	/**
 	 * Formatea un double a los digitos y precisión deseados, 
-	 * sustituyendo la coma decimal por el punto decimal.<br/>
+	 * sustituyendo la coma decimal por el punto decimal.
 	 * Los números se redondeán al número de decimales pedido.
 	 * @param value double valor
 	 * @param digits número total de dígitos
 	 * @param decimals número de decimales
 	 * @return cadena con el número formateado xxx.xxx
-	 * Si value es NaN o infinito, o digits<=0 o decimals<0 
+	 * Si value es NaN o infinito, o digitsmenr oigual que 0 o decimals menor que 0 
 	 * arroja IllegalArgumentException
 	 */
 	public static String doubleToString(double value, int digits, int decimals) {

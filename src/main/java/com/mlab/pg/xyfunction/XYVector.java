@@ -82,7 +82,7 @@ public class XYVector extends ArrayList<double[]>  {
 	/**
 	 * Establece los valores {x, y} de la función
 	 * 
-	 * @param newvalues List<double[]> con los valores de la serie
+	 * @param newvalues List con los valores de la serie
 	 */
 	public void setValues(List<double[]> newvalues) {
 		this.clear();
@@ -97,8 +97,8 @@ public class XYVector extends ArrayList<double[]>  {
 	/**
 	 * Devuelve true si el índice i es uno de los índices
 	 * válidos del ArrayList
-	 * @param i
-	 * @return
+	 * @param i índice a comprobar
+	 * @return true, false
 	 */
 	public boolean contains(int i) {
 		return (i>=0 && i<size());

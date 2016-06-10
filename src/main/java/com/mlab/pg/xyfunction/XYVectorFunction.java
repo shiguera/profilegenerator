@@ -138,6 +138,8 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	 * es intermedia entre dos de la serie devuelve la 
 	 * interpolación lineal de las Y del punto anterior y
 	 * el siguiente
+	 * @param x valor de la abscisa
+	 * @return valor de la ordenada
 	 */
 	@Override
 	public double getY(double x) {
@@ -162,12 +164,14 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 
 	/**
-	 * Calcula la tangente según la fórmula:<br/>
-	 * tangent = inc(Y)/inc(X) <br/>
+	 * Calcula la tangente según la fórmula:
+	 * tangent = inc(Y)/inc(X) 
 	 * Si el punto coincide con uno de la serie, excepto el último,
 	 *  el valor es exacto. El último punto no tiene tangente.
 	 *  Si el punto es intermedio, devuelve la interpolación 
 	 *  lineal de la tangente del punto anterior y el siguiente
+	 *  @param x valor de la abscisa
+	 *  @return valor de la tangente
 	 */
 	@Override
 	public double getTangent(double x) {
@@ -202,7 +206,6 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	 * XYVectorFunction 'function' comprendidos en el intervalo [start, end], incluyendo
 	 * los extremos.
 	 * 
-	 * @param function XYVectorFunction con los valores de los puntos a ajustar
 	 * @param start Índice del primer punto de la XYSample que se quiere incluir en
 	 * la recta ajustada
 	 * @param end Índice del último punto de la XYVectorFunction que se quiere incluir en 
@@ -224,10 +227,10 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 
 	/**
-	 * 
-	 * @param start
-	 * @param end
-	 * @return
+	 * Parábola por mínimos cuadrados
+	 * @param start índice inicial
+	 * @param end índice final
+	 * @return vector con los coeficientes 
 	 */
 	public double[] parabolaMinimosCuadrados(int start, int end) {
 		IntegerInterval interval = new IntegerInterval(start, end);

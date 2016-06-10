@@ -16,12 +16,11 @@ public class Parabole extends Polynom2{
 	 * de los puntos inicial y final y de la tangente en 
 	 * el punto inicial.
 	 * 
-	 * @param x0
-	 * @param y0
-	 * @param t0
-	 * @param xf
-	 * @param yf
-	 * @return
+	 * @param x0 abscisa inicial
+	 * @param y0 ordenada inicial
+	 * @param t0 tangente inicial
+	 * @param xf abscisa final
+	 * @param yf ordenada final
 	 */
 	public Parabole(double x0, double y0, 
 			double t0, double xf, double yf) {
@@ -37,7 +36,6 @@ public class Parabole extends Polynom2{
 	 * @param z0 Coordenada z del punto inicial
 	 * @param g0 Pendiente en el punto (s0,z0)
 	 * @param kv Parámetro de la parábola
-	 * @return Parabole
 	 */
 	public Parabole(double s0, double z0, double g0, double kv) {
 		super(0.0,0.0,0.0);

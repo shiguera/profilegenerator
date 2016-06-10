@@ -1,7 +1,7 @@
 package com.mlab.pg.xyfunction;
 
 /**
- * Es un Polinom2 en el que el coeficiente a2 es cero:<br/>
+ * Es un Polinom2 en el que el coeficiente a2 es cero:
  * y = a0 + a1 * x 
  * 
  * @author shiguera
@@ -14,9 +14,9 @@ public class Straight extends Parabole {
 	}
 	/**
 	 * Recta a partir de un punto y una pendiente
-	 * @param x0
-	 * @param y0
-	 * @param pdte
+	 * @param x0 abscisa delpunto
+	 * @param y0 ordenada del punto
+	 * @param pdte pendiente de la recta
 	 */
 	public Straight(double x0, double y0, double pdte) {
 		super(y0-pdte*x0, pdte, 0.0);

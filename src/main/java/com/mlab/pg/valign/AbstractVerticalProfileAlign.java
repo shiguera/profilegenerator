@@ -145,7 +145,6 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	/**
 	 * Obtiene la alineación GradeProfileAlign derivada
 	 * 
-	 * @param align
 	 * @return Un GradeProfileAlign derivada del VerticalProfileAlign 
 	 */
 	@Override

@@ -1,13 +1,13 @@
 package com.mlab.pg.xyfunction;
 
 /**
- * Representa un polinomio de grado 2 en la forma :<br/>
- * y = a0 + a1*x + a2*x² <br/>
- * Implementa el interface XYFunction.<br/>
- * Tiene tres propiedades doubles con los coeficientes: a0, a1, a2 <br/>
+ * Representa un polinomio de grado 2 en la forma :
+ * y = a0 + a1*x + a2*x² 
+ * Implementa el interface XYFunction.
+ * Tiene tres propiedades doubles con los coeficientes: a0, a1, a2 
  * Además de los métodos del interface XYFunction, tiene un constructor 
  * que recibe los tres coeficientes como argumentos y getters y setters para los
- * tres coeficientes.<br/>
+ * tres coeficientes.
  * 
  * @author shiguera
  *
@@ -17,12 +17,12 @@ public class Polynom2 implements XYFunction {
 	protected double a0, a1, a2;;
 	
 	/**
-	 * Crea una instancia de Polynom2 en la forma:<br/>
+	 * Crea una instancia de Polynom2 en la forma:
 	 * P(x) = a0 + a1x + a2x^2
 	 * 
-	 * @param a0
-	 * @param a1
-	 * @param a2
+	 * @param a0 coeficiente 
+	 * @param a1 coeficiente
+	 * @param a2 coeficiente
 	 */
 	public Polynom2(double a0, double a1, double a2) {
 		this.a0 = a0;

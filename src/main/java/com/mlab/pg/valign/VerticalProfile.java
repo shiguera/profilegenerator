@@ -163,7 +163,7 @@ public class VerticalProfile extends ArrayList<VerticalProfileAlign>  {
 	 * @param vp2
 	 * @param spaceBetweenPoints Separación entre los puntos de los perfiles sobre los
 	 * que se medirá el error cuadrático
-	 * @return
+	 * @return ecm
 	 */
 	public double ecm(VerticalProfile vp2, double spaceBetweenPoints) {
 		
