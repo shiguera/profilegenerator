@@ -110,6 +110,7 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 		}
 		return sample;
 	}
+	
 	/**
 	 * Calcula el error cuadrático medio entre los puntos de dos perfiles 
 	 * de pendientes. 

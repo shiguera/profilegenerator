@@ -9,8 +9,8 @@ package com.mlab.pg.xyfunction;
  *
  */
 public class IntegerInterval {
-	int start;
-	int end;
+	protected int start;
+	protected int end;
 	
 	// Constructor
 	/**
