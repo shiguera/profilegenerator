@@ -7,12 +7,19 @@ import org.apache.log4j.Logger;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public class Characteriser {
+/**
+ * Caracteriza los puntos de una XYVectorFunction a partir de las pendientes 
+ * de las bases móviles anterior y posterior
+ *  
+ * @author shiguera
+ *
+ */
+public class ProfileCharacteriser {
 	
-	Logger LOG = Logger.getLogger(Characteriser.class);
+	Logger LOG = Logger.getLogger(ProfileCharacteriser.class);
 	
 	
-	public Characteriser() {
+	public ProfileCharacteriser() {
 	}
 
 	/**
@@ -34,7 +41,7 @@ public class Characteriser {
 		// Se crea el List<PointType> e inicialmente se rellena con tipo NULL todos los puntos, 
 		// para tener el List creado
 		List<PointType> types = new ArrayList<PointType>();
-		for(int i=0; i<gpsample.size(); i++) {
+		for(int i=0; i<sampleSize; i++) {
 			types.add(PointType.NULL);
 		}
 		// Se caracterizan los puntos caracterizables, excluyendo los de los extremos

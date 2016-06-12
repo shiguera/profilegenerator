@@ -43,7 +43,7 @@ public class TestCharacteriser {
 		int mobileBaseSize = 5;
 		double thresholdSlope = 1e-5;
 		
-		Characteriser characteriser = new Characteriser();
+		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		List<PointType> types = characteriser.characterise(gpsample, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(types);
 		
