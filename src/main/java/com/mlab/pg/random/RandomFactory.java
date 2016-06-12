@@ -18,6 +18,16 @@ import com.mlab.pg.xyfunction.Straight;
 public class RandomFactory {
 
 	private static Logger LOG = Logger.getLogger(RandomFactory.class);
+	
+	// DesigSpeed
+	public static DesignSpeed randomDesignSpeed() {
+		int max = DesignSpeed.values().length; 
+		Random r = new Random();
+		int value = r.nextInt(max);
+		DesignSpeed ds = DesignSpeed.values()[value];
+		return ds;
+	}
+
 	// Perfiles longitudinales
 	/**
 	 * Genera un perfil longitudinal aleatorio compuesto de una sucesión 
