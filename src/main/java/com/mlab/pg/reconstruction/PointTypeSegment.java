@@ -18,7 +18,7 @@ public class PointTypeSegment extends IntegerInterval {
 	
 	@Override
 	public String toString() {
-		return String.format("(%d, %d, %d)", start, end, pointType) ;
+		return String.format("(%d, %d, %s)", start, end, pointType) ;
 	}
 
 }

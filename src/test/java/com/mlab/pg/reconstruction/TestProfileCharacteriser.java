@@ -17,9 +17,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 import junit.framework.Assert;
 
-public class TestCharacteriser {
+public class TestProfileCharacteriser {
 	
-	private final static Logger LOG = Logger.getLogger(TestCharacteriser.class);
+	private final static Logger LOG = Logger.getLogger(TestProfileCharacteriser.class);
 	
 	@BeforeClass
 	public static void before() {
@@ -46,6 +46,7 @@ public class TestCharacteriser {
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		List<PointType> types = characteriser.characterise(gpsample, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(types);
+		Assert.assertEquals(gpsample.size(), types.size());
 		
 		for (int i=0; i<mobileBaseSize-1; i++) {
 			Assert.assertEquals(PointType.NULL, types.get(i));

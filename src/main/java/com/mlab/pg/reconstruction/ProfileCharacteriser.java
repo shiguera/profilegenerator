@@ -32,7 +32,7 @@ public class ProfileCharacteriser {
 
 	 * @return Lista de puntos con un tipo PointType asignado 
 	 */
-	List<PointType> characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
+	PointTypeArray characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
 		if(gpsample==null || gpsample.size()<2*mobileBaseSize-1) {
 			LOG.error("characterise() ERROR: NULL RESULT");
 			return null;
@@ -40,7 +40,7 @@ public class ProfileCharacteriser {
 		int sampleSize = gpsample.size();
 		// Se crea el List<PointType> e inicialmente se rellena con tipo NULL todos los puntos, 
 		// para tener el List creado
-		List<PointType> types = new ArrayList<PointType>();
+		PointTypeArray types = new PointTypeArray();
 		for(int i=0; i<sampleSize; i++) {
 			types.add(PointType.NULL);
 		}
