@@ -20,7 +20,7 @@ import com.mlab.pg.valign.VerticalProfile;
 
 public class TestRandomFactory {
 
-static Logger LOG = Logger.getLogger(TestRandomFactory.class);
+	static Logger LOG = Logger.getLogger(TestRandomFactory.class);
 	
 	@BeforeClass
 	public static void before() {
