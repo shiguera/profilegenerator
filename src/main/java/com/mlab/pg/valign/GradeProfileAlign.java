@@ -82,6 +82,7 @@ public class GradeProfileAlign implements VAlign {
 		return straight.getTangent(x);
 	}
 
+	
 	@Override
 	public double getCurvature(double x) {
 		return 0;

@@ -146,6 +146,25 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 		return ecm;
 	}
 	
+	/**
+	 * Integra un perfil de pendientes obteniendo el perfil longitudinalcorrespondiente.
+	 * @param startZ Altitud del primer punto del perfil.
+	 * @return Perfil longitudinal
+	 */
+	public VerticalProfile integrate(double startZ) {
+		if(this.size()==0) {
+			return null;
+		}
+		double currentStartZ = startZ;
+		VerticalProfile verticalProfile = new VerticalProfile(this.designSpeed);
+		for(int i=0; i<this.size(); i++) {
+			VerticalProfileAlign valign = this.get(i).integrate(currentStartZ);
+			verticalProfile.add(valign);
+			currentStartZ = valign.getEndZ();
+		}
+		return verticalProfile;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
