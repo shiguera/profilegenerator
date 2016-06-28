@@ -52,4 +52,12 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 		return pointTypeSegments;
 	}
 
+	@Override
+	public PointTypeSegmentArray clone() {
+		PointTypeSegmentArray copy = new PointTypeSegmentArray();
+		for(int i=0; i<this.size(); i++) {
+			copy.add(this.get(i));
+		}
+		return copy;
+	}
 }
