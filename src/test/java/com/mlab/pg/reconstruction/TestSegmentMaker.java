@@ -86,6 +86,7 @@ public class TestSegmentMaker {
 		}
 		Assert.assertEquals(3, maker.getPointTypeSegments().size());	
 	}
+	
 	@Test
 	public void testVerticalCurveToVerticalCurve() {
 		LOG.debug("testVerticalCurveToVerticalCurve()");

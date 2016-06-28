@@ -27,7 +27,7 @@ public class MathUtil {
 	}
 	
 	/**
-	 * Calcula el vector unitariocorrespondiente a una recta. 
+	 * Calcula el vector unitario correspondiente a una recta. 
 	 * El vector tiene módulo 1 y está en el primer o cuarto cuadrante (-90 < alfa < 90)
 	 * 
 	 * @param r recta en la forma [a0,a1] => y=a0 + a1*x

@@ -19,6 +19,7 @@ public class SegmentMaker {
 		this.pointTypeSegments = new PointTypeSegmentArray(pointTypes);
 	}
 
+	
 	public XYVectorFunction getGradeSample() {
 		return gradeSample;
 	}

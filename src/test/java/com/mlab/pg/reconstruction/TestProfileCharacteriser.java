@@ -26,10 +26,16 @@ public class TestProfileCharacteriser {
 		PropertyConfigurator.configure("log4j.properties");
 	}
 
+	/**
+	 * Se genera un GradeAlign aleatorio. Se genera el GradeProfileAlign utilizando
+	 * el método derivative() de la clase GradeAlign, se extrae una muestra XYVectorFunction
+	 * y se analiza con el ProfileCharacteriser. 
+	 * Se comprueba que todos los puntos, salvo los iniciales y finales, son del tipo GRADE  
+	 */
 	@Test
 	public void testGradeAlign() {
 		LOG.debug("testGradeAlign()");
-		DesignSpeed dspeed = DesignSpeed.DS120;
+		DesignSpeed dspeed = RandomFactory.randomDesignSpeed();
 		GradeAlign grade = RandomFactory.randomGradeAlign(dspeed, 100.0, 1000.0);
 		System.out.println(VAlign.CABECERA);
 		System.out.println(grade.toString());
@@ -70,8 +76,5 @@ public class TestProfileCharacteriser {
 		double z0 = 1000.0;
 		VerticalProfile verticalprofile = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		System.out.println(verticalprofile.toString());
-
-		
-		
 	}
 }
