@@ -92,4 +92,39 @@ public class TestPointCharacteriser {
 	}
 
 
+	@Test
+	public void testAnglesBetweenStraights() {
+		LOG.debug("testAnglesBetweenStraights()");
+		// TODO Incompleto, dejado  medias
+		List<double[]> pts = new ArrayList<double[]>();
+		pts.add(new double[] {0.0, 0.04075});
+		pts.add(new double[] {2.0, 0.04075});
+		pts.add(new double[] {4.0, 0.04075});
+		pts.add(new double[] {6.0, 0.04075});
+		pts.add(new double[] {8.0, 0.04075});
+		pts.add(new double[] {10.0, 0.04075});
+		pts.add(new double[] {12.0, 0.04075});
+		pts.add(new double[] {14.0, 0.04075});
+		pts.add(new double[] {16.0, 0.04075});
+		pts.add(new double[] {18.0, 0.04075});
+		
+		pts.add(new double[] {20.0, 0.04075}); // i=10
+		
+		pts.add(new double[] {22.0, 0.04050});
+		pts.add(new double[] {24.0, 0.04025});
+		pts.add(new double[] {26.0, 0.04});
+		pts.add(new double[] {28.0, 0.03975});
+		pts.add(new double[] {30.0, 0.03950});
+		pts.add(new double[] {32.0, 0.03925});
+		pts.add(new double[] {34.0, 0.03900});
+		pts.add(new double[] {36.0, 0.038750});
+		
+		XYVectorFunction gp = new XYVectorFunction(pts);
+		
+		double[] r1 = PointCharacteriser.calculaRectaAnterior(gp, 10, 3);
+		System.out.println("Recta anterior: " + r1[0] + " " +r1[1]);
+		double[] r2 = PointCharacteriser.calculaRectaPosterior(gp, 10, 3);
+		System.out.println("Recta posterior: " + r2[0] + " " +r2[1]);
+		
+	}
 }

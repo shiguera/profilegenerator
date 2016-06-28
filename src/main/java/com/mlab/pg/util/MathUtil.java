@@ -4,12 +4,94 @@ import java.util.List;
 
 
 public class MathUtil {
+
+	// rectas en el plano
+	
+	/**
+	 * Calcula la ecuación de una recta que pasa por dos puntos
+	 * @param p1 coordenadas [p1x, p1y] del primer punto de la recta
+	 * @param p2 coordenadas [p2x, p2y] del segundo punto de la recta
+	 * @return Recta en la forma [a0, a1] => y = a0 + a1*x. Si la recta es
+	 * vertical devuelve null
+	 */
+	public static double[] straightByTwoPoints(double[] p1,double[] p2) {
+		// Comprobar si es vertical
+		double denom = p2[0] - p1[0];
+		if(denom == 0.0) {
+			return null;
+		}
+		double m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+		double a0 = p1[1] - m * p1[0];
+		double a1 = m;
+		return new double[] {a0,a1};
+	}
+	
+	/**
+	 * Calcula el vector unitariocorrespondiente a una recta. 
+	 * El vector tiene módulo 1 y está en el primer o cuarto cuadrante (-90 < alfa < 90)
+	 * 
+	 * @param r recta en la forma [a0,a1] => y=a0 + a1*x
+	 * @return double[] con las componentes del vector ajustado al primer o cuarto cuadrante
+	 */
+	public static double[] unitVectorForStraight(double[] r) {
+		// Ver si es horizontal
+		if ( r[1] == 0.0) {
+			return new double[] {1,0};
+		}
+		double u = 0.0;
+		double v = 0.0;
+		if(r[0] == 0.0) {
+			u = 1.0;
+			v = r[1];
+		} else {
+			u = r[0]/r[1];
+			v = r[0];			
+		}
+		if(u<0) {
+			u = -1.0*u;
+			v=-1.0*u;
+		}
+		double mod = MathUtil.norm(new double[]{u,v});
+		return new double[] {u/mod, v/mod};
+	}
+
+	/**
+	 * Calcula el módulo de un vector
+	 * @param v Componentes del vector
+	 * @return modulo del vector = sqrt(v1*v1 + v2*v2)
+	 */
+	public static double norm(double[] v) {
+		return Math.sqrt(v[0]*v[0] + v[1]*v[1]);
+	}
+	/**
+	 * Calcula el producto escalar de dos vectores
+	 * @param v1 componentes del primer vector
+	 * @param v2 componentes del segundo vector
+	 */
+	public static double dot(double[] v1, double[] v2) {
+		return v1[0]*v2[0] + v1[1]*v2[1];
+	}
+	
+	/**
+	 * Calcula el ángulo menor formado entre dos rectas
+	 */
+	public static double angleInRadiansBetweenTwoStraights(double[] r1, double[] r2) {
+		double ang = 0.0;
+		
+		return ang;
+	}
+	
+	public static double angleInDegreesBetweenTwoStraights(double[] r1, double[] r2) {
+		double radians = MathUtil.angleInRadiansBetweenTwoStraights(r1, r2);
+		return (180 / Math.PI)*radians;
+	}
+	
 	/**
 	 * Devuelve true si un numero entero es par
 	 * @param i número entero a evaluar
 	 * @return true si el número entero es par
 	 */
-	public static boolean isEven(int i) {
+ 	public static boolean isEven(int i) {
 		return (i % 2) == 0;
 	}
 	/**
