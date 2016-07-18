@@ -55,6 +55,17 @@ public class TestVerticalCurveAlign {
 		Assert.assertEquals(0.04672, vc.getEndTangent(), 0.001);
 		Assert.assertEquals(80.0, vc.getEndS(), 0.001);
 		
+		dspeed = DesignSpeed.DS80;
+		s0 = 0.0;
+		z0 = 0.0;
+		g0 = 0.005;
+		kv = 6000.0;
+		ends = 250.0;
+		vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);
+		Assert.assertEquals(0.0468, vc.getEndTangent(), 0.001);
+		Assert.assertEquals(250.0, vc.getEndS(), 0.001);
+		
+		
 	}
 	@Test
 	public void testDerivative() {
