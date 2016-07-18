@@ -15,7 +15,9 @@ public class VerticalCurveAlign extends AbstractVerticalProfileAlign {
 	public VerticalCurveAlign(DesignSpeed dspeed, Parabole parabole, double startx, double endx) {
 		super(dspeed, parabole, startx, endx);
 	}
-	
+	public VerticalCurveAlign(DesignSpeed dspeed, double starts, double startz, double startTangent, double kv, double ends) {
+		super(dspeed, new Parabole(starts, startz, startTangent, kv), starts, ends);
+	}
 	@Override
 	public Parabole getPolynom2() {
 		return (Parabole)(super.getPolynom2());

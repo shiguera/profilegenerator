@@ -40,10 +40,22 @@ public class TestVerticalCurveAlign {
 		Assert.assertEquals(0.28, p1.getStartTangent(), 0.0001);
 		Assert.assertEquals(0.40, p1.getEndTangent(), 0.0001);
 		Assert.assertEquals(600.0, p1.getLength(), 0.0001);
-		
-
 	}
 
+	@Test
+	public void testConstructor() {
+		LOG.debug("testConstructor()");
+		DesignSpeed dspeed = DesignSpeed.DS40;
+		double s0 = 0.0;
+		double z0 = 0.0;
+		double g0 = 0.02;
+		double kv = 3000.0;
+		double ends = 80.0;
+		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);
+		Assert.assertEquals(0.04672, vc.getEndTangent(), 0.001);
+		Assert.assertEquals(80.0, vc.getEndS(), 0.001);
+		
+	}
 	@Test
 	public void testDerivative() {
 		LOG.debug("testDerivative()");
