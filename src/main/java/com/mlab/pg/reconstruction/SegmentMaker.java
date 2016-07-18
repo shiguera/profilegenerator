@@ -21,6 +21,39 @@ public class SegmentMaker {
 
 	/**
 	 * Procesa las sucesiones de segmentos y cuando se encuentra una
+	 * sucesión VC - VCVC - VCE - G añade el segmento VCVC al segmento VC
+	 */
+	public void processVerticalCurveEndings() {
+		PointTypeSegmentArray newPointTypeSegments = new PointTypeSegmentArray();
+		int lastsegment = pointTypeSegments.size() -1;
+		int lastsegmentadded = -1;
+		for(int i=0; i<= lastsegment-3; i++) {
+			if(pointTypeSegments.get(i).getPointType()==PointType.VERTICAL_CURVE && 
+					pointTypeSegments.get(i+1).getPointType()==PointType.VERTICALCURVE_TO_VERTICALCURVE &&
+					pointTypeSegments.get(i+2).getPointType()==PointType.VERTICALCURVE_END &&
+					pointTypeSegments.get(i+3).getPointType()==PointType.GRADE) {
+				// Convierte en VerticalCurve el segmento VerticalCurveToVerticalCurve
+				//int firstpoint = pointTypeSegments.get(i+2).getStart();
+				int lastPoint = pointTypeSegments.get(i+2).getEnd();
+				newPointTypeSegments.add(pointTypeSegments.get(i));
+				newPointTypeSegments.add(pointTypeSegments.get(i+2));
+				newPointTypeSegments.add(pointTypeSegments.get(i+3));				
+				newPointTypeSegments.get(newPointTypeSegments.size()-3).setEnd(lastPoint);
+				i = i+3;
+			} else {
+				newPointTypeSegments.add(pointTypeSegments.get(i));
+			}
+			lastsegmentadded = i;
+		}
+		if (lastsegmentadded < lastsegment) {
+			for(int i=lastsegmentadded + 1; i<=lastsegment; i++) {
+				newPointTypeSegments.add(pointTypeSegments.get(i));
+			}			
+		}
+		pointTypeSegments = newPointTypeSegments.clone();
+	}
+	/**
+	 * Procesa las sucesiones de segmentos y cuando se encuentra una
 	 * sucesión G-VCB-VCVC-VC añade el segmento VCVC al segmento VC
 	 */
 	public void processVerticalCurveBeginnings() {
@@ -51,7 +84,7 @@ public class SegmentMaker {
 		}
 		pointTypeSegments = newPointTypeSegments.clone();
 	}
-	
+	// Getter -Setter
 	public XYVectorFunction getGradeSample() {
 		return gradeSample;
 	}

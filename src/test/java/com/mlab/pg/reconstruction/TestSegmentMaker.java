@@ -8,6 +8,13 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.valign.GradeAlign;
+import com.mlab.pg.valign.GradeProfile;
+import com.mlab.pg.valign.VerticalCurveAlign;
+import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.xyfunction.Parabole;
+import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 import junit.framework.Assert;
@@ -206,10 +213,74 @@ public class TestSegmentMaker {
 		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
 	}
 	
+	/**
+	 * Una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
+	 * DesignSpeed = 40
+	 * El punto VCE está en s=80, que corresponde al índice i=16 en la XYVectorFunction
+	 */
+	private VerticalProfile getSampleProfile1() {
+		DesignSpeed dspeed = DesignSpeed.DS40;
+		Parabole parab = new Parabole(0.0, 0.02, 0.000167);
+		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, parab, 0.0, 80.0);
+		double lastGrade = vc.getTangent(80.0);
+		Straight r = new Straight(80.0, vc.getY(80.0), vc.getTangent(80.0));
+		GradeAlign grade = new GradeAlign(dspeed, r, 80.0, 160.0);
+
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		profile.add(vc);
+		profile.add(grade);
+		return profile;
+	}
+	/**
+	 * Test con una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
+	 * El punto VCE está en s=80, que corresponde al índice i=16 en la XYVectorFunction
+	 */
 	@Test
-	public void testProcessVerticalCurveBeginning() {
-		LOG.debug("testProcessVerticalCurveBeginning()");
+	public void testProcessVerticalCurveEndings() {
+		LOG.debug("testProcessVerticalCurveEndings()");
+		
+		VerticalProfile profile = this.getSampleProfile1();
+		System.out.println(profile.toString());
+		
+		GradeProfile gradeProfile = profile.derivative();
+		XYVectorFunction sample = gradeProfile.getSample(0.0, 160.0, 5, true);
+		// System.out.println(lastGrade);
+		// System.out.println(sample.size()-1);
+
+		int mobileBaseSize = 4;
+		System.out.println("mobileBaseSize = " + mobileBaseSize);
+		double thresholdSlope = 1e-5;		
+		System.out.println("thresholdSlope = " + thresholdSlope);
+		
+		
+		SegmentMaker maker = new SegmentMaker(sample, mobileBaseSize, thresholdSlope);
+		Assert.assertNotNull(maker.getPointTypes());
+		Assert.assertEquals(sample.size(), maker.getPointTypes().size());
+//		for(PointType type : maker.getPointTypes()) {
+//			System.out.println(type);
+//		}
+		Assert.assertNotNull(maker.getPointTypeSegments());
+		System.out.println("\nBefore processing segments");
+		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
+			System.out.println(segment.toString());
+		}
+		// Comprobar que se sacan seis segmentos: NULL - VC - VCVC - VCE - G 
+		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
+		// Comprobar que el verdadero punto VCE es identificado como tal
+		Assert.assertEquals(PointType.VERTICALCURVE_END, maker.getPointTypes().get(16));
+//		
+		maker.processVerticalCurveEndings();
+		System.out.println("\nAfter processing segments");
+		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
+			System.out.println(segment.toString());
+		}
+		Assert.assertEquals(5, maker.getPointTypeSegments().size());		
+	}
+	@Test
+	public void testProcessVerticalCurveBeginnings() {
+		LOG.debug("testProcessVerticalCurveBeginningsing()");
 		List<double[]> pts = new ArrayList<double[]>();
+
 		pts.add(new double[] {0.0, 0.04075});
 		pts.add(new double[] {2.0, 0.04075});
 		pts.add(new double[] {4.0, 0.04075});
