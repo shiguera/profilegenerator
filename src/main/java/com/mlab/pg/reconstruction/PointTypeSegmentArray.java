@@ -60,4 +60,14 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 		}
 		return copy;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for(int i=0; i<this.size(); i++) {
+			builder.append(this.get(i).toString());
+			builder.append("\n");
+		}
+		return builder.toString();
+	}
 }

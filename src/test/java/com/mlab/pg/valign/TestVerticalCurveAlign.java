@@ -68,6 +68,44 @@ public class TestVerticalCurveAlign {
 		
 	}
 	@Test
+	public void testConstructorWithSagCurve() {
+		LOG.debug("testConstructorWithSagCurve()");
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		double g0 = 0.03;
+		double Kv0 = 10000.0;
+		double s1 = 150.0;
+		
+		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		Assert.assertEquals(0.0, sag.getStartS(), 0.001);
+		Assert.assertEquals(1000.0, sag.getStartZ(), 0.001);
+		Assert.assertEquals(0.03, sag.getStartTangent(), 0.001);
+		Assert.assertEquals(1005.625, sag.getEndZ(), 0.001);
+		Assert.assertEquals(0.045, sag.getEndTangent(), 0.001);
+		Assert.assertEquals(1005.625, sag.getY(150.0), 0.001);
+		Assert.assertEquals(0.045, sag.getTangent(150.0), 0.001);
+	}
+	@Test
+	public void testConstructorWithCrestCurve() {
+		LOG.debug("testConstructorWithCrestCurve()");
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double s0 = 150.0;
+		double z0 = 1005.625;
+		double g0 = 0.045;
+		double Kv0 = -20000.0;
+		double s1 = 750.0;
+		
+		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		Assert.assertEquals(150.0, sag.getStartS(), 0.001);
+		Assert.assertEquals(1005.625, sag.getStartZ(), 0.001);
+		Assert.assertEquals(0.045, sag.getStartTangent(), 0.001);
+		Assert.assertEquals(1023.625, sag.getEndZ(), 0.001);
+		Assert.assertEquals(0.015, sag.getEndTangent(), 0.001);
+		Assert.assertEquals(1023.625, sag.getY(750.0), 0.001);
+		Assert.assertEquals(0.015, sag.getTangent(750.0), 0.001);
+	}
+	@Test
 	public void testDerivative() {
 		LOG.debug("testDerivative()");
 		DesignSpeed dspeed = DesignSpeed.DS120;
@@ -95,6 +133,20 @@ public class TestVerticalCurveAlign {
 		Assert.assertEquals(align.getEndTangent(), galign.getEndGrade(), 0.001);
 		Assert.assertEquals(align.getLength(), galign.getLength(), 0.001);
 
+		
+	}
+
+	@Test
+	public void testGetSForSlope() {
+		LOG.debug("testGetSForSlope()");
+		VerticalCurveAlign vc = new VerticalCurveAlign(DesignSpeed.DS100, 0.0, 1000.0, 0.03, 10000.0, 150.0);
+		Assert.assertEquals(150.0, vc.getSForSlope(0.045), 0.001);
+		Assert.assertEquals(250.0, vc.getSForSlope(0.055), 0.001);
+		
+		vc = new VerticalCurveAlign(DesignSpeed.DS100, 150.0, 1005.625, 0.045, -20000.0, 750.0);
+		Assert.assertEquals(250.0, vc.getSForSlope(0.04), 0.001);
+		Assert.assertEquals(500.0, vc.getSForSlope(0.0275), 0.001);
+		Assert.assertEquals(750.0, vc.getSForSlope(0.015), 0.001);
 		
 	}
 }

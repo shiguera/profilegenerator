@@ -31,8 +31,6 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 		
 	}
 
-
-	
 	// Interface XYFunction
 	@Override
 	public double getY(double x) {
@@ -161,6 +159,13 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 		return galign;
 	}
 
+	/**
+	 * Devuelve la abscisa correspondiente a una pendiente concreta
+	 */
+	public double getSForSlope(double slope) {
+		return (slope - this.getPolynom2().getA1()) / 2.0 / this.getPolynom2().getA2();
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %12.6f %10s", 

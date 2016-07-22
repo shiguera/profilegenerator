@@ -57,7 +57,9 @@ public class Parabole extends Polynom2{
 		return (a2 < 0);
 	}
 	
-	
+	public double getSForSlope(double slope) {
+		return (slope - a1) / 2.0 / a2;
+	}
 	
 	
 

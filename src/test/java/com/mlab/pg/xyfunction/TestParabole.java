@@ -105,4 +105,18 @@ public class TestParabole {
 	}
 
 
+	@Test
+	public void testGetSForSlope() {
+		LOG.debug("testGetSForSlope()");
+		Parabole p = new Parabole(0.0, 0.0, 1.0);
+		Assert.assertEquals(0.0, p.getSForSlope(0.0));
+		Assert.assertEquals(1.0, p.getSForSlope(2.0));
+		Assert.assertEquals(-1.0, p.getSForSlope(-2.0));
+
+		p = new Parabole(-3.0, -2.0, 1.5);
+		Assert.assertEquals(1.0, p.getSForSlope(1.0));
+		Assert.assertEquals(0.0, p.getSForSlope(-2.0));
+		Assert.assertEquals(-1.0, p.getSForSlope(-5.0));
+
+	}
 }

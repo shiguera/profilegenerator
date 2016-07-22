@@ -13,7 +13,6 @@ import com.mlab.pg.valign.GradeAlign;
 import com.mlab.pg.valign.GradeProfile;
 import com.mlab.pg.valign.VerticalCurveAlign;
 import com.mlab.pg.valign.VerticalProfile;
-import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -395,4 +394,40 @@ public class TestSegmentMaker {
 			System.out.println(segment.toString());
 		}
 	}
+
+
+	@Test
+	public void testSagCurveCrestCurve() {
+		LOG.debug("testSagCurveCrestCurve()");
+		
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double s0 = 0.0;
+		double z0 = 1000.0;
+		double g0 = 0.03;
+		double Kv0 = 10000.0;
+		double s1 = 150.0;
+		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		
+		double z1 = sag.getEndZ(); // 1005.625
+		double g1 = sag.getEndTangent(); // 0.045
+		double Kv1 = -20000.0;
+		double s2 = 750.0;
+		VerticalCurveAlign crest = new VerticalCurveAlign(dspeed, s1, z1, g1, Kv1, s2);
+		
+		VerticalProfile profile = new VerticalProfile(dspeed);
+		profile.add(sag);
+		profile.add(crest);
+		GradeProfile gradeprofile = profile.derivative();
+		XYVectorFunction gradesample = gradeprofile.getSample(s0, s2, 5, true);
+		
+		int mobileBaseSize = 3;
+		double thresholdSlope = 1e-5;
+		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
+		PointTypeSegmentArray segments = maker.getPointTypeSegments();
+		
+		System.out.println(segments);
+		
+		
+	}
+
 }
