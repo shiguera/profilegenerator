@@ -15,7 +15,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public abstract class AbstractVerticalProfileAlign implements VerticalProfileAlign{
+public abstract class AbstractVerticalProfileAlign implements VerticalProfileAlign {
 
 	protected DesignSpeed designSpeed;
 	protected double startS;

@@ -2,6 +2,14 @@ package com.mlab.pg.reconstruction;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
+/** 
+ * A partir de un perfil de pendientes en la forma de una XYVectorFunction, un tamaño
+ * de la mobileBaseSize y un valor límite para el thresholdSlope genera un PointTypeSegmentArray 
+ * caracterizando los distintos segmentos que encuentra en el perfil de pendientes
+ *  
+ * @author shiguera
+ *
+ */
 public class SegmentMaker {
 
 	XYVectorFunction gradeSample;
@@ -84,6 +92,24 @@ public class SegmentMaker {
 		}
 		pointTypeSegments = newPointTypeSegments.clone();
 	}
+	
+	/**
+	 * Procesa las ternas G - BVC - VC , asignando los puntos del tramo BVC
+	 * a los tramos vecinos
+	 */
+	public void processThrees_G_BVC_VC() {
+		
+	}
+	
+	/**
+	 * Procesa los tramos VCVC que están entre dos tramos VC 
+	 * asignando sus puntos a los tramos VC vecinos con el criterio de
+	 * minimos cuadrados.
+	 */
+	public void processVerticalCurveToVerticalCurveSegments() {
+		
+	}
+	
 	// Getter -Setter
 	public XYVectorFunction getGradeSample() {
 		return gradeSample;

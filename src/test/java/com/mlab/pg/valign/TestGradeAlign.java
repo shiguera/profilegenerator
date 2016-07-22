@@ -45,6 +45,21 @@ public class TestGradeAlign {
 	}
 
 	@Test
+	public void testConstructorPuntoPdteLongitud() {
+		LOG.debug("testConstructorPuntoPdteLongitud()");
+		DesignSpeed dspeed = DesignSpeed.DS100;
+		double starts = 0.0;
+		double startz = 1000.0;
+		double slope = 0.03;
+		double length = 1200.0;
+		GradeAlign grade = new GradeAlign(dspeed, starts, startz, slope, length);
+		Assert.assertEquals(0.0, grade.getStartS(), 0.001);
+		Assert.assertEquals(1000.0, grade.getStartZ(), 0.001);
+		Assert.assertEquals(1200.0, grade.getEndS(), 0.001);
+		Assert.assertEquals(1036.0, grade.getEndZ(), 0.001);
+		
+	}
+	@Test
 	public void testDerivative() {
 		// With up grade
 		double starts =0.0;

@@ -30,5 +30,24 @@ public class TestStraight {
 		Assert.assertEquals(0.0, r.getCurvature(1.0));
 		
 	}
+	
+	@Test
+	public void testConstructorPuntoPendiente() {
+		LOG.debug("testConstructorPuntoPendiente()");
+		// Recta por (0,0) con pendiente 1.0
+		Straight r1 = new Straight(0.0,0.0,1.0);
+		Assert.assertEquals(0.0, r1.getY(0.0));
+		Assert.assertEquals(1.0, r1.getY(1.0));
+		Assert.assertEquals(-1.0, r1.getY(-1.0));
+		Assert.assertEquals(1.0, r1.getSlope());
+		
+		// Recta por (1,0) con pendiente -1.0
+		Straight r2 = new Straight(1.0,0.0,-1.0);
+		Assert.assertEquals(1.0, r2.getY(0.0));
+		Assert.assertEquals(0.0, r2.getY(1.0));
+		Assert.assertEquals(2.0, r2.getY(-1.0));
+		Assert.assertEquals(-1.0, r2.getSlope());
+				
+	}
 
 }

@@ -12,10 +12,25 @@ import com.mlab.pg.xyfunction.Straight;
 public class GradeAlign extends AbstractVerticalProfileAlign {
 
 	
+	/**
+	 * Crea una GradeAlign a partir de una DesignSpeed, una ecuación de una recta, Straight, 
+	 * un inicio, startS, y un final , endS
+	 * @param dspeed Velocidad de diseño
+	 * @param straight Ecuación de la recta
+	 * @param starts Inicio de la alineación
+	 * @param ends Final de la alineación
+	 */
 	public GradeAlign(DesignSpeed dspeed,Straight straight, double starts, double ends) {
 		super(dspeed, straight, starts, ends);
 	}
 
+	/**
+	 * Crea una GradeAlign a partir de una DesignSpeed, abscisa inicial, ordenada inicial, pendiente y longitud
+	 * No comprueba que la pendiente supere los límites para esa DesignSpeed
+	 */
+	public GradeAlign(DesignSpeed dspeed, double starts, double startz, double slope, double length) {
+		this(dspeed, new Straight(starts, startz, slope), starts, starts + length);
+	}
 	
 	@Override
 	public Straight getPolynom2() {

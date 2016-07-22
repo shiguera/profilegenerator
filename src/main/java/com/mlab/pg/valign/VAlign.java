@@ -12,7 +12,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public interface VAlign extends XYFunction{
+public interface VAlign extends XYFunction {
 	public static String CABECERA = String.format("%12s %12s %12s %12s %12s %12s %12s %12s %12s %12s %10s", 
 			"SE","ZE", "PE", "L", "SS", "ZS", "PS", "a0", "a1x", "a2x^2", "K");
 	
