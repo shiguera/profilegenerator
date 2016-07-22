@@ -57,13 +57,13 @@ public class GradeProfileAlign implements VAlign {
 			double a1 = g1;
 			double a0 = startZ - s1*g1;
 			Straight r = new Straight(a0,a1);
-			valign = new GradeAlign(designSpeed, r, s1, s2);
+			valign = new Grade(designSpeed, r, s1, s2);
 		} else {
 			double a2 = (g2-g1)/2/(s2-s1);
 			double a1 = g2 - 2*a2*s2;
 			double a0 = startZ - a1*s1 - a2 * s1 * s1;
 			Parabole p = new Parabole(a0,a1,a2);
-			valign = new VerticalCurveAlign(designSpeed, p,s1,s2);
+			valign = new VerticalCurve(designSpeed, p,s1,s2);
 		}
 		return valign;
 	}

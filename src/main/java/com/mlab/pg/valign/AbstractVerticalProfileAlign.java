@@ -148,11 +148,11 @@ public abstract class AbstractVerticalProfileAlign implements VerticalProfileAli
 	@Override
 	public GradeProfileAlign derivative() {
 		GradeProfileAlign galign = null;
-		if(getClass().isAssignableFrom(GradeAlign.class)) {
+		if(getClass().isAssignableFrom(Grade.class)) {
 			double g = getSlope();
 			Straight r = new Straight(g,0.0);
 			galign = new GradeProfileAlign(designSpeed, r, getStartS(), getEndS());
-		} else if (getClass().isAssignableFrom(VerticalCurveAlign.class)) {
+		} else if (getClass().isAssignableFrom(VerticalCurve.class)) {
 			Straight r = new Straight(getPolynom2().getA1(), getPolynom2().getA2()*2.0);
 			galign = new GradeProfileAlign(designSpeed, r, getStartS(), getEndS());
 		}

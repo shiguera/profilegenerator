@@ -9,13 +9,13 @@ import com.mlab.pg.xyfunction.Parabole;
  * @author shiguera
  *
  */
-public class VerticalCurveAlign extends AbstractVerticalProfileAlign {
+public class VerticalCurve extends AbstractVerticalProfileAlign {
 
 	
-	public VerticalCurveAlign(DesignSpeed dspeed, Parabole parabole, double startx, double endx) {
+	public VerticalCurve(DesignSpeed dspeed, Parabole parabole, double startx, double endx) {
 		super(dspeed, parabole, startx, endx);
 	}
-	public VerticalCurveAlign(DesignSpeed dspeed, double starts, double startz, double startTangent, double kv, double ends) {
+	public VerticalCurve(DesignSpeed dspeed, double starts, double startz, double startTangent, double kv, double ends) {
 		super(dspeed, new Parabole(starts, startz, startTangent, kv), starts, ends);
 	}
 	@Override

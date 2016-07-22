@@ -9,8 +9,8 @@ import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
-import com.mlab.pg.valign.GradeAlign;
-import com.mlab.pg.valign.VerticalCurveAlign;
+import com.mlab.pg.valign.Grade;
+import com.mlab.pg.valign.VerticalCurve;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
@@ -128,15 +128,15 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
-		GradeAlign grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
 		double g2 = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		VerticalCurveAlign crestcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve crestcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		double starts2 = crestcurve.getEndS();
 		double startz2 = crestcurve.getEndZ();
 		double length2 = RandomFactory.randomGradeLength(dspeed);
 		double ends2 = starts2 + length2;
 		Straight straight2 = new Straight(starts2, startz2, g2);
-		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts2, ends2);
+		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(grade1);
 		profile.add(crestcurve);
@@ -151,15 +151,15 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
-		GradeAlign grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
 		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		VerticalCurveAlign sagcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve sagcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		double starts2 = sagcurve.getEndS();
 		double startz2 = sagcurve.getEndZ();
 		double length2 = RandomFactory.randomGradeLength(dspeed);
 		double ends2 = starts2 + length2;
 		Straight straight2 = new Straight(starts2, startz2, g2);
-		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts2, ends2);
+		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(grade1);
 		profile.add(sagcurve);
@@ -177,7 +177,7 @@ public class RandomFactory {
 	 * @param g2 Pendiente de la GradeAlign final
 	 * @return VerticalCurveAlign
 	 */
-	public static VerticalCurveAlign randomVerticalCurve(DesignSpeed dspeed, GradeAlign grade1, double g2) {
+	public static VerticalCurve randomVerticalCurve(DesignSpeed dspeed, Grade grade1, double g2) {
 		double g1 = grade1.getStartTangent();
 		if(g1*g2 > 0) {
 			LOG.error("randomVerticalCurve() ERROR: slopes have same sign");
@@ -207,7 +207,7 @@ public class RandomFactory {
 		double startz = grade1.getEndZ();
 		double ends = starts +length;
 		Parabole p = new Parabole(starts, startz, g1, kv);
-		VerticalCurveAlign align = new VerticalCurveAlign(dspeed, p, starts, ends);
+		VerticalCurve align = new VerticalCurve(dspeed, p, starts, ends);
 		return align;
 	}
 	/**
@@ -251,12 +251,12 @@ public class RandomFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static GradeAlign randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static Grade randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
 		double slope = RandomFactory.randomGradeSlope(dspeed);
 		double length = RandomFactory.randomGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		GradeAlign align = new GradeAlign(dspeed, r, s0, ends);
+		Grade align = new Grade(dspeed, r, s0, ends);
 		return align;
 	}
 	/**
@@ -270,12 +270,12 @@ public class RandomFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static GradeAlign randomUpGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static Grade randomUpGradeAlign(DesignSpeed dspeed, double s0, double z0) {
 		double slope = Math.abs(RandomFactory.randomGradeSlope(dspeed));
 		double length = RandomFactory.randomGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		GradeAlign align = new GradeAlign(dspeed, r, s0, ends);
+		Grade align = new Grade(dspeed, r, s0, ends);
 		return align;
 	}
 	/**
@@ -289,12 +289,12 @@ public class RandomFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static GradeAlign randomDownGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static Grade randomDownGradeAlign(DesignSpeed dspeed, double s0, double z0) {
 		double slope = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
 		double length = RandomFactory.randomGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		GradeAlign align = new GradeAlign(dspeed, r, s0, ends);
+		Grade align = new Grade(dspeed, r, s0, ends);
 		return align;
 	}
 	

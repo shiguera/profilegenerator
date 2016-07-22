@@ -24,7 +24,7 @@ public class TestGradeAlign {
 		Straight straight = new Straight(0.0, 0.04);
 		double startx = 0.0;
 		double endx = 1200.0;
-		GradeAlign tangent1 = new GradeAlign(DesignSpeed.DS100, straight, startx, endx);
+		Grade tangent1 = new Grade(DesignSpeed.DS100, straight, startx, endx);
 		Assert.assertNotNull(tangent1);
 		Assert.assertNotNull(tangent1.getDesignSpeed());
 		Assert.assertNotNull(tangent1.getStartS());
@@ -52,7 +52,7 @@ public class TestGradeAlign {
 		double startz = 1000.0;
 		double slope = 0.03;
 		double length = 1200.0;
-		GradeAlign grade = new GradeAlign(dspeed, starts, startz, slope, length);
+		Grade grade = new Grade(dspeed, starts, startz, slope, length);
 		Assert.assertEquals(0.0, grade.getStartS(), 0.001);
 		Assert.assertEquals(1000.0, grade.getStartZ(), 0.001);
 		Assert.assertEquals(1200.0, grade.getEndS(), 0.001);
@@ -68,7 +68,7 @@ public class TestGradeAlign {
 		Straight r = new Straight(starts, startz, slope);
 		double ends = 1000.0;
 		DesignSpeed dspeed = DesignSpeed.DS120;
-		GradeAlign align = new GradeAlign(dspeed, r, starts, ends);
+		Grade align = new Grade(dspeed, r, starts, ends);
 
 		GradeProfileAlign galign = align.derivative();
 		Assert.assertEquals(dspeed, galign.getDesignSpeed());
@@ -84,7 +84,7 @@ public class TestGradeAlign {
 		r = new Straight(starts, startz, slope);
 		ends = 1300.0;
 		dspeed = DesignSpeed.DS80;
-		align = new GradeAlign(dspeed, r, starts, ends);
+		align = new Grade(dspeed, r, starts, ends);
 
 		galign = align.derivative();
 		Assert.assertEquals(dspeed, galign.getDesignSpeed());

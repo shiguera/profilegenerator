@@ -27,12 +27,12 @@ public class TestGradeProfileAlign {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0 = 1000.0;
 		double z0 = 1000.0;
-		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		
 		GradeProfileAlign galign = grade1.derivative();
 		
 		double startZ = z0;
-		GradeAlign align = (GradeAlign) galign.integrate(startZ);
+		Grade align = (Grade) galign.integrate(startZ);
 		Assert.assertNotNull(align);
 		Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
 		Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
@@ -50,11 +50,11 @@ public class TestGradeProfileAlign {
 			g2 = Math.abs(g2);
 		}
 		
-		VerticalCurveAlign vcalign = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve vcalign = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		Assert.assertNotNull(align);
 		galign = vcalign.derivative();
 		
-		VerticalCurveAlign vcintegrate = (VerticalCurveAlign) galign.integrate(vcalign.getStartZ()); 
+		VerticalCurve vcintegrate = (VerticalCurve) galign.integrate(vcalign.getStartZ()); 
 		Assert.assertEquals(vcalign.getStartS(), vcintegrate.getStartS(), 0.001);
 		Assert.assertEquals(vcalign.getStartZ(), vcintegrate.getStartZ(), 0.001);
 		Assert.assertEquals(vcalign.getStartTangent(), vcintegrate.getStartTangent(), 0.001);
@@ -75,7 +75,7 @@ public class TestGradeProfileAlign {
 		double startslope1 = 0.03;
 		Straight straight1 = new Straight(starts1, startz1, startslope1);
 		double ends1 = 1400.0; 
-		GradeAlign grade1 = new GradeAlign(dspeed, straight1, starts1, ends1);
+		Grade grade1 = new Grade(dspeed, straight1, starts1, ends1);
 		double starts2 = ends1;
 		double startz2 = grade1.getEndZ();
 		double startslope2 = startslope1;
@@ -83,13 +83,13 @@ public class TestGradeProfileAlign {
 		Parabole parabole = new Parabole(starts2, startz2, startslope2, kv);
 		double length = 400;
 		double ends2 = starts2 + length;
-		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, parabole, starts2, ends2);
+		VerticalCurve vc = new VerticalCurve(dspeed, parabole, starts2, ends2);
 		double starts3 = vc.getEndS();
 		double startz3 = vc.getEndZ();
 		double startslope3 = vc.getEndTangent();
 		Straight straight2 = new Straight(starts3, startz3, startslope3);
 		double ends3 = starts3 + 300.0;
-		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts3, ends3);
+		Grade grade2 = new Grade(dspeed, straight2, starts3, ends3);
 
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		Assert.assertTrue(profile.add(grade1));
@@ -116,7 +116,7 @@ public class TestGradeProfileAlign {
 		double startslope1 = 0.03;
 		Straight straight1 = new Straight(starts1, startz1, startslope1);
 		double ends1 = 1400.0; 
-		GradeAlign grade1 = new GradeAlign(dspeed, straight1, starts1, ends1);
+		Grade grade1 = new Grade(dspeed, straight1, starts1, ends1);
 		double starts2 = ends1;
 		double startz2 = grade1.getEndZ();
 		double startslope2 = startslope1;
@@ -124,13 +124,13 @@ public class TestGradeProfileAlign {
 		Parabole parabole = new Parabole(starts2, startz2, startslope2, kv);
 		double length = 400;
 		double ends2 = starts2 + length;
-		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, parabole, starts2, ends2);
+		VerticalCurve vc = new VerticalCurve(dspeed, parabole, starts2, ends2);
 		double starts3 = vc.getEndS();
 		double startz3 = vc.getEndZ();
 		double startslope3 = vc.getEndTangent();
 		Straight straight2 = new Straight(starts3, startz3, startslope3);
 		double ends3 = starts3 + 300.0;
-		GradeAlign grade2 = new GradeAlign(dspeed, straight2, starts3, ends3);
+		Grade grade2 = new Grade(dspeed, straight2, starts3, ends3);
 
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		Assert.assertTrue(profile.add(grade1));

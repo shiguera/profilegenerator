@@ -9,9 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.valign.GradeAlign;
+import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.GradeProfile;
-import com.mlab.pg.valign.VerticalCurveAlign;
+import com.mlab.pg.valign.VerticalCurve;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -224,9 +224,9 @@ public class TestSegmentMaker {
 		double g0 = 0.02;
 		double kv = 3000.0;
 		double ends = 80.0;
-		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);		
+		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);		
 		Straight r = new Straight(80.0, vc.getY(80.0), vc.getTangent(80.0));
-		GradeAlign grade = new GradeAlign(dspeed, r, 80.0, 160.0);
+		Grade grade = new Grade(dspeed, r, 80.0, 160.0);
 
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(vc);
@@ -246,9 +246,9 @@ public class TestSegmentMaker {
 		double g0 = 0.005;
 		double kv = 6000.0;
 		double ends = 250.0;
-		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);		
+		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);		
 		Straight r = new Straight(80.0, vc.getY(80.0), vc.getTangent(250.0));
-		GradeAlign grade = new GradeAlign(dspeed, r, 250.0, 500.0);
+		Grade grade = new Grade(dspeed, r, 250.0, 500.0);
 
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(vc);
@@ -406,13 +406,13 @@ public class TestSegmentMaker {
 		double g0 = 0.03;
 		double Kv0 = 10000.0;
 		double s1 = 150.0;
-		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
 		
 		double z1 = sag.getEndZ(); // 1005.625
 		double g1 = sag.getEndTangent(); // 0.045
 		double Kv1 = -20000.0;
 		double s2 = 750.0;
-		VerticalCurveAlign crest = new VerticalCurveAlign(dspeed, s1, z1, g1, Kv1, s2);
+		VerticalCurve crest = new VerticalCurve(dspeed, s1, z1, g1, Kv1, s2);
 		
 		VerticalProfile profile = new VerticalProfile(dspeed);
 		profile.add(sag);

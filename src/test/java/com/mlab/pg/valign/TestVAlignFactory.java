@@ -27,7 +27,7 @@ public class TestVAlignFactory {
 		double g0 = 0.03;
 		double kv = 10000.0;
 		double gf = 0.045;
-		VerticalCurveAlign vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(dspeed, s0, z0, g0, kv, gf);
+		VerticalCurve vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(dspeed, s0, z0, g0, kv, gf);
 		Assert.assertEquals(150.0, vc.getEndS(), 0.001);
 		
 		s0 = 150.0;

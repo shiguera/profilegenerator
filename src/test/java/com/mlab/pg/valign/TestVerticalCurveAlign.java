@@ -25,7 +25,7 @@ public class TestVerticalCurveAlign {
 		Parabole parabole = new Parabole(0.0, 0.04, 0.0001);
 		double startx = 1200.0;
 		double endx = 1800.0;
-		VerticalCurveAlign p1 = new VerticalCurveAlign(DesignSpeed.DS100, parabole, startx, endx);
+		VerticalCurve p1 = new VerticalCurve(DesignSpeed.DS100, parabole, startx, endx);
 		Assert.assertNotNull(p1);
 		Assert.assertNotNull(p1.getDesignSpeed());
 		Assert.assertNotNull(p1.getStartS());
@@ -51,7 +51,7 @@ public class TestVerticalCurveAlign {
 		double g0 = 0.02;
 		double kv = 3000.0;
 		double ends = 80.0;
-		VerticalCurveAlign vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);
+		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);
 		Assert.assertEquals(0.04672, vc.getEndTangent(), 0.001);
 		Assert.assertEquals(80.0, vc.getEndS(), 0.001);
 		
@@ -61,7 +61,7 @@ public class TestVerticalCurveAlign {
 		g0 = 0.005;
 		kv = 6000.0;
 		ends = 250.0;
-		vc = new VerticalCurveAlign(dspeed, s0, z0, g0, kv, ends);
+		vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);
 		Assert.assertEquals(0.0468, vc.getEndTangent(), 0.001);
 		Assert.assertEquals(250.0, vc.getEndS(), 0.001);
 		
@@ -77,7 +77,7 @@ public class TestVerticalCurveAlign {
 		double Kv0 = 10000.0;
 		double s1 = 150.0;
 		
-		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
 		Assert.assertEquals(0.0, sag.getStartS(), 0.001);
 		Assert.assertEquals(1000.0, sag.getStartZ(), 0.001);
 		Assert.assertEquals(0.03, sag.getStartTangent(), 0.001);
@@ -96,7 +96,7 @@ public class TestVerticalCurveAlign {
 		double Kv0 = -20000.0;
 		double s1 = 750.0;
 		
-		VerticalCurveAlign sag = new VerticalCurveAlign(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
 		Assert.assertEquals(150.0, sag.getStartS(), 0.001);
 		Assert.assertEquals(1005.625, sag.getStartZ(), 0.001);
 		Assert.assertEquals(0.045, sag.getStartTangent(), 0.001);
@@ -111,14 +111,14 @@ public class TestVerticalCurveAlign {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0 = 1000.0;
 		double z0 = 1000.0;
-		GradeAlign grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g2 = RandomFactory.randomGradeSlope(dspeed);
 		if (grade1.getSlope() > 0) {
 			g2 = - Math.abs(g2);
 		} else {
 			g2 = Math.abs(g2);
 		}
-		VerticalCurveAlign align = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve align = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		Assert.assertNotNull(align);
 		Assert.assertEquals(grade1.getEndS(), align.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), align.getStartZ(), 0.001);
@@ -139,11 +139,11 @@ public class TestVerticalCurveAlign {
 	@Test
 	public void testGetSForSlope() {
 		LOG.debug("testGetSForSlope()");
-		VerticalCurveAlign vc = new VerticalCurveAlign(DesignSpeed.DS100, 0.0, 1000.0, 0.03, 10000.0, 150.0);
+		VerticalCurve vc = new VerticalCurve(DesignSpeed.DS100, 0.0, 1000.0, 0.03, 10000.0, 150.0);
 		Assert.assertEquals(150.0, vc.getSForSlope(0.045), 0.001);
 		Assert.assertEquals(250.0, vc.getSForSlope(0.055), 0.001);
 		
-		vc = new VerticalCurveAlign(DesignSpeed.DS100, 150.0, 1005.625, 0.045, -20000.0, 750.0);
+		vc = new VerticalCurve(DesignSpeed.DS100, 150.0, 1005.625, 0.045, -20000.0, 750.0);
 		Assert.assertEquals(250.0, vc.getSForSlope(0.04), 0.001);
 		Assert.assertEquals(500.0, vc.getSForSlope(0.0275), 0.001);
 		Assert.assertEquals(750.0, vc.getSForSlope(0.015), 0.001);
