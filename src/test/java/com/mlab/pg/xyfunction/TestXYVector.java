@@ -1,5 +1,7 @@
 package com.mlab.pg.xyfunction;
 
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Assert;
@@ -147,6 +149,36 @@ public class TestXYVector {
 		Assert.assertEquals(2.0, vector.getYValues()[0],0.001);
 		Assert.assertEquals(2.0, vector.getYValues()[1],0.001);
 		
+	}
+	@Test
+	public void testGetYValues2() {
+		LOG.debug("testGetYValues2()");
+		XYVector vector = new XYVector();
+		Assert.assertNull(vector.getYValues());
+		
+		Random rnd = new Random();
+		for(int i=0; i<100; i++) {
+			vector.add(new double[]{rnd.nextDouble(), rnd.nextDouble()});
+		}
+		
+		double[] values = vector.getYValues(-1, 1);
+		Assert.assertNull(values);	
+		
+		values = vector.getYValues(1, 0);
+		Assert.assertNull(values);	
+		
+		values = vector.getYValues(-1, 2);
+		Assert.assertNull(values);	
+		
+		values = vector.getYValues(0, vector.size()-1);
+		Assert.assertEquals(vector.size(), values.length, 0.001);	
+		
+		values = vector.getYValues(0, 10);
+		Assert.assertEquals(11, values.length, 0.001);	
+
+		values = vector.getYValues(10, 20);
+		Assert.assertEquals(11, values.length, 0.001);	
+
 	}
 
 

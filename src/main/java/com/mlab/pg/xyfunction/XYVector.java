@@ -79,6 +79,18 @@ public class XYVector extends ArrayList<double[]>  {
 		}
 		return yvalues;
 	}
+	public double[] getYValues(int first, int last) {
+		if(size()==0 || last<first || first <0 || first > size()-1 || last < 0 || last > size()-1) {
+			return null;
+		}
+		double[] yvalues = new double[last-first+1];
+		int contador = 0;
+		for(int i=first; i<=last; i++) {
+			yvalues[contador] = this.get(i)[1];
+			contador++;
+		}
+		return yvalues;
+	}
 	/**
 	 * Establece los valores {x, y} de la función
 	 * 

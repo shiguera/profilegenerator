@@ -27,6 +27,19 @@ public class SegmentMaker {
 		this.pointTypeSegments = new PointTypeSegmentArray(pointTypes);
 	}
 
+	public void processBorderPoints() {
+		for(int i=1; i<pointTypeSegments.size()-1; i++) {
+			PointTypeSegment previousSegment = pointTypeSegments.get(i-1);
+			PointTypeSegment currentSegment = pointTypeSegments.get(i);
+			PointTypeSegment followingSegment = pointTypeSegments.get(i+1);
+			if(currentSegment.getPointType()==PointType.BORDER_POINT && 
+					previousSegment.getPointType() != PointType.NULL && 
+					followingSegment.getPointType() != PointType.NULL) {
+				
+			}
+		}
+	}
+	
 	/**
 	 * Procesa las sucesiones de segmentos y cuando se encuentra una
 	 * sucesión VC - VCVC - VCE - G añade el segmento VCVC al segmento VC
