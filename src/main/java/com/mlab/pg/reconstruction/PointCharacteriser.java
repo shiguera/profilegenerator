@@ -26,16 +26,16 @@ public class PointCharacteriser {
 			if(isHorizontal(r2, thresholdSlope)) {
 				return PointType.GRADE;
 			} else {
-				return PointType.VERTICALCURVE_BEGINNING;
+				return PointType.BORDER_POINT;
 			}
 		} else {
 			if(isHorizontal(r2, thresholdSlope)) {
-				return PointType.VERTICALCURVE_END;
+				return PointType.BORDER_POINT;
 			} else {
 				if(isEqualSlope(r1, r2, thresholdSlope)) {
 					return PointType.VERTICAL_CURVE;
 				} else {
-					return PointType.VERTICALCURVE_TO_VERTICALCURVE;
+					return PointType.BORDER_POINT;
 				}
 			}
 		}

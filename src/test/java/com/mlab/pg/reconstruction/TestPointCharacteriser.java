@@ -69,7 +69,7 @@ public class TestPointCharacteriser {
 		
 		PointCharacteriser ch = new PointCharacteriser();
 		PointType type = ch.characterise(3, gp, 3, 1e-5);
-		Assert.assertTrue(type.equals(PointType.VERTICALCURVE_TO_VERTICALCURVE));
+		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class TestPointCharacteriser {
 		
 		PointCharacteriser ch = new PointCharacteriser();
 		PointType type = ch.characterise(3, gp, 3, 1e-5);
-		Assert.assertTrue(type.equals(PointType.VERTICALCURVE_END));
+		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 
 
