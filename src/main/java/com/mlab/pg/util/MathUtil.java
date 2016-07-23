@@ -5,8 +5,22 @@ import java.util.List;
 
 public class MathUtil {
 
-	// rectas en el plano
 	
+	// Error cuadratico medio
+	
+	public static double ecm(double[] y1, double[] y2) {
+		if(y1.length != y2.length) {
+			return Double.NaN;
+		}
+		double ecm = 0.0;
+		for(int i=0; i<y1.length; i++) {
+			ecm = ecm + (y2[i]-y1[i])*(y2[i]-y1[i]);
+		}
+		ecm = ecm / y1.length;
+		return ecm;
+	}
+	
+	// rectas en el plano
 	/**
 	 * Calcula la ecuación de una recta que pasa por dos puntos
 	 * @param p1 coordenadas [p1x, p1y] del primer punto de la recta

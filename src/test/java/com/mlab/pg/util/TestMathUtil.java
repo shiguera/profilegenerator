@@ -19,6 +19,30 @@ public class TestMathUtil {
 	}
 
 	@Test
+	public void testEcm() {
+		LOG.debug("testEcm()");
+		double[] y1 = new double[]{1.0, 2.0};
+		double[] y2 = new double[]{2.0};
+		Assert.assertEquals(Double.NaN, MathUtil.ecm(y1, y2), 0.001);
+		
+		y1 = new double[]{1.0};
+		y2 = new double[]{2.0};
+		Assert.assertEquals(1.0, MathUtil.ecm(y1, y2), 0.001);
+		
+		y1 = new double[]{1.0, 2.0};
+		y2 = new double[]{2.0, 3.0};
+		Assert.assertEquals(1.0, MathUtil.ecm(y1, y2), 0.001);
+		
+		y1 = new double[]{1.0, 2.0};
+		y2 = new double[]{2.0, 3.0};
+		Assert.assertEquals(1.0, MathUtil.ecm(y1, y2), 0.001);
+
+		y1 = new double[]{1.0, 2.0, 3.0};
+		y2 = new double[]{2.0, 3.0, 4.0};
+		Assert.assertEquals(1.0, MathUtil.ecm(y1, y2), 0.001);
+	}
+	
+	@Test
 	public void testNorm() {
 		LOG.debug("testNorm()");
 		double[] v = new double[]{0,0};

@@ -43,7 +43,7 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 				continue;
 			} else {
 				pointTypeSegments.add(currentSegment);
-				currentSegment = new PointTypeSegment(i,i,pointTypes.get(i));
+				currentSegment = new PointTypeSegment(i-1,i,pointTypes.get(i));
 			}
 		}
 		
