@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
+import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.GradeProfile;
 import com.mlab.pg.valign.VerticalCurve;
@@ -92,7 +93,71 @@ public class TestSegmentMaker {
 		}
 		Assert.assertEquals(3, maker.getPointTypeSegments().size());	
 	}
-	
+	@Test
+	public void testProcessBorder1() {
+		LOG.debug("testProcessBorder1()");
+		VerticalProfile profile = getSampleProfile1();
+		GradeProfile gradeprofile = profile.derivative();
+		System.out.println(gradeprofile);
+		double starts = gradeprofile.getStartS();
+		double ends = gradeprofile.getEndS();
+		double space = 5.0;
+		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
+		double thresholdSlope = 1e-5;
+		int baseSize = 3;
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		System.out.println(maker.originalSegments);
+		try {
+			maker.processBorderPoints();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(maker.processedSegments);
+	}
+	@Test
+	public void testProcessBorder2() {
+		LOG.debug("testProcessBorder2()");
+		VerticalProfile profile = getSampleProfile2();
+		GradeProfile gradeprofile = profile.derivative();
+		System.out.println(gradeprofile);
+		double starts = gradeprofile.getStartS();
+		double ends = gradeprofile.getEndS();
+		double space = 5.0;
+		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
+		double thresholdSlope = 1e-5;
+		int baseSize = 3;
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		System.out.println(maker.originalSegments);
+		try {
+			maker.processBorderPoints();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(maker.processedSegments);
+	}
+	@Test
+	public void testProcessBorder3() {
+		LOG.debug("testProcessBorder3()");
+		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
+		System.out.println(profile);
+		GradeProfile gradeprofile = profile.derivative();
+		//System.out.println(gradeprofile);
+		double starts = gradeprofile.getStartS();
+		double ends = gradeprofile.getEndS();
+		double space = 5.0;
+		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
+		double thresholdSlope = 1e-5;
+		int baseSize = 3;
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		System.out.println(maker.originalSegments);
+		try {
+			maker.processBorderPoints();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(maker.processedSegments);
+	}
 	@Test
 	public void testVerticalCurveToVerticalCurve() {
 //		LOG.debug("testVerticalCurveToVerticalCurve()");

@@ -2,6 +2,13 @@ package com.mlab.pg.reconstruction;
 
 import java.util.ArrayList;
 
+/**
+ * Es un ArrayList de PointTypeSegment. Se genera en el constructor, al pasarle un
+ * PointTypeArray, que es un ArrayList de tipos de puntos
+ * 
+ * @author shiguera
+ *
+ */
 public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 	
 	private static final long serialVersionUID = 1L;
@@ -52,6 +59,15 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 		return pointTypeSegments;
 	}
 
+	public boolean hasBorderPoints() {
+		for(int i=0; i<size(); i++) {
+			if(get(i).getPointType()== PointType.BORDER_POINT) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public PointTypeSegmentArray clone() {
 		PointTypeSegmentArray copy = new PointTypeSegmentArray();

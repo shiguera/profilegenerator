@@ -58,6 +58,11 @@ public class XYVector extends ArrayList<double[]>  {
 			return null;
 		}
 	}
+
+	@Override
+	public XYVector subList(int fromIndex, int toIndex) {
+		return new XYVector(super.subList(fromIndex, toIndex));
+	}
 	
 	public double[] getXValues() {
 		if(size()==0) {
@@ -69,6 +74,10 @@ public class XYVector extends ArrayList<double[]>  {
 		}
 		return xvalues;
 	}
+	public double[] getXValues(int start, int end) {
+		return subList(start, end).getXValues();
+	}
+	
 	public double[] getYValues() {
 		if(size()==0) {
 			return null;
@@ -115,7 +124,5 @@ public class XYVector extends ArrayList<double[]>  {
 	public boolean contains(int i) {
 		return (i>=0 && i<size());
 	}
-
-
 
 }

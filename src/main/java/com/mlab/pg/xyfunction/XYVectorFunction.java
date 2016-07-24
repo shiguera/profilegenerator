@@ -111,6 +111,11 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return d;
 	}
 	
+	@Override
+	public XYVectorFunction subList(int fromIndex, int toIndex) {
+		return new XYVectorFunction(super.subList(fromIndex, toIndex));
+	}
+	
 	// Interface InInterval
 	@Override
 	public double getStartX() {

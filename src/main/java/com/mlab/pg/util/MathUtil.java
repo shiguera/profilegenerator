@@ -21,6 +21,16 @@ public class MathUtil {
 	}
 	
 	// rectas en el plano
+	
+	/**
+	 * Recta dados un punto y una pendiente. Devuelve la recta como
+	 * double[] en la forma y = double[0] + double[1]*x
+	 * 
+	 */
+	public static double[] rectaPtoPendiente(double x1, double y1, double m) {
+		double[] r = new double[]{y1 - m*x1, m};
+		return r;
+	}
 	/**
 	 * Calcula la ecuación de una recta que pasa por dos puntos
 	 * @param p1 coordenadas [p1x, p1y] del primer punto de la recta
