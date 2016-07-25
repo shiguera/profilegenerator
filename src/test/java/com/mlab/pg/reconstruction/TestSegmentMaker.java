@@ -49,16 +49,16 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		
 		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-		Assert.assertNotNull(maker.getPointTypes());
-		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
-		for(PointType type : maker.getPointTypes()) {
+		Assert.assertNotNull(maker.getOriginalPointTypes());
+		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
+		for(PointType type : maker.getOriginalPointTypes()) {
 			System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getPointTypeSegments());
-		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
+		Assert.assertNotNull(maker.getOriginalSegments());
+		for(PointTypeSegment segment : maker.getOriginalSegments()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(3, maker.getPointTypeSegments().size());
+		Assert.assertEquals(3, maker.getOriginalSegments().size());
 	}
 
 	@Test
@@ -81,17 +81,17 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		
 		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-		Assert.assertNotNull(maker.getPointTypes());
-		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
+		Assert.assertNotNull(maker.getOriginalPointTypes());
+		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
 		
-		for(PointType type : maker.getPointTypes()) {
+		for(PointType type : maker.getOriginalPointTypes()) {
 			System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getPointTypeSegments());
-		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
+		Assert.assertNotNull(maker.getOriginalSegments());
+		for(PointTypeSegment segment : maker.getOriginalSegments()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(3, maker.getPointTypeSegments().size());	
+		Assert.assertEquals(3, maker.getOriginalSegments().size());	
 	}
 	@Test
 	public void testProcessBorder1() {
@@ -488,7 +488,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
-		PointTypeSegmentArray segments = maker.getPointTypeSegments();
+		PointTypeSegmentArray segments = maker.getOriginalSegments();
 		
 		System.out.println(segments);
 		
