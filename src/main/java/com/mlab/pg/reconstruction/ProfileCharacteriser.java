@@ -25,12 +25,18 @@ public class ProfileCharacteriser {
 	/**
 	 * Caracteriza los puntos a partir de las pendientes de las bases móviles
 	 * previa y posterior.
-	 * El primer punto caracterizable es el de índice (mobileBaseSize-1).</br>
-	 * El último punto caracterizable es el XYVectorFunction.size()-mobileBaseSize.</br>
+	 * El primer punto caracterizable es el de índice (mobileBaseSize-1). Los puntos anteriores los
+	 * caracteriza del mismo tipo que este</br>
+	 * El último punto caracterizable es el XYVectorFunction.size()-mobileBaseSize. Los puntos posteriores 
+	 * los caracteriza del mismo tipo que este</br>
 	 * 
-	 * @param gpsample
-
-	 * @return Lista de puntos con un tipo PointType asignado 
+	 * @param gpsample Valores {Si, Gi} de los puntos que se quiere caracterizar
+	 * @param mobileBaseSize Número de puntos de la base móvil que se utilizará 
+	 * para caracterizar los puntos.
+	 * @param thresholdSlope Valor de la pendiente límite de las rectas que se consideran
+	 * horizontales en la caracterización
+	 * @return Lista de puntos con un tipo PointType asignado. El tipo de los puntos es Grade, Border
+	 * o VerticalCurve 
 	 */
 	PointTypeArray characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
 		if(gpsample==null || gpsample.size()<2*mobileBaseSize-1) {
@@ -49,6 +55,14 @@ public class ProfileCharacteriser {
 		int last = gpsample.size()-mobileBaseSize;
 		for(int i=first; i<=last; i++) {
 			types.set(i, findPointType(i,gpsample, mobileBaseSize,thresholdSlope));
+		}
+		// Los puntos anteriores a first se caracterizan dell mismo tipo que first
+		for (int i=0; i<first; i++) {
+			types.set(i, types.get(first));
+		}
+		// Los puntos posteriores a last se caracterizan del mismo tipo que last
+		for (int i=last+1; i<types.size(); i++) {
+			types.set(i, types.get(last));
 		}
 		return types;
 	}

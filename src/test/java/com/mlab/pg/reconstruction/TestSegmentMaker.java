@@ -58,7 +58,7 @@ public class TestSegmentMaker {
 		for(PointTypeSegment segment : maker.getOriginalSegments()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(3, maker.getOriginalSegments().size());
+		Assert.assertEquals(1, maker.getOriginalSegments().size());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class TestSegmentMaker {
 		for(PointTypeSegment segment : maker.getOriginalSegments()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(3, maker.getOriginalSegments().size());	
+		Assert.assertEquals(1, maker.getOriginalSegments().size());	
 	}
 	@Test
 	public void testProcessBorder1() {
@@ -158,124 +158,7 @@ public class TestSegmentMaker {
 		}
 		System.out.println(maker.processedSegments);
 	}
-	@Test
-	public void testVerticalCurveToVerticalCurve() {
-//		LOG.debug("testVerticalCurveToVerticalCurve()");
-//		List<double[]> pts = new ArrayList<double[]>();
-//		pts.add(new double[] {0.0, 0.00});
-//		pts.add(new double[] {2.0, 2.5e-4});
-//		pts.add(new double[] {4.0, 5e-4});
-//		pts.add(new double[] {6.0, 7.5e-4});
-//		pts.add(new double[] {8.0, 1.0e-3});
-//		pts.add(new double[] {10.0, 1.25e-3});
-//		pts.add(new double[] {12.0, 1.0e-3});
-//		pts.add(new double[] {14.0, 7.5e-4});
-//		pts.add(new double[] {16.0, 5e-4});
-//		pts.add(new double[] {18.0, 2.5e-4});
-//		pts.add(new double[] {20.0, 0.0});
-//		
-//		XYVectorFunction gp = new XYVectorFunction(pts);
-//		int mobileBaseSize = 3;
-//		double thresholdSlope = 1e-5;
-//		
-//		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(7, maker.getPointTypeSegments().size());
-	}
 
-	@Test
-	public void testVerticalCurveEnd() {
-//		LOG.debug("testVerticalCurveEnd()");
-//		List<double[]> pts = new ArrayList<double[]>();
-//		pts.add(new double[] {0.0, 0.04075});
-//		pts.add(new double[] {2.0, 0.04050});
-//		pts.add(new double[] {4.0, 0.04025});
-//		pts.add(new double[] {6.0, 0.04});
-//		pts.add(new double[] {8.0, 0.03975});
-//		pts.add(new double[] {10.0, 0.03950});
-//		pts.add(new double[] {12.0, 0.03925});
-//		pts.add(new double[] {14.0, 0.03900});
-//		
-//		pts.add(new double[] {16.0, 0.038750});
-//		
-//		pts.add(new double[] {18.0, 0.038750});
-//		pts.add(new double[] {20.0, 0.038750});
-//		pts.add(new double[] {22.0, 0.038750});
-//		pts.add(new double[] {24.0, 0.038750});
-//		pts.add(new double[] {26.0, 0.038750});
-//		pts.add(new double[] {28.0, 0.038750});
-//		pts.add(new double[] {30.0, 0.038750});
-//		
-//		
-//		XYVectorFunction gp = new XYVectorFunction(pts);
-//		int mobileBaseSize = 3;
-//		double thresholdSlope = 1e-5;
-//		
-//		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
-//		Assert.assertTrue(maker.getPointTypes().get(8)==PointType.BORDER_POINT);
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
-	}
-
-	@Test
-	public void testVerticalCurveBeginning() {
-//		LOG.debug("testVerticalCurveBeginning()");
-//		List<double[]> pts = new ArrayList<double[]>();
-//		pts.add(new double[] {0.0, 0.04075});
-//		pts.add(new double[] {2.0, 0.04075});
-//		pts.add(new double[] {4.0, 0.04075});
-//		pts.add(new double[] {6.0, 0.04075});
-//		pts.add(new double[] {8.0, 0.04075});
-//		pts.add(new double[] {10.0, 0.04075});
-//		pts.add(new double[] {12.0, 0.04075});
-//		pts.add(new double[] {14.0, 0.04075});
-//		pts.add(new double[] {16.0, 0.04075});
-//		pts.add(new double[] {18.0, 0.04075});
-//		
-//		pts.add(new double[] {20.0, 0.04075});
-//		
-//		pts.add(new double[] {22.0, 0.04050});
-//		pts.add(new double[] {24.0, 0.04025});
-//		pts.add(new double[] {26.0, 0.04});
-//		pts.add(new double[] {28.0, 0.03975});
-//		pts.add(new double[] {30.0, 0.03950});
-//		pts.add(new double[] {32.0, 0.03925});
-//		pts.add(new double[] {34.0, 0.03900});
-//		pts.add(new double[] {36.0, 0.038750});
-//		
-//		XYVectorFunction gp = new XYVectorFunction(pts);
-//		int mobileBaseSize = 4;
-//		double thresholdSlope = 1e-5;
-//		
-//		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
-//		Assert.assertTrue(maker.getPointTypes().get(9)==PointType.BORDER_POINT);
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
-	}
 	
 	/**
 	 * Una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
@@ -322,143 +205,6 @@ public class TestSegmentMaker {
 	}
 
 	
-	/**
-	 * Test con una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
-	 * El punto VCE está en s=80, que corresponde al índice i=16 en la XYVectorFunction
-	 */
-	@Test
-	public void testProcessVerticalCurveEndings_ProfileSample1() {
-//		LOG.debug("testProcessVerticalCurveEndings_ProfileSample1()");
-//		
-//		VerticalProfile profile = this.getSampleProfile1();
-//		System.out.println(profile.toString());
-//		
-//		GradeProfile gradeProfile = profile.derivative();
-//		XYVectorFunction sample = gradeProfile.getSample(0.0, 160.0, 5, true);
-//		// System.out.println(lastGrade);
-//		// System.out.println(sample.size()-1);
-//
-//		int mobileBaseSize = 4;
-//		System.out.println("mobileBaseSize = " + mobileBaseSize);
-//		double thresholdSlope = 1e-5;		
-//		System.out.println("thresholdSlope = " + thresholdSlope);
-//		
-//		
-//		SegmentMaker maker = new SegmentMaker(sample, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(sample.size(), maker.getPointTypes().size());
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		System.out.println("\nBefore processing segments");
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		// Comprobar que se sacan seis segmentos: NULL - VC - VCVC - VCE - G 
-//		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
-//		// Comprobar que el verdadero punto VCE es identificado como tal
-//		Assert.assertEquals(PointType.BORDER_POINT, maker.getPointTypes().get(16));
-//		
-//		maker.processVerticalCurveEndings();
-//		System.out.println("\nAfter processing segments");
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(5, maker.getPointTypeSegments().size());		
-	}
-	@Test
-	public void testProcessVerticalCurveEndings_ProfileSample2() {
-//		LOG.debug("testProcessVerticalCurveEndings_ProfileSample2()");
-//		
-//		VerticalProfile profile = this.getSampleProfile2();
-//		System.out.println(profile.toString());
-//		
-//		GradeProfile gradeProfile = profile.derivative();
-//		XYVectorFunction sample = gradeProfile.getSample(0.0, 500.0, 5, true);
-//		// System.out.println(lastGrade);
-//		// System.out.println(sample.size()-1);
-//
-//		int mobileBaseSize = 4;
-//		System.out.println("mobileBaseSize = " + mobileBaseSize);
-//		double thresholdSlope = 1e-5;		
-//		System.out.println("thresholdSlope = " + thresholdSlope);
-//		
-//		
-//		SegmentMaker maker = new SegmentMaker(sample, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(sample.size(), maker.getPointTypes().size());
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		System.out.println("\nBefore processing segments");
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		// Comprobar que se sacan seis segmentos: NULL - VC - VCVC - VCE - G 
-//		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
-//		// Comprobar que el verdadero punto VCE es identificado como tal
-//		Assert.assertEquals(PointType.BORDER_POINT, maker.getPointTypes().get(51));
-////		
-//		maker.processVerticalCurveEndings();
-//		System.out.println("\nAfter processing segments");
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(5, maker.getPointTypeSegments().size());		
-	}
-
-	@Test
-	public void testProcessVerticalCurveBeginnings() {
-//		LOG.debug("testProcessVerticalCurveBeginningsing()");
-//		List<double[]> pts = new ArrayList<double[]>();
-//
-//		pts.add(new double[] {0.0, 0.04075});
-//		pts.add(new double[] {2.0, 0.04075});
-//		pts.add(new double[] {4.0, 0.04075});
-//		pts.add(new double[] {6.0, 0.04075});
-//		pts.add(new double[] {8.0, 0.04075});
-//		pts.add(new double[] {10.0, 0.04075});
-//		pts.add(new double[] {12.0, 0.04075});
-//		pts.add(new double[] {14.0, 0.04075});
-//		pts.add(new double[] {16.0, 0.04075});
-//		pts.add(new double[] {18.0, 0.04075});
-//		
-//		pts.add(new double[] {20.0, 0.04075});
-//		
-//		pts.add(new double[] {22.0, 0.04050});
-//		pts.add(new double[] {24.0, 0.04025});
-//		pts.add(new double[] {26.0, 0.04});
-//		pts.add(new double[] {28.0, 0.03975});
-//		pts.add(new double[] {30.0, 0.03950});
-//		pts.add(new double[] {32.0, 0.03925});
-//		pts.add(new double[] {34.0, 0.03900});
-//		pts.add(new double[] {36.0, 0.038750});
-//		
-//		XYVectorFunction gp = new XYVectorFunction(pts);
-//		int mobileBaseSize = 4;
-//		double thresholdSlope = 1e-5;
-//		
-//		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
-//		Assert.assertNotNull(maker.getPointTypes());
-//		Assert.assertEquals(gp.size(), maker.getPointTypes().size());
-//		Assert.assertTrue(maker.getPointTypes().get(9)==PointType.BORDER_POINT);
-//		for(PointType type : maker.getPointTypes()) {
-//			System.out.println(type);
-//		}
-//		Assert.assertNotNull(maker.getPointTypeSegments());
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-//		Assert.assertEquals(6, maker.getPointTypeSegments().size());		
-//		
-//		maker.processVerticalCurveBeginnings();
-//		Assert.assertEquals(5, maker.getPointTypeSegments().size());		
-//		for(PointTypeSegment segment : maker.getPointTypeSegments()) {
-//			System.out.println(segment.toString());
-//		}
-	}
 
 
 	@Test

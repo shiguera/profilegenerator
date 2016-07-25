@@ -55,13 +55,13 @@ public class TestProfileCharacteriser {
 		Assert.assertEquals(gpsample.size(), types.size());
 		
 		for (int i=0; i<mobileBaseSize-1; i++) {
-			Assert.assertEquals(PointType.NULL, types.get(i));
+			Assert.assertEquals(PointType.GRADE, types.get(i));
 		}
 		for (int i=mobileBaseSize-1; i<=types.size()-mobileBaseSize; i++) {
 			Assert.assertEquals(PointType.GRADE, types.get(i));
 		}
 		for (int i=types.size()-mobileBaseSize+1; i<types.size(); i++) {
-			Assert.assertEquals(PointType.NULL, types.get(i));
+			Assert.assertEquals(PointType.GRADE, types.get(i));
 		}
 		
 		
