@@ -12,6 +12,9 @@ public abstract class AbstractVAlignLimits implements VAlignLimits {
 
 	protected DesignSpeed designSpeed;
 	protected double maxLength = 3000.0;
+	/**
+	 * 10 sg de recorrido a velocidad de proyecto
+	 */
 	protected double minLength;
 	protected double maxSlope;
 	protected double MIN_SLOPE = 0.005;
@@ -21,19 +24,19 @@ public abstract class AbstractVAlignLimits implements VAlignLimits {
 	protected AbstractVAlignLimits(DesignSpeed designSpeed) {
 		this.designSpeed = designSpeed;
 		if (designSpeed == DesignSpeed.DS40) {
-			this.minLength = 33.0;
+			this.minLength = 40.0/.36;
 			this.maxSlope = 0.1;	
 		} else if (designSpeed == DesignSpeed.DS60) {
-			this.minLength = 50.0;
+			this.minLength = 60.0/.36;
 			this.maxSlope = 0.08;
 		} else if (designSpeed == DesignSpeed.DS80) {
-			this.minLength = 67.0;
+			this.minLength = 80.0 / .36;
 			this.maxSlope = 0.07;
 		} else if (designSpeed == DesignSpeed.DS100) {
-			this.minLength = 83.0;
+			this.minLength = 100.0 / .36;
 			this.maxSlope = 0.05;
 		} else if (designSpeed == DesignSpeed.DS120) {
-			this.minLength = 100.0;
+			this.minLength = 120.0 /.36;
 			this.maxSlope = 0.05;
 		}
 	}

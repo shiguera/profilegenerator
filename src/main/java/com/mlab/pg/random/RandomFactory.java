@@ -169,6 +169,28 @@ public class RandomFactory {
 	
 	// Alineaciones VerticalCurve
 	/**
+	 * Genera una Sag VerticalCurve aleatoria con punto inicial y pendiente inicial 
+	 * conocidas para una velocidad de proyecto dada. 
+	 * 
+	 * @param dspeed Velocidad de proyecto
+	 * @param s0 Abscisa inicial
+	 * @param z0 Ordenada inicial
+	 * @param g0 Pendiente inicial
+	 * @return VerticalCurve resultado con la pendiente de salida positiva
+	 */
+	public static VerticalCurve randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
+		// La pendiente inicial tiene que ser negativa para que se trate de una sag curve
+		if(g0 > 0) {
+			g0 = -g0;
+		}
+		double endg = 0.0;
+		if(positiveEndSlope) {
+			endg = RandomFactory.randomU
+		} else {
+			
+		}
+	}
+	/**
 	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
 	 * salida g2. El parámetro es aleatorio entre el mínimo correspondiente a la categoría . 
 	 * La pendiente de salida tiene que ser del signo contrario que la pendiente de entrada. 

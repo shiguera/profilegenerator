@@ -171,8 +171,7 @@ public class SegmentMaker {
 			}
 		}
 		//LOG.debug("ecm = " + ecmmin);
-		//it status
-		LOG.debug("ecmmin_index = " + ecmmin_index);
+		//LOG.debug("ecmmin_index = " + ecmmin_index);
 		processedSegments.get(processedSegments.size()-1).setEnd(ecmmin_index);
 		processedSegments.add(followingSegment);
 		processedSegments.get(processedSegments.size()-1).setStart(ecmmin_index);
