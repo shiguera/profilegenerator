@@ -195,6 +195,7 @@ public class TestMathUtil {
 		Assert.assertTrue(MathUtil.isEven(i));
 
 	}
+
 	
 	
 }

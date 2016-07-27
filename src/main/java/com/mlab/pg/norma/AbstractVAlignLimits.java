@@ -24,19 +24,19 @@ public abstract class AbstractVAlignLimits implements VAlignLimits {
 	protected AbstractVAlignLimits(DesignSpeed designSpeed) {
 		this.designSpeed = designSpeed;
 		if (designSpeed == DesignSpeed.DS40) {
-			this.minLength = 40.0/.36;
+			this.minLength = Math.round(40.0/.36);
 			this.maxSlope = 0.1;	
 		} else if (designSpeed == DesignSpeed.DS60) {
-			this.minLength = 60.0/.36;
+			this.minLength = Math.round(60.0/.36);
 			this.maxSlope = 0.08;
 		} else if (designSpeed == DesignSpeed.DS80) {
-			this.minLength = 80.0 / .36;
+			this.minLength = Math.round(80.0 / .36);
 			this.maxSlope = 0.07;
 		} else if (designSpeed == DesignSpeed.DS100) {
-			this.minLength = 100.0 / .36;
+			this.minLength = Math.round(100.0 / .36);
 			this.maxSlope = 0.05;
 		} else if (designSpeed == DesignSpeed.DS120) {
-			this.minLength = 120.0 /.36;
+			this.minLength = Math.round(120.0 /.36);
 			this.maxSlope = 0.05;
 		}
 	}

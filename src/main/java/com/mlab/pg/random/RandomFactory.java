@@ -181,14 +181,17 @@ public class RandomFactory {
 	public static VerticalCurve randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
 		// La pendiente inicial tiene que ser negativa para que se trate de una sag curve
 		if(g0 > 0) {
-			g0 = -g0;
+			return null;
 		}
-		double endg = 0.0;
+		double endg = RandomFactory.randomGradeSlope(dspeed);
 		if(positiveEndSlope) {
-			endg = RandomFactory.randomU
+			endg = Math.abs(endg);
 		} else {
-			
+			endg = - Math.abs(endg);
 		}
+		
+		// TODO
+		return null;
 	}
 	/**
 	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
@@ -221,7 +224,7 @@ public class RandomFactory {
 		double theta = g2-g1;
 		double kv=0.0;
 		double length = 0.0;
-		while(Math.abs(kv)<kvmin || Math.abs(kv)>kvmax) {
+		while(Math.abs(kv)<kvmin || Math.abs(kv)>kvmax || length<limits.getMinLength() | length>limits.getMaxLength()) {
 			length = RandomFactory.randomDoubleByIncrements(minlength, maxlength, lengthIncrement);			
 			kv = length / theta;
 		}
@@ -348,7 +351,7 @@ public class RandomFactory {
 		GradeLimits limits = new GradeLimits(dspeed);
 		double min = limits.getMinLength();
 		double max = limits.getMaxLength();
-		double inc = limits.getMinLength();
+		double inc = 50.0; // limits.getMinLength();
 		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc));
 		return length;
 	}

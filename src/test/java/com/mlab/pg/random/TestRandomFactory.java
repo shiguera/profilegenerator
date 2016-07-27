@@ -221,7 +221,7 @@ public class TestRandomFactory {
 		
 	}
 
-	// Perfile básicos
+	// Perfiles básicos
 	@Test
 	public void testRandomVerticalProfileType_I_DS120() {
 		LOG.debug("testRandomVerrticalProfileType_I_DS120");
@@ -493,7 +493,7 @@ public class TestRandomFactory {
 		//System.out.println(vc.getKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
-		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
 	}
@@ -524,7 +524,7 @@ public class TestRandomFactory {
 		//System.out.println(vc.getKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
-		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
 	}
@@ -555,7 +555,7 @@ public class TestRandomFactory {
 		//System.out.println(vc.getKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
-		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
 	}
@@ -586,7 +586,7 @@ public class TestRandomFactory {
 		//System.out.println(vc.getKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
-		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
 	}
@@ -617,12 +617,11 @@ public class TestRandomFactory {
 		//System.out.println(vc.getKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
 		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
-		Assert.assertTrue(vc.getLength() > limits.getMinLength());
+		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
 	}
 
-	
 	@Test
 	public void testRandomSagCurveKv() {
 		LOG.debug("testRandomSagCurveKv()");
@@ -706,6 +705,7 @@ public class TestRandomFactory {
 
 		}
 	}
+
 	// Grades
 	@Test
 	public void testRandomGradeAlign() {
@@ -878,6 +878,7 @@ public class TestRandomFactory {
 			DesignSpeed dspeed = DesignSpeed.DS120;
 			GradeLimits limits = new GradeLimits(dspeed);
 			double length = RandomFactory.randomGradeLength(dspeed);
+			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
 			Assert.assertTrue(length >= limits.getMinLength());
 			Assert.assertTrue(length <= limits.getMaxLength());
 			//System.out.println(length);
@@ -885,6 +886,7 @@ public class TestRandomFactory {
 			dspeed = DesignSpeed.DS100;
 			limits = new GradeLimits(dspeed);
 			length = RandomFactory.randomGradeLength(dspeed);
+			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
 			Assert.assertTrue(length >= limits.getMinLength());
 			Assert.assertTrue(length <= limits.getMaxLength());
 			//System.out.println(length);
@@ -892,6 +894,7 @@ public class TestRandomFactory {
 			dspeed = DesignSpeed.DS80;
 			limits = new GradeLimits(dspeed);
 			length = RandomFactory.randomGradeLength(dspeed);
+			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
 			Assert.assertTrue(length >= limits.getMinLength());
 			Assert.assertTrue(length <= limits.getMaxLength());
 			//System.out.println(length);
@@ -899,6 +902,7 @@ public class TestRandomFactory {
 			dspeed = DesignSpeed.DS60;
 			limits = new GradeLimits(dspeed);
 			length = RandomFactory.randomGradeLength(dspeed);
+			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
 			Assert.assertTrue(length >= limits.getMinLength());
 			Assert.assertTrue(length <= limits.getMaxLength());
 			//System.out.println(length);
@@ -906,6 +910,7 @@ public class TestRandomFactory {
 			dspeed = DesignSpeed.DS40;
 			limits = new GradeLimits(dspeed);
 			length = RandomFactory.randomGradeLength(dspeed);
+			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
 			Assert.assertTrue(length >= limits.getMinLength());
 			Assert.assertTrue(length <= limits.getMaxLength());
 			//System.out.println(length);
@@ -955,5 +960,24 @@ public class TestRandomFactory {
 			Assert.assertTrue(number>=min && number<=max);
 		}
 		//System.out.println();
+	}
+
+	// DesignSpeed
+	@Test
+	public void testRandomDesignSpeed() {
+		LOG.debug("testRandomDesigSpeed()");
+		int[] vals = new int[DesignSpeed.values().length];
+		for(int i=0; i<vals.length; i++) {
+			vals[i]=0;
+		}
+		for(int i=0; i<100;i++) {
+			DesignSpeed ds = RandomFactory.randomDesignSpeed();
+			int value = ds.ordinal();
+			vals[value]++;
+		}
+		for(int i=0; i<vals.length; i++) {
+			Assert.assertTrue(vals[i]>0);
+			// LOG.debug("ocurrencias de " + DesignSpeed.values()[i] + ": " + vals[i]);
+		}
 	}
 }
