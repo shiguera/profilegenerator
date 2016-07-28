@@ -40,17 +40,18 @@ public class TestGradeProfileAlign {
 		Assert.assertEquals(galign.getEndGrade(), align.getEndTangent(), 0.001);
 		Assert.assertEquals(align.getStartZ(), z0, 0.001);
 		
-
-		
-		
 		double g2 = RandomFactory.randomGradeSlope(dspeed);
+		VerticalCurve vcalign = null;
 		if (grade1.getSlope() > 0) {
 			g2 = - Math.abs(g2);
+			vcalign = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);
 		} else {
 			g2 = Math.abs(g2);
+			vcalign = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);
 		}
 		
-		VerticalCurve vcalign = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		Assert.assertNotNull(align);
 		galign = vcalign.derivative();
 		

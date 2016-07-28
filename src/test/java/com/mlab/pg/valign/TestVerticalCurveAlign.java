@@ -112,18 +112,18 @@ public class TestVerticalCurveAlign {
 		double s0 = 1000.0;
 		double z0 = 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
-		double g2 = RandomFactory.randomGradeSlope(dspeed);
+		VerticalCurve align = null;
 		if (grade1.getSlope() > 0) {
-			g2 = - Math.abs(g2);
+			align = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);
 		} else {
-			g2 = Math.abs(g2);
+			align = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);
 		}
-		VerticalCurve align = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
 		Assert.assertNotNull(align);
 		Assert.assertEquals(grade1.getEndS(), align.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), align.getStartZ(), 0.001);
 		Assert.assertEquals(grade1.getSlope(), align.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, align.getEndTangent(), 0.001);
 		
 		GradeProfileAlign galign = align.derivative();
 		Assert.assertNotNull(galign);

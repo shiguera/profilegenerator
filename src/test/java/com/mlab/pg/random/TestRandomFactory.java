@@ -474,16 +474,18 @@ public class TestRandomFactory {
 		double z0= 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurve vc = null;
 		if(g1>0) {
-			g2 = - g2;
-		} 
-		VerticalCurve vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		} else {
+			vc = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		}
 		Assert.assertNotNull(vc);
 		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
 		VerticalCurveLimits limits = null;
 		if(vc.getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
@@ -505,16 +507,18 @@ public class TestRandomFactory {
 		double z0= 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurve vc = null;
 		if(g1>0) {
-			g2 = - g2;
-		} 
-		VerticalCurve vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		} else {
+			vc = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		}
 		Assert.assertNotNull(vc);
 		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
 		VerticalCurveLimits limits = null;
 		if(vc.getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
@@ -536,16 +540,18 @@ public class TestRandomFactory {
 		double z0= 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurve vc = null;
 		if(g1>0) {
-			g2 = - g2;
-		} 
-		VerticalCurve vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		} else {
+			vc = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		}
 		Assert.assertNotNull(vc);
 		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
 		VerticalCurveLimits limits = null;
 		if(vc.getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
@@ -567,16 +573,18 @@ public class TestRandomFactory {
 		double z0= 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurve vc = null;
 		if(g1>0) {
-			g2 = - g2;
-		} 
-		VerticalCurve vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		} else {
+			vc = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		}
 		Assert.assertNotNull(vc);
 		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
 		VerticalCurveLimits limits = null;
 		if(vc.getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
@@ -598,16 +606,18 @@ public class TestRandomFactory {
 		double z0= 1000.0;
 		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
+		VerticalCurve vc = null;
 		if(g1>0) {
-			g2 = - g2;
-		} 
-		VerticalCurve vc = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		} else {
+			vc = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
+					grade1.getEndZ(), grade1.getEndTangent(), true);	
+		}
 		Assert.assertNotNull(vc);
 		Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
-		Assert.assertEquals(g2, vc.getEndTangent(), 0.001);
 		VerticalCurveLimits limits = null;
 		if(vc.getKv()>0) {
 			limits = new SagCurveLimits(dspeed);

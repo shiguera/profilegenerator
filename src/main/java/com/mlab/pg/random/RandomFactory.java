@@ -9,6 +9,7 @@ import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
+import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.VerticalCurve;
 import com.mlab.pg.valign.VerticalProfile;
@@ -129,12 +130,13 @@ public class RandomFactory {
 	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
 		Grade grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
-		double g2 = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		VerticalCurve crestcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve crestcurve = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = crestcurve.getEndS();
 		double startz2 = crestcurve.getEndZ();
 		double length2 = RandomFactory.randomGradeLength(dspeed);
 		double ends2 = starts2 + length2;
+		double g2 = crestcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
 		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
 		VerticalProfile profile = new VerticalProfile(dspeed);
@@ -152,12 +154,13 @@ public class RandomFactory {
 	 */
 	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
 		Grade grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
-		double g2 = Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		VerticalCurve sagcurve = RandomFactory.randomVerticalCurve(dspeed, grade1, g2);
+		VerticalCurve sagcurve = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(), 
+				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = sagcurve.getEndS();
 		double startz2 = sagcurve.getEndZ();
 		double length2 = RandomFactory.randomGradeLength(dspeed);
 		double ends2 = starts2 + length2;
+		double g2 = sagcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
 		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
 		VerticalProfile profile = new VerticalProfile(dspeed);
@@ -179,59 +182,62 @@ public class RandomFactory {
 	 * @return VerticalCurve resultado con la pendiente de salida positiva
 	 */
 	public static VerticalCurve randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
-		// La pendiente inicial tiene que ser negativa para que se trate de una sag curve
-		if(g0 > 0) {
-			return null;
-		}
 		double endg = RandomFactory.randomGradeSlope(dspeed);
 		if(positiveEndSlope) {
 			endg = Math.abs(endg);
-		} else {
-			endg = - Math.abs(endg);
-		}
-		
-		// TODO
-		return null;
-	}
-	/**
-	 * Calcula una vertical curve que comienza en el punto final del grade1 y tiene una pendiente de 
-	 * salida g2. El parámetro es aleatorio entre el mínimo correspondiente a la categoría . 
-	 * La pendiente de salida tiene que ser del signo contrario que la pendiente de entrada. 
-	 * @param dspeed Velocidad de diseño
-	 * @param grade1 GradeAlign inicial
-	 * @param g2 Pendiente de la GradeAlign final
-	 * @return VerticalCurveAlign
-	 */
-	public static VerticalCurve randomVerticalCurve(DesignSpeed dspeed, Grade grade1, double g2) {
-		double g1 = grade1.getStartTangent();
-		if(g1*g2 > 0) {
-			LOG.error("randomVerticalCurve() ERROR: slopes have same sign");
-			return null;
-		}
-		VerticalCurveLimits limits = null;
-		if(g1>0) {
-			//LOG.debug("randomVerticalCurve(): generating crest curve");
-			limits = new CrestCurveLimits(dspeed);
-		} else {
-			//LOG.debug("randomVerticalCurve(): generating sag curve");
-			limits = new SagCurveLimits(dspeed);
-		}
+		} 
+		VerticalCurveLimits limits =  new CrestCurveLimits(dspeed);
 		double kvmin = limits.getMinKv();
 		double kvmax = limits.getMaxKv();
 		double minlength = limits.getMinLength();
 		double maxlength = limits.getMaxLength();
 		double lengthIncrement = minlength;
-		double theta = g2-g1;
+		double theta = endg-g0;
 		double kv=0.0;
 		double length = 0.0;
 		while(Math.abs(kv)<kvmin || Math.abs(kv)>kvmax || length<limits.getMinLength() | length>limits.getMaxLength()) {
 			length = RandomFactory.randomDoubleByIncrements(minlength, maxlength, lengthIncrement);			
 			kv = length / theta;
 		}
-		double starts = grade1.getEndS();
-		double startz = grade1.getEndZ();
+		double starts = s0;
+		double startz = z0;
 		double ends = starts +length;
-		Parabole p = new Parabole(starts, startz, g1, kv);
+		Parabole p = new Parabole(starts, startz, g0, kv);
+		VerticalCurve align = new VerticalCurve(dspeed, p, starts, ends);
+		return align;
+	}
+	/**
+	 * Genera una Crest VerticalCurve aleatoria con punto inicial y pendiente inicial 
+	 * conocidas para una velocidad de proyecto dada. 
+	 * 
+	 * @param dspeed Velocidad de proyecto
+	 * @param s0 Abscisa inicial
+	 * @param z0 Ordenada inicial
+	 * @param g0 Pendiente inicial
+	 * @return VerticalCurve resultado con la pendiente de salida positiva
+	 */
+	public static VerticalCurve randomCrestCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean negativeEndSlope) {
+		double endg = RandomFactory.randomGradeSlope(dspeed);
+		if(negativeEndSlope) {
+			endg = - Math.abs(endg);
+		} 
+		VerticalCurveLimits limits =  new CrestCurveLimits(dspeed);
+		double kvmin = limits.getMinKv();
+		double kvmax = limits.getMaxKv();
+		double minlength = limits.getMinLength();
+		double maxlength = limits.getMaxLength();
+		double lengthIncrement = minlength;
+		double theta = endg-g0;
+		double kv=0.0;
+		double length = 0.0;
+		while(Math.abs(kv)<kvmin || Math.abs(kv)>kvmax || length<limits.getMinLength() | length>limits.getMaxLength()) {
+			length = RandomFactory.randomDoubleByIncrements(minlength, maxlength, lengthIncrement);			
+			kv = length / theta;
+		}
+		double starts = s0;
+		double startz = z0;
+		double ends = starts +length;
+		Parabole p = new Parabole(starts, startz, g0, kv);
 		VerticalCurve align = new VerticalCurve(dspeed, p, starts, ends);
 		return align;
 	}
