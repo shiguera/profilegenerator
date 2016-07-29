@@ -249,4 +249,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return MathUtil.parabolaMinimosCuadrados(xy);
 	}
 
+	@Override
+	public XYVectorFunction clone() {
+		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
+		return new XYVectorFunction(this.getValues(interval));
+	}
 }

@@ -102,7 +102,7 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 	 * @return
 	 */
 	public boolean canGenerateGradeProfile() {
-		if(hasBorderSegments() || hasNullSegments() || hasTwoGradeConsecutive()) {
+		if(hasBorderSegments() || hasNullSegments() || hasTwoGradesConsecutive()) {
 			return false;
 		}
 		return true;

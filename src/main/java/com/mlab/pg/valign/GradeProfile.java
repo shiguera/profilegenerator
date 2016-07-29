@@ -179,4 +179,13 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 			builder.append('\n');
 		}
 		return builder.toString();
-	}}
+	}
+
+	public DesignSpeed getDesignSpeed() {
+		return designSpeed;
+	}
+	
+	public void setDesignSpeed(DesignSpeed designSpeed) {
+		this.designSpeed = designSpeed;
+	}
+}
