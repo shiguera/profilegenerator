@@ -59,13 +59,53 @@ public class PointTypeSegmentArray extends ArrayList<PointTypeSegment> {
 		return pointTypeSegments;
 	}
 
-	public boolean hasBorderPoints() {
+	/**
+	 * Devuelve true si existe algún segmento del tipo Border
+	 * @return
+	 */
+	public boolean hasBorderSegments() {
 		for(int i=0; i<size(); i++) {
 			if(get(i).getPointType()== PointType.BORDER_POINT) {
 				return true;
 			}
 		}
 		return false;
+	}
+	/**
+	 * Devuelve true si hay algún segmento del tipo Null
+	 * @return
+	 */
+	public boolean hasNullSegments() {
+		for(int i=0; i<size(); i++) {
+			if(get(i).getPointType()== PointType.NULL) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Devuelve true s exsten dos segmentos del tipo Grade consecutivos
+	 * @return
+	 */
+	public boolean hasTwoGradesConsecutive() {
+		for(int i=0; i<size()-1; i++) {
+			if(get(i).getPointType()==PointType.GRADE && get(i+1).getPointType()==PointType.GRADE) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Para poder generar un GradeProfile a partir de una segmentación no puede haber
+	 * dos Grades consecutivas, ni segmentos Null, ni segmentos Border
+	 * 
+	 * @return
+	 */
+	public boolean canGenerateGradeProfile() {
+		if(hasBorderSegments() || hasNullSegments() || hasTwoGradeConsecutive()) {
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
