@@ -195,7 +195,7 @@ public class TestSegmentMaker {
 		double kv = 6000.0;
 		double ends = 250.0;
 		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);		
-		Straight r = new Straight(80.0, vc.getY(80.0), vc.getTangent(250.0));
+		Straight r = new Straight(250.0, vc.getY(250.0), vc.getTangent(250.0));
 		Grade grade = new Grade(dspeed, r, 250.0, 500.0);
 
 		VerticalProfile profile = new VerticalProfile(dspeed);

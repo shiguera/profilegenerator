@@ -10,7 +10,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 /**
  * Genera un GradeProfile a partir de un XYVectorFunction con los puntos originales {si, gi} 
  * y un PointTypeSegmentArray procesado por SegmentMaker y que solo tiene segmentos
- * del tipo Grade y VerticalCurve
+ * del tipo Grade y VerticalCurve.
+ * Ofrece un metodo getVerticalProfile() que integra el perfil de pendientes y devuelve 
+ * el VerticalProfile correspondiente
  * 
  * @author shiguera
  *
