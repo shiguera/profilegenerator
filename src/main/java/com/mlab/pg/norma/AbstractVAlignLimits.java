@@ -10,19 +10,14 @@ package com.mlab.pg.norma;
  */
 public abstract class AbstractVAlignLimits implements VAlignLimits {
 
-	protected DesignSpeed designSpeed;
+	protected double minLength = 50.0;
 	protected double maxLength = 3000.0;
-	/**
-	 * 10 sg de recorrido a velocidad de proyecto
-	 */
-	protected double minLength;
 	protected double maxSlope;
 	protected double MIN_SLOPE = 0.005;
 	protected double SLOPE_INCREMENTS = 0.005;
 	protected double KV_INCREMENTS = 250.0;
 	
 	protected AbstractVAlignLimits(DesignSpeed designSpeed) {
-		this.designSpeed = designSpeed;
 		if (designSpeed == DesignSpeed.DS40) {
 			this.minLength = Math.round(40.0/.36);
 			this.maxSlope = 0.1;	
@@ -40,9 +35,9 @@ public abstract class AbstractVAlignLimits implements VAlignLimits {
 			this.maxSlope = 0.05;
 		}
 	}
-	@Override
-	public DesignSpeed getDesignSpeed() {
-		return designSpeed;
+	protected AbstractVAlignLimits(double minlength, double maxslope) {
+		this.minLength = minlength;
+		this.maxSlope = maxslope;
 	}
 
 	@Override

@@ -2,53 +2,37 @@ package com.mlab.pg.valign;
 
 import java.util.ArrayList;
 
-import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.XYVector;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
- * ArrayList de elementos VerticalProfileAlign para una categoría de carretera 
- * definida por su velocidad de proyecto DesignSpeed
- * 
+ * ArrayList de elementos GradeProfileAlignment 
  * @author shiguera
  *
  */
-public class VerticalProfile extends ArrayList<VAlignment>  {
+public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 
 	private static final long serialVersionUID = 1L;
-
-	public VerticalProfile() {
+	
+	public VerticalGradeProfile() {
 		super();
 	}
 	
-	public boolean add(VerticalProfile vp) {
-		if (vp == null || vp.size() == 0) {
-			return false;
-		}
-		boolean globalResult = true;
-		for(int i=0; i<vp.size(); i++) {
-			boolean partialResult = this.add(vp.get(i));
-			if (partialResult == false) {
-				globalResult = false;
-			}
-		}
-		return globalResult;
-	}
-	public VAlignment getFirstAlign() {
+	public GradeProfileAlignment getFirstAlign() {
 		if (size() > 0) {
 			return get(0);
 		} else {
 			return null;
 		}
 	}
-	public VAlignment getLastAlign() {
+	public GradeProfileAlignment getLastAlign() {
 		if (size() > 0) {
 			return get(size()-1);
 		} else {
 			return null;
 		}
 	}
-	public VAlignment getAlign(double x) {
+	public GradeProfileAlignment getAlign(double x) {
 		if(size()==0 || x<getStartS() || x>getEndS()) {
 			return null;
 		}
@@ -59,12 +43,13 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		return null;
 	}
-	public VAlignment getAlign(int i) {
+	public GradeProfileAlignment getAlign(int i) {
 		if(i<0 || i>=size()) {
 			return null;
 		}
 		return get(i);
 	}
+
 	public int getAlignIndex(double x) {
 		if(size()==0 || x<getStartS() || x>getEndS()) {
 			return -1;
@@ -90,15 +75,6 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 			return Double.NaN;
 		}
 	}
-	public double getLength() {
-		if (size() > 0) {
-			return getEndS() - getStartS();
-		} else {
-			return Double.NaN;
-		}
-	}
-
-	
 	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
 		if(starts>getEndS() || ends<getStartS()) {
 			return null;
@@ -111,7 +87,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		XYVectorFunction sample = new XYVectorFunction();
 		double x = starts;
-		VAlignment align = null;
+		GradeProfileAlignment align = null;
 		for(x=starts; x<=ends; x+=space) {
 			align = getAlign(x);
 			sample.add(new double[]{x, align.getY(x)});
@@ -121,50 +97,33 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		return sample;
 	}
-	// Extend ArrayList
-	@Override
-	public boolean add(VAlignment align) {
-		return super.add(align);			
-	}
 	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Vertical Profile \n");
-		builder.append(VAlign.CABECERA);
-		builder.append('\n');
-		for(int i=0; i<this.size(); i++) {
-			builder.append(this.get(i).toString());
-			builder.append('\n');
-		}
-		return builder.toString();
-	}
-
 	/**
-	 * Calcula el error cuadrático medio entre los puntos de dos perfiles longitudinales. 
+	 * Calcula el error cuadrático medio entre los puntos de dos perfiles 
+	 * de pendientes. 
 	 * 
-	 * @param vp2
+	 * @param gp2 segundo perfil
 	 * @param spaceBetweenPoints Separación entre los puntos de los perfiles sobre los
 	 * que se medirá el error cuadrático
 	 * @return ecm
 	 */
-	public double ecm(VerticalProfile vp2, double spaceBetweenPoints) {
+	public double ecm(VerticalGradeProfile gp2, double spaceBetweenPoints) {
 		
 		// Ajustar al mismo punto de inicio
-		if (vp2.getStartS() < this.getStartS()) {
-			this.getFirstAlign().setStartS(vp2.getStartS());
+		if (gp2.getStartS() < this.getStartS()) {
+			this.getFirstAlign().setStartS(gp2.getStartS());
 		} else {
-			vp2.getFirstAlign().setStartS(this.getStartS());
+			gp2.getFirstAlign().setStartS(this.getStartS());
 		}
 		// Ajustar al mismo punto final
-		if(vp2.getEndS() > this.getEndS()) {
-			this.getLastAlign().setEndS(vp2.getEndS());
+		if(gp2.getEndS() > this.getEndS()) {
+			this.getLastAlign().setEndS(gp2.getEndS());
 		} else {
-			vp2.getLastAlign().setEndS(this.getEndS());
+			gp2.getLastAlign().setEndS(this.getEndS());
 		}
 		
 		XYVector sample1 = getSample(getStartS(), getEndS(), spaceBetweenPoints, true);
-		XYVector sample2 = vp2.getSample(vp2.getStartS(), vp2.getEndS(), spaceBetweenPoints, true);
+		XYVector sample2 = gp2.getSample(gp2.getStartS(), gp2.getEndS(), spaceBetweenPoints, true);
 
 		double ecm = 0.0;
 		for(int i=0; i<sample1.size(); i++) {
@@ -174,14 +133,37 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		ecm = ecm / sample1.size();
 		return ecm;
 	}
-
-	public VerticalGradeProfile derivative() {
-		VerticalGradeProfile gprofile =new VerticalGradeProfile();
-		for(int i=0; i<size(); i++) {
-			GradeProfileAlignment galign = (GradeProfileAlignment) getAlign(i).derivative();
-			gprofile.add(galign);
+	
+	/**
+	 * Integra un perfil de pendientes obteniendo el perfil longitudinal correspondiente.
+	 * @param startZ Altitud del primer punto del perfil.
+	 * @return Perfil longitudinal
+	 */
+	public VerticalProfile integrate(double startZ) {
+		if(this.size()==0) {
+			return null;
 		}
-		return gprofile;
+		double currentStartZ = startZ;
+		VerticalProfile verticalProfile = new VerticalProfile();
+		for(int i=0; i<this.size(); i++) {
+			VAlignment valign = this.get(i).integrate(currentStartZ);
+			verticalProfile.add(valign);
+			currentStartZ = valign.getEndZ();
+		}
+		return verticalProfile;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Grade Profile \n");
+		builder.append(VAlign.CABECERA);
+		builder.append('\n');
+		for(int i=0; i<this.size(); i++) {
+			builder.append(this.get(i).toString());
+			builder.append('\n');
+		}
+		return builder.toString();
 	}
 
 }

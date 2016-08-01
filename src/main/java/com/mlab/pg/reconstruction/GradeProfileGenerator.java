@@ -1,8 +1,8 @@
 package com.mlab.pg.reconstruction;
 
-import com.mlab.pg.valign.GradeProfile;
+import com.mlab.pg.valign.OldGradeProfile;
 import com.mlab.pg.valign.GradeProfileAlign;
-import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.OldVerticalProfile;
 import com.mlab.pg.xyfunction.IntegerInterval;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -21,12 +21,12 @@ public class GradeProfileGenerator {
 
 	protected XYVectorFunction originalPoints;
 	protected PointTypeSegmentArray segments;
-	protected GradeProfile gradeProfile;
+	protected OldGradeProfile gradeProfile;
 	
 	public GradeProfileGenerator(XYVectorFunction originalPoints, PointTypeSegmentArray segments) {
 		this.originalPoints = originalPoints.clone();
 		this.segments = segments.clone();
-		gradeProfile = new GradeProfile(null);
+		gradeProfile = new OldGradeProfile(null);
 		for(int i=0; i<segments.size(); i++) {
 			int first = segments.get(i).getStart();
 			int last = segments.get(i).getEnd();
@@ -38,7 +38,7 @@ public class GradeProfileGenerator {
 		}
 	}
 
-	public VerticalProfile getVerticalProfile(double startz) {
+	public OldVerticalProfile getVerticalProfile(double startz) {
 		return gradeProfile.integrate(startz);
 	}
 	
@@ -48,7 +48,7 @@ public class GradeProfileGenerator {
 	public PointTypeSegmentArray getSegments() {
 		return segments;
 	}
-	public GradeProfile getGradeProfile() {
+	public OldGradeProfile getGradeProfile() {
 		return gradeProfile;
 	}
 

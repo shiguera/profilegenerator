@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
-import com.mlab.pg.valign.Grade;
+import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.xyfunction.Straight;
 
 /**
@@ -116,12 +116,12 @@ public class RandomGradeFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static Grade randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static GradeAlignment randomGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
 		double slope = randomUniformGradeSlope(dspeed);
 		double length = randomUniformGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
+		GradeAlignment align = new GradeAlignment(r, s0, ends);
 		return align;
 	}
 	/**
@@ -135,12 +135,12 @@ public class RandomGradeFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static Grade randomUpGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static GradeAlignment randomUpGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
 		double slope = Math.abs(randomUniformGradeSlope(dspeed));
 		double length = randomUniformGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
+		GradeAlignment align = new GradeAlignment(r, s0, ends);
 		return align;
 	}
 	/**
@@ -154,12 +154,12 @@ public class RandomGradeFactory {
 	 * @param z0 Altitud inicial de la alineación
 	 * @return GradeAlign resultado
 	 */
-	public static Grade randomDownGradeAlign(DesignSpeed dspeed, double s0, double z0) {
+	public static GradeAlignment randomDownGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
 		double slope = -Math.abs(randomUniformGradeSlope(dspeed));
 		double length = randomUniformGradeLength(dspeed);
 		Straight r = new Straight(s0, z0, slope);
 		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
+		GradeAlignment align = new GradeAlignment(r, s0, ends);
 		return align;
 	}
 

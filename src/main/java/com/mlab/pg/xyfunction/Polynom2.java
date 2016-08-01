@@ -69,8 +69,24 @@ public class Polynom2 implements XYFunction {
 		this.a2 = a2;
 	}
 
+	public double getKv() {
+		if(a2 == 0.0) {
+			return Double.NaN;
+		}
+		return 0.5 / a2;
+	}
+
+	public double getSForSlope(double slope) {
+		return (slope - a1) / 2.0 / a2;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%12.6f + %12.6f * x + %12.6f * x^2", a0,a1,a2);
+	}
+
+	@Override
+	public Polynom2 clone() throws CloneNotSupportedException {
+		return new Polynom2(a0, a1, a2);
 	}
 }

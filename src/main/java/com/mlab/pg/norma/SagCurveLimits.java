@@ -27,4 +27,9 @@ public class SagCurveLimits extends VerticalCurveLimits {
 		}
 	}
 
+	public SagCurveLimits(double minlength, double maxslope, double minkvadelantamiento, double minkvparada) {
+		super(minlength, maxslope);
+		this.minKvAdelantamiento = minkvadelantamiento;
+		this.minKvParada = minkvparada;
+	}
 }

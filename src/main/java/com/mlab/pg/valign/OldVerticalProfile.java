@@ -13,15 +13,19 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class VerticalProfile extends ArrayList<VAlignment>  {
+public class OldVerticalProfile extends ArrayList<VerticalProfileAlign>  {
 
 	private static final long serialVersionUID = 1L;
 
-	public VerticalProfile() {
+	protected DesignSpeed designSpeed;
+	
+
+	public OldVerticalProfile(DesignSpeed dspeed) {
 		super();
+		this.designSpeed = dspeed;
 	}
 	
-	public boolean add(VerticalProfile vp) {
+	public boolean add(OldVerticalProfile vp) {
 		if (vp == null || vp.size() == 0) {
 			return false;
 		}
@@ -34,21 +38,21 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		return globalResult;
 	}
-	public VAlignment getFirstAlign() {
+	public VerticalProfileAlign getFirstAlign() {
 		if (size() > 0) {
 			return get(0);
 		} else {
 			return null;
 		}
 	}
-	public VAlignment getLastAlign() {
+	public VerticalProfileAlign getLastAlign() {
 		if (size() > 0) {
 			return get(size()-1);
 		} else {
 			return null;
 		}
 	}
-	public VAlignment getAlign(double x) {
+	public VerticalProfileAlign getAlign(double x) {
 		if(size()==0 || x<getStartS() || x>getEndS()) {
 			return null;
 		}
@@ -59,7 +63,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		return null;
 	}
-	public VAlignment getAlign(int i) {
+	public VerticalProfileAlign getAlign(int i) {
 		if(i<0 || i>=size()) {
 			return null;
 		}
@@ -97,6 +101,12 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 			return Double.NaN;
 		}
 	}
+	public DesignSpeed getDesignSpeed() {
+		return designSpeed;
+	}
+	public void setDesignSpeed(DesignSpeed designSpeed) {
+		this.designSpeed = designSpeed;
+	}
 
 	
 	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
@@ -111,7 +121,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		XYVectorFunction sample = new XYVectorFunction();
 		double x = starts;
-		VAlignment align = null;
+		VerticalProfileAlign align = null;
 		for(x=starts; x<=ends; x+=space) {
 			align = getAlign(x);
 			sample.add(new double[]{x, align.getY(x)});
@@ -123,14 +133,20 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 	}
 	// Extend ArrayList
 	@Override
-	public boolean add(VAlignment align) {
-		return super.add(align);			
+	public boolean add(VerticalProfileAlign align) {
+		if(align.getDesignSpeed()==this.designSpeed) {
+			return super.add(align);			
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Vertical Profile \n");
+		builder.append("Vertical Profile (DesignSpeed= ");
+		builder.append(designSpeed);
+		builder.append(")\n");
 		builder.append(VAlign.CABECERA);
 		builder.append('\n');
 		for(int i=0; i<this.size(); i++) {
@@ -148,7 +164,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 	 * que se medirá el error cuadrático
 	 * @return ecm
 	 */
-	public double ecm(VerticalProfile vp2, double spaceBetweenPoints) {
+	public double ecm(OldVerticalProfile vp2, double spaceBetweenPoints) {
 		
 		// Ajustar al mismo punto de inicio
 		if (vp2.getStartS() < this.getStartS()) {
@@ -175,10 +191,10 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		return ecm;
 	}
 
-	public VerticalGradeProfile derivative() {
-		VerticalGradeProfile gprofile =new VerticalGradeProfile();
+	public OldGradeProfile derivative() {
+		OldGradeProfile gprofile =new OldGradeProfile(getDesignSpeed());
 		for(int i=0; i<size(); i++) {
-			GradeProfileAlignment galign = (GradeProfileAlignment) getAlign(i).derivative();
+			GradeProfileAlign galign = getAlign(i).derivative();
 			gprofile.add(galign);
 		}
 		return gprofile;

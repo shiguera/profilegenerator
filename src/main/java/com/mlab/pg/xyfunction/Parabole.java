@@ -44,12 +44,7 @@ public class Parabole extends Polynom2{
 		a0 = z0 - a1*s0 - s0*s0/2/kv;
 	}
 
-	public double getKv() {
-		if(a2 == 0.0) {
-			return Double.NaN;
-		}
-		return 0.5 / a2;
-	}
+	
 	public boolean isConcave() {
 		return (a2 > 0);
 	}
@@ -57,9 +52,7 @@ public class Parabole extends Polynom2{
 		return (a2 < 0);
 	}
 	
-	public double getSForSlope(double slope) {
-		return (slope - a1) / 2.0 / a2;
-	}
+	
 	
 	
 

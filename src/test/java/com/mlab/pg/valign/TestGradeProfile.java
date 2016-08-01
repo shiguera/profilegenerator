@@ -26,21 +26,21 @@ public class TestGradeProfile {
 		double maxEcm = 0.0;
 		double minEcm = 0.0;
 		Random rnd = new Random();
+		DesignSpeed dspeed =  RandomFactory.randomDesignSpeed();
 		for(int i=0; i<numberOfTests; i++) {
-			DesignSpeed ds = RandomFactory.randomDesignSpeed();
 			double s0 = rnd.nextDouble()*10000;
 			double z0 = rnd.nextDouble()*5000;
 			int vertexCount = 1 + rnd.nextInt(10);
-			VerticalProfile vp = RandomFactory.randomVerticalProfile(ds, s0, z0, vertexCount);
+			VerticalProfile vp = RandomFactory.randomVerticalProfile(dspeed, s0, z0, vertexCount);
 			if(vp == null) {
 				LOG.debug(vertexCount);
 				LOG.debug(s0);
 				LOG.debug(z0);
-				LOG.debug(ds);
+				LOG.debug(dspeed);
 				Assert.fail();
 				return;
 			}
-			GradeProfile gp = vp.derivative();
+			VerticalGradeProfile gp = vp.derivative();
 			VerticalProfile vpresult = gp.integrate(z0);
 			double ecm = vp.ecm(vpresult, 2.0);
 			if(i>0) {

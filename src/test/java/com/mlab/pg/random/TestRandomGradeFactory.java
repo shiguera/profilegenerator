@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
-import com.mlab.pg.valign.Grade;
+import com.mlab.pg.valign.GradeAlignment;
 
 public class TestRandomGradeFactory {
 
@@ -63,35 +63,35 @@ public class TestRandomGradeFactory {
 		DesignSpeed ds = DesignSpeed.DS120;
 		double s0 = 0.0;
 		double z0 = 0.0;
-		Grade ga = RandomGradeFactory.randomGradeAlign(ds, s0, z0);
+		GradeAlignment ga = RandomGradeFactory.randomGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS100;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS80;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS60;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS40;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
 		//System.out.println(ga);
 
@@ -102,41 +102,41 @@ public class TestRandomGradeFactory {
 		DesignSpeed ds = DesignSpeed.DS120;
 		double s0 = 0.0;
 		double z0 = 0.0;
-		Grade ga = RandomGradeFactory.randomUpGradeAlign(ds, s0, z0);
+		GradeAlignment ga = RandomGradeFactory.randomUpGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
+		Assert.assertTrue(ga.getStartTangent()>0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS100;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomUpGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomUpGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
+		Assert.assertTrue(ga.getStartTangent()>0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS80;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomUpGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomUpGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
+		Assert.assertTrue(ga.getStartTangent()>0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS60;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomUpGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomUpGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
+		Assert.assertTrue(ga.getStartTangent()>0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS40;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomUpGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomUpGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
+		Assert.assertTrue(ga.getStartTangent()>0);
 		//System.out.println(ga);
 
 	}	
@@ -146,41 +146,41 @@ public class TestRandomGradeFactory {
 		DesignSpeed ds = DesignSpeed.DS120;
 		double s0 = 0.0;
 		double z0 = 0.0;
-		Grade ga = RandomGradeFactory.randomDownGradeAlign(ds, s0, z0);
+		GradeAlignment ga = RandomGradeFactory.randomDownGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
+		Assert.assertTrue(ga.getStartTangent()<0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS100;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomDownGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomDownGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
+		Assert.assertTrue(ga.getStartTangent()<0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS80;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomDownGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomDownGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
+		Assert.assertTrue(ga.getStartTangent()<0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS60;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomDownGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomDownGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
+		Assert.assertTrue(ga.getStartTangent()<0);
 		//System.out.println(ga);
 
 		ds = DesignSpeed.DS40;
 		s0 = 0.0;
 		z0 = 0.0;
-		ga = RandomGradeFactory.randomDownGradeAlign(ds, s0, z0);
+		ga = RandomGradeFactory.randomDownGradeAlignment(ds, s0, z0);
 		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
+		Assert.assertTrue(ga.getStartTangent()<0);
 		//System.out.println(ga);
 
 	}		

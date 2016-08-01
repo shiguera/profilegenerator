@@ -12,6 +12,7 @@ public interface VerticalProfileAlign extends VAlign {
 	double getEndZ();
 	double getStartTangent();
 	double getEndTangent();
+	
 	/**
 	 * Devuelve la pendiente de la alineación. Sólo tiene sentido en
 	 * el caso de la rampas o pendientes. En el caso de los acuerdos parabólicos 
@@ -19,6 +20,7 @@ public interface VerticalProfileAlign extends VAlign {
 	 * @return pendiente de la alineación
 	 */
 	double getSlope();
+	
 	/**
 	 * Devuelve el valor del parámetro de la alineación vertical. 
 	 * Solo tiene sentido en el caso de tratarse de una vertical curve.

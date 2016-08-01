@@ -2,8 +2,7 @@ package com.mlab.pg.norma;
 
 /**
  * Límites básicos para las alineaciones verticales.
- * Cada tipo de alineación vertical y en función de su
- * velocidad de diseño, tendrá valores mínimos y máximos
+ * Cada tipo de alineación vertical tendrá valores mínimos y máximos
  * para la longitud de la alineación y para la pendiente.
  * 
  * @author shiguera
@@ -12,7 +11,6 @@ package com.mlab.pg.norma;
 public interface VAlignLimits {
 
 	
-	DesignSpeed getDesignSpeed();
 	double getMaxLength();
 	double getMinLength();
 	double getMaxSlope();

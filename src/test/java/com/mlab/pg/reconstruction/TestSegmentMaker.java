@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
-import com.mlab.pg.valign.Grade;
-import com.mlab.pg.valign.GradeProfile;
-import com.mlab.pg.valign.VerticalCurve;
+import com.mlab.pg.valign.GradeAlignment;
+import com.mlab.pg.valign.VerticalCurveAlignment;
+import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -97,7 +97,7 @@ public class TestSegmentMaker {
 	public void testProcessBorder1() {
 		LOG.debug("testProcessBorder1()");
 		VerticalProfile profile = getSampleProfile1();
-		GradeProfile gradeprofile = profile.derivative();
+		VerticalGradeProfile gradeprofile = profile.derivative();
 		System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
@@ -118,7 +118,7 @@ public class TestSegmentMaker {
 	public void testProcessBorder2() {
 		LOG.debug("testProcessBorder2()");
 		VerticalProfile profile = getSampleProfile2();
-		GradeProfile gradeprofile = profile.derivative();
+		VerticalGradeProfile gradeprofile = profile.derivative();
 		System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
@@ -141,7 +141,7 @@ public class TestSegmentMaker {
 		LOG.debug("testProcessBorder3()");
 		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
 		System.out.println(profile);
-		GradeProfile gradeprofile = profile.derivative();
+		VerticalGradeProfile gradeprofile = profile.derivative();
 		//System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
@@ -166,17 +166,16 @@ public class TestSegmentMaker {
 	 * El punto VCE está en s=80, que corresponde al índice i=16 en la XYVectorFunction
 	 */
 	private VerticalProfile getSampleProfile1() {
-		DesignSpeed dspeed = DesignSpeed.DS40;
 		double s0 = 0.0;
 		double z0 = 0.0;
 		double g0 = 0.02;
 		double kv = 3000.0;
 		double ends = 80.0;
-		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);		
+		VerticalCurveAlignment vc = new VerticalCurveAlignment(s0, z0, g0, kv, ends);		
 		Straight r = new Straight(80.0, vc.getY(80.0), vc.getTangent(80.0));
-		Grade grade = new Grade(dspeed, r, 80.0, 160.0);
+		GradeAlignment grade = new GradeAlignment(r, 80.0, 160.0);
 
-		VerticalProfile profile = new VerticalProfile(dspeed);
+		VerticalProfile profile = new VerticalProfile();
 		profile.add(vc);
 		profile.add(grade);
 		return profile;
@@ -188,17 +187,16 @@ public class TestSegmentMaker {
 	 * El punto VCE está en s=250, que corresponde al índice i=  en la XYVectorFunction
 	 */
 	private VerticalProfile getSampleProfile2() {
-		DesignSpeed dspeed = DesignSpeed.DS80;
 		double s0 = 0.0;
 		double z0 = 0.0;
 		double g0 = 0.005;
 		double kv = 6000.0;
 		double ends = 250.0;
-		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);		
+		VerticalCurveAlignment vc = new VerticalCurveAlignment(s0, z0, g0, kv, ends);		
 		Straight r = new Straight(250.0, vc.getY(250.0), vc.getTangent(250.0));
-		Grade grade = new Grade(dspeed, r, 250.0, 500.0);
+		GradeAlignment grade = new GradeAlignment(r, 250.0, 500.0);
 
-		VerticalProfile profile = new VerticalProfile(dspeed);
+		VerticalProfile profile = new VerticalProfile();
 		profile.add(vc);
 		profile.add(grade);
 		return profile;
@@ -211,24 +209,23 @@ public class TestSegmentMaker {
 	public void testSagCurveCrestCurve() {
 		LOG.debug("testSagCurveCrestCurve()");
 		
-		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		double g0 = 0.03;
 		double Kv0 = 10000.0;
 		double s1 = 150.0;
-		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurveAlignment sag = new VerticalCurveAlignment(s0, z0, g0, Kv0, s1);
 		
 		double z1 = sag.getEndZ(); // 1005.625
 		double g1 = sag.getEndTangent(); // 0.045
 		double Kv1 = -20000.0;
 		double s2 = 750.0;
-		VerticalCurve crest = new VerticalCurve(dspeed, s1, z1, g1, Kv1, s2);
+		VerticalCurveAlignment crest = new VerticalCurveAlignment(s1, z1, g1, Kv1, s2);
 		
-		VerticalProfile profile = new VerticalProfile(dspeed);
+		VerticalProfile profile = new VerticalProfile();
 		profile.add(sag);
 		profile.add(crest);
-		GradeProfile gradeprofile = profile.derivative();
+		VerticalGradeProfile gradeprofile = profile.derivative();
 		XYVectorFunction gradesample = gradeprofile.getSample(s0, s2, 5, true);
 		
 		int mobileBaseSize = 3;

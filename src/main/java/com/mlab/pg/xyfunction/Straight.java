@@ -24,4 +24,9 @@ public class Straight extends Parabole {
 	public double getSlope() {
 		return a1;
 	}
+	
+	@Override
+	public Straight clone() throws CloneNotSupportedException {
+		return new Straight(a0, a1);
+	}
 }

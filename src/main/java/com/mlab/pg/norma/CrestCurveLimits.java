@@ -27,4 +27,9 @@ public class CrestCurveLimits extends VerticalCurveLimits {
 		}
 	}
 
+	public CrestCurveLimits(double minlength, double maxslope, double minkvadelantamiento, double minkvparada) {
+		super(minlength, maxslope);
+		this.minKvAdelantamiento = minkvadelantamiento;
+		this.minKvParada = minkvparada;
+	}
 }

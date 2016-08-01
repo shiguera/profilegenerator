@@ -12,9 +12,9 @@ import com.mlab.pg.xyfunction.Parabole;
 
 import junit.framework.Assert;
 
-public class TestVerticalCurveAlign {
+public class TestVerticalCurveAlignment {
 
-	private final static Logger LOG = Logger.getLogger(TestVerticalCurveAlign.class);
+	private final static Logger LOG = Logger.getLogger(TestVerticalCurveAlignment.class);
 	@BeforeClass
 	public static void before() {
 		PropertyConfigurator.configure("log4j.properties");
@@ -26,9 +26,8 @@ public class TestVerticalCurveAlign {
 		Parabole parabole = new Parabole(0.0, 0.04, 0.0001);
 		double startx = 1200.0;
 		double endx = 1800.0;
-		VerticalCurve p1 = new VerticalCurve(DesignSpeed.DS100, parabole, startx, endx);
+		VerticalCurveAlignment p1 = new VerticalCurveAlignment(parabole, startx, endx);
 		Assert.assertNotNull(p1);
-		Assert.assertNotNull(p1.getDesignSpeed());
 		Assert.assertNotNull(p1.getStartS());
 		Assert.assertNotNull(p1.getEndS());
 		
@@ -46,23 +45,21 @@ public class TestVerticalCurveAlign {
 	@Test
 	public void testConstructor() {
 		LOG.debug("testConstructor()");
-		DesignSpeed dspeed = DesignSpeed.DS40;
 		double s0 = 0.0;
 		double z0 = 0.0;
 		double g0 = 0.02;
 		double kv = 3000.0;
 		double ends = 80.0;
-		VerticalCurve vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);
+		VerticalCurveAlignment vc = new VerticalCurveAlignment(s0, z0, g0, kv, ends);
 		Assert.assertEquals(0.04672, vc.getEndTangent(), 0.001);
 		Assert.assertEquals(80.0, vc.getEndS(), 0.001);
 		
-		dspeed = DesignSpeed.DS80;
 		s0 = 0.0;
 		z0 = 0.0;
 		g0 = 0.005;
 		kv = 6000.0;
 		ends = 250.0;
-		vc = new VerticalCurve(dspeed, s0, z0, g0, kv, ends);
+		vc = new VerticalCurveAlignment(s0, z0, g0, kv, ends);
 		Assert.assertEquals(0.0468, vc.getEndTangent(), 0.001);
 		Assert.assertEquals(250.0, vc.getEndS(), 0.001);
 		
@@ -112,9 +109,9 @@ public class TestVerticalCurveAlign {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0 = 1000.0;
 		double z0 = 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		VerticalCurve align = null;
-		if (grade1.getSlope() > 0) {
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		VerticalCurveAlignment align = null;
+		if (grade1.getStartTangent() > 0) {
 			align = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);
 		} else {
@@ -124,14 +121,14 @@ public class TestVerticalCurveAlign {
 		Assert.assertNotNull(align);
 		Assert.assertEquals(grade1.getEndS(), align.getStartS(), 0.001);
 		Assert.assertEquals(grade1.getEndZ(), align.getStartZ(), 0.001);
-		Assert.assertEquals(grade1.getSlope(), align.getStartTangent(), 0.001);
+		Assert.assertEquals(grade1.getStartTangent(), align.getStartTangent(), 0.001);
 		
-		GradeProfileAlign galign = align.derivative();
+		GradeProfileAlignment galign = align.derivative();
 		Assert.assertNotNull(galign);
 		Assert.assertEquals(align.getStartS(), galign.getStartS(), 0.001);
-		Assert.assertEquals(align.getStartTangent(), galign.getStartGrade(), 0.001);
+		Assert.assertEquals(align.getStartTangent(), galign.getStartZ(), 0.001);
 		Assert.assertEquals(align.getEndS(), galign.getEndS(), 0.001);
-		Assert.assertEquals(align.getEndTangent(), galign.getEndGrade(), 0.001);
+		Assert.assertEquals(align.getEndTangent(), galign.getEndZ(), 0.001);
 		Assert.assertEquals(align.getLength(), galign.getLength(), 0.001);
 
 		
@@ -140,14 +137,14 @@ public class TestVerticalCurveAlign {
 	@Test
 	public void testGetSForSlope() {
 		LOG.debug("testGetSForSlope()");
-		VerticalCurve vc = new VerticalCurve(DesignSpeed.DS100, 0.0, 1000.0, 0.03, 10000.0, 150.0);
-		Assert.assertEquals(150.0, vc.getSForSlope(0.045), 0.001);
-		Assert.assertEquals(250.0, vc.getSForSlope(0.055), 0.001);
+		VerticalCurveAlignment vc = new VerticalCurveAlignment(0.0, 1000.0, 0.03, 10000.0, 150.0);
+		Assert.assertEquals(150.0, vc.getPolynom2().getSForSlope(0.045), 0.001);
+		Assert.assertEquals(250.0, vc.getPolynom2().getSForSlope(0.055), 0.001);
 		
-		vc = new VerticalCurve(DesignSpeed.DS100, 150.0, 1005.625, 0.045, -20000.0, 750.0);
-		Assert.assertEquals(250.0, vc.getSForSlope(0.04), 0.001);
-		Assert.assertEquals(500.0, vc.getSForSlope(0.0275), 0.001);
-		Assert.assertEquals(750.0, vc.getSForSlope(0.015), 0.001);
+		vc = new VerticalCurveAlignment(150.0, 1005.625, 0.045, -20000.0, 750.0);
+		Assert.assertEquals(250.0, vc.getPolynom2().getSForSlope(0.04), 0.001);
+		Assert.assertEquals(500.0, vc.getPolynom2().getSForSlope(0.0275), 0.001);
+		Assert.assertEquals(750.0, vc.getPolynom2().getSForSlope(0.015), 0.001);
 		
 	}
 }

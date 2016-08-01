@@ -13,7 +13,7 @@ public class Grade extends AbstractVerticalProfileAlign {
 
 	
 	/**
-	 * Crea una GradeAlign a partir de una DesignSpeed, una ecuación de una recta, Straight, 
+	 * Crea un Grade a partir de una DesignSpeed, una ecuación de una recta, Straight, 
 	 * un inicio, startS, y un final , endS
 	 * @param dspeed Velocidad de diseño
 	 * @param straight Ecuación de la recta
@@ -25,12 +25,13 @@ public class Grade extends AbstractVerticalProfileAlign {
 	}
 
 	/**
-	 * Crea una GradeAlign a partir de una DesignSpeed, abscisa inicial, ordenada inicial, pendiente y longitud
+	 * Crea un Grade a partir de una DesignSpeed, abscisa inicial, ordenada inicial, pendiente y longitud
 	 * No comprueba que la pendiente supere los límites para esa DesignSpeed
 	 */
 	public Grade(DesignSpeed dspeed, double starts, double startz, double slope, double length) {
 		this(dspeed, new Straight(starts, startz, slope), starts, starts + length);
 	}
+	
 	
 	@Override
 	public Straight getPolynom2() {

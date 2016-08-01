@@ -17,7 +17,9 @@ public abstract class VerticalCurveLimits extends AbstractVAlignLimits {
 	
 	protected VerticalCurveLimits(DesignSpeed designSpeed) {
 		super(designSpeed);
-		
+	}
+	protected VerticalCurveLimits(double minlength, double maxslope) {
+		super(minlength, maxslope);
 	}
 
 	public double getMinKvAdelantamiento() {

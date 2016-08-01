@@ -12,13 +12,13 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class GradeProfile extends ArrayList<GradeProfileAlign> {
+public class OldGradeProfile extends ArrayList<GradeProfileAlign> {
 
 	private static final long serialVersionUID = 1L;
 
 	protected DesignSpeed designSpeed;
 	
-	public GradeProfile(DesignSpeed dspeed) {
+	public OldGradeProfile(DesignSpeed dspeed) {
 		super();
 		this.designSpeed = dspeed;
 	}
@@ -120,7 +120,7 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 	 * que se medirá el error cuadrático
 	 * @return ecm
 	 */
-	public double ecm(GradeProfile gp2, double spaceBetweenPoints) {
+	public double ecm(OldGradeProfile gp2, double spaceBetweenPoints) {
 		
 		// Ajustar al mismo punto de inicio
 		if (gp2.getStartS() < this.getStartS()) {
@@ -152,12 +152,12 @@ public class GradeProfile extends ArrayList<GradeProfileAlign> {
 	 * @param startZ Altitud del primer punto del perfil.
 	 * @return Perfil longitudinal
 	 */
-	public VerticalProfile integrate(double startZ) {
+	public OldVerticalProfile integrate(double startZ) {
 		if(this.size()==0) {
 			return null;
 		}
 		double currentStartZ = startZ;
-		VerticalProfile verticalProfile = new VerticalProfile(this.designSpeed);
+		OldVerticalProfile verticalProfile = new OldVerticalProfile(this.designSpeed);
 		for(int i=0; i<this.size(); i++) {
 			VerticalProfileAlign valign = this.get(i).integrate(currentStartZ);
 			verticalProfile.add(valign);

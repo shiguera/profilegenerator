@@ -8,12 +8,13 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
 import com.mlab.pg.valign.Grade;
-import com.mlab.pg.valign.VAlign;
+import com.mlab.pg.valign.GradeAlignment;
+import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalCurve;
+import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
 
@@ -41,17 +42,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileBeginningOnType_I(dspeed, s0, z0, 1);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		dspeed = DesignSpeed.DS80;
@@ -59,28 +60,28 @@ public class TestRandomFactory {
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(6, vp.size());
 		align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(3);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(3);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(3);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(4);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(4);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(4);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(5);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(5);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(5);
 		Assert.assertTrue(grade.getSlope()>0);
 
 		dspeed = DesignSpeed.DS40;
@@ -88,40 +89,40 @@ public class TestRandomFactory {
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(9, vp.size());
 		align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(3);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(3);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(3);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(4);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(4);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(4);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(5);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(5);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(5);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(6);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(6);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(6);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(7);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(7);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(7);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(8);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(8);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(8);
 		Assert.assertTrue(grade.getSlope()<0);
 
 		
@@ -135,17 +136,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileBeginningOnType_II(dspeed, s0, z0, 1);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		
 		dspeed = DesignSpeed.DS60;
@@ -153,28 +154,28 @@ public class TestRandomFactory {
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(6, vp.size());
 		align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(3);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(3);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(3);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(4);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(4);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(4);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(5);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(5);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(5);
 		Assert.assertTrue(grade.getSlope()<0);
 
 		dspeed = DesignSpeed.DS120;
@@ -182,40 +183,40 @@ public class TestRandomFactory {
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(9, vp.size());
 		align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(3);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(3);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(3);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(4);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(4);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(4);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(5);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(5);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(5);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(6);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(6);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(6);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(7);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		vc = (VerticalCurve)vp.get(7);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		vc = (VerticalCurveAlignment)vp.get(7);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(8);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(8);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(8);
 		Assert.assertTrue(grade.getSlope()>0);
 
 		
@@ -231,17 +232,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		//System.out.println(vp);
@@ -256,17 +257,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		//System.out.println(vp);
@@ -280,17 +281,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		Assert.assertNotNull(vp);
@@ -304,17 +305,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		//Assert.assertNotNull(vp);
@@ -328,17 +329,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()>0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()<0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()<0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()<0);
 		
 		//Assert.assertNotNull(vp);
@@ -353,17 +354,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_II(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		
 		//System.out.println(vp);
@@ -377,17 +378,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_II(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		
 		//System.out.println(vp);
@@ -401,17 +402,17 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_II(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
 		Assert.assertTrue(grade.getSlope()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
 		Assert.assertTrue(grade.getSlope()>0);
 		
 		//System.out.println(vp);
@@ -425,18 +426,18 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_II(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
-		Assert.assertTrue(grade.getSlope()<0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
+		Assert.assertTrue(grade.getStartTangent()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
-		Assert.assertTrue(grade.getSlope()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
+		Assert.assertTrue(grade.getStartTangent()>0);
 		
 		//System.out.println(vp);
 	}
@@ -449,18 +450,18 @@ public class TestRandomFactory {
 		VerticalProfile vp = RandomFactory.randomVerticalProfileType_II(dspeed, s0, z0);
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
-		VAlign align = vp.get(0);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		Grade grade = (Grade)vp.get(0);
-		Assert.assertTrue(grade.getSlope()<0);
+		VAlignment align = vp.get(0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		GradeAlignment grade = (GradeAlignment)vp.get(0);
+		Assert.assertTrue(grade.getStartTangent()<0);
 		align = vp.get(1);
-		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurve.class));
-		VerticalCurve vc = (VerticalCurve)vp.get(1);
-		Assert.assertTrue(vc.getKv()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		VerticalCurveAlignment vc = (VerticalCurveAlignment)vp.get(1);
+		Assert.assertTrue(vc.getPolynom2().getKv()>0);
 		align = vp.get(2);
-		Assert.assertTrue(align.getClass().isAssignableFrom(Grade.class));
-		grade = (Grade)vp.get(2);
-		Assert.assertTrue(grade.getSlope()>0);
+		Assert.assertTrue(align.getClass().isAssignableFrom(GradeAlignment.class));
+		grade = (GradeAlignment)vp.get(2);
+		Assert.assertTrue(grade.getStartTangent()>0);
 		
 		//System.out.println(vp);
 	}
@@ -472,9 +473,9 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		double g1 = grade1.getSlope();
-		VerticalCurve vc = null;
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		double g1 = grade1.getStartTangent();
+		VerticalCurveAlignment vc = null;
 		if(g1>0) {
 			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);	
@@ -487,14 +488,14 @@ public class TestRandomFactory {
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
 		VerticalCurveLimits limits = null;
-		if(vc.getKv()>0) {
+		if(vc.getPolynom2().getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
 		} else {
 			limits = new CrestCurveLimits(dspeed);
 		}
-		//System.out.println(vc.getKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		//System.out.println(vc.getPolynom2().getKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) < limits.getMaxKv());
 		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
@@ -505,9 +506,9 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		double g1 = grade1.getSlope();
-		VerticalCurve vc = null;
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		double g1 = grade1.getStartTangent();
+		VerticalCurveAlignment vc = null;
 		if(g1>0) {
 			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);	
@@ -520,14 +521,14 @@ public class TestRandomFactory {
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
 		VerticalCurveLimits limits = null;
-		if(vc.getKv()>0) {
+		if(vc.getPolynom2().getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
 		} else {
 			limits = new CrestCurveLimits(dspeed);
 		}
-		//System.out.println(vc.getKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		//System.out.println(vc.getPolynom2().getKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) < limits.getMaxKv());
 		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
@@ -538,9 +539,9 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS80;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		double g1 = grade1.getSlope();
-		VerticalCurve vc = null;
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		double g1 = grade1.getStartTangent();
+		VerticalCurveAlignment vc = null;
 		if(g1>0) {
 			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);	
@@ -553,14 +554,14 @@ public class TestRandomFactory {
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
 		VerticalCurveLimits limits = null;
-		if(vc.getKv()>0) {
+		if(vc.getPolynom2().getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
 		} else {
 			limits = new CrestCurveLimits(dspeed);
 		}
-		//System.out.println(vc.getKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		//System.out.println(vc.getPolynom2().getKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) < limits.getMaxKv());
 		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
@@ -571,9 +572,9 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS60;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		double g1 = grade1.getSlope();
-		VerticalCurve vc = null;
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		double g1 = grade1.getStartTangent();
+		VerticalCurveAlignment vc = null;
 		if(g1>0) {
 			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);	
@@ -586,14 +587,14 @@ public class TestRandomFactory {
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
 		VerticalCurveLimits limits = null;
-		if(vc.getKv()>0) {
+		if(vc.getPolynom2().getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
 		} else {
 			limits = new CrestCurveLimits(dspeed);
 		}
-		//System.out.println(vc.getKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		//System.out.println(vc.getPolynom2().getKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) < limits.getMaxKv());
 		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);
@@ -604,9 +605,9 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS40;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
-		double g1 = grade1.getSlope();
-		VerticalCurve vc = null;
+		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
+		double g1 = grade1.getStartTangent();
+		VerticalCurveAlignment vc = null;
 		if(g1>0) {
 			vc = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 					grade1.getEndZ(), grade1.getEndTangent(), true);	
@@ -619,14 +620,14 @@ public class TestRandomFactory {
 		Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
 		Assert.assertEquals(g1, vc.getStartTangent(), 0.001);
 		VerticalCurveLimits limits = null;
-		if(vc.getKv()>0) {
+		if(vc.getPolynom2().getKv()>0) {
 			limits = new SagCurveLimits(dspeed);
 		} else {
 			limits = new CrestCurveLimits(dspeed);
 		}
-		//System.out.println(vc.getKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) > limits.getMinKv());
-		Assert.assertTrue(Math.abs(vc.getKv()) < limits.getMaxKv());
+		//System.out.println(vc.getPolynom2().getKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) > limits.getMinKv());
+		Assert.assertTrue(Math.abs(vc.getPolynom2().getKv()) < limits.getMaxKv());
 		Assert.assertTrue(vc.getLength() >= limits.getMinLength());
 		Assert.assertTrue(vc.getLength() < limits.getMaxLength());
 		//System.out.println(vc);

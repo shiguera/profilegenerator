@@ -7,11 +7,10 @@ import org.apache.log4j.Logger;
 
 import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
-import com.mlab.pg.valign.Grade;
-import com.mlab.pg.valign.VerticalCurve;
+import com.mlab.pg.valign.GradeAlignment;
+import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
@@ -50,7 +49,7 @@ public class RandomFactory {
 	 * @param z0 altura inicial
 	 * @return VerticalProfile
 	 */
-	public static VerticalProfile randomVerticalProfile(DesignSpeed dspeed, double s0, double z0, int vertexCount) {
+	public static VerticalProfile randomVerticalProfile(DesignSpeed dspeed,  double s0, double z0, int vertexCount) {
 		double sign = RandomFactory.randomSign();
 		if ( sign> 0) {
 			return RandomFactory.randomVerticalProfileBeginningOnType_I(dspeed, s0, z0, vertexCount);
@@ -72,7 +71,7 @@ public class RandomFactory {
 		if(vertexCount < 1) {
 			return null;
 		}
-		VerticalProfile generalProfile = new VerticalProfile(dspeed);
+		VerticalProfile generalProfile = new VerticalProfile();
 		int count = 0;
 		double startS = s0;
 		double startZ = z0;
@@ -107,7 +106,7 @@ public class RandomFactory {
 		if(vertexCount < 1) {
 			return null;
 		}
-		VerticalProfile generalProfile = new VerticalProfile(dspeed);
+		VerticalProfile generalProfile = new VerticalProfile();
 		int count = 0;
 		double startS = s0;
 		double startZ = z0;
@@ -138,8 +137,8 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
-		Grade grade1 = RandomGradeFactory.randomUpGradeAlign(dspeed, s0, z0);
-		VerticalCurve crestcurve = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
+		GradeAlignment grade1 = RandomGradeFactory.randomUpGradeAlignment(dspeed, s0, z0);
+		VerticalCurveAlignment crestcurve = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = crestcurve.getEndS();
 		double startz2 = crestcurve.getEndZ();
@@ -147,8 +146,8 @@ public class RandomFactory {
 		double ends2 = starts2 + length2;
 		double g2 = crestcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
-		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
-		VerticalProfile profile = new VerticalProfile(dspeed);
+		GradeAlignment grade2 = new GradeAlignment(straight2, starts2, ends2);
+		VerticalProfile profile = new VerticalProfile();
 		profile.add(grade1);
 		profile.add(crestcurve);
 		profile.add(grade2);
@@ -162,8 +161,8 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
-		Grade grade1 = RandomGradeFactory.randomDownGradeAlign(dspeed, s0, z0);
-		VerticalCurve sagcurve = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(), 
+		GradeAlignment grade1 = RandomGradeFactory.randomDownGradeAlignment(dspeed, s0, z0);
+		VerticalCurveAlignment sagcurve = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(), 
 				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = sagcurve.getEndS();
 		double startz2 = sagcurve.getEndZ();
@@ -171,8 +170,8 @@ public class RandomFactory {
 		double ends2 = starts2 + length2;
 		double g2 = sagcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
-		Grade grade2 = new Grade(dspeed, straight2, starts2, ends2);
-		VerticalProfile profile = new VerticalProfile(dspeed);
+		GradeAlignment grade2 = new GradeAlignment(straight2, starts2, ends2);
+		VerticalProfile profile = new VerticalProfile();
 		profile.add(grade1);
 		profile.add(sagcurve);
 		profile.add(grade2);
@@ -190,7 +189,7 @@ public class RandomFactory {
 	 * @param g0 Pendiente inicial
 	 * @return VerticalCurve resultado con la pendiente de salida positiva
 	 */
-	public static VerticalCurve randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
+	public static VerticalCurveAlignment randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
 		double endg = RandomGradeFactory.randomUniformGradeSlope(dspeed);
 		if(positiveEndSlope) {
 			endg = Math.abs(endg);
@@ -212,7 +211,7 @@ public class RandomFactory {
 		double startz = z0;
 		double ends = starts +length;
 		Parabole p = new Parabole(starts, startz, g0, kv);
-		VerticalCurve align = new VerticalCurve(dspeed, p, starts, ends);
+		VerticalCurveAlignment align = new VerticalCurveAlignment(p, starts, ends);
 		return align;
 	}
 	/**
@@ -225,7 +224,7 @@ public class RandomFactory {
 	 * @param g0 Pendiente inicial
 	 * @return VerticalCurve resultado con la pendiente de salida positiva
 	 */
-	public static VerticalCurve randomCrestCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean negativeEndSlope) {
+	public static VerticalCurveAlignment randomCrestCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean negativeEndSlope) {
 		double endg = RandomGradeFactory.randomUniformGradeSlope(dspeed);
 		if(negativeEndSlope) {
 			endg = - Math.abs(endg);
@@ -247,7 +246,7 @@ public class RandomFactory {
 		double startz = z0;
 		double ends = starts +length;
 		Parabole p = new Parabole(starts, startz, g0, kv);
-		VerticalCurve align = new VerticalCurve(dspeed, p, starts, ends);
+		VerticalCurveAlignment align = new VerticalCurveAlignment(p, starts, ends);
 		return align;
 	}
 	/**
