@@ -5,8 +5,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.norma.DesignSpeed;
-
 import junit.framework.Assert;
 
 public class TestVAlignFactory {
@@ -21,13 +19,12 @@ public class TestVAlignFactory {
 	@Test
 	public void testCreateVCFrom_PointGradeKvAndFinalSlope() {
 		LOG.debug("testCreateVCFrom_PointGradeKvAndFinalSlope()");
-		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		double g0 = 0.03;
 		double kv = 10000.0;
 		double gf = 0.045;
-		VerticalCurve vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(dspeed, s0, z0, g0, kv, gf);
+		VerticalCurveAlignment vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(s0, z0, g0, kv, gf);
 		Assert.assertEquals(150.0, vc.getEndS(), 0.001);
 		
 		s0 = 150.0;
@@ -35,7 +32,7 @@ public class TestVAlignFactory {
 		g0 = 0.045;
 		kv = -20000.0;
 		gf = 0.015;
-		vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(dspeed, s0, z0, g0, kv, gf);
+		vc = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(s0, z0, g0, kv, gf);
 		Assert.assertEquals(750.0, vc.getEndS(), 0.001);
 		
 		

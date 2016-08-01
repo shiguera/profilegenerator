@@ -68,14 +68,13 @@ public class TestVerticalCurveAlignment {
 	@Test
 	public void testConstructorWithSagCurve() {
 		LOG.debug("testConstructorWithSagCurve()");
-		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0 = 0.0;
 		double z0 = 1000.0;
 		double g0 = 0.03;
 		double Kv0 = 10000.0;
 		double s1 = 150.0;
 		
-		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurveAlignment sag = new VerticalCurveAlignment(s0, z0, g0, Kv0, s1);
 		Assert.assertEquals(0.0, sag.getStartS(), 0.001);
 		Assert.assertEquals(1000.0, sag.getStartZ(), 0.001);
 		Assert.assertEquals(0.03, sag.getStartTangent(), 0.001);
@@ -87,14 +86,13 @@ public class TestVerticalCurveAlignment {
 	@Test
 	public void testConstructorWithCrestCurve() {
 		LOG.debug("testConstructorWithCrestCurve()");
-		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0 = 150.0;
 		double z0 = 1005.625;
 		double g0 = 0.045;
 		double Kv0 = -20000.0;
 		double s1 = 750.0;
 		
-		VerticalCurve sag = new VerticalCurve(dspeed, s0, z0, g0, Kv0, s1);
+		VerticalCurveAlignment sag = new VerticalCurveAlignment(s0, z0, g0, Kv0, s1);
 		Assert.assertEquals(150.0, sag.getStartS(), 0.001);
 		Assert.assertEquals(1005.625, sag.getStartZ(), 0.001);
 		Assert.assertEquals(0.045, sag.getStartTangent(), 0.001);

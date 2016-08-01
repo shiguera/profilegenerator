@@ -131,7 +131,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Vertical Profile \n");
-		builder.append(VAlign.CABECERA);
+		builder.append(VAlignment.CABECERA);
 		builder.append('\n');
 		for(int i=0; i<this.size(); i++) {
 			builder.append(this.get(i).toString());

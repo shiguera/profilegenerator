@@ -157,7 +157,7 @@ public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Grade Profile \n");
-		builder.append(VAlign.CABECERA);
+		builder.append(VAlignment.CABECERA);
 		builder.append('\n');
 		for(int i=0; i<this.size(); i++) {
 			builder.append(this.get(i).toString());

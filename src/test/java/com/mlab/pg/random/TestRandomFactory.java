@@ -10,10 +10,8 @@ import com.mlab.pg.norma.CrestCurveLimits;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
-import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VAlignment;
-import com.mlab.pg.valign.VerticalCurve;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 

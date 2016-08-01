@@ -12,7 +12,7 @@ import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.GradeProfileAlignment;
-import com.mlab.pg.valign.VAlign;
+import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -38,11 +38,11 @@ public class TestProfileCharacteriser {
 		LOG.debug("testGradeAlignment()");
 		DesignSpeed dspeed = RandomFactory.randomDesignSpeed();
 		GradeAlignment grade = RandomGradeFactory.randomGradeAlignment(dspeed, 100.0, 1000.0);
-		System.out.println(VAlign.CABECERA);
+		System.out.println(VAlignment.CABECERA);
 		System.out.println(grade.toString());
 		
 		GradeProfileAlignment galign = grade.derivative();
-		System.out.println(VAlign.CABECERA);
+		System.out.println(VAlignment.CABECERA);
 		System.out.println(galign.toString());
 	
 		XYVectorFunction gpsample = galign.getSample(galign.getStartS(), galign.getEndS(), 10);
