@@ -472,7 +472,7 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
 		VerticalCurve vc = null;
 		if(g1>0) {
@@ -505,7 +505,7 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS100;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
 		VerticalCurve vc = null;
 		if(g1>0) {
@@ -538,7 +538,7 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS80;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
 		VerticalCurve vc = null;
 		if(g1>0) {
@@ -571,7 +571,7 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS60;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
 		VerticalCurve vc = null;
 		if(g1>0) {
@@ -604,7 +604,7 @@ public class TestRandomFactory {
 		DesignSpeed dspeed = DesignSpeed.DS40;
 		double s0= 0.0;
 		double z0= 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		double g1 = grade1.getSlope();
 		VerticalCurve vc = null;
 		if(g1>0) {
@@ -717,217 +717,7 @@ public class TestRandomFactory {
 	}
 
 	// Grades
-	@Test
-	public void testRandomGradeAlign() {
-		LOG.debug("testRandomGradeAlign()");
-		DesignSpeed ds = DesignSpeed.DS120;
-		double s0 = 0.0;
-		double z0 = 0.0;
-		Grade ga = RandomFactory.randomGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS100;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS80;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS60;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS40;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		//System.out.println(ga);
-
-	}	
-	@Test
-	public void testRandomUpGradeAlign() {
-		LOG.debug("testRandomUpGradeAlign()");
-		DesignSpeed ds = DesignSpeed.DS120;
-		double s0 = 0.0;
-		double z0 = 0.0;
-		Grade ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS100;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS80;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS60;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS40;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomUpGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()>0);
-		//System.out.println(ga);
-
-	}	
-	@Test
-	public void testRandomDownGradeAlign() {
-		LOG.debug("testRandomDownGradeAlign()");
-		DesignSpeed ds = DesignSpeed.DS120;
-		double s0 = 0.0;
-		double z0 = 0.0;
-		Grade ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS100;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS80;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS60;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
-		//System.out.println(ga);
-
-		ds = DesignSpeed.DS40;
-		s0 = 0.0;
-		z0 = 0.0;
-		ga = RandomFactory.randomDownGradeAlign(ds, s0, z0);
-		Assert.assertNotNull(ga);
-		Assert.assertTrue(ga.getSlope()<0);
-		//System.out.println(ga);
-
-	}		
-	@Test
-	public void testRandomGradeSlope() {
-		LOG.debug("testRandomGradeSlope()");
-		for(int i=0; i<100;i++) {
-			DesignSpeed dspeed = DesignSpeed.DS120;
-			GradeLimits limits = new GradeLimits(dspeed);
-			double slope = RandomFactory.randomGradeSlope(dspeed);
-			Assert.assertTrue(Math.abs(slope) >= limits.getMinSlope());
-			Assert.assertTrue(Math.abs(slope) <= limits.getMaxSlope());
-			//System.out.println(slope);
-			
-			dspeed = DesignSpeed.DS100;
-			limits = new GradeLimits(dspeed);
-			slope = RandomFactory.randomGradeSlope(dspeed);
-			Assert.assertTrue(Math.abs(slope) >= limits.getMinSlope());
-			Assert.assertTrue(Math.abs(slope) <= limits.getMaxSlope());
-
-			dspeed = DesignSpeed.DS80;
-			limits = new GradeLimits(dspeed);
-			slope = RandomFactory.randomGradeSlope(dspeed);
-			Assert.assertTrue(Math.abs(slope) >= limits.getMinSlope());
-			Assert.assertTrue(Math.abs(slope) <= limits.getMaxSlope());
-
-			dspeed = DesignSpeed.DS60;
-			limits = new GradeLimits(dspeed);
-			slope = RandomFactory.randomGradeSlope(dspeed);
-			Assert.assertTrue(Math.abs(slope) >= limits.getMinSlope());
-			Assert.assertTrue(Math.abs(slope) <= limits.getMaxSlope());
-
-			dspeed = DesignSpeed.DS40;
-			limits = new GradeLimits(dspeed);
-			slope = RandomFactory.randomGradeSlope(dspeed);
-			Assert.assertTrue(Math.abs(slope) >= limits.getMinSlope());
-			Assert.assertTrue(Math.abs(slope) <= limits.getMaxSlope());
-
-		}		
-	}
-	@Test
-	public void testRandomGradeLength() {
-		LOG.debug("testRandomGradeLength()");
-		for(int i=0; i<100; i++) {
-			DesignSpeed dspeed = DesignSpeed.DS120;
-			GradeLimits limits = new GradeLimits(dspeed);
-			double length = RandomFactory.randomGradeLength(dspeed);
-			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
-			Assert.assertTrue(length >= limits.getMinLength());
-			Assert.assertTrue(length <= limits.getMaxLength());
-			//System.out.println(length);
-
-			dspeed = DesignSpeed.DS100;
-			limits = new GradeLimits(dspeed);
-			length = RandomFactory.randomGradeLength(dspeed);
-			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
-			Assert.assertTrue(length >= limits.getMinLength());
-			Assert.assertTrue(length <= limits.getMaxLength());
-			//System.out.println(length);
-
-			dspeed = DesignSpeed.DS80;
-			limits = new GradeLimits(dspeed);
-			length = RandomFactory.randomGradeLength(dspeed);
-			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
-			Assert.assertTrue(length >= limits.getMinLength());
-			Assert.assertTrue(length <= limits.getMaxLength());
-			//System.out.println(length);
-
-			dspeed = DesignSpeed.DS60;
-			limits = new GradeLimits(dspeed);
-			length = RandomFactory.randomGradeLength(dspeed);
-			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
-			Assert.assertTrue(length >= limits.getMinLength());
-			Assert.assertTrue(length <= limits.getMaxLength());
-			//System.out.println(length);
-
-			dspeed = DesignSpeed.DS40;
-			limits = new GradeLimits(dspeed);
-			length = RandomFactory.randomGradeLength(dspeed);
-			//System.out.println(limits.getMaxLength() + " " + limits.getMinLength() + " " + length);
-			Assert.assertTrue(length >= limits.getMinLength());
-			Assert.assertTrue(length <= limits.getMaxLength());
-			//System.out.println(length);
-
-		}
-	}
-	@Test
+		@Test
 	public void testRandomSign() {
 		LOG.debug("testRandomSign()");
 		int countpositives = 0;

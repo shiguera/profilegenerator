@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
+import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.xyfunction.Parabole;
 
 import junit.framework.Assert;
@@ -111,7 +112,7 @@ public class TestVerticalCurveAlign {
 		DesignSpeed dspeed = DesignSpeed.DS120;
 		double s0 = 1000.0;
 		double z0 = 1000.0;
-		Grade grade1 = RandomFactory.randomGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomGradeAlign(dspeed, s0, z0);
 		VerticalCurve align = null;
 		if (grade1.getSlope() > 0) {
 			align = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),

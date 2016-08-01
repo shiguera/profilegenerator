@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
+import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class TestVerticalProfile {
@@ -23,9 +24,9 @@ public class TestVerticalProfile {
 	public void testConstructor() {
 		LOG.debug("testConstructor()");
 		VerticalProfile vp = new VerticalProfile(DesignSpeed.DS120);
-		Grade g1 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		Grade g1 = RandomGradeFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
 		Assert.assertTrue(vp.add(g1));
-		Grade g2 = RandomFactory.randomGradeAlign(DesignSpeed.DS100, 0.0, 1000.0);
+		Grade g2 = RandomGradeFactory.randomGradeAlign(DesignSpeed.DS100, 0.0, 1000.0);
 		Assert.assertFalse(vp.add(g2));
 	}
 
@@ -33,7 +34,7 @@ public class TestVerticalProfile {
 	public void testGetSample() {
 		LOG.debug("testGetSample()");
 		VerticalProfile vp = new VerticalProfile(DesignSpeed.DS120);
-		Grade g1 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		Grade g1 = RandomGradeFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
 		vp.add(g1);
 		XYVectorFunction function = vp.getSample(g1.getEndS()+1.0, 1000, 105, true);
 		Assert.assertNull(function);
@@ -56,14 +57,14 @@ public class TestVerticalProfile {
 	public void testEcm() {
 		LOG.debug("testEcm()");
 		VerticalProfile vp = new VerticalProfile(DesignSpeed.DS120);
-		Grade g1 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		Grade g1 = RandomGradeFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
 		vp.add(g1);
 		double space = (vp.getEndS() - vp.getStartS())/100.0;
 		double ecm = vp.ecm(vp, space);
 		Assert.assertEquals(0.0, ecm, 0.001);
 
 		VerticalProfile vp2 = new VerticalProfile(DesignSpeed.DS120);
-		Grade g2 = RandomFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
+		Grade g2 = RandomGradeFactory.randomGradeAlign(DesignSpeed.DS120, 0.0, 1000.0);
 		vp2.add(g2);
 		LOG.debug(vp.ecm(vp2, space));
 

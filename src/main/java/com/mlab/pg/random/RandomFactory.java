@@ -1,5 +1,6 @@
 package com.mlab.pg.random;
 
+import java.util.Date;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -9,7 +10,6 @@ import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.norma.GradeLimits;
 import com.mlab.pg.norma.SagCurveLimits;
 import com.mlab.pg.norma.VerticalCurveLimits;
-import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.VerticalCurve;
 import com.mlab.pg.valign.VerticalProfile;
@@ -19,12 +19,21 @@ import com.mlab.pg.xyfunction.Straight;
 public class RandomFactory {
 
 	private static Logger LOG = Logger.getLogger(RandomFactory.class);
+
+	static Random random;
+	
+	static {
+		random = new Random(new Date().getTime());
+	}
 	
 	// DesigSpeed
+	/**
+	 * Genera una velocidad de proyecto aleatoria de entre las de DesignSpeed
+	 * @return
+	 */
 	public static DesignSpeed randomDesignSpeed() {
 		int max = DesignSpeed.values().length; 
-		Random r = new Random();
-		int value = r.nextInt(max);
+		int value = random.nextInt(max);
 		DesignSpeed ds = DesignSpeed.values()[value];
 		return ds;
 	}
@@ -129,12 +138,12 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_I(DesignSpeed dspeed, double s0, double z0) {
-		Grade grade1 = RandomFactory.randomUpGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomUpGradeAlign(dspeed, s0, z0);
 		VerticalCurve crestcurve = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
 				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = crestcurve.getEndS();
 		double startz2 = crestcurve.getEndZ();
-		double length2 = RandomFactory.randomGradeLength(dspeed);
+		double length2 = RandomGradeFactory.randomUniformGradeLength(dspeed);
 		double ends2 = starts2 + length2;
 		double g2 = crestcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
@@ -153,12 +162,12 @@ public class RandomFactory {
 	 * @return VerticalProfile
 	 */
 	public static VerticalProfile randomVerticalProfileType_II(DesignSpeed dspeed, double s0, double z0) {
-		Grade grade1 = RandomFactory.randomDownGradeAlign(dspeed, s0, z0);
+		Grade grade1 = RandomGradeFactory.randomDownGradeAlign(dspeed, s0, z0);
 		VerticalCurve sagcurve = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(), 
 				grade1.getEndZ(), grade1.getEndTangent(), true);
 		double starts2 = sagcurve.getEndS();
 		double startz2 = sagcurve.getEndZ();
-		double length2 = RandomFactory.randomGradeLength(dspeed);
+		double length2 = RandomGradeFactory.randomUniformGradeLength(dspeed);
 		double ends2 = starts2 + length2;
 		double g2 = sagcurve.getEndTangent();
 		Straight straight2 = new Straight(starts2, startz2, g2);
@@ -182,7 +191,7 @@ public class RandomFactory {
 	 * @return VerticalCurve resultado con la pendiente de salida positiva
 	 */
 	public static VerticalCurve randomSagCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean positiveEndSlope) {
-		double endg = RandomFactory.randomGradeSlope(dspeed);
+		double endg = RandomGradeFactory.randomUniformGradeSlope(dspeed);
 		if(positiveEndSlope) {
 			endg = Math.abs(endg);
 		} 
@@ -217,7 +226,7 @@ public class RandomFactory {
 	 * @return VerticalCurve resultado con la pendiente de salida positiva
 	 */
 	public static VerticalCurve randomCrestCurve(DesignSpeed dspeed, double s0, double z0, double g0, boolean negativeEndSlope) {
-		double endg = RandomFactory.randomGradeSlope(dspeed);
+		double endg = RandomGradeFactory.randomUniformGradeSlope(dspeed);
 		if(negativeEndSlope) {
 			endg = - Math.abs(endg);
 		} 
@@ -271,96 +280,8 @@ public class RandomFactory {
 	}
 
 	// Alineaciones Grade
-	/**
-	 * Genera una alineación grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente puede ser positiva o negativa.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static Grade randomGradeAlign(DesignSpeed dspeed, double s0, double z0) {
-		double slope = RandomFactory.randomGradeSlope(dspeed);
-		double length = RandomFactory.randomGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
-		return align;
-	}
-	/**
-	 * Genera una alineación up-grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente será positiva.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static Grade randomUpGradeAlign(DesignSpeed dspeed, double s0, double z0) {
-		double slope = Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		double length = RandomFactory.randomGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
-		return align;
-	}
-	/**
-	 * Genera una alineación down-grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente será negativa.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static Grade randomDownGradeAlign(DesignSpeed dspeed, double s0, double z0) {
-		double slope = -Math.abs(RandomFactory.randomGradeSlope(dspeed));
-		double length = RandomFactory.randomGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		Grade align = new Grade(dspeed, r, s0, ends);
-		return align;
-	}
+		
 	
-	/**
-	 * Calcula una pendiente aleatoria positiva o negativa para una Grade de una determinada
-	 * DesignSpeed
-	 * @param dspeed Velocidad de proyecto de la carretera
-	 * @return Pendiente positiva o negativa aleatoria entre los valores 
-	 * máximo y mínimo de esa categoría de carreteras a intervalos de 0.005%
-	 */
-	public static double randomGradeSlope(DesignSpeed dspeed) {
-		GradeLimits limits = new GradeLimits(dspeed);
-		double min = limits.getMinSlope();
-		double max = limits.getMaxSlope();
-		double inc = limits.getSlopeIncrements();
-		double slope = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc)*1000)/1000;
-		double sign = RandomFactory.randomSign();
-		return sign*slope;
-	}
-	/**
-	 * Calcula una longitud aleatoria para una Grade de una determinada
-	 * DesignSpeed
-	 * @param dspeed Velocidad de proyecto de la carretera
-	 * @return Longitud aleatoria entre los valores 
-	 * máximo y mínimo de esa categoría de carreteras a intervalos de la longitud
-	 * mímima para la velocidad de proyecto
-	 */
-	public static double randomGradeLength(DesignSpeed dspeed) {
-		GradeLimits limits = new GradeLimits(dspeed);
-		double min = limits.getMinLength();
-		double max = limits.getMaxLength();
-		double inc = 50.0; // limits.getMinLength();
-		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc));
-		return length;
-	}
 
 	// Funciones utilitarias
 	/**

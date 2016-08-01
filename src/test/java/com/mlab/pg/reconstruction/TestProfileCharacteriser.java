@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
+import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.valign.Grade;
 import com.mlab.pg.valign.GradeProfileAlign;
 import com.mlab.pg.valign.VAlign;
@@ -36,7 +37,7 @@ public class TestProfileCharacteriser {
 	public void testGradeAlign() {
 		LOG.debug("testGradeAlign()");
 		DesignSpeed dspeed = RandomFactory.randomDesignSpeed();
-		Grade grade = RandomFactory.randomGradeAlign(dspeed, 100.0, 1000.0);
+		Grade grade = RandomGradeFactory.randomGradeAlign(dspeed, 100.0, 1000.0);
 		System.out.println(VAlign.CABECERA);
 		System.out.println(grade.toString());
 		
