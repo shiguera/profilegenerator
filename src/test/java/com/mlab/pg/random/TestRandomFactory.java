@@ -963,13 +963,110 @@ public class TestRandomFactory {
 		LOG.debug("testRandomDoubleByIncrementsWithNegativeNumbers()");
 		double min = -12;
 		double max = 12;
-		double steep = 0.5;
+		double increment = 0.5;
 		for (int i=0;i<200;i++) {
-			double number = RandomFactory.randomDoubleByIncrements(min, max, steep);
+			double number = RandomFactory.randomDoubleByIncrements(min, max, increment);
 			//System.out.print(number + " ");
 			Assert.assertTrue(number>=min && number<=max);
 		}
 		//System.out.println();
+	}
+	@Test
+	public void testRandomDoubleByIncrements_ExactMatch() {
+		LOG.debug("testRandomDoubleByIncrements_ExactMatch()");
+		double min= 1.0;
+		double max = 2.0;
+		double increment = 0.25;
+		int[] contador = new int[5];
+		for(int i=0; i<5; i++) {
+			contador[i] = 0;
+		}
+		for (int i=0;i<200;i++) {
+			double number = RandomFactory.randomDoubleByIncrements(min, max, increment);
+			//System.out.print(number + " ");
+			Assert.assertTrue(number>=min && number<=max);
+			if(number == 1.0) {
+				contador[0]++;
+			} else if (number==1.25) {
+				contador[1]++;
+			} else if (number==1.5) {
+				contador[2]++;
+			} else if (number==1.75) {
+				contador[3]++;
+			} else if (number==2.0) {
+				contador[4]++;
+			}
+		}
+		int numeventos = contador[0] + contador[1] + contador[2] + contador[3] + contador[4];
+		Assert.assertEquals(200, numeventos);
+		for(int  i=0; i<5; i++) {
+			System.out.println(contador[i]);
+		}
+	}
+	
+	@Test
+	public void testRandomDoubleByIncrements_NoExactMatch() {
+		LOG.debug("testRandomDoubleByIncrementsWithNegativeNumbers()");
+		double min= 1.0;
+		double max = 2.2;
+		double increment = 0.25;
+		int[] contador = new int[6];
+		for(int i=0; i<5; i++) {
+			contador[i] = 0;
+		}
+		for (int i=0;i<200;i++) {
+			double number = RandomFactory.randomDoubleByIncrements(min, max, increment);
+			//System.out.print(number + " ");
+			Assert.assertTrue(number>=min && number<=max);
+			if(number == 1.0) {
+				contador[0]++;
+			} else if (number==1.25) {
+				contador[1]++;
+			} else if (number==1.5) {
+				contador[2]++;
+			} else if (number==1.75) {
+				contador[3]++;
+			} else if (number==2.0) {
+				contador[4]++;
+			} else if (number>=2.0) {
+				contador[5]++;
+			}
+		}
+		int numeventos = contador[0] + contador[1] + contador[2] + contador[3] + contador[4] + contador[5];
+		Assert.assertEquals(200, numeventos);
+		Assert.assertEquals(0, contador[5]);
+		for(int  i=0; i<6; i++) {
+			System.out.println(contador[i]);
+		}
+
+		min= 1.0;
+		max = 2.2;
+		increment = 0.5;
+		contador = new int[4];
+		for(int i=0; i<4; i++) {
+			contador[i] = 0;
+		}
+		for (int i=0;i<200;i++) {
+			double number = RandomFactory.randomDoubleByIncrements(min, max, increment);
+			//System.out.print(number + " ");
+			Assert.assertTrue(number>=min && number<=max);
+			if(number == 1.0) {
+				contador[0]++;
+			} else if (number==1.5) {
+				contador[1]++;
+			} else if (number==2.0) {
+				contador[2]++;
+			} else if (number>=2.0) {
+				contador[3]++;
+			}
+		}
+		numeventos = contador[0] + contador[1] + contador[2] + contador[3];
+		Assert.assertEquals(200, numeventos);
+		Assert.assertEquals(0, contador[3]);
+		for(int  i=0; i<4; i++) {
+			System.out.println(contador[i]);
+		}
+
 	}
 
 	// DesignSpeed

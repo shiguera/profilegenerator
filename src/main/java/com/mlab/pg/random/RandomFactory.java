@@ -365,6 +365,8 @@ public class RandomFactory {
 	// Funciones utilitarias
 	/**
 	 * Calcula un signo positivo o negativo aleatoriamente. 
+	 * Nota.- La función Random.nextInt(n) devuelve un entero distribuido uniformemente
+	 * en el intervalo [0, n) 
 	 * @return Devuelve un double que es o +1.0 o -1.0 para utilizar
 	 * como signo a aplicar.
 	 */
@@ -378,8 +380,9 @@ public class RandomFactory {
 		}
 	}
 	/**
-	 * Genera un número double aleatorio comprendido entre un valor máximo 
-	 * y uno mínimo, ambos incluidos [min, max] y ajustado a intervalos exactos
+	 * Genera un número double aleatorio distribuido uniformemente, y 
+	 * comprendido entre un valor máximo y uno mínimo, ambos incluidos [min, max] 
+	 * y ajustado a intervalos exactos
 	 * 
 	 * @param min Valor mínimo que puede tomar el número double generado
 	 * @param max Valor máximo que puede tomar el número double generado
@@ -390,6 +393,9 @@ public class RandomFactory {
 	 * ajustado a los incrementos increment
 	 */
 	public static double randomDoubleByIncrements(double min, double max, double increment) {
+		if(max<=min) {
+			return Double.NaN;
+		}
 		double range = max - min;
 		int maxsteeps = (int) (range / increment);
 		Random rnd = new Random();
