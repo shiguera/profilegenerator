@@ -1,5 +1,7 @@
 package com.mlab.pg.reconstruction;
 
+import org.apache.log4j.Logger;
+
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -19,13 +21,25 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  */
 public class GradeProfileGenerator {
 
+	Logger LOG = Logger.getLogger(GradeProfileGenerator.class);
+
 	protected XYVectorFunction originalPoints;
 	protected PointTypeSegmentArray segments;
 	protected VerticalGradeProfile gradeProfile;
+	protected VerticalProfile verticalProfile;
+	protected SegmentMaker maker;
 	
-	public GradeProfileGenerator(XYVectorFunction originalPoints, PointTypeSegmentArray segments) {
+	
+	public GradeProfileGenerator(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) {
 		this.originalPoints = originalPoints.clone();
-		this.segments = segments.clone();
+		try {
+			maker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
+		} catch(CloneNotSupportedException e) {
+			LOG.debug("Error en constructor de SegmentMaker " + e.getLocalizedMessage());
+		}
+		
+		this.segments = maker.getProcessedSegments();
+		
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<segments.size(); i++) {
 			int first = segments.get(i).getStart();
@@ -36,10 +50,13 @@ public class GradeProfileGenerator {
 			GradeProfileAlignment align = new GradeProfileAlignment(straight, originalPoints.getX(first), originalPoints.getX(last));
 			gradeProfile.add(align);
 		}
+		
+		verticalProfile = gradeProfile.integrate(startZ);
+		
 	}
 
-	public VerticalProfile getVerticalProfile(double startz) {
-		return gradeProfile.integrate(startz);
+	public VerticalProfile getVerticalProfile() {
+		return verticalProfile;
 	}
 	
 	public XYVectorFunction getOriginalPoints() {

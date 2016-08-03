@@ -30,7 +30,7 @@ public class TestSegmentMaker {
 	}
 	
 	@Test
-	public void testGrade() {
+	public void testGrade() throws CloneNotSupportedException {
 		LOG.debug("testGrade()");
 		List<double[]> pts = new ArrayList<double[]>();
 		pts.add(new double[] {0.0, 0.04});
@@ -62,7 +62,7 @@ public class TestSegmentMaker {
 	}
 
 	@Test
-	public void testVerticalCurve() {
+	public void testVerticalCurve() throws CloneNotSupportedException {
 		LOG.debug("testVerticalCurve()");
 		List<double[]> pts = new ArrayList<double[]>();
 		pts.add(new double[] {0.0, 0.00});
@@ -94,7 +94,7 @@ public class TestSegmentMaker {
 		Assert.assertEquals(1, maker.getOriginalSegments().size());	
 	}
 	@Test
-	public void testProcessBorder1() {
+	public void testProcessBorder1() throws CloneNotSupportedException {
 		LOG.debug("testProcessBorder1()");
 		VerticalProfile profile = getSampleProfile1();
 		VerticalGradeProfile gradeprofile = profile.derivative();
@@ -115,7 +115,7 @@ public class TestSegmentMaker {
 		System.out.println(maker.processedSegments);
 	}
 	@Test
-	public void testProcessBorder2() {
+	public void testProcessBorder2() throws CloneNotSupportedException {
 		LOG.debug("testProcessBorder2()");
 		VerticalProfile profile = getSampleProfile2();
 		VerticalGradeProfile gradeprofile = profile.derivative();
@@ -137,7 +137,7 @@ public class TestSegmentMaker {
 		System.out.println(maker.processedSegments);
 	}
 	@Test
-	public void testProcessBorder3() {
+	public void testProcessBorder3() throws CloneNotSupportedException {
 		LOG.debug("testProcessBorder3()");
 		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
 		System.out.println(profile);
@@ -206,7 +206,7 @@ public class TestSegmentMaker {
 
 
 	@Test
-	public void testSagCurveCrestCurve() {
+	public void testSagCurveCrestCurve() throws CloneNotSupportedException {
 		LOG.debug("testSagCurveCrestCurve()");
 		
 		double s0 = 0.0;

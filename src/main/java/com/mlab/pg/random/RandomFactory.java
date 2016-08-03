@@ -281,7 +281,14 @@ public class RandomFactory {
 	// Alineaciones Grade
 		
 	
-
+	/**
+	 * Calcula una longitud aleatoria entre unos valores
+	 * máximo y mínimo, redondeada a incrementosincrement
+	 */
+	public static double randomUniformLength(double min, double max, double increment) {
+		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, increment));
+		return length;
+	}
 	// Funciones utilitarias
 	/**
 	 * Calcula un signo positivo o negativo aleatoriamente. 

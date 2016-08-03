@@ -2,7 +2,6 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,14 +32,8 @@ public class TestGradeProfileGenerator {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		SegmentMaker maker = new SegmentMaker(originalPoints, 3, 1e-5);
-		try {
-			maker.processBorderPoints();
-		} catch (Exception e) {
-			Assert.fail();
-		}
-		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints, maker.getProcessedSegments());
-		VerticalProfile vprofile = generator.getVerticalProfile(0.0);
+		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints,3, 1e-5, 0.0);
+		VerticalProfile vprofile = generator.getVerticalProfile();
 		System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
 		for(int i=0; i<processedPoints.size(); i++) {
@@ -59,14 +52,8 @@ public class TestGradeProfileGenerator {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		SegmentMaker maker = new SegmentMaker(originalPoints, 3, 1e-5);
-		try {
-			maker.processBorderPoints();
-		} catch (Exception e) {
-			Assert.fail();
-		}
-		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints, maker.getProcessedSegments());
-		VerticalProfile vprofile = generator.getVerticalProfile(0.0);
+		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints,3, 1e-5, 0.0);
+		VerticalProfile vprofile = generator.getVerticalProfile();
 		System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
 		for(int i=0; i<processedPoints.size(); i++) {

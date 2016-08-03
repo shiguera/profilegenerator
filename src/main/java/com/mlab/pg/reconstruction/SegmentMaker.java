@@ -64,13 +64,15 @@ public class SegmentMaker {
 	PointTypeSegmentArray processedSegments;
 	
 	
-	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope) {
+	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope) throws CloneNotSupportedException {
 		this.originalGradePoints = gradesample;
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 		this.originalSegments = new PointTypeSegmentArray(originalPointTypes);
+
+		processBorderPoints();
 	}
 
 	public void processBorderPoints() throws CloneNotSupportedException {

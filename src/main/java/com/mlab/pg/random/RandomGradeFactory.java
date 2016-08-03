@@ -81,14 +81,7 @@ public class RandomGradeFactory {
 		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc));
 		return length;
 	}
-	/**
-	 * Calcula una longitud aleatoria para una Grade entre unos valores
-	 * máximo y mínimo, redondeada al metro exacto
-	 */
-	public static double randomUniformGradeLength(double min, double max) {
-		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, 1.0));
-		return length;
-	}
+	
 
 	/**
 	 * Genera una longitud aleatoria positiva para una grade según una distribución
