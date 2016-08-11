@@ -1,5 +1,7 @@
 package com.mlab.pg.reconstruction;
 
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
@@ -32,7 +34,7 @@ public class TestReconstructionProfilesType_I {
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
 	double pointSeparation = 7.0;
-	boolean displayProfiles = true;
+	boolean displayProfiles = false;
 	
 	/**
 	 * Parámetros para la generación de las alineaciones aleatorias
@@ -109,8 +111,12 @@ public class TestReconstructionProfilesType_I {
 		d1 = new double[numberOfEssays];
 		d2 = new double[numberOfEssays];
 		
+		Random rnd = new Random();
 		
 		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
+
+			pointSeparation = 1.0 + rnd.nextInt(20)/2.0;
+			
 			originalVerticalProfile = generateOriginalVerticalProfile();
 			if(displayProfiles) {
 				System.out.println(originalVerticalProfile);
@@ -204,7 +210,7 @@ public class TestReconstructionProfilesType_I {
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
 		double currentd1 = Math.abs(originalVerticalProfile.getAlign(1).getStartS() - resultVerticalProfile.getAlign(1).getStartS());
 		double currentd2 = Math.abs(originalVerticalProfile.getAlign(1).getEndS() - resultVerticalProfile.getAlign(1).getEndS());
-		System.out.println(currentEcm + ", " + currentd1 + ", " + currentd2);
+		System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;
