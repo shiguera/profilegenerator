@@ -31,8 +31,8 @@ public class TestReconstructionProfilesType_I {
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
-	double pointSeparation = 5.0;
-	boolean displayProfiles = false;
+	double pointSeparation = 7.0;
+	boolean displayProfiles = true;
 	
 	/**
 	 * Parámetros para la generación de las alineaciones aleatorias
@@ -84,7 +84,15 @@ public class TestReconstructionProfilesType_I {
 	 * Errores cuadráticos cometidos en la reconstrucción
 	 */
 	double[] ecm;
-	double maxEcm, minEcm;
+	double maxEcm, minEcm, meanecm;
+	
+	/**
+	 * d1 es la distancia en valor absoluto desde el punto de entrada a la vertical curve
+	 * en el perfil original y el reconstruido.
+	 * d2 es la distancia en el punto de salida de la vertical curve
+	 */
+	double[] d1, d2;
+	double maxd1, mind1, meand1, maxd2, mind2, meand2;
 	
 	
 	@BeforeClass
@@ -98,6 +106,9 @@ public class TestReconstructionProfilesType_I {
 		LOG.debug("test()");
 		
 		ecm = new double[numberOfEssays];
+		d1 = new double[numberOfEssays];
+		d2 = new double[numberOfEssays];
+		
 		
 		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
 			originalVerticalProfile = generateOriginalVerticalProfile();
@@ -191,9 +202,16 @@ public class TestReconstructionProfilesType_I {
 		resultVerticalProfilePoints = resultVerticalProfile.getSample(s0, originalVerticalProfile.getEndS(), pointSeparation, true);
 		originalVerticalProfilePoints = originalVerticalProfile.getSample(s0, originalVerticalProfile.getEndS(), pointSeparation, true);		
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
+		double currentd1 = Math.abs(originalVerticalProfile.getAlign(1).getStartS() - resultVerticalProfile.getAlign(1).getStartS());
+		double currentd2 = Math.abs(originalVerticalProfile.getAlign(1).getEndS() - resultVerticalProfile.getAlign(1).getEndS());
+		System.out.println(currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;
+			maxd1 = currentd1;
+			mind1 = currentd1;
+			maxd2 = currentd2;
+			mind2 = currentd2;
 		} else {
 			if (currentEcm > maxEcm) {
 				maxEcm = currentEcm;
@@ -201,25 +219,62 @@ public class TestReconstructionProfilesType_I {
 			if(currentEcm < minEcm) {
 				minEcm = currentEcm;
 			}
+			if(currentd1 > maxd1) {
+				maxd1 = currentd1;
+			}
+			if(currentd1 < mind1) {
+				mind1 = currentd1;
+			}
+			if(currentd2 > maxd2) {
+				maxd2 = currentd2;
+			}
+			if(currentd2 < mind2) {
+				mind2 = currentd2;
+			}
 		}
 		ecm[currentEssay] = currentEcm;
 		if(currentEcm>0.01) {
 			System.out.println(originalVerticalProfile);
 			System.out.println(resultVerticalProfile);
 		}
-	}
-	private void showReport() {
-		// LOG.debug("showError()");
-		System.out.println("Número de ensayos: " + numberOfEssays);
-		double meanecm = 0.0;
+		d1[currentEssay] = currentd1;
+		d2[currentEssay] = currentd1;
+		
+		meanecm = 0.0;
 		for(int i=0; i<ecm.length;i++) {
 			meanecm+=ecm[i];
 		}
 		meanecm = meanecm / ecm.length;
+		
+		meand1 = 0.0;
+		for(int i=0; i<d1.length;i++) {
+			meand1+=d1[i];
+		}
+		meand1 = meand1 / d1.length;
+		
+		meand2 = 0.0;
+		for(int i=0; i<d2.length;i++) {
+			meand2+=d2[i];
+		}
+		meand2 = meand2 / d2.length;
+		
+	}
+	private void showReport() {
+		// LOG.debug("showError()");
+		System.out.println("Número de ensayos: " + numberOfEssays);
+		
 		System.out.println("mean ecm = " + meanecm);
 		System.out.println("min ecm = " + minEcm);
 		System.out.println("max ecm = " + maxEcm);
-			
+		
+		System.out.println("mean d1 = " + meand1);
+		System.out.println("min d1 = " + mind1);
+		System.out.println("max d1 = " + maxd1);
+
+		System.out.println("mean d2 = " + meand2);
+		System.out.println("min d2 = " + mind2);
+		System.out.println("max d2 = " + maxd2);
+
 	}
 	
 
