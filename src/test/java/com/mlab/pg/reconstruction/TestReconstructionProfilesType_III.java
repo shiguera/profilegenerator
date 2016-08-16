@@ -22,19 +22,20 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class TestReconstructionProfilesType_I {
+public class TestReconstructionProfilesType_III {
 	
-	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_I.class);
+	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_III.class);
 	
-	int numberOfEssays = 1000;
+	int numberOfEssays = 1;
 	int currentEssay;
 	int mobileBaseSize = 3;
 	double thresholdSlope = 1e-5;
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
-	double pointSeparation = 7.0;
-	boolean displayProfiles = false;
+	double pointSeparation = 1.0;
+	boolean randomPointSeparation = true;
+	boolean displayProfiles = true;
 	
 	/**
 	 * Parámetros para la generación de las alineaciones aleatorias
@@ -115,7 +116,9 @@ public class TestReconstructionProfilesType_I {
 		
 		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
 
-			pointSeparation = 1.0 + rnd.nextInt(20)/2.0;
+			if(randomPointSeparation) {
+				pointSeparation = 1.0 + rnd.nextInt(19)/2.0;
+			}
 			
 			originalVerticalProfile = generateOriginalVerticalProfile();
 			if(displayProfiles) {
@@ -143,7 +146,7 @@ public class TestReconstructionProfilesType_I {
 		originalGrade1 = calculateFirstGrade(s0, z0);
 
 		// Pendiente de salida de la vertical curve, pendiente de la segunda grade
-		double g2 = -RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
+		double g2 = RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
 
 		originalVerticalCurve = calculateVerticalCurve(originalGrade1.getEndS(), originalGrade1.getEndZ(), originalGrade1.getSlope(), g2);
 
@@ -160,7 +163,7 @@ public class TestReconstructionProfilesType_I {
 
 	private GradeAlignment calculateFirstGrade(double starts, double startz) {
 		//LOG.debug("calculateFirstGrade()");
-		double g1 = RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
+		double g1 = -RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
 		double grade1Length = RandomFactory.randomUniformLength(minGradeLength, maxGradeLength, gradeLengthIncrement);
 		GradeAlignment grade1 = new GradeAlignment(starts, startz, g1, grade1Length);
 		return grade1;
@@ -210,7 +213,7 @@ public class TestReconstructionProfilesType_I {
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
 		double currentd1 = Math.abs(originalVerticalProfile.getAlign(1).getStartS() - resultVerticalProfile.getAlign(1).getStartS());
 		double currentd2 = Math.abs(originalVerticalProfile.getAlign(1).getEndS() - resultVerticalProfile.getAlign(1).getEndS());
-		System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
+		// System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;
@@ -268,7 +271,11 @@ public class TestReconstructionProfilesType_I {
 	private void showReport() {
 		// LOG.debug("showError()");
 		System.out.println("Número de ensayos: " + numberOfEssays);
-		
+		if(randomPointSeparation) {
+			System.out.println("Separación de puntos aleatoria entre 1 y 10 m.");
+		} else {
+			System.out.println("Separación de puntos: " + pointSeparation + " m");
+		}
 		System.out.println("mean ecm = " + meanecm);
 		System.out.println("min ecm = " + minEcm);
 		System.out.println("max ecm = " + maxEcm);
