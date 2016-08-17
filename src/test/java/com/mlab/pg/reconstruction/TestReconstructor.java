@@ -13,9 +13,9 @@ import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public class TestGradeProfileGenerator {
+public class TestReconstructor {
 
-	private static Logger LOG = Logger.getLogger(TestGradeProfileGenerator.class);
+	private static Logger LOG = Logger.getLogger(TestReconstructor.class);
 	
 	@BeforeClass
 	public static void beforeClass() {
@@ -32,7 +32,7 @@ public class TestGradeProfileGenerator {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints,3, 1e-5, 0.0);
+		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0);
 		VerticalProfile vprofile = generator.getVerticalProfile();
 		System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
@@ -52,7 +52,7 @@ public class TestGradeProfileGenerator {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		GradeProfileGenerator generator = new GradeProfileGenerator(originalPoints,3, 1e-5, 0.0);
+		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0);
 		VerticalProfile vprofile = generator.getVerticalProfile();
 		System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);

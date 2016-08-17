@@ -10,18 +10,19 @@ import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
- * Genera un GradeProfile a partir de un XYVectorFunction con los puntos originales {si, gi} 
- * y un PointTypeSegmentArray procesado por SegmentMaker y que solo tiene segmentos
+ * Genera un GradeProfile y un VerticalProfile a partir de un XYVectorFunction con los puntos originales {si, gi} 
+ * Para ello utiliza un PointTypeSegmentArray procesado por SegmentMaker y que solo tiene segmentos
  * del tipo Grade y VerticalCurve.
- * Ofrece un metodo getVerticalProfile() que integra el perfil de pendientes y devuelve 
- * el VerticalProfile correspondiente
+ * Ofrece una pareja de métodos getGradeProfile() que devuelve el GradeProfile reconstruido y 
+ * getVerticalProfile() que devuelve el perfil longitudinal VerticalProfile correspondiente
+ * a la integración del GradeProfile
  * 
  * @author shiguera
  *
  */
-public class GradeProfileGenerator {
+public class Reconstructor {
 
-	Logger LOG = Logger.getLogger(GradeProfileGenerator.class);
+	Logger LOG = Logger.getLogger(Reconstructor.class);
 
 	protected XYVectorFunction originalPoints;
 	protected PointTypeSegmentArray segments;
@@ -30,7 +31,7 @@ public class GradeProfileGenerator {
 	protected SegmentMaker maker;
 	
 	
-	public GradeProfileGenerator(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) {
+	public Reconstructor(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) {
 		this.originalPoints = originalPoints.clone();
 		try {
 			maker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);

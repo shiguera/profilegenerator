@@ -72,21 +72,29 @@ public class SegmentMaker {
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 		this.originalSegments = new PointTypeSegmentArray(originalPointTypes);
 
-		processBorderPoints();
+		processBorderSegments();
 	}
 
-	public void processBorderPoints() throws CloneNotSupportedException {
+	/**
+	 * Procesa los segmentos de puntos tipo BorderPoint dejando solo segmentos
+	 * del tipo Grade y del tipo VerticalCurve
+	 * 
+	 * @throws CloneNotSupportedException
+	 */
+	public void processBorderSegments() throws CloneNotSupportedException {
 		processedGradePoints = new XYVectorFunction();
 		processedPointTypes = new PointTypeArray();
 		processedSegments = new PointTypeSegmentArray();
 		
 		for(int i=0; i<originalSegments.size(); i++) {
+			
 			// El primer y último segmento los añado como están (deberían ser NULL)
 			if(i==0 || i==originalSegments.size()-1) {
 				processedSegments.add(originalSegments.get(i).clone());
 				continue;
 			}
 			PointTypeSegment currentSegment = originalSegments.get(i);
+			
 			// Los segmentos que no son Border los añado como están
 			if(currentSegment.getPointType()==PointType.NULL || currentSegment.getPointType()==PointType.GRADE ||
 					currentSegment.getPointType()==PointType.VERTICAL_CURVE) {

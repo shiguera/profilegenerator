@@ -200,7 +200,7 @@ public class TestReconstructionProfilesType_III {
 	}
 	private void doGradeProfileReconstruction() {
 		//LOG.debug("doGradeProfileReconstruction()");
-		GradeProfileGenerator generator = new GradeProfileGenerator(originalGradePoints, mobileBaseSize, thresholdSlope, z0);
+		Reconstructor generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0);
 		resultGradeProfile = generator.getGradeProfile();
 		resultGradePoints = resultGradeProfile.getSample(s0,  z0, pointSeparation, true);
 		resultVerticalProfile = generator.getVerticalProfile();

@@ -108,7 +108,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
 		System.out.println(maker.originalSegments);
 		try {
-			maker.processBorderPoints();
+			maker.processBorderSegments();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -129,7 +129,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
 		System.out.println(maker.originalSegments);
 		try {
-			maker.processBorderPoints();
+			maker.processBorderSegments();
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,7 +152,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
 		System.out.println(maker.originalSegments);
 		try {
-			maker.processBorderPoints();
+			maker.processBorderSegments();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

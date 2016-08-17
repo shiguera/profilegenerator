@@ -34,7 +34,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(2, gp, 3, 1e-5);
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.GRADE));
 	}
 	@Test
@@ -50,7 +50,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(2, gp, 3, 1e-5);
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.VERTICAL_CURVE));
 	}
 	@Test
@@ -68,7 +68,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(3, gp, 3, 1e-5);
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 
@@ -87,7 +87,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(3, gp, 3, 1e-5);
+		PointType type = ch.characterise(gp, 3, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 

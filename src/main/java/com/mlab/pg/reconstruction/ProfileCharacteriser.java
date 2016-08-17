@@ -1,8 +1,5 @@
 package com.mlab.pg.reconstruction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -67,11 +64,10 @@ public class ProfileCharacteriser {
 		return types;
 	}
 
-	private PointType findPointType(int i, XYVectorFunction gpsample,
-			int mobileBaseSize, double thresholdSlope) {
+	private PointType findPointType(int i, XYVectorFunction gpsample, int mobileBaseSize, double thresholdSlope) {
 		PointCharacteriser pch = new PointCharacteriser();
 		
-		return pch.characterise(i, gpsample, mobileBaseSize, thresholdSlope);
+		return pch.characterise(gpsample, i, mobileBaseSize, thresholdSlope);
 	}
 	
 	/**

@@ -4,7 +4,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * Caracteriza un punto de un perfil de pendientes según uno de los tipos básicos
- * definidos en PointType
+ * definidos en PointType: Grade, VerticalCurve, BorderPoint
  * 
  * @author shiguera
  *
@@ -15,7 +15,7 @@ public class PointCharacteriser {
 		
 	}
 	
-	public PointType characterise(int index, XYVectorFunction gpsample, int mobileBaseSize, double thresholdSlope) {
+	public PointType characterise(XYVectorFunction gpsample, int index, int mobileBaseSize, double thresholdSlope) {
 		double[] r1 = calculaRectaAnterior(gpsample, index, mobileBaseSize);
 		double[] r2 = calculaRectaPosterior(gpsample, index, mobileBaseSize);
 		if (r1 == null || r2 == null || r1.length <2 || r2.length <2) {
