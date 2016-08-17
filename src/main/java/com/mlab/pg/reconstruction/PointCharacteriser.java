@@ -4,7 +4,8 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * Caracteriza un punto de un perfil de pendientes según uno de los tipos básicos
- * definidos en PointType: Grade, VerticalCurve, BorderPoint
+ * definidos en PointType: Grade, VerticalCurve, BorderPoint, para unos valores
+ * determinados del mobileBaseSize y thresholdSlope 
  * 
  * @author shiguera
  *

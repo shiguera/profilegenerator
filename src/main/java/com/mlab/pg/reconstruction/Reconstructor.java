@@ -33,11 +33,9 @@ public class Reconstructor {
 	
 	public Reconstructor(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) {
 		this.originalPoints = originalPoints.clone();
-		try {
-			maker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
-		} catch(CloneNotSupportedException e) {
-			LOG.debug("Error en constructor de SegmentMaker " + e.getLocalizedMessage());
-		}
+		
+		maker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
+		
 		
 		this.segments = maker.getProcessedSegments();
 		

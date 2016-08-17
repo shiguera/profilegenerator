@@ -34,6 +34,7 @@ public class TestReconstructionProfilesType_I {
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
 	double pointSeparation = 7.0;
+	boolean randomPointSeparation = true;
 	boolean displayProfiles = false;
 	
 	/**
@@ -115,7 +116,9 @@ public class TestReconstructionProfilesType_I {
 		
 		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
 
-			pointSeparation = 1.0 + rnd.nextInt(20)/2.0;
+			if(randomPointSeparation) {
+				pointSeparation = 1.0 + rnd.nextInt(20)/2.0;
+			}
 			
 			originalVerticalProfile = generateOriginalVerticalProfile();
 			if(displayProfiles) {
@@ -210,7 +213,7 @@ public class TestReconstructionProfilesType_I {
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
 		double currentd1 = Math.abs(originalVerticalProfile.getAlign(1).getStartS() - resultVerticalProfile.getAlign(1).getStartS());
 		double currentd2 = Math.abs(originalVerticalProfile.getAlign(1).getEndS() - resultVerticalProfile.getAlign(1).getEndS());
-		System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
+		//System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;

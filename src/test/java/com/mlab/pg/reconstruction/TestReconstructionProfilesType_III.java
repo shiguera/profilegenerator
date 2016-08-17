@@ -26,7 +26,7 @@ public class TestReconstructionProfilesType_III {
 	
 	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_III.class);
 	
-	int numberOfEssays = 1;
+	int numberOfEssays = 1000;
 	int currentEssay;
 	int mobileBaseSize = 3;
 	double thresholdSlope = 1e-5;
@@ -35,7 +35,7 @@ public class TestReconstructionProfilesType_III {
 	 */
 	double pointSeparation = 1.0;
 	boolean randomPointSeparation = true;
-	boolean displayProfiles = true;
+	boolean displayProfiles = false;
 	
 	/**
 	 * Parámetros para la generación de las alineaciones aleatorias

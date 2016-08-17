@@ -64,10 +64,11 @@ public class SegmentMaker {
 	PointTypeSegmentArray processedSegments;
 	
 	
-	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope) throws CloneNotSupportedException {
+	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope) {
 		this.originalGradePoints = gradesample;
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
+		
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 		this.originalSegments = new PointTypeSegmentArray(originalPointTypes);
@@ -81,67 +82,76 @@ public class SegmentMaker {
 	 * 
 	 * @throws CloneNotSupportedException
 	 */
-	public void processBorderSegments() throws CloneNotSupportedException {
+	public void processBorderSegments() {
 		processedGradePoints = new XYVectorFunction();
 		processedPointTypes = new PointTypeArray();
 		processedSegments = new PointTypeSegmentArray();
 		
 		for(int i=0; i<originalSegments.size(); i++) {
 			
+			PointTypeSegment currentSegment = originalSegments.get(i);
+			PointTypeSegment processedSegment = new PointTypeSegment(currentSegment.getStart(), currentSegment.getEnd(), currentSegment.getPointType());
+
 			// El primer y último segmento los añado como están (deberían ser NULL)
 			if(i==0 || i==originalSegments.size()-1) {
-				processedSegments.add(originalSegments.get(i).clone());
+				processedSegments.add(processedSegment);
 				continue;
 			}
-			PointTypeSegment currentSegment = originalSegments.get(i);
 			
 			// Los segmentos que no son Border los añado como están
 			if(currentSegment.getPointType()==PointType.NULL || currentSegment.getPointType()==PointType.GRADE ||
 					currentSegment.getPointType()==PointType.VERTICAL_CURVE) {
-				processedSegments.add(currentSegment.clone());
+				processedSegments.add(processedSegment);
 				continue;
 			}
+			
 			// Proceso los segmentos enmarcados entre Grade y VC
 			PointTypeSegment previousSegment = originalSegments.get(i-1);
 			PointTypeSegment followingSegment = originalSegments.get(i+1);
 			if(currentSegment.getPointType()==PointType.BORDER_POINT && 
 					previousSegment.getPointType() != PointType.NULL && 
 					followingSegment.getPointType() != PointType.NULL) {
+		
+				// Si el border segment tiene solo un punto, lo añado al final del previous y al inicio del following
+				if(currentSegment.size() == 1) {	
+					processedSegments.get(processedSegments.size()-1).setEnd(currentSegment.getStart());
+					processedSegments.add(followingSegment);
+					processedSegments.get(processedSegments.size()-1).setStart(currentSegment.getEnd());
+					continue;
+				} else {
 					processCurrentBorderSegment(i);
-					i++;
+					i++;					
+				}
 			} else {
-				processedSegments.add(originalSegments.get(i).clone());				
+				processedSegments.add(processedSegment);				
 			}
 		}
 	}
 	
 	private void processCurrentBorderSegment(int index) {
-		PointTypeSegment previousSegment = originalSegments.get(index-1);
-		int start = previousSegment.getStart();
-		PointTypeSegment borderSegment = originalSegments.get(index);
-		int firstBorder = borderSegment.getStart();
-		int lastBorder = borderSegment.getEnd();
+		PointTypeSegment currentBorderSegment = originalSegments.get(index);
+		int startOfCurrentBorderSegment = currentBorderSegment.getStart();
+		int endOfCurrentBorderSegment = currentBorderSegment.getEnd();
 		PointTypeSegment followingSegment = originalSegments.get(index+1);
-		int end = followingSegment.getEnd();
-		XYVectorFunction originalpoints = originalGradePoints.subList(start, end+1);
-		double[] originalY = originalpoints.getYValues();
+		int endOfFollowingSegment = followingSegment.getEnd();
+		PointTypeSegment lastProcessedSegment = processedSegments.get(processedSegments.size()-1);
 		
-		// Si el border segment tiene solo un punto, lo añado al final del previous y al inicio del following
-		if(borderSegment.size() == 1) {
-			processedSegments.get(processedSegments.size()-1).setEnd(borderSegment.getStart());
-			processedSegments.add(followingSegment);
-			processedSegments.get(processedSegments.size()-1).setStart(borderSegment.getEnd());
-			return;
-		}
-		// Si el border segment tiene más de un punto buscar por ecm
+		// Si el border segment tiene más de un punto busco
+		// el que mejor ajuste da por ecm y prolongo 
+		// los segmentos anterior y posterior hasta él
+		PointTypeSegment previousSegment = originalSegments.get(index-1);
+		int startOfPreviousSegment = previousSegment.getStart();
+		XYVectorFunction originalpoints = originalGradePoints.subList(startOfPreviousSegment, endOfFollowingSegment+1);
+		double[] originalY = originalpoints.getYValues();
+				
 		double ecmmin = -1.0;
 		int ecmmin_index = -1;
-		for(int i=firstBorder; i<=lastBorder; i++) {
+		for(int i=startOfCurrentBorderSegment; i<=endOfCurrentBorderSegment; i++) {
 			XYVectorFunction adjustedPoints = new XYVectorFunction();
-			double[][] coords_r1 = originalGradePoints.getValuesAsArray(new IntegerInterval(start,i));
+			double[][] coords_r1 = originalGradePoints.getValuesAsArray(new IntegerInterval(startOfPreviousSegment,i));
 			double[] r1 = MathUtil.rectaMinimosCuadrados(coords_r1);
 			
-			double[][] coords_r2 = originalGradePoints.getValuesAsArray(new IntegerInterval(i, end));
+			double[][] coords_r2 = originalGradePoints.getValuesAsArray(new IntegerInterval(i, endOfFollowingSegment));
 			double[] r2 = MathUtil.rectaMinimosCuadrados(coords_r2);
 			
 			// Hay que ajustarlas en el último punto. Las desplazo paralelamente
@@ -155,12 +165,12 @@ public class SegmentMaker {
 			double pdte2 = r2[1];
 			r2 = MathUtil.rectaPtoPendiente(xcomun, ycomun, pdte2);
 			// Genero las coordenadas de los puntos ajustados
-			for(int j=start; j<i; j++) {
+			for(int j=startOfPreviousSegment; j<i; j++) {
 				double x = originalGradePoints.getX(j);
 				double y = r1[0] + r1[1] * x;
 				adjustedPoints.add(new double[]{x, y});
 			}
-			for(int j=i; j<=end; j++) {
+			for(int j=i; j<=endOfFollowingSegment; j++) {
 				double x = originalGradePoints.getX(j);
 				double y = r2[0] + r2[1] * x;
 				adjustedPoints.add(new double[]{x, y});

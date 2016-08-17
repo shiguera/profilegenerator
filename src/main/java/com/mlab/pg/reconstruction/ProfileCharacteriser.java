@@ -5,8 +5,10 @@ import org.apache.log4j.Logger;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
- * Caracteriza los puntos de una XYVectorFunction a partir de las pendientes 
- * de las bases móviles anterior y posterior
+ * Clasifica los puntos de una muestra de puntos de un perfil de pendientes
+ * según uno de los tipos PointType, para unos valores concretos de 
+ * mobileBaseSize y thresholdSlope.
+ * 
  *  
  * @author shiguera
  *
@@ -20,8 +22,8 @@ public class ProfileCharacteriser {
 	}
 
 	/**
-	 * Caracteriza los puntos a partir de las pendientes de las bases móviles
-	 * previa y posterior.
+	 * Caracteriza cada punto de la muestra según las pendientes de las rectas de interpolación
+	 * anterior y posterior.
 	 * El primer punto caracterizable es el de índice (mobileBaseSize-1). Los puntos anteriores los
 	 * caracteriza del mismo tipo que este</br>
 	 * El último punto caracterizable es el XYVectorFunction.size()-mobileBaseSize. Los puntos posteriores 
