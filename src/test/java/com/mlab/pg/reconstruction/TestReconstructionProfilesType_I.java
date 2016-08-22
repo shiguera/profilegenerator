@@ -32,30 +32,14 @@ public class TestReconstructionProfilesType_I {
 	
 	int numberOfEssays = 1000;
 	int currentEssay;
-	int mobileBaseSize = 3;
+	int mobileBaseSize = 6;
 	double thresholdSlope = 1e-5;
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
-	double pointSeparation = 7.0;
-	boolean randomPointSeparation = true;
+	double pointSeparation = 10.0;
+	boolean randomPointSeparation = false;
 	boolean displayProfiles = false;
-	
-	/**
-	 * Parámetros para la generación de las alineaciones aleatorias
-	 */
-	double s0 = 0.0;
-	double z0 = 1000.0;
-	double minGrade = 0.005;
-	double maxGrade = 0.1;
-	double gradeIncrement = 0.005;
-	double minGradeLength = 50.0;
-	double maxGradeLength = 1500.0;
-	double gradeLengthIncrement = 50.0;
-	double minVerticalCurveLength = 150.0;
-	double maxVerticalCurveLength = 1500.0;
-	double verticalCurveLengthIncrement = 50.0;
-	double maxKv = 60000.0;
 		
 	/**
 	 * Perfil longitudinal del tipo I generado aleatoriamente.
@@ -158,6 +142,8 @@ public class TestReconstructionProfilesType_I {
 	}
 	private void doGradeProfileReconstruction() {
 		//LOG.debug("doGradeProfileReconstruction()");
+		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
+		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
 		Reconstructor generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0);
 		resultGradeProfile = generator.getGradeProfile();
 		resultGradePoints = resultGradeProfile.getSample(s0,  z0, pointSeparation, true);
@@ -166,6 +152,8 @@ public class TestReconstructionProfilesType_I {
 	
 	private void measureErrors() {
 		//LOG.debug("measureErrors()");
+		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
+		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
 		resultVerticalProfilePoints = resultVerticalProfile.getSample(s0, originalVerticalProfile.getEndS(), pointSeparation, true);
 		originalVerticalProfilePoints = originalVerticalProfile.getSample(s0, originalVerticalProfile.getEndS(), pointSeparation, true);		
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
@@ -229,7 +217,9 @@ public class TestReconstructionProfilesType_I {
 	private void showReport() {
 		// LOG.debug("showError()");
 		System.out.println("Número de ensayos: " + numberOfEssays);
-		
+		System.out.println("Pendiente límite:: " + thresholdSlope);
+		System.out.println("Separación entre puntos: " + (!randomPointSeparation?pointSeparation:"Random"));
+		System.out.println("Longitud rectas m.c.: " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
 		System.out.println("mean ecm = " + meanecm);
 		System.out.println("min ecm = " + minEcm);
 		System.out.println("max ecm = " + maxEcm);
