@@ -1,5 +1,7 @@
 package com.mlab.pg.valign;
 
+import java.security.GeneralSecurityException;
+
 import com.mlab.pg.xyfunction.Parabole;
 
 /**
@@ -18,4 +20,9 @@ public class VerticalCurveAlignment extends AbstractVAlignment {
 		super(new Parabole(starts, startz, startTangent, kv), starts, ends);
 	}
 	
+	public double getKv() {
+		return getPolynom2().getKv();
+	}
+	
+
 }
