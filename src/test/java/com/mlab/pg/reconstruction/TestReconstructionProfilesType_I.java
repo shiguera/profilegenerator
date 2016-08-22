@@ -7,8 +7,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.random.RandomFactory;
-import com.mlab.pg.random.RandomGradeFactory;
+import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VerticalCurveAlignment;
@@ -25,6 +24,11 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 public class TestReconstructionProfilesType_I {
 	
 	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_I.class);
+	@BeforeClass
+	public static void beforeClass() {
+		PropertyConfigurator.configure("log4j.properties");	
+	
+	}
 	
 	int numberOfEssays = 1000;
 	int currentEssay;
@@ -98,11 +102,7 @@ public class TestReconstructionProfilesType_I {
 	double maxd1, mind1, meand1, maxd2, mind2, meand2;
 	
 	
-	@BeforeClass
-	public static void beforeClass() {
-		PropertyConfigurator.configure("log4j.properties");	
 	
-	}
 	
 	@Test
 	public void test() {
@@ -115,7 +115,7 @@ public class TestReconstructionProfilesType_I {
 		Random rnd = new Random();
 		
 		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
-
+			//System.out.println(currentEssay);
 			if(randomPointSeparation) {
 				pointSeparation = 1.0 + rnd.nextInt(20)/2.0;
 			}
@@ -125,9 +125,9 @@ public class TestReconstructionProfilesType_I {
 				System.out.println(originalVerticalProfile);
 			}
 
-			generateOriginalGradeProfile();
+			originalGradeProfile = generateOriginalGradeProfile();
 			
-			generateGradeSample();
+			originalGradePoints = generateGradeSample();
 			
 			doGradeProfileReconstruction();
 			if(displayProfiles) {
@@ -141,61 +141,19 @@ public class TestReconstructionProfilesType_I {
 	}
 	
 	private VerticalProfile generateOriginalVerticalProfile() {
-		//LOG.debug("generateVerticalProfile()");
-		
-		originalGrade1 = calculateFirstGrade(s0, z0);
-
-		// Pendiente de salida de la vertical curve, pendiente de la segunda grade
-		double g2 = -RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
-
-		originalVerticalCurve = calculateVerticalCurve(originalGrade1.getEndS(), originalGrade1.getEndZ(), originalGrade1.getSlope(), g2);
-
-		originalGrade2 = calculateSecondGrade(originalVerticalCurve.getEndS(), originalVerticalCurve.getEndZ(), g2);
-
-		VerticalProfile verticalProfile = new VerticalProfile();
-		verticalProfile.add(originalGrade1);
-		verticalProfile.add(originalVerticalCurve);
-		verticalProfile.add(originalGrade2);
-		
-		// System.out.println(originalVerticalProfile);
-		return verticalProfile;
+		//LOG.debug("generateVerticalProfile()");		
+		RandomProfileFactory factory = new RandomProfileFactory();
+		return factory.randomProfileType_I();
 	}
 
-	private GradeAlignment calculateFirstGrade(double starts, double startz) {
-		//LOG.debug("calculateFirstGrade()");
-		double g1 = RandomGradeFactory.randomUniformGradeSlope(minGrade, maxGrade, gradeIncrement);
-		double grade1Length = RandomFactory.randomUniformLength(minGradeLength, maxGradeLength, gradeLengthIncrement);
-		GradeAlignment grade1 = new GradeAlignment(starts, startz, g1, grade1Length);
-		return grade1;
-	}
-	private VerticalCurveAlignment calculateVerticalCurve(double s1, double z1, double g1, double g2) {
-		//LOG.debug("calculateVerticalCurve()");
-		double Kv=maxKv+1;
-		double verticalCurveLength = 0.0;
-		while(Math.abs(Kv)>maxKv) {
-			verticalCurveLength = RandomFactory.randomUniformLength(minVerticalCurveLength, maxVerticalCurveLength, verticalCurveLengthIncrement);
-			double theta = g2 - g1;
-			Kv = verticalCurveLength / theta;	
-			//LOG.debug("verticalCurveLength= " + verticalCurveLength);
-		}
-		double s2 = s1 + verticalCurveLength;
-		VerticalCurveAlignment verticalCurve = new VerticalCurveAlignment(s1, z1, g1, Kv, s2);
-		return verticalCurve;
-	}
-	private GradeAlignment calculateSecondGrade(double startS, double startZ, double slope) {
-		//LOG.debug("calculateSecondGrade()");
-		double grade2Length = RandomFactory.randomUniformLength(minGradeLength, maxGradeLength, gradeLengthIncrement);
-		GradeAlignment grade2 = new GradeAlignment(startS, startZ, slope, grade2Length);
-		return grade2;
-	}
-	private void generateOriginalGradeProfile() {
+	private VerticalGradeProfile generateOriginalGradeProfile() {
 		//LOG.debug("generateVerticalGradeProfile()");
-		originalGradeProfile = originalVerticalProfile.derivative();
+		return originalVerticalProfile.derivative();
 		//System.out.println(originalGradeProfile);
 	}
-	private void generateGradeSample() {
+	private XYVectorFunction generateGradeSample() {
 		//LOG.debug("generateGradeSample()");
-		originalGradePoints = originalGradeProfile.getSample(s0, originalGrade2.getEndS(), pointSeparation, true);
+		return originalGradeProfile.getSample(originalVerticalProfile.getStartS(), originalVerticalProfile.getEndS(), pointSeparation, true);
 		//LOG.debug("Muestra de pendientes: sep = " + pointSeparation + ", points = " + originalGradePoints.size());
 	}
 	private void doGradeProfileReconstruction() {
