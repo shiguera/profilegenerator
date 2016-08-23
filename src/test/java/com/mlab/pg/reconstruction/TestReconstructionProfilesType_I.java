@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.random.RandomProfileFactory;
+import com.mlab.pg.random.RandomProfileType_I_Factory;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VerticalCurveAlignment;
@@ -126,8 +127,8 @@ public class TestReconstructionProfilesType_I {
 	
 	private VerticalProfile generateOriginalVerticalProfile() {
 		//LOG.debug("generateVerticalProfile()");		
-		RandomProfileFactory factory = new RandomProfileFactory();
-		return factory.randomProfileType_I();
+		RandomProfileFactory factory = new RandomProfileType_I_Factory();
+		return factory.createRandomProfile();
 	}
 
 	private VerticalGradeProfile generateOriginalGradeProfile() {

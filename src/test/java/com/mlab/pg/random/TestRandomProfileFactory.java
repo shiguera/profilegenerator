@@ -23,8 +23,8 @@ public class TestRandomProfileFactory {
 	@Test
 	public void testRandomProfileType_I() {
 		LOG.debug("testRandomProfileType_I()");
-		RandomProfileFactory factory = new RandomProfileFactory();
-		VerticalProfile vp = factory.randomProfileType_I();
+		RandomProfileFactory factory = new RandomProfileType_I_Factory();
+		VerticalProfile vp = factory.createRandomProfile();
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 
@@ -67,10 +67,10 @@ public class TestRandomProfileFactory {
 				
 	}
 	@Test
-	public void testRandomProfileType_II() {
-		LOG.debug("testRandomProfileType_II()");
-		RandomProfileFactory factory = new RandomProfileFactory();
-		VerticalProfile vp = factory.randomProfileType_II();
+	public void testRandomProfileType_III() {
+		LOG.debug("testRandomProfileType_III()");
+		RandomProfileFactory factory = new RandomProfileType_III_Factory();
+		VerticalProfile vp = factory.createRandomProfile();
 		Assert.assertNotNull(vp);
 		Assert.assertEquals(3, vp.size());
 

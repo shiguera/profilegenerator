@@ -1,4 +1,4 @@
-package com.mlab.pg.reconstruction;
+package com.mlab.pg.random;
 
 import java.util.Random;
 
@@ -7,8 +7,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.random.RandomProfileType_III_Factory;
+import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -20,10 +19,11 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class TestReconstructionProfilesType_III {
+public class EssayFactory {
 	
-	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_III.class);
+	private static Logger LOG = Logger.getLogger(EssayFactory.class);
 	
+	RandomProfileFactory profileFactory;
 	/**
 	 * Número de ensayos
 	 */
@@ -39,7 +39,7 @@ public class TestReconstructionProfilesType_III {
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
-	double pointSeparation = 4.5;
+	double pointSeparation = 5.0;
 	/**
 	 * Si es true, en cada ensayo se genera una separación de puntos aleatoria entre 1 y 10 metros
 	 */
@@ -47,7 +47,7 @@ public class TestReconstructionProfilesType_III {
 	/**
 	 * Número de puntos de las rectas de interpolación
 	 */
-	int mobileBaseSize = 8;
+	int mobileBaseSize = 3;
 	/**
 	 * Pendiente límite de las rectas consideradas horizontales
 	 */
@@ -103,15 +103,14 @@ public class TestReconstructionProfilesType_III {
 	double[] maxd, mind, meand; // Valor promedio de las distancias para cada alineación
 	
 	
-	@BeforeClass
-	public static void beforeClass() {
-		PropertyConfigurator.configure("log4j.properties");	
 	
+	public EssayFactory(RandomProfileFactory profilefactory) {
+		this.profileFactory = profilefactory;
 	}
 	
-	@Test
-	public void test() {
-		LOG.debug("test()");
+	
+	public void doEssays() {
+		//LOG.debug("work()");
 		
 		Random rnd = new Random();
 		
@@ -157,8 +156,7 @@ public class TestReconstructionProfilesType_III {
 	 */
 	private VerticalProfile generateOriginalVerticalProfile() {
 		//LOG.debug("generateVerticalProfile()");
-		RandomProfileFactory factory = new RandomProfileType_III_Factory();
-		return factory.createRandomProfile();
+		return profileFactory.createRandomProfile();
 	}
 	/**
 	 * Generación del perfil de pendientes por derivación del perfil longitudinal
@@ -271,6 +269,147 @@ public class TestReconstructionProfilesType_III {
 		for(int i=1; i < alignmentCount; i++) {
 			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \n", i, meand[i], maxd[i], mind[i]);
 		}
+	}
+
+
+	public RandomProfileFactory getProfileFactory() {
+		return profileFactory;
+	}
+
+
+	public void setProfileFactory(RandomProfileFactory profileFactory) {
+		this.profileFactory = profileFactory;
+	}
+
+
+	public int getEssaysCount() {
+		return essaysCount;
+	}
+
+
+	public void setEssaysCount(int essaysCount) {
+		this.essaysCount = essaysCount;
+	}
+
+
+	public boolean isDisplayProfiles() {
+		return displayProfiles;
+	}
+
+
+	public void setDisplayProfiles(boolean displayProfiles) {
+		this.displayProfiles = displayProfiles;
+	}
+
+
+	public boolean isRandomPointSeparation() {
+		return randomPointSeparation;
+	}
+
+
+	public void setRandomPointSeparation(boolean randomPointSeparation) {
+		this.randomPointSeparation = randomPointSeparation;
+	}
+
+
+	public double getAlertEcm() {
+		return alertEcm;
+	}
+
+
+	public void setAlertEcm(double alertEcm) {
+		this.alertEcm = alertEcm;
+	}
+
+
+	public double getPointSeparation() {
+		return pointSeparation;
+	}
+	public void setPointSeparation(double separation) {
+		this.pointSeparation = separation;
+	}
+
+	public int getMobileBaseSize() {
+		return mobileBaseSize;
+	}
+	public void setMobileBaseSize(int mobilebasesize) {
+		this.mobileBaseSize = mobilebasesize;
+	}
+
+	public double getThresholdSlope() {
+		return thresholdSlope;
+	}
+
+	public void setThresholdSlope(double thresholdslope) {
+		this.thresholdSlope = thresholdslope;
+	}
+	public VerticalProfile getOriginalVerticalProfile() {
+		return originalVerticalProfile;
+	}
+
+
+	public XYVectorFunction getOriginalVerticalProfilePoints() {
+		return originalVerticalProfilePoints;
+	}
+
+
+	public VerticalGradeProfile getOriginalGradeProfile() {
+		return originalGradeProfile;
+	}
+
+
+	public XYVectorFunction getOriginalGradePoints() {
+		return originalGradePoints;
+	}
+
+
+	public VerticalGradeProfile getResultGradeProfile() {
+		return resultGradeProfile;
+	}
+
+
+	public XYVectorFunction getResultGradePoints() {
+		return resultGradePoints;
+	}
+
+
+	public VerticalProfile getResultVerticalProfile() {
+		return resultVerticalProfile;
+	}
+
+
+	public XYVectorFunction getResultVerticalProfilePoints() {
+		return resultVerticalProfilePoints;
+	}
+
+
+	public double getMaxEcm() {
+		return maxEcm;
+	}
+
+
+	public double getMinEcm() {
+		return minEcm;
+	}
+
+
+	public double getMeanEcm() {
+		return meanEcm;
+	}
+
+
+	public double[] getMaxd() {
+		return maxd;
+	}
+
+
+	public double[] getMind() {
+		return mind;
+	}
+
+
+	public double[] getMeand() {
+		return meand;
 	}
 	
 
