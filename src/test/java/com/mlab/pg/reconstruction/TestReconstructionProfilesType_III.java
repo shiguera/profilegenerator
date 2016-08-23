@@ -7,12 +7,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.random.RandomFactory;
-import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.valign.GradeAlignment;
-import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -27,55 +23,83 @@ public class TestReconstructionProfilesType_III {
 	
 	private static Logger LOG = Logger.getLogger(TestReconstructionProfilesType_III.class);
 	
-	int numberOfEssays = 1000;
+	/**
+	 * Número de ensayos
+	 */
+	int essaysCount = 5000;
+	/**
+	 * Si es true, se muestran en pantalla los perfiles longitudinales y de pendientes
+	 */
+	boolean displayProfiles = false;
+	/**
+	 * Ensayo actual durante la ejecución
+	 */
 	int currentEssay;
-	int mobileBaseSize = 3;
-	double thresholdSlope = 1e-5;
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
-	double pointSeparation = 1.0;
+	double pointSeparation = 4.5;
+	/**
+	 * Si es true, en cada ensayo se genera una separación de puntos aleatoria entre 1 y 10 metros
+	 */
 	boolean randomPointSeparation = false;
-	boolean displayProfiles = false;
+	/**
+	 * Número de puntos de las rectas de interpolación
+	 */
+	int mobileBaseSize = 8;
+	/**
+	 * Pendiente límite de las rectas consideradas horizontales
+	 */
+	double thresholdSlope = 1e-5;
 		
 	/**
 	 * Perfil longitudinal del tipo I generado aleatoriamente.
 	 * Consta de una UpGrade, una CrestCurve y una DownGrade 
 	 */
 	VerticalProfile originalVerticalProfile; 
+	XYVectorFunction originalVerticalProfilePoints;
+	/**
+	 * Perfil de pendientes obtenido de originalVerticalProfile por derivación
+	 */
+	VerticalGradeProfile originalGradeProfile;
+	/**
+	 * Muestra de puntos (Si, gi) a la que se aplicará el algoritmo de reconstrucción
+	 */
+	XYVectorFunction originalGradePoints;
+	/**
+	 * Perfil de pendientes reconstruido a partir de la muestra de puntos (si, gi)
+	 */
+	VerticalGradeProfile resultGradeProfile;
+	XYVectorFunction resultGradePoints;
 
 	/**
 	 * Perfil longitudinal resultado de la reconstrucción
 	 */
 	VerticalProfile resultVerticalProfile;
+	XYVectorFunction resultVerticalProfilePoints;
+
 	/**
-	 * Perfil de pendientes correspondiente al originalVerticalProfile
-	 */
-	VerticalGradeProfile originalGradeProfile;
-	/**
-	 * Perfil de pendientes reconstruido a partir de la muestra de puntos (si, gi)
-	 */
-	VerticalGradeProfile resultGradeProfile;
-	/**
-	 * Muestra de puntos (Si, gi) a la que se aplicará el algoritmo de reconstrucción
-	 */
-	XYVectorFunction originalGradePoints;
-	
-	XYVectorFunction resultGradePoints, originalVerticalProfilePoints, resultVerticalProfilePoints;
-	
-	/**
-	 * Errores cuadráticos cometidos en la reconstrucción
+	 * Errores cuadráticos de cada ensayo cometidos en la reconstrucción.
+	 * Es el error cuadrático medio entre los puntos de la muestra original
+	 * del perfil de pendientes y los puntos del perfil de pendientes
+	 * reconstruido.
 	 */
 	double[] ecm;
-	double maxEcm, minEcm, meanecm;
-	
 	/**
-	 * d1 es la distancia en valor absoluto desde el punto de entrada a la vertical curve
-	 * en el perfil original y el reconstruido.
-	 * d2 es la distancia en el punto de salida de la vertical curve
+	 * Error cuadrático máximo, mínimo y medio en la serie de ensayos
 	 */
-	double[] d1, d2;
-	double maxd1, mind1, meand1, maxd2, mind2, meand2;
+	double maxEcm, minEcm, meanEcm;
+	/**
+	 * Valor del ecm por encima del cual muestra un mensaje log con el ensayo afectado
+	 */
+	double alertEcm = 1.0;
+	/**
+	 * d es la distancia horizontal en valor absoluto desde el punto de entrada a cada alineación
+	 * en el perfil original y el reconstruido.
+	 */
+	int alignmentCount;
+	double[][] d; // Una distancia para cada ensayo y cada alineación
+	double[] maxd, mind, meand; // Valor promedio de las distancias para cada alineación
 	
 	
 	@BeforeClass
@@ -88,49 +112,78 @@ public class TestReconstructionProfilesType_III {
 	public void test() {
 		LOG.debug("test()");
 		
-		ecm = new double[numberOfEssays];
-		d1 = new double[numberOfEssays];
-		d2 = new double[numberOfEssays];
-		
 		Random rnd = new Random();
 		
-		for(currentEssay=0; currentEssay< numberOfEssays; currentEssay++) {
+		ecm = new double[essaysCount];
+		d = new double[essaysCount][];
+				
+		for(currentEssay=0; currentEssay < essaysCount; currentEssay++) {
 
 			if(randomPointSeparation) {
 				pointSeparation = 1.0 + rnd.nextInt(19)/2.0;
 			}
 			
 			originalVerticalProfile = generateOriginalVerticalProfile();
+			alignmentCount = originalVerticalProfile.size();
+			d[currentEssay] = new double[alignmentCount];
+			if(currentEssay == 0) {
+				meand = new double[alignmentCount];
+				maxd = new double[alignmentCount];
+				mind = new double[alignmentCount];
+			}
+			
 			if(displayProfiles) {
 				System.out.println(originalVerticalProfile);
 			}
 
-			originalGradeProfile = originalVerticalProfile.derivative();
+			originalGradeProfile = generateGradeProfile(originalVerticalProfile);
 			
-			originalGradePoints = generateGradeSample();
+			originalGradePoints = generateGradeSample(originalGradeProfile, pointSeparation);
 			
 			doGradeProfileReconstruction();
 			if(displayProfiles) {
 				System.out.println(resultVerticalProfile);
 			}
 			
-			measureErrors();
+			measureEssayErrors();
 		}
-
+		doAverages();
 		showReport();
 	}
-	
+	/**
+	 * Generación del perfil longitudinal aleatorio
+	 * @return
+	 */
 	private VerticalProfile generateOriginalVerticalProfile() {
 		//LOG.debug("generateVerticalProfile()");
 		RandomProfileFactory factory = new RandomProfileFactory();
 		return factory.randomProfileType_II();
 	}
-
-	private XYVectorFunction generateGradeSample() {
-		//LOG.debug("generateGradeSample()");
-		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
-		return originalGradeProfile.getSample(s0, originalGradeProfile.getEndS(), pointSeparation, true);
+	/**
+	 * Generación del perfil de pendientes por derivación del perfil longitudinal
+	 * @param vprofile
+	 * @return
+	 */
+	private VerticalGradeProfile generateGradeProfile(VerticalProfile vprofile) {
+		return vprofile.derivative();
 	}
+
+	/**
+	 * Genera la muestra de puntos (Si, Gi) con la que se hará la reconstrucción
+	 * @param gradeProfile
+	 * @param pointseparation
+	 * @return
+	 */
+	private XYVectorFunction generateGradeSample(VerticalGradeProfile gradeProfile, double pointseparation) {
+		//LOG.debug("generateGradeSample()");
+		double starts = gradeProfile.getStartS();
+		double ends = gradeProfile.getEndS();
+		return gradeProfile.getSample(starts, ends, pointseparation, true);
+	}
+
+	/**
+	 * Reconstrucción propiamente dicha
+	 */
 	private void doGradeProfileReconstruction() {
 		//LOG.debug("doGradeProfileReconstruction()");
 		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
@@ -141,21 +194,25 @@ public class TestReconstructionProfilesType_III {
 		resultVerticalProfile = generator.getVerticalProfile();
 	}
 	
-	private void measureErrors() {
+	private void measureEssayErrors() {
 		//LOG.debug("measureErrors()");
-		resultVerticalProfilePoints = resultVerticalProfile.getSample(originalVerticalProfile.getStartS(), originalVerticalProfile.getEndS(), pointSeparation, true);
-		originalVerticalProfilePoints = originalVerticalProfile.getSample(originalVerticalProfile.getStartS(), originalVerticalProfile.getEndS(), pointSeparation, true);		
+		double starts = originalVerticalProfile.getStartS();
+		double ends = originalVerticalProfile.getEndS();
+		resultVerticalProfilePoints = resultVerticalProfile.getSample(starts, ends, pointSeparation, true);
+		originalVerticalProfilePoints = originalVerticalProfile.getSample(starts, ends, pointSeparation, true);		
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
-		double currentd1 = Math.abs(originalVerticalProfile.getAlign(1).getStartS() - resultVerticalProfile.getAlign(1).getStartS());
-		double currentd2 = Math.abs(originalVerticalProfile.getAlign(1).getEndS() - resultVerticalProfile.getAlign(1).getEndS());
+		double[] currentd = new double[alignmentCount];
+		for(int i=0; i<alignmentCount; i++) {
+			currentd[i] = Math.abs(originalVerticalProfile.getAlign(i).getStartS() - resultVerticalProfile.getAlign(i).getStartS());
+		}
 		// System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;
-			maxd1 = currentd1;
-			mind1 = currentd1;
-			maxd2 = currentd2;
-			mind2 = currentd2;
+			for(int i=0; i<alignmentCount; i++) {
+				maxd[i] = currentd[i];
+				mind[i] = currentd[i];
+			}	
 		} else {
 			if (currentEcm > maxEcm) {
 				maxEcm = currentEcm;
@@ -163,64 +220,57 @@ public class TestReconstructionProfilesType_III {
 			if(currentEcm < minEcm) {
 				minEcm = currentEcm;
 			}
-			if(currentd1 > maxd1) {
-				maxd1 = currentd1;
-			}
-			if(currentd1 < mind1) {
-				mind1 = currentd1;
-			}
-			if(currentd2 > maxd2) {
-				maxd2 = currentd2;
-			}
-			if(currentd2 < mind2) {
-				mind2 = currentd2;
-			}
+			for(int i=0; i<alignmentCount; i++) {
+				if(currentd[i] > maxd[i]) {
+					maxd[i] = currentd[i];
+					System.out.println(maxd[i]);
+				}
+				if(currentd[i] < mind[i]) {
+					mind[i] = currentd[i];
+				}
+			}	
 		}
 		ecm[currentEssay] = currentEcm;
-		if(currentEcm>0.01) {
-			System.out.println(originalVerticalProfile);
-			System.out.println(resultVerticalProfile);
+		if(currentEcm > alertEcm) {
+			LOG.warn("Essay number " +currentEssay + "; ECM = " + currentEcm); 
 		}
-		d1[currentEssay] = currentd1;
-		d2[currentEssay] = currentd2;
-		
-		meanecm = 0.0;
-		for(int i=0; i<ecm.length;i++) {
-			meanecm+=ecm[i];
+		for(int i=0; i < alignmentCount; i++) {
+			d[currentEssay][i] = currentd[i];
 		}
-		meanecm = meanecm / ecm.length;
 		
-		meand1 = 0.0;
-		for(int i=0; i<d1.length;i++) {
-			meand1+=d1[i];
+		
+	}
+	private void doAverages() {
+		meanEcm = 0.0;
+		for(int i=0; i < essaysCount;i++) {
+			meanEcm += ecm[i];
 		}
-		meand1 = meand1 / d1.length;
+		meanEcm = meanEcm / essaysCount;
 		
-		meand2 = 0.0;
-		for(int i=0; i<d2.length;i++) {
-			meand2+=d2[i];
-		}
-		meand2 = meand2 / d2.length;
-		
+		// Comienza en 1, pues el inicio de la primera alineación no se cuenta
+		for(int i=1; i < alignmentCount; i++) {
+			meand[i] = 0.0;
+			for(int j=0; j < essaysCount; j++) {
+				meand[i] += d[j][i];
+			}
+			meand[i] = meand[i] / essaysCount;
+		}		
 	}
 	private void showReport() {
 		// LOG.debug("showError()");
-		System.out.println("Número de ensayos: " + numberOfEssays);
-		System.out.println("Pendiente límite:: " + thresholdSlope);
-		System.out.println("Separación entre puntos: " + (!randomPointSeparation?pointSeparation:"Random"));
-		System.out.println("Longitud rectas m.c.: " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
-		System.out.println("mean ecm = " + meanecm);
-		System.out.println("min ecm = " + minEcm);
-		System.out.println("max ecm = " + maxEcm);
+		System.out.println("Número de ensayos            : " + essaysCount);
+		System.out.println("Separación entre puntos      : " + (!randomPointSeparation?pointSeparation:"Random"));
+		System.out.println("Longitud rectas interpolación: " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
+		System.out.println("Pendiente límite             : " + thresholdSlope);
+		System.out.println("---------------------------------------------------------------------------------------------------------");
+
+		System.out.format("Averages  %12s \t %12s \t %12s \n", "meanecm", "maxecm", "minecm");
+		System.out.format("          %12.8f \t %12.8f \t %12.8f \n", meanEcm, maxEcm, minEcm);
 		
-		System.out.println("mean d1 = " + meand1);
-		System.out.println("min d1 = " + mind1);
-		System.out.println("max d1 = " + maxd1);
-
-		System.out.println("mean d2 = " + meand2);
-		System.out.println("min d2 = " + mind2);
-		System.out.println("max d2 = " + maxd2);
-
+		System.out.format("Point %12s \t %12s \t %12s \n", "meand", "maxd", "mind");
+		for(int i=1; i < alignmentCount; i++) {
+			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \n", i, meand[i], maxd[i], mind[i]);
+		}
 	}
 	
 
