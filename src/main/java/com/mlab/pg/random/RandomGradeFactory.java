@@ -1,5 +1,6 @@
 package com.mlab.pg.random;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -156,6 +157,24 @@ public class RandomGradeFactory {
 		return align;
 	}
 
+	public static double[] generateThreeOrderedSlopes(double minSlope, double maxSlope, double slopeIncrement) {
+		double[] slopes = new double[3];
+		slopes[0] = RandomGradeFactory.randomUniformGradeSlope(minSlope, maxSlope, slopeIncrement);
+		while(true) {
+			slopes[1] = RandomGradeFactory.randomUniformGradeSlope(minSlope, maxSlope, slopeIncrement);
+			if(slopes[1] != slopes[0]) {
+				break;
+			}
+		}
+		while(true) {
+			slopes[2] = RandomGradeFactory.randomUniformGradeSlope(minSlope, maxSlope, slopeIncrement);			
+			if((slopes[2] != slopes[0]) && (slopes[2] != slopes[1])) {
+				break;
+			}
+		}
+		Arrays.sort(slopes);
+		return slopes;
+	}
 
 
 }

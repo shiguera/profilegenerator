@@ -67,6 +67,67 @@ public class TestRandomProfileFactory {
 				
 	}
 	@Test
+	public void testRandomProfileType_IIa() {
+		LOG.debug("testRandomProfileType_IIa()");
+		RandomProfileFactory factory = new RandomProfileType_IIa_Factory();
+		VerticalProfile vp = factory.createRandomProfile();
+		Assert.assertNotNull(vp);
+		Assert.assertEquals(4, vp.size());
+
+		GradeAlignment grade1 = (GradeAlignment)vp.getAlign(0);
+		Assert.assertNotNull(grade1);
+		Assert.assertTrue(grade1.getClass().isAssignableFrom(GradeAlignment.class));
+		Assert.assertEquals(factory.getS0(), grade1.getStartS(), 0.001);
+		Assert.assertEquals(factory.getZ0(), grade1.getStartZ(), 0.001);
+		Assert.assertTrue(grade1.getLength() >= factory.getMinGradeLength());
+		Assert.assertTrue(grade1.getLength() <= factory.getMaxGradeLength());		
+		Assert.assertTrue(grade1.getSlope()>0);
+		Assert.assertTrue(grade1.getSlope() >= factory.getMinSlope());
+		Assert.assertTrue(grade1.getSlope() <= factory.getMaxSlope());
+		
+		VerticalCurveAlignment vc1 = (VerticalCurveAlignment)vp.getAlign(1);
+		Assert.assertNotNull(vc1);
+		Assert.assertTrue(vc1.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		Assert.assertEquals(grade1.getEndS(), vc1.getStartS(), 0.001);
+		Assert.assertEquals(grade1.getEndZ(), vc1.getStartZ(), 0.001);
+		Assert.assertEquals(grade1.getEndTangent(), vc1.getStartTangent(), 0.001);
+		Assert.assertTrue(vc1.getLength() > 0);
+		Assert.assertTrue(vc1.getLength() >=  factory.getMinVerticalCurveLength());
+		Assert.assertTrue(vc1.getLength() <=  factory.getMaxVerticalCurveLength());
+		Assert.assertTrue(Math.abs(vc1.getKv()) >= factory.getMinKv());
+		Assert.assertTrue(Math.abs(vc1.getKv()) <= factory.getMaxKv());
+		Assert.assertTrue(Math.abs(vc1.getEndTangent()) <= factory.getMaxSlope());
+		Assert.assertTrue(Math.abs(vc1.getEndTangent()) >= factory.getMinSlope());
+
+		VerticalCurveAlignment vc2 = (VerticalCurveAlignment)vp.getAlign(2);
+		Assert.assertNotNull(vc2);
+		Assert.assertTrue(vc2.getClass().isAssignableFrom(VerticalCurveAlignment.class));
+		Assert.assertEquals(vc1.getEndS(), vc2.getStartS(), 0.001);
+		Assert.assertEquals(vc1.getEndZ(), vc2.getStartZ(), 0.001);
+		Assert.assertEquals(vc1.getEndTangent(), vc2.getStartTangent(), 0.001);
+		Assert.assertTrue(vc2.getLength() > 0);
+		Assert.assertTrue(vc2.getLength() >=  factory.getMinVerticalCurveLength());
+		Assert.assertTrue(vc2.getLength() <=  factory.getMaxVerticalCurveLength());
+		Assert.assertTrue(Math.abs(vc2.getKv()) >= factory.getMinKv());
+		Assert.assertTrue(Math.abs(vc2.getKv()) <= factory.getMaxKv());
+		Assert.assertTrue(Math.abs(vc2.getEndTangent()) <= factory.getMaxSlope());
+		Assert.assertTrue(Math.abs(vc2.getEndTangent()) >= factory.getMinSlope());
+
+		GradeAlignment grade2 = (GradeAlignment) vp.getAlign(3);
+		Assert.assertNotNull(grade2);
+		Assert.assertTrue(grade1.getClass().isAssignableFrom(GradeAlignment.class));
+		Assert.assertEquals(vc2.getEndS(), grade2.getStartS(), 0.001);
+		Assert.assertEquals(vc2.getEndZ(), grade2.getStartZ(), 0.001);
+		Assert.assertEquals(vc2.getEndTangent(), grade2.getSlope(), 0.001);		
+		Assert.assertTrue(grade2.getLength() >= factory.getMinGradeLength());
+		Assert.assertTrue(grade2.getLength() <= factory.getMaxGradeLength());		
+		Assert.assertTrue(grade2.getSlope() > 0);
+		Assert.assertTrue(Math.abs(grade2.getSlope()) >= factory.getMinSlope());
+		Assert.assertTrue(Math.abs(grade2.getSlope()) <= factory.getMaxSlope());
+				
+	}
+
+	@Test
 	public void testRandomProfileType_III() {
 		LOG.debug("testRandomProfileType_III()");
 		RandomProfileFactory factory = new RandomProfileType_III_Factory();

@@ -21,6 +21,19 @@ public class TestRandomGradeFactory {
 	}
 	
 	@Test
+	public void testGenerateThreeOrderedSlopes() {
+		LOG.debug("testGenerateThreeOrderedSlopes()");
+		RandomProfileType_I_Factory factory = new RandomProfileType_I_Factory();
+		for(int i=0; i<100; i++) {
+			double[] slopes = RandomGradeFactory.generateThreeOrderedSlopes(factory.getMinSlope(), factory.getMaxSlope(), factory.getSlopeIncrement());
+			Assert.assertTrue(slopes[0] < slopes[1]);
+			Assert.assertTrue(slopes[1] < slopes[2]);
+			Assert.assertTrue(slopes[0] >= factory.getMinSlope());
+			Assert.assertTrue(slopes[2] <= factory.getMaxSlope());			
+		}
+	}
+	
+	@Test
 	public void testGaussianSlope() {
 		LOG.debug("testGaussianSlope()");
 		double mean = 0.03;
