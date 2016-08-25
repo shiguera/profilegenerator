@@ -1,4 +1,4 @@
-package com.mlab.pg.random;
+package com.mlab.pg;
 
 import java.util.Random;
 
@@ -7,6 +7,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;

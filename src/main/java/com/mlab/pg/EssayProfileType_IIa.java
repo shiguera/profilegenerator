@@ -3,7 +3,6 @@ package com.mlab.pg;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.mlab.pg.random.EssayFactory;
 import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.random.RandomProfileType_IIa_Factory;
 
