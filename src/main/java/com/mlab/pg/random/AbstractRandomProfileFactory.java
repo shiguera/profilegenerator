@@ -3,6 +3,7 @@ package com.mlab.pg.random;
 import java.util.Random;
 
 import com.mlab.pg.valign.GradeAlignment;
+import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
@@ -31,10 +32,10 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 	double minSlope = 0.005;
 	double maxSlope = 0.1;
 	double slopeIncrement = 0.005;
-	double minGradeLength = 50.0;
+	double minGradeLength = 100.0;
 	double maxGradeLength = 1500.0;
-	double gradeLengthIncrement = 50.0;
-	double minVerticalCurveLength = 150.0;
+	double gradeLengthIncrement = 100.0;
+	double minVerticalCurveLength = 100.0;
 	protected double maxVerticalCurveLength = 1500.0;
 	protected double verticalCurveLengthIncrement = 50.0;
 	protected double maxKv = 60000.0;
@@ -71,14 +72,14 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 		//LOG.debug("randomVerticalCurve()");
 		double Kv=maxKv+1;
 		double verticalCurveLength = 0.0;
-		while(Math.abs(Kv)>maxKv) {
+		while(Math.abs(Kv)>maxKv || Math.abs(Kv) < minKv) {
 			verticalCurveLength = RandomFactory.randomUniformLength(minVerticalCurveLength, maxVerticalCurveLength, verticalCurveLengthIncrement);
 			double theta = g2 - g1;
-			Kv = verticalCurveLength / theta;	
+			Kv = Math.rint(verticalCurveLength / theta);	
 			//LOG.debug("verticalCurveLength= " + verticalCurveLength);
 		}
-		double s2 = s1 + verticalCurveLength;
-		VerticalCurveAlignment verticalCurve = new VerticalCurveAlignment(s1, z1, g1, Kv, s2);
+		// double s2 = s1 + verticalCurveLength;
+		VerticalCurveAlignment verticalCurve = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(s1, z1, g1, Kv, g2);
 		return verticalCurve;
 	}
 	

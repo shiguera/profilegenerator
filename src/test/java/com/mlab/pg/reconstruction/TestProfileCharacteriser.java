@@ -1,7 +1,5 @@
 package com.mlab.pg.reconstruction;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
@@ -12,7 +10,7 @@ import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.random.RandomGradeFactory;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.GradeProfileAlignment;
-import com.mlab.pg.valign.VAlignment;
+import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -38,23 +36,22 @@ public class TestProfileCharacteriser {
 		LOG.debug("testGradeAlignment()");
 		DesignSpeed dspeed = RandomFactory.randomDesignSpeed();
 		GradeAlignment grade = RandomGradeFactory.randomGradeAlignment(dspeed, 100.0, 1000.0);
-		System.out.println(VAlignment.CABECERA);
-		System.out.println(grade.toString());
+		//System.out.println(VAlignment.CABECERA);
+		//System.out.println(grade.toString());
 		
 		GradeProfileAlignment galign = grade.derivative();
-		System.out.println(VAlignment.CABECERA);
-		System.out.println(galign.toString());
+		//System.out.println(VAlignment.CABECERA);
+		//System.out.println(galign.toString());
 	
 		XYVectorFunction gpsample = galign.getSample(galign.getStartS(), galign.getEndS(), 10);
-		System.out.println(gpsample.size());
+		//System.out.println(gpsample.size());
 		int mobileBaseSize = 5;
 		double thresholdSlope = 1e-5;
 		
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
-		List<PointType> types = characteriser.characterise(gpsample, mobileBaseSize, thresholdSlope);
+		PointTypeArray types = characteriser.characterise(gpsample, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(types);
 		Assert.assertEquals(gpsample.size(), types.size());
-		
 		for (int i=0; i<mobileBaseSize-1; i++) {
 			Assert.assertEquals(PointType.GRADE, types.get(i));
 		}
@@ -76,6 +73,15 @@ public class TestProfileCharacteriser {
 		double s0 = 100.0;
 		double z0 = 1000.0;
 		VerticalProfile verticalprofile = RandomFactory.randomVerticalProfileType_I(dspeed, s0, z0);
-		System.out.println(verticalprofile.toString());
+		//System.out.println(verticalprofile.toString());
+		VerticalGradeProfile gradeProfile = verticalprofile.derivative();
+		XYVectorFunction sample =gradeProfile.getSample(s0, gradeProfile.getEndS(), 5, true);
+		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		PointTypeArray types = characteriser.characterise(sample, 3, 1e-6);
+		Assert.assertNotNull(types);
+		Assert.assertEquals(sample.size(), types.size());
+		for(int i=0; i<types.size(); i++) {
+			Assert.assertTrue(types.get(i) != PointType.NULL);
+		}
 	}
 }

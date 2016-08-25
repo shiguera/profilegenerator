@@ -121,10 +121,6 @@ public class TestPointCharacteriser {
 		
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		double[] r1 = PointCharacteriser.calculaRectaAnterior(gp, 10, 3);
-		System.out.println("Recta anterior: " + r1[0] + " " +r1[1]);
-		double[] r2 = PointCharacteriser.calculaRectaPosterior(gp, 10, 3);
-		System.out.println("Recta posterior: " + r2[0] + " " +r2[1]);
 		
 	}
 }

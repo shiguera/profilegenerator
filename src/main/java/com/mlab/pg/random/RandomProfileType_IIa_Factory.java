@@ -39,8 +39,16 @@ public class RandomProfileType_IIa_Factory extends AbstractRandomProfileFactory 
 		// Generar crest 2
 		double s2 = vc1.getEndS();
 		double z2 = vc1.getEndZ();
-		double g3 = slopes[2];
-		VerticalCurveAlignment vc2 = randomVerticalCurve(s2, z2, g2, g3);
+		double g3 = slopes[0];
+		double Kv1 = Math.abs(vc1.getKv());
+		double Kv2 = Kv1;
+		VerticalCurveAlignment vc2 =  null;
+		// Fuerzo una diferencia de al menos el 10% en el valor de las Kv
+		while(Math.abs((Math.abs(Kv2)- Kv1)/Kv1) < 0.1) {
+			//System.out.println(Kv1 + ", " + Kv2);
+			vc2 = randomVerticalCurve(s2, z2, g2, g3);
+			Kv2 = vc2.getKv();
+		}
 		vp.add(vc2);
 
 		// Generar alineación grade de salida

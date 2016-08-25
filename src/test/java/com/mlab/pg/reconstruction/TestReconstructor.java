@@ -23,7 +23,7 @@ public class TestReconstructor {
 	}
 	
 	@Test
-	public void test1() {
+	public void test1() throws Exception {
 		LOG.debug("test1()");
 		VerticalProfile profile = getSampleProfile1();
 		double starts = profile.getStartS();
@@ -43,7 +43,7 @@ public class TestReconstructor {
 		System.out.println("ecm = "  + MathUtil.ecm(originalVProfilePoints.getYValues(), processedPoints.getYValues()));
 	}
 	@Test
-	public void test2() {
+	public void test2() throws Exception {
 		LOG.debug("test2()");
 		VerticalProfile profile = getSampleProfile2();
 		double starts = profile.getStartS();

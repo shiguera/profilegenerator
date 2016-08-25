@@ -83,7 +83,7 @@ public class PointCharacteriser {
  	 * 
 	 * @return double[] con la recta en la forma y = a[0] + a[1]x
 	 */
-	public static double[] calculaRectaAnterior(XYVectorFunction function, int last, int straightsize) {
+	private static double[] calculaRectaAnterior(XYVectorFunction function, int last, int straightsize) {
 		if(function.size()<last+1) {
 			return null;
 		}
@@ -103,7 +103,7 @@ public class PointCharacteriser {
 	 * 
 	 * @return double[] con la recta en la forma y = a[0] + a[1]x
 	 */
-	public static double[] calculaRectaPosterior(XYVectorFunction function, int first, int straightsize) {
+	private static double[] calculaRectaPosterior(XYVectorFunction function, int first, int straightsize) {
 		int last = first + straightsize-1;
 		if(function.size()<last+1) {
 			return null;

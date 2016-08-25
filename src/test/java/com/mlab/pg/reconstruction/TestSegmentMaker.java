@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.valign.GradeAlignment;
+import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -30,7 +31,7 @@ public class TestSegmentMaker {
 	}
 	
 	@Test
-	public void testGrade() throws CloneNotSupportedException {
+	public void testGrade() throws NullTypeException {
 		LOG.debug("testGrade()");
 		List<double[]> pts = new ArrayList<double[]>();
 		pts.add(new double[] {0.0, 0.04});
@@ -54,15 +55,15 @@ public class TestSegmentMaker {
 		for(PointType type : maker.getOriginalPointTypes()) {
 			System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getOriginalSegments());
-		for(PointTypeSegment segment : maker.getOriginalSegments()) {
+		Assert.assertNotNull(maker.getOriginalSegmentation());
+		for(TypeInterval segment : maker.getOriginalSegmentation()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(1, maker.getOriginalSegments().size());
+		Assert.assertEquals(1, maker.getOriginalSegmentation().size());
 	}
 
 	@Test
-	public void testVerticalCurve() throws CloneNotSupportedException {
+	public void testVerticalCurve() throws NullTypeException {
 		LOG.debug("testVerticalCurve()");
 		List<double[]> pts = new ArrayList<double[]>();
 		pts.add(new double[] {0.0, 0.00});
@@ -87,14 +88,14 @@ public class TestSegmentMaker {
 		for(PointType type : maker.getOriginalPointTypes()) {
 			System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getOriginalSegments());
-		for(PointTypeSegment segment : maker.getOriginalSegments()) {
+		Assert.assertNotNull(maker.getOriginalSegmentation());
+		for(TypeInterval segment : maker.getOriginalSegmentation()) {
 			System.out.println(segment.toString());
 		}
-		Assert.assertEquals(1, maker.getOriginalSegments().size());	
+		Assert.assertEquals(1, maker.getOriginalSegmentation().size());	
 	}
 	@Test
-	public void testProcessBorder1() throws CloneNotSupportedException {
+	public void testProcessBorder1() throws NullTypeException {
 		LOG.debug("testProcessBorder1()");
 		VerticalProfile profile = getSampleProfile1();
 		VerticalGradeProfile gradeprofile = profile.derivative();
@@ -106,12 +107,11 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.originalSegments);
-		maker.processBorderSegments();
-		System.out.println(maker.processedSegments);
+		System.out.println(maker.getOriginalSegmentation());
+		System.out.println(maker.getResultSegmentation());
 	}
 	@Test
-	public void testProcessBorder2() throws CloneNotSupportedException {
+	public void testProcessBorder2() throws NullTypeException {
 		LOG.debug("testProcessBorder2()");
 		VerticalProfile profile = getSampleProfile2();
 		VerticalGradeProfile gradeprofile = profile.derivative();
@@ -123,18 +123,15 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.originalSegments);
-		maker.processBorderSegments();
-		
-		System.out.println(maker.processedSegments);
+		System.out.println(maker.getOriginalSegmentation());		
+		System.out.println(maker.getResultSegmentation());
 	}
 	@Test
-	public void testProcessBorder3() throws CloneNotSupportedException {
+	public void testProcessBorder3() throws NullTypeException {
 		LOG.debug("testProcessBorder3()");
 		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
 		System.out.println(profile);
 		VerticalGradeProfile gradeprofile = profile.derivative();
-		//System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
 		double space = 5.0;
@@ -142,10 +139,8 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.originalSegments);
-		maker.processBorderSegments();
-		
-		System.out.println(maker.processedSegments);
+		System.out.println(maker.getOriginalSegmentation());
+		System.out.println(maker.getResultSegmentation());
 	}
 
 	
@@ -191,11 +186,68 @@ public class TestSegmentMaker {
 		return profile;
 	}
 
-	
+
+	@Test
+	public void testSampleProfileTypeIIa_1() throws NullTypeException {
+		LOG.debug("testSampleProfileTypeIIa_1");
+		VerticalProfile vp = getSampleProfileTypeIIa_1();
+		VerticalGradeProfile gradeProfile = vp.derivative();
+		double starts = gradeProfile.getStartS();
+		double ends = gradeProfile.getEndS();
+		double space = 1.0;
+		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
+		double thresholdSlope = 1e-6;
+		int baseSize = 3;
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		System.out.println(maker.getOriginalSegmentation());
+		System.out.println(maker.getResultSegmentation());
+		Assert.assertEquals(4, maker.getResultSegmentation().size());
+	}
+	private VerticalProfile getSampleProfileTypeIIa_1() {
+		VerticalProfile vp = new VerticalProfile();
+		GradeAlignment grade1 = new GradeAlignment(0.0, 1000.0, 0.06, 1050.0);
+		vp.add(grade1);
+		VerticalCurveAlignment vc1 = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(1050.0, 1063.0, 0.06, -50000.0, 0.05);
+		vp.add(vc1);
+		VerticalCurveAlignment vc2 = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(1550.0, 1090.0, 0.05, -55000.0, 0.03);
+		vp.add(vc2);
+		GradeAlignment grade2 = new GradeAlignment(2650.0, 1134.0, 0.03, 750.0);
+		vp.add(grade2);
+		return vp;
+	}
+
+	@Test
+	public void testSampleProfileTypeIIa_2() throws NullTypeException {
+		LOG.debug("testSampleProfileTypeIIa_2");
+		VerticalProfile vp = getSampleProfileTypeIIa_2();
+		VerticalGradeProfile gradeProfile = vp.derivative();
+		double starts = gradeProfile.getStartS();
+		double ends = gradeProfile.getEndS();
+		double space = 7.0;
+		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
+		double thresholdSlope = 1e-6;
+		int baseSize = 4;
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		System.out.println(maker.getOriginalSegmentation());
+		System.out.println(maker.getResultSegmentation());
+		Assert.assertEquals(4, maker.getResultSegmentation().size());
+	}	
+	private VerticalProfile getSampleProfileTypeIIa_2() {
+		VerticalProfile vp = new VerticalProfile();
+		GradeAlignment grade1 = new GradeAlignment(0.0, 1000.0, 0.06, 50.0);
+		vp.add(grade1);
+		VerticalCurveAlignment vc1 = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(50.0, 1003.0, 0.06, -32500.0, 0.04);
+		vp.add(vc1);
+		VerticalCurveAlignment vc2 = VAlignFactory.createVCFrom_PointGradeKvAndFinalSlope(700.0, 1035.0, 0.04, -55000.0, 0.03);
+		vp.add(vc2);
+		GradeAlignment grade2 = new GradeAlignment(1250.0, 1054.0, 0.03, 1250.0);
+		vp.add(grade2);
+		return vp;
+	}
 
 
 	@Test
-	public void testSagCurveCrestCurve() throws CloneNotSupportedException {
+	public void testSagCurveCrestCurve() throws NullTypeException {
 		LOG.debug("testSagCurveCrestCurve()");
 		
 		double s0 = 0.0;
@@ -220,7 +272,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
-		PointTypeSegmentArray segments = maker.getOriginalSegments();
+		Segmentation segments = maker.getOriginalSegmentation();
 		
 		System.out.println(segments);
 		

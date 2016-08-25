@@ -59,6 +59,9 @@ public class XYVector extends ArrayList<double[]>  {
 		}
 	}
 
+	/**
+	 * Sublista desde fromIndex inclusive hasta toIndex exclusivo
+	 */
 	@Override
 	public XYVector subList(int fromIndex, int toIndex) {
 		return new XYVector(super.subList(fromIndex, toIndex));

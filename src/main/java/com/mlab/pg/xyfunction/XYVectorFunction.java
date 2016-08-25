@@ -111,6 +111,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return d;
 	}
 	
+	/**
+	 * Sublista desde fromIndex inclusive hasta toIndex exclusivo
+	 */
 	@Override
 	public XYVectorFunction subList(int fromIndex, int toIndex) {
 		return new XYVectorFunction(super.subList(fromIndex, toIndex));

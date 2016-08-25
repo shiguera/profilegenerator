@@ -113,8 +113,11 @@ public class TestReconstructionProfilesType_I {
 			originalGradeProfile = generateOriginalGradeProfile();
 			
 			originalGradePoints = generateGradeSample();
-			
-			doGradeProfileReconstruction();
+			try {
+				doGradeProfileReconstruction();
+			} catch (Exception e) {
+				LOG.error("Error en el constructor de Reconstructor");
+			}
 			if(displayProfiles) {
 				System.out.println(resultVerticalProfile);
 			}
@@ -141,7 +144,7 @@ public class TestReconstructionProfilesType_I {
 		return originalGradeProfile.getSample(originalVerticalProfile.getStartS(), originalVerticalProfile.getEndS(), pointSeparation, true);
 		//LOG.debug("Muestra de pendientes: sep = " + pointSeparation + ", points = " + originalGradePoints.size());
 	}
-	private void doGradeProfileReconstruction() {
+	private void doGradeProfileReconstruction() throws Exception {
 		//LOG.debug("doGradeProfileReconstruction()");
 		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
 		double s0 = originalVerticalProfile.getFirstAlign().getStartS();

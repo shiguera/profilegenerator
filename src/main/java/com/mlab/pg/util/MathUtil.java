@@ -2,12 +2,36 @@ package com.mlab.pg.util;
 
 import java.util.List;
 
+import com.mlab.pg.xyfunction.Polynom2;
+
 
 public class MathUtil {
 
 	
 	// Error cuadratico medio
-	
+	/**
+	 * Calcula el ECM entre un polinomio y una serie de puntos. Para evaluar las y delpolinomio
+	 * utiliza las x de los puntos  
+	 * @param poly a0 + a1x + a2 x*x
+	 * @param xyvalues 
+	 * @return
+	 */
+	public static double ecmPolynomToPoints(Polynom2 poly, double[][] xyvalues) {
+		int count = xyvalues.length;
+		double[] ypoly = new double[count];
+		double[] ypoints = new double[count];
+		for(int i=0; i<count; i++) {
+			ypoly[i] = poly.getY(xyvalues[i][0]);
+			ypoints[i] = xyvalues[i][1];
+		}
+		return ecm(ypoly, ypoints);
+	}
+	/**
+	 * Calcula el ECM entre dos colecciones de valores y
+	 * @param y1
+	 * @param y2
+	 * @return
+	 */
 	public static double ecm(double[] y1, double[] y2) {
 		if(y1.length != y2.length) {
 			return Double.NaN;

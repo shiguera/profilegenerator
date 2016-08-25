@@ -16,10 +16,10 @@ public class EssayProfileType_IIa {
 		LOG.debug("EssayProfileType_IIa.main()");
 		RandomProfileFactory profileFactory = new RandomProfileType_IIa_Factory();
 		EssayFactory essayFactory = new EssayFactory(profileFactory);
-		essayFactory.setEssaysCount(1000);
-		essayFactory.setPointSeparation(3);
-		essayFactory.setMobileBaseSize(10);
-		essayFactory.setThresholdSlope(1e-5);
+		essayFactory.setEssaysCount(100);
+		essayFactory.setPointSeparation(10);
+		essayFactory.setMobileBaseSize(4);
+		essayFactory.setThresholdSlope(1e-6);
 		essayFactory.setDisplayProfiles(false);
 		essayFactory.setRandomPointSeparation(false);
 		

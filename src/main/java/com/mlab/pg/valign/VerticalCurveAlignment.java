@@ -1,7 +1,5 @@
 package com.mlab.pg.valign;
 
-import java.security.GeneralSecurityException;
-
 import com.mlab.pg.xyfunction.Parabole;
 
 /**

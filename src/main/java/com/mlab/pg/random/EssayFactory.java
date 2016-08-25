@@ -100,7 +100,7 @@ public class EssayFactory {
 	 */
 	int alignmentCount;
 	double[][] d; // Una distancia para cada ensayo y cada alineación
-	double[] maxd, mind, meand; // Valor promedio de las distancias para cada alineación
+	double[] maxd, mind, meand, desv; // Valor promedio y desviación típica de las distancias para cada alineación
 	
 	
 	
@@ -117,6 +117,7 @@ public class EssayFactory {
 		ecm = new double[essaysCount];
 		d = new double[essaysCount][];
 				
+		int cuentaerrores = 0;
 		for(currentEssay=0; currentEssay < essaysCount; currentEssay++) {
 
 			if(randomPointSeparation) {
@@ -144,8 +145,15 @@ public class EssayFactory {
 			if(displayProfiles) {
 				System.out.println(resultVerticalProfile);
 			}
+			if(resultVerticalProfile.size() == originalVerticalProfile.size()) {
+				measureEssayErrors();				
+			} else {
+				cuentaerrores++;
+				System.out.println(cuentaerrores);
+				System.out.println(originalVerticalProfile);
+				System.out.println(resultVerticalProfile);
+			}
 			
-			measureEssayErrors();
 		}
 		doAverages();
 		showReport();
@@ -187,7 +195,13 @@ public class EssayFactory {
 		//LOG.debug("doGradeProfileReconstruction()");
 		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
 		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
-		Reconstructor generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0);
+		Reconstructor generator = null;
+		try {
+			generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0);
+		} catch(Exception e) {
+			LOG.error("Error en el constructor de Reconstructor");
+			System.exit(1);
+		}
 		resultGradeProfile = generator.getGradeProfile();
 		resultGradePoints = resultGradeProfile.getSample(s0,z0, pointSeparation, true);
 		resultVerticalProfile = generator.getVerticalProfile();
@@ -201,6 +215,8 @@ public class EssayFactory {
 		originalVerticalProfilePoints = originalVerticalProfile.getSample(starts, ends, pointSeparation, true);		
 		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
 		double[] currentd = new double[alignmentCount];
+		
+
 		for(int i=0; i<alignmentCount; i++) {
 			currentd[i] = Math.abs(originalVerticalProfile.getAlign(i).getStartS() - resultVerticalProfile.getAlign(i).getStartS());
 		}
@@ -239,12 +255,14 @@ public class EssayFactory {
 		
 	}
 	private void doAverages() {
+		// Media en el error c. m. del perfil longitudinal reconstruido
 		meanEcm = 0.0;
 		for(int i=0; i < essaysCount;i++) {
 			meanEcm += ecm[i];
 		}
 		meanEcm = meanEcm / essaysCount;
 		
+		// Media del error en la distancia a los puntos singulares
 		// Comienza en 1, pues el inicio de la primera alineación no se cuenta
 		for(int i=1; i < alignmentCount; i++) {
 			meand[i] = 0.0;
@@ -253,6 +271,16 @@ public class EssayFactory {
 			}
 			meand[i] = meand[i] / essaysCount;
 		}		
+		
+		// Desviación típica de la distancia a los puntos singulares
+		desv = new double[alignmentCount];
+		for(int i=1; i < alignmentCount; i++) {
+			desv[i] = 0.0;
+			for(int j=0; j < essaysCount; j++) {
+				desv[i] += (d[j][i] - meand[i])*(d[j][i] - meand[i]);
+			}
+			desv[i] = Math.sqrt(desv[i] / essaysCount);
+		}
 	}
 	private void showReport() {
 		// LOG.debug("showError()");
@@ -265,9 +293,9 @@ public class EssayFactory {
 		System.out.format("Averages  %12s \t %12s \t %12s \n", "meanecm", "maxecm", "minecm");
 		System.out.format("          %12.8f \t %12.8f \t %12.8f \n", meanEcm, maxEcm, minEcm);
 		
-		System.out.format("Point %12s \t %12s \t %12s \n", "meand", "maxd", "mind");
+		System.out.format("Point %12s \t %12s \t %12s \t %12s\n", "meand", "maxd", "mind", "desv");
 		for(int i=1; i < alignmentCount; i++) {
-			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \n", i, meand[i], maxd[i], mind[i]);
+			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i, meand[i], maxd[i], mind[i], desv[i]);
 		}
 	}
 

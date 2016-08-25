@@ -11,7 +11,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
  * Genera un GradeProfile y un VerticalProfile a partir de un XYVectorFunction con los puntos originales {si, gi} 
- * Para ello utiliza un PointTypeSegmentArray procesado por SegmentMaker y que solo tiene segmentos
+ * Para ello utiliza un SegmentMaker que genera una Segmentation que solo tiene segmentos
  * del tipo Grade y VerticalCurve.
  * Ofrece una pareja de métodos getGradeProfile() que devuelve el GradeProfile reconstruido y 
  * getVerticalProfile() que devuelve el perfil longitudinal VerticalProfile correspondiente
@@ -25,24 +25,22 @@ public class Reconstructor {
 	Logger LOG = Logger.getLogger(Reconstructor.class);
 
 	protected XYVectorFunction originalPoints;
-	protected PointTypeSegmentArray segments;
+	protected Segmentation segmentation;
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
-	protected SegmentMaker maker;
+	protected SegmentMaker segmentMaker;
 	
 	
-	public Reconstructor(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) {
+	public Reconstructor(XYVectorFunction originalPoints, int mobilebasesize, double thresholdslope, double startZ) throws NullTypeException {
 		this.originalPoints = originalPoints.clone();
 		
-		maker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
-		
-		
-		this.segments = maker.getProcessedSegments();
+		segmentMaker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
+		segmentation = segmentMaker.getResultSegmentation();
 		
 		gradeProfile = new VerticalGradeProfile();
-		for(int i=0; i<segments.size(); i++) {
-			int first = segments.get(i).getStart();
-			int last = segments.get(i).getEnd();
+		for(int i=0; i<segmentation.size(); i++) {
+			int first = segmentation.get(i).getStart();
+			int last = segmentation.get(i).getEnd();
 			IntegerInterval interval = new IntegerInterval(first, last);
 			double[] r = originalPoints.rectaMinimosCuadrados(interval);
 			Straight straight = new Straight(r[0], r[1]);
@@ -61,8 +59,8 @@ public class Reconstructor {
 	public XYVectorFunction getOriginalPoints() {
 		return originalPoints;
 	}
-	public PointTypeSegmentArray getSegments() {
-		return segments;
+	public Segmentation getSegments() {
+		return segmentation;
 	}
 	public VerticalGradeProfile getGradeProfile() {
 		return gradeProfile;
