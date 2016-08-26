@@ -18,7 +18,7 @@ public class EssayProfileType_III {
 		essayFactory.setEssaysCount(1000);
 		essayFactory.setPointSeparation(7.5);
 		essayFactory.setMobileBaseSize(5);
-		essayFactory.setThresholdSlope(1e-6);
+		essayFactory.setThresholdSlope(1e-5);
 		essayFactory.setDisplayProfiles(false);
 		essayFactory.setRandomPointSeparation(false);
 		

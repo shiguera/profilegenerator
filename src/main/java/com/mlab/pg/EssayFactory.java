@@ -207,6 +207,8 @@ public class EssayFactory {
 		showReport();
 	}
 	private void tryWithLessThresholdSlope() {
+		//System.out.println(originalVerticalProfile);
+		//System.out.println(resultVerticalProfile);
 		double oldThresholdSlope = thresholdSlope;
 		setThresholdSlope(oldThresholdSlope / 10.0);
 		doGradeProfileReconstruction();
@@ -214,6 +216,7 @@ public class EssayFactory {
 			correctedWrongProfilesCount++;
 			calculateEcmError();
 			calculateBorderPointErrors();
+			//System.out.println(resultVerticalProfile);	
 		} else {
 			setThresholdSlope(oldThresholdSlope);
 			doGradeProfileReconstruction();
