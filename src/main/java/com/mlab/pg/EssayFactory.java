@@ -98,6 +98,13 @@ public class EssayFactory {
 	 */
 	int wrongProfileCount;
 	/**
+	 * Cuando al reconstruir el perfil por primera vez el número de alineaciones
+	 * de la reconstrucción no coincide con el del perfil original, se hace un intento
+	 * con un thresholdSlope menor. Si se corrige el problema, se incrementa 
+	 * este contador.
+	 */
+	int correctedWrongProfilesCount;
+	/**
 	 * Errores cuadráticos de cada ensayo cometidos en la reconstrucción.
 	 * Es el error cuadrático medio entre los puntos de la muestra original
 	 * del perfil de pendientes y los puntos del perfil de pendientes
@@ -152,6 +159,7 @@ public class EssayFactory {
 		d = new ArrayList<double[]>();
 		
 		wrongProfileCount = 0;
+		correctedWrongProfilesCount = 0;
 		
 		for(currentEssay=0; currentEssay < essaysCount; currentEssay++) {
 
@@ -188,6 +196,7 @@ public class EssayFactory {
 				calculateBorderPointErrors();				
 			} else {
 				wrongProfileCount++;
+				tryWithLessThresholdSlope();
 			}
 			
 		}
@@ -196,6 +205,21 @@ public class EssayFactory {
 		calculateAggregatesForBorderPointErrors();
 		
 		showReport();
+	}
+	private void tryWithLessThresholdSlope() {
+		double oldThresholdSlope = thresholdSlope;
+		setThresholdSlope(oldThresholdSlope / 10.0);
+		doGradeProfileReconstruction();
+		if(resultVerticalProfile.size() == originalVerticalProfile.size()) {
+			correctedWrongProfilesCount++;
+			calculateEcmError();
+			calculateBorderPointErrors();
+		} else {
+			setThresholdSlope(oldThresholdSlope);
+			doGradeProfileReconstruction();
+			calculateEcmError();				
+		}
+		setThresholdSlope(oldThresholdSlope);
 	}
 	private double calculateRandomPointSeparation() {
 		return 1.0 + random.nextInt(19)/2.0;
@@ -374,9 +398,11 @@ public class EssayFactory {
 		System.out.println("---------------------------------------------------------------------------------------------------------");
 
 		double wrongpercentage = (double) wrongProfileCount * 100 / (double)essaysCount;
-		double rightpercentage = 100.0 - wrongpercentage; 
+		double rightpercentage = 100.0 - wrongpercentage;
+		double correctedpercentage = correctedWrongProfilesCount * 100 / (double)essaysCount;
 		System.out.format("Porcentaje de ensayos correctos: %6.2f \n", rightpercentage);
 		System.out.format("Porcentaje de ensayos erroneos : %6.2f \n", wrongpercentage);
+		System.out.format("Porcentaje de ensayos erroneos corregidos al disminuir la pendiente límite: %6.2f \n", correctedpercentage);
 		
 		System.out.println("\n");
 		

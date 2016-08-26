@@ -1,7 +1,5 @@
 package com.mlab.pg.random;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.valign.GradeAlignment;
