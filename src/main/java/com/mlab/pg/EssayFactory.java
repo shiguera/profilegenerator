@@ -1,11 +1,10 @@
 package com.mlab.pg;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.reconstruction.Reconstructor;
@@ -24,6 +23,14 @@ public class EssayFactory {
 	
 	private static Logger LOG = Logger.getLogger(EssayFactory.class);
 	
+	/**
+	 * Generador de números aleatorios
+	 */
+	Random random;
+	
+	/**
+	 * Factory generadora de perfiles aleatorios
+	 */
 	RandomProfileFactory profileFactory;
 	/**
 	 * Número de ensayos
@@ -33,10 +40,6 @@ public class EssayFactory {
 	 * Si es true, se muestran en pantalla los perfiles longitudinales y de pendientes
 	 */
 	boolean displayProfiles = false;
-	/**
-	 * Ensayo actual durante la ejecución
-	 */
-	int currentEssay;
 	/**
 	 * Separación entre puntos de la muestra del perfil de pendientes
 	 */
@@ -81,6 +84,20 @@ public class EssayFactory {
 	XYVectorFunction resultVerticalProfilePoints;
 
 	/**
+	 * Ensayo actual durante la ejecución
+	 */
+	int currentEssay;
+	/**
+	 * Número de alineaciones de las que consta el perfillongitudinal
+	 */
+	int alignmentCount;
+	/**
+	 * El wrongProfileCount cuenta el número de perfiles reconstruidos 
+	 * en los que no se ha acertado el número de alineaciones, y por tanto,
+	 * no es posible medir los errores en los puntos frontera
+	 */
+	int wrongProfileCount;
+	/**
 	 * Errores cuadráticos de cada ensayo cometidos en la reconstrucción.
 	 * Es el error cuadrático medio entre los puntos de la muestra original
 	 * del perfil de pendientes y los puntos del perfil de pendientes
@@ -88,20 +105,36 @@ public class EssayFactory {
 	 */
 	double[] ecm;
 	/**
-	 * Error cuadrático máximo, mínimo y medio en la serie de ensayos
+	 * Valores agregados para la medición del ecm: 
+	 * Error cuadrático máximo, mínimo, medio y desviación típica en la serie de ensayos
 	 */
-	double maxEcm, minEcm, meanEcm;
+	double maxEcm, minEcm, meanEcm, desvEcm;
 	/**
 	 * Valor del ecm por encima del cual muestra un mensaje log con el ensayo afectado
 	 */
 	double alertEcm = 1.0;
 	/**
-	 * d es la distancia horizontal en valor absoluto desde el punto de entrada a cada alineación
-	 * en el perfil original y el reconstruido.
+	 * d es la distancia horizontal en valor absoluto desde el punto final de cada alineación
+	 * en el perfil original y el reconstruido. Hay un punto frontera para medir errores 
+	 * por cada alineación del perfil. El primer punto de la primera alineación no se 
+	 * considera.
+	 * Cada elemento del ArrayList pertenece a uno de los ensayos válidos, que son aquellos
+	 * en los que el algoritmo ha acertado el número de alineaciones. Cada elemento es un double[]
+	 * con una componente para cada punto frontera de la alineación correspondiente
 	 */
-	int alignmentCount;
-	double[][] d; // Una distancia para cada ensayo y cada alineación
-	double[] maxd, mind, meand, desv; // Valor promedio y desviación típica de las distancias para cada alineación
+	List<double[]> d;
+	/**
+	 * Valores agregados de los errores cometidos en la determinación
+	 * de los puntos finales de las alineaciones. Cada punto frontera tendrá un
+	 * valor agregado. Por ejemplo, el punto final de la primera alineación del perfil
+	 * tendrá un valor maxd correspondiente al máximo error cometido en la determinación
+	 * de ese punto en los diferentes perfiles aleatorios generados.
+	 * En los perfiles en los que el algoritmo no acierta con el número de alineaciones,
+	 * no se mide este error.
+	 * El double[] tiene tantas componentes como alineaciones tenga un perfil, alignmentCount 
+	 */
+	
+	double[] maxd, mind, meand, desvd; 
 	
 	
 	
@@ -111,29 +144,31 @@ public class EssayFactory {
 	
 	
 	public void doEssays() {
-		//LOG.debug("work()");
+		//LOG.debug("doEssays()");
 		
-		Random rnd = new Random();
+		random = new Random();
 		
 		ecm = new double[essaysCount];
-		d = new double[essaysCount][];
-				
-		int cuentaerrores = 0;
+		d = new ArrayList<double[]>();
+		
+		wrongProfileCount = 0;
+		
 		for(currentEssay=0; currentEssay < essaysCount; currentEssay++) {
 
 			if(randomPointSeparation) {
-				pointSeparation = 1.0 + rnd.nextInt(19)/2.0;
+				pointSeparation = calculateRandomPointSeparation();
 			}
 			
 			originalVerticalProfile = generateOriginalVerticalProfile();
 			alignmentCount = originalVerticalProfile.size();
-			d[currentEssay] = new double[alignmentCount];
+			d.add(new double[alignmentCount]);
 			if(currentEssay == 0) {
-				meand = new double[alignmentCount];
 				maxd = new double[alignmentCount];
 				mind = new double[alignmentCount];
+				meand = new double[alignmentCount];
+				desvd = new double[alignmentCount];				
 			}
-			
+
 			if(displayProfiles) {
 				System.out.println(originalVerticalProfile);
 			}
@@ -146,18 +181,24 @@ public class EssayFactory {
 			if(displayProfiles) {
 				System.out.println(resultVerticalProfile);
 			}
+			
+			calculateEcmError();
+			
 			if(resultVerticalProfile.size() == originalVerticalProfile.size()) {
-				measureEssayErrors();				
+				calculateBorderPointErrors();				
 			} else {
-				cuentaerrores++;
-				System.out.println(cuentaerrores);
-				System.out.println(originalVerticalProfile);
-				System.out.println(resultVerticalProfile);
+				wrongProfileCount++;
 			}
 			
 		}
-		doAverages();
+		
+		calculateAggregatesForEcm();
+		calculateAggregatesForBorderPointErrors();
+		
 		showReport();
+	}
+	private double calculateRandomPointSeparation() {
+		return 1.0 + random.nextInt(19)/2.0;
 	}
 	/**
 	 * Generación del perfil longitudinal aleatorio
@@ -208,27 +249,17 @@ public class EssayFactory {
 		resultVerticalProfile = generator.getVerticalProfile();
 	}
 	
-	private void measureEssayErrors() {
-		//LOG.debug("measureErrors()");
+	private void calculateEcmError() {
 		double starts = originalVerticalProfile.getStartS();
 		double ends = originalVerticalProfile.getEndS();
-		resultVerticalProfilePoints = resultVerticalProfile.getSample(starts, ends, pointSeparation, true);
 		originalVerticalProfilePoints = originalVerticalProfile.getSample(starts, ends, pointSeparation, true);		
-		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());
-		double[] currentd = new double[alignmentCount];
+		resultVerticalProfilePoints = resultVerticalProfile.getSample(starts, ends, pointSeparation, true);
+		double currentEcm = MathUtil.ecm(originalVerticalProfilePoints.getYValues(), resultVerticalProfilePoints.getYValues());		
+		ecm[currentEssay] = currentEcm;
 		
-
-		for(int i=0; i<alignmentCount; i++) {
-			currentd[i] = Math.abs(originalVerticalProfile.getAlign(i).getStartS() - resultVerticalProfile.getAlign(i).getStartS());
-		}
-		// System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		if(currentEssay==0) {
 			maxEcm = currentEcm;
 			minEcm = currentEcm;
-			for(int i=0; i<alignmentCount; i++) {
-				maxd[i] = currentd[i];
-				mind[i] = currentd[i];
-			}	
 		} else {
 			if (currentEcm > maxEcm) {
 				maxEcm = currentEcm;
@@ -236,6 +267,32 @@ public class EssayFactory {
 			if(currentEcm < minEcm) {
 				minEcm = currentEcm;
 			}
+		}
+		
+		if(currentEcm > alertEcm) {
+			LOG.warn("Essay number " +currentEssay + "; ECM = " + currentEcm); 
+		}
+
+	}
+	private void calculateBorderPointErrors() {
+		//LOG.debug("measureErrors()");
+		
+		double[] currentd = new double[alignmentCount];
+		for(int i=0; i<alignmentCount; i++) {
+			currentd[i] = Math.abs(originalVerticalProfile.getAlign(i).getEndS() - resultVerticalProfile.getAlign(i).getEndS());
+		}
+		// System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
+		for(int i=0; i < alignmentCount; i++) {
+			d.get(currentEssay)[i] = currentd[i];
+		}
+		
+
+		if(currentEssay==0) {
+			for(int i=0; i<alignmentCount; i++) {
+				maxd[i] = currentd[i];
+				mind[i] = currentd[i];
+			}	
+		} else {
 			for(int i=0; i<alignmentCount; i++) {
 				if(currentd[i] > maxd[i]) {
 					maxd[i] = currentd[i];
@@ -245,44 +302,69 @@ public class EssayFactory {
 				}
 			}	
 		}
-		ecm[currentEssay] = currentEcm;
-		if(currentEcm > alertEcm) {
-			LOG.warn("Essay number " +currentEssay + "; ECM = " + currentEcm); 
-		}
-		for(int i=0; i < alignmentCount; i++) {
-			d[currentEssay][i] = currentd[i];
-		}
-		
-		
 	}
-	private void doAverages() {
+	private void calculateAggregatesForEcm() {
+		calculateMeanForEcmError();
+		calculateStandardDeviationForEcmError();		
+	}
+	private void calculateMeanForEcmError() {
 		// Media en el error c. m. del perfil longitudinal reconstruido
-		meanEcm = 0.0;
-		for(int i=0; i < essaysCount;i++) {
-			meanEcm += ecm[i];
+		meanEcm = sumDoubleArray(ecm) / (double)essaysCount;		
+	}
+	private void calculateStandardDeviationForEcmError() {
+		desvEcm = 0.0;
+		for(int i=0; i<essaysCount; i++) {
+			desvEcm += (ecm[i] - meanEcm) * (ecm[i] - meanEcm);
 		}
-		meanEcm = meanEcm / essaysCount;
+		desvEcm = Math.sqrt(desvEcm) / (double)essaysCount;
+	}
+	private void calculateAggregatesForBorderPointErrors() {
 		
 		// Media del error en la distancia a los puntos singulares
-		// Comienza en 1, pues el inicio de la primera alineación no se cuenta
-		for(int i=1; i < alignmentCount; i++) {
-			meand[i] = 0.0;
-			for(int j=0; j < essaysCount; j++) {
-				meand[i] += d[j][i];
+		calculateMeanForBorderPointErrors();
+
+		// Desviación típica
+		calculateStandardDeviationForBorderPointErrors();		
+	}
+	private void calculateMeanForBorderPointErrors() {
+		double[] sums = new double[alignmentCount];
+		for(int i=0; i<sums.length; i++) {
+			sums[i] = 0.0;
+		}
+		
+		for(int i=1; i < d.size(); i++) {
+			for(int j=0; j<alignmentCount; j++) {
+				sums[j] += d.get(i)[j];
 			}
-			meand[i] = meand[i] / essaysCount;
 		}		
 		
-		// Desviación típica de la distancia a los puntos singulares
-		desv = new double[alignmentCount];
-		for(int i=1; i < alignmentCount; i++) {
-			desv[i] = 0.0;
-			for(int j=0; j < essaysCount; j++) {
-				desv[i] += (d[j][i] - meand[i])*(d[j][i] - meand[i]);
-			}
-			desv[i] = Math.sqrt(desv[i] / essaysCount);
+		
+		for(int i=0; i<sums.length; i++) {
+			meand[i] = sums[i] / (double)(d.size());
 		}
 	}
+	private void calculateStandardDeviationForBorderPointErrors() {
+		double[] desv = new double[alignmentCount];
+		for(int i=0; i<desv.length; i++) {
+			desv[i] = 0.0;
+		}
+		for(int i=1; i < d.size(); i++) {
+			for(int j=0; j<alignmentCount; j++) {
+				desv[j] += (d.get(i)[j] - meand[j]) * (d.get(i)[j] - meand[j]);				
+			}
+		}
+		for(int i=0; i<desv.length; i++) {
+			desvd[i] = Math.sqrt(desv[i]) / (double)(d.size());
+		}
+	}
+	private double sumDoubleArray(double[] array) {
+		double sum=0;
+		for(int i=0; i<array.length; i++) {
+			sum += array[i];
+		}
+		return sum;
+	}
+	
 	private void showReport() {
 		// LOG.debug("showError()");
 		System.out.println("Número de ensayos            : " + essaysCount);
@@ -291,16 +373,23 @@ public class EssayFactory {
 		System.out.println("Pendiente límite             : " + thresholdSlope);
 		System.out.println("---------------------------------------------------------------------------------------------------------");
 
-		System.out.format("Averages  %12s \t %12s \t %12s \n", "meanecm", "maxecm", "minecm");
-		System.out.format("          %12.8f \t %12.8f \t %12.8f \n", meanEcm, maxEcm, minEcm);
+		double wrongpercentage = (double) wrongProfileCount * 100 / (double)essaysCount;
+		double rightpercentage = 100.0 - wrongpercentage; 
+		System.out.format("Porcentaje de ensayos correctos: %6.2f \n", rightpercentage);
+		System.out.format("Porcentaje de ensayos erroneos : %6.2f \n", wrongpercentage);
 		
-		System.out.format("Point %12s \t %12s \t %12s \t %12s\n", "meand", "maxd", "mind", "desv");
-		for(int i=1; i < alignmentCount; i++) {
-			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i, meand[i], maxd[i], mind[i], desv[i]);
+		System.out.println("\n");
+		
+		System.out.format("Averages  %12s \t %12s \t %12s \t %12s \n", "meanecm", "desv", "maxecm", "minecm");
+		System.out.format("          %12.8f \t %12.8f \t %12.8f , \t %12.8f \n", meanEcm, desvEcm, maxEcm, minEcm);
+		
+		System.out.format("Point %12s \t %12s \t %12s \t %12s\n", "meand",  "desv", "maxd", "mind");
+		for(int i=0; i < alignmentCount; i++) {
+			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i, meand[i], desvd[i], maxd[i], mind[i]);
 		}
 	}
 
-
+	// Getters and Setters
 	public RandomProfileFactory getProfileFactory() {
 		return profileFactory;
 	}
