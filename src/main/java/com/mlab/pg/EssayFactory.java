@@ -98,6 +98,10 @@ public class EssayFactory {
 	 */
 	int wrongProfileCount;
 	/**
+	 * Si es true, los ensayos fallidos se vuelven a probar con thresholdSlope/10
+	 */
+	boolean tryWithLessThresholdSlope = false;
+	/**
 	 * Cuando al reconstruir el perfil por primera vez el número de alineaciones
 	 * de la reconstrucción no coincide con el del perfil original, se hace un intento
 	 * con un thresholdSlope menor. Si se corrige el problema, se incrementa 
@@ -191,12 +195,15 @@ public class EssayFactory {
 			}
 			
 			calculateEcmError();
+			// TODO Al hacer la segunda oportunidad, se guardan los maxEcm y minEcm de los ensayos fallidos
 			
 			if(resultVerticalProfile.size() == originalVerticalProfile.size()) {
 				calculateBorderPointErrors();				
 			} else {
 				wrongProfileCount++;
-				tryWithLessThresholdSlope();
+				if(tryWithLessThresholdSlope) {
+					tryWithLessThresholdSlope();					
+				}
 			}
 			
 		}
@@ -557,6 +564,16 @@ public class EssayFactory {
 
 	public double[] getMeand() {
 		return meand;
+	}
+
+
+	public boolean isTryWithLessThresholdSlope() {
+		return tryWithLessThresholdSlope;
+	}
+
+
+	public void setTryWithLessThresholdSlope(boolean tryWithLessThresholdSlope) {
+		this.tryWithLessThresholdSlope = tryWithLessThresholdSlope;
 	}
 	
 

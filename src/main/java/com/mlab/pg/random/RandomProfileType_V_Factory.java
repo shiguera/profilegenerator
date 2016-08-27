@@ -7,12 +7,12 @@ import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
 /**
- * Genera un perfil aleatorio tipo II a = upgrade + crest + crest + upgrade
+ * Genera un perfil aleatorio tipo V = upgrade + crest + crest + upgrade
  * @author shiguera
  *
  */
-public class RandomProfileType_IIa_Factory extends AbstractRandomProfileFactory {
-	Logger LOG = Logger.getLogger(RandomProfileType_IIa_Factory.class);
+public class RandomProfileType_V_Factory extends AbstractRandomProfileFactory {
+	Logger LOG = Logger.getLogger(RandomProfileType_V_Factory.class);
 	
 	@Override
 	public VerticalProfile createRandomProfile() {

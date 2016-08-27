@@ -7,7 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.valign.GradeAlignment;
-import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
@@ -70,9 +69,9 @@ public class TestRandomProfileFactory {
 		}
 	}
 	@Test
-	public void testRandomProfileType_IIa() {
-		LOG.debug("testRandomProfileType_IIa()");
-		RandomProfileFactory factory = new RandomProfileType_IIa_Factory();
+	public void testRandomProfileType_V() {
+		LOG.debug("testRandomProfileType_V()");
+		RandomProfileFactory factory = new RandomProfileType_V_Factory();
 		for(int i=0; i<1000; i++) {
 			VerticalProfile vp = factory.createRandomProfile();
 			Assert.assertNotNull(vp);
