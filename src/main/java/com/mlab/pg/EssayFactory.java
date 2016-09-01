@@ -250,7 +250,6 @@ public class EssayFactory {
 	private VerticalGradeProfile generateGradeProfile(VerticalProfile vprofile) {
 		return vprofile.derivative();
 	}
-
 	/**
 	 * Genera la muestra de puntos (Si, Gi) con la que se hará la reconstrucción
 	 * @param gradeProfile
@@ -263,7 +262,6 @@ public class EssayFactory {
 		double ends = gradeProfile.getEndS();
 		return gradeProfile.getSample(starts, ends, pointseparation, true);
 	}
-
 	/**
 	 * Reconstrucción propiamente dicha
 	 */
@@ -317,7 +315,7 @@ public class EssayFactory {
 		}
 		// System.out.println(pointSeparation + ", " + currentEcm + ", " + currentd1 + ", " + currentd2);
 		for(int i=0; i < alignmentCount; i++) {
-			d.get(currentEssay)[i] = currentd[i];
+			d.get(d.size()-1)[i] = currentd[i];
 		}
 		
 

@@ -12,10 +12,10 @@ public class EssayProfileType_IVa {
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		LOG.debug("EssayProfileType_IIa.main()");
+		LOG.debug("EssayProfileType_IVa.main()");
 		RandomProfileFactory profileFactory = new RandomProfileType_IVa_Factory();
 		EssayFactory essayFactory = new EssayFactory(profileFactory);
-		essayFactory.setEssaysCount(10000);
+		essayFactory.setEssaysCount(1000);
 		essayFactory.setPointSeparation(10);
 		essayFactory.setMobileBaseSize(5);
 		essayFactory.setThresholdSlope(1.5e-5);
