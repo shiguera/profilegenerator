@@ -17,20 +17,20 @@ public class EssayProfileType_V {
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		LOG.debug("EssayProfileType_V.main()");
+		//LOG.debug("EssayProfileType_V.main()");
 		RandomProfileFactory profileFactory = new RandomProfileType_V_Factory();
 		profileFactory.setMinGradeLength(50.0);
 		profileFactory.setMinVerticalCurveLength(50.0);
 		
 		EssayFactory essayFactory = new EssayFactory(profileFactory);
 		essayFactory.setEssaysCount(1000);
-		essayFactory.setThresholdSlope(1.5e-5);
+		essayFactory.setThresholdSlope(1.5e-6);
 		essayFactory.setDisplayProfiles(false);
 		essayFactory.setRandomPointSeparation(false);
 		essayFactory.setTryWithLessThresholdSlope(false);
 		
 		essayFactory.setPointSeparation(1.8);
-		essayFactory.setMobileBaseSize(33);
+		essayFactory.setMobileBaseSize(8);
 		
 		essayFactory.doEssays();
 	}

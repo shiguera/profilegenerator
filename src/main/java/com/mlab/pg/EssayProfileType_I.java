@@ -12,7 +12,7 @@ public class EssayProfileType_I {
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		LOG.debug("EssayProfileType_I.main()");
+		//LOG.debug("EssayProfileType_I.main()");
 		
 		RandomProfileFactory profileFactory = new RandomProfileType_I_Factory();
 		profileFactory.setMinGradeLength(50.0);

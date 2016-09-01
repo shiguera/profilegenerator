@@ -11,6 +11,11 @@ import com.mlab.pg.valign.VerticalProfile;
  */
 public class RandomProfileType_IVa_Factory extends AbstractRandomProfileFactory {
 
+	public RandomProfileType_IVa_Factory() {
+		this.factoryName = "RandomProfileType_IVa_Factory";
+		this.description = "Random essays with profiles type IVa";
+	}
+
 	@Override
 	public VerticalProfile createRandomProfile() {
 		VerticalProfile vp = new VerticalProfile();

@@ -14,6 +14,11 @@ import com.mlab.pg.valign.VerticalProfile;
 public class RandomProfileType_VI_Factory extends AbstractRandomProfileFactory {
 	Logger LOG = Logger.getLogger(RandomProfileType_VI_Factory.class);
 	
+	public RandomProfileType_VI_Factory() {
+		this.factoryName = "RandomProfileType_VI_Factory";
+		this.description = "Random essays with profiles type VI";
+	}
+
 	@Override
 	public VerticalProfile createRandomProfile() {
 		VerticalProfile vp = new VerticalProfile();

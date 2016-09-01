@@ -24,6 +24,9 @@ import com.mlab.pg.valign.VerticalProfile;
  */
 public abstract class AbstractRandomProfileFactory implements RandomProfileFactory {
 
+	protected String factoryName = "";
+	protected String description = "";
+	
 	/**
 	 * Parámetros para la generación de las alineaciones aleatorias
 	 */
@@ -91,7 +94,14 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 	}
 	
 	// Getters and setters
-	
+	@Override
+	public String getFactoryName() {
+		return factoryName;
+	}
+	@Override
+	public String getDescription() {
+		return description;
+	}
 	@Override
 	public double getS0() {
 		return s0;

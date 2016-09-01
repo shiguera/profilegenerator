@@ -48,6 +48,7 @@ public class EssayFactory {
 	 * Si es true, en cada ensayo se genera una separación de puntos aleatoria entre 1 y 10 metros
 	 */
 	boolean randomPointSeparation = false;
+	boolean alertIfEcmGreatThanAlertEcm = false;
 	/**
 	 * Número de puntos de las rectas de interpolación
 	 */
@@ -301,7 +302,7 @@ public class EssayFactory {
 			}
 		}
 		
-		if(currentEcm > alertEcm) {
+		if(alertIfEcmGreatThanAlertEcm && currentEcm > alertEcm) {
 			LOG.warn("Essay number " +currentEssay + "; ECM = " + currentEcm); 
 		}
 
@@ -399,27 +400,36 @@ public class EssayFactory {
 	
 	private void showReport() {
 		// LOG.debug("showError()");
-		System.out.println("Número de ensayos            : " + essaysCount);
-		System.out.println("Separación entre puntos      : " + (!randomPointSeparation?pointSeparation:"Random"));
-		System.out.println("Longitud rectas interpolación: " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
-		System.out.println("Pendiente límite             : " + thresholdSlope);
-		System.out.println("---------------------------------------------------------------------------------------------------------");
+		System.out.println("\n\n");
+		System.out.println(profileFactory.getFactoryName());
+		System.out.println(profileFactory.getDescription());
+		System.out.println("Essays count                   : " + essaysCount);
+		System.out.println("Point distance                 : " + (!randomPointSeparation?pointSeparation:"Random"));
+		System.out.println("Interpolation straights length : " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
+		System.out.println("Threshold slope                : " + thresholdSlope);
+		System.out.println("-------------------------------------------------------------------------");
 
 		double wrongpercentage = (double) wrongProfileCount * 100 / (double)essaysCount;
 		double rightpercentage = 100.0 - wrongpercentage;
 		double correctedpercentage = correctedWrongProfilesCount * 100 / (double)essaysCount;
-		System.out.format("Porcentaje de ensayos correctos: %6.2f \n", rightpercentage);
-		System.out.format("Porcentaje de ensayos erroneos : %6.2f \n", wrongpercentage);
-		System.out.format("Porcentaje de ensayos erroneos corregidos al disminuir la pendiente límite: %6.2f \n", correctedpercentage);
+		System.out.format("Correct essays percentage                                 : %6.2f \n", rightpercentage);
+		System.out.format("Wrong essays percentage                                   : %6.2f \n", wrongpercentage);
+		System.out.format("Corrected essays percentage using a lower threshold slope : " + (tryWithLessThresholdSlope?"%6.2f":"%s") + " \n", 
+				(tryWithLessThresholdSlope?correctedpercentage:"NOT USED"));
 		
 		System.out.println("\n");
 		
-		System.out.format("Averages  %12s \t %12s \t %12s \t %12s \n", "meanecm", "desv", "maxecm", "minecm");
-		System.out.format("          %12.8f \t %12.8f \t %12.8f , \t %12.8f \n", meanEcm, desvEcm, maxEcm, minEcm);
-		
-		System.out.format("Point %12s \t %12s \t %12s \t %12s\n", "meand",  "desv", "maxd", "mind");
-		for(int i=0; i < alignmentCount; i++) {
-			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i, meand[i], desvd[i], maxd[i], mind[i]);
+		System.out.println("Mean Squared Error (MSE) (Between reconstructed profile and exact profile)");
+		System.out.println("--------------------------------------------------------------------------");
+		System.out.format("%12s \t %12s \t %12s \t %12s \n", "mean", "deviation", "max", "min");
+		System.out.format("%12.8f \t %12.8f \t %12.8f \t %12.8f \n", meanEcm, desvEcm, maxEcm, minEcm);
+
+		System.out.println("\n");
+		System.out.println("Border points Accuracy (distance to exact point in metres)");
+		System.out.println("----------------------------------------------------------");
+		System.out.format("Point %12s \t %12s \t %12s \t %12s\n", "mean",  "dev", "max", "min");
+		for(int i=0; i < alignmentCount-1; i++) {
+			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i+1, meand[i], desvd[i], maxd[i], mind[i]);
 		}
 	}
 

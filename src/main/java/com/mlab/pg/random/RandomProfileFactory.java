@@ -4,6 +4,9 @@ import com.mlab.pg.valign.VerticalProfile;
 
 public interface RandomProfileFactory {
 
+	String getFactoryName();
+	String getDescription();
+	
 	VerticalProfile createRandomProfile();
 
 	
