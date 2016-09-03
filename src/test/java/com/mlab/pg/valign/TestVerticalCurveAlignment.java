@@ -5,9 +5,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.random.RandomFactory;
-import com.mlab.pg.random.RandomGradeFactory;
+import com.mlab.pg.random.RandomProfileFactory;
+import com.mlab.pg.random.RandomProfileType_III_Factory;
+import com.mlab.pg.random.RandomProfileType_I_Factory;
 import com.mlab.pg.xyfunction.Parabole;
 
 import junit.framework.Assert;
@@ -104,31 +104,55 @@ public class TestVerticalCurveAlignment {
 	@Test
 	public void testDerivative() {
 		LOG.debug("testDerivative()");
-		DesignSpeed dspeed = DesignSpeed.DS120;
-		double s0 = 1000.0;
-		double z0 = 1000.0;
-		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
-		VerticalCurveAlignment align = null;
-		if (grade1.getStartTangent() > 0) {
-			align = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
-					grade1.getEndZ(), grade1.getEndTangent(), true);
-		} else {
-			align = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
-					grade1.getEndZ(), grade1.getEndTangent(), true);
+		for(int i=0; i<100; i++) {
+			RandomProfileFactory factory = new RandomProfileType_I_Factory();
+			VerticalProfile profile = factory.createRandomProfile();
+			Assert.assertNotNull(profile);
+	
+			GradeAlignment grade1 = (GradeAlignment) profile.getAlign(0);
+			VerticalCurveAlignment vc = (VerticalCurveAlignment)profile.getAlign(1);
+			GradeAlignment grade2 = (GradeAlignment) profile.getAlign(2);
+	
+			Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+			Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+			Assert.assertEquals(grade1.getStartTangent(), vc.getStartTangent(), 0.001);
+	
+			Assert.assertEquals(grade2.getStartS(), vc.getEndS(), 0.001);
+			Assert.assertEquals(grade2.getStartZ(), vc.getEndZ(), 0.001);
+			Assert.assertEquals(grade2.getStartTangent(), vc.getEndTangent(), 0.001);
+	
+			VerticalGradeProfile galign = profile.derivative();
+			Assert.assertNotNull(galign);
+			Assert.assertEquals(profile.getStartS(), galign.getStartS(), 0.001);
+			Assert.assertEquals(profile.getAlign(0).getStartTangent(), galign.getAlign(0).getStartZ(), 0.001);
+			Assert.assertEquals(profile.getEndS(), galign.getEndS(), 0.001);
+			Assert.assertEquals(profile.getAlign(profile.size()-1).getEndTangent(), galign.getAlign(galign.size()-1).getEndZ(), 0.001);
+			Assert.assertEquals(profile.getLength(), galign.getEndS() - galign.getStartS(), 0.001);
+	
+			factory = new RandomProfileType_III_Factory();
+			profile = factory.createRandomProfile();
+			Assert.assertNotNull(profile);
+	
+			grade1 = (GradeAlignment) profile.getAlign(0);
+			vc = (VerticalCurveAlignment)profile.getAlign(1);
+			grade2 = (GradeAlignment) profile.getAlign(2);
+	
+			Assert.assertEquals(grade1.getEndS(), vc.getStartS(), 0.001);
+			Assert.assertEquals(grade1.getEndZ(), vc.getStartZ(), 0.001);
+			Assert.assertEquals(grade1.getStartTangent(), vc.getStartTangent(), 0.001);
+	
+			Assert.assertEquals(grade2.getStartS(), vc.getEndS(), 0.001);
+			Assert.assertEquals(grade2.getStartZ(), vc.getEndZ(), 0.001);
+			Assert.assertEquals(grade2.getStartTangent(), vc.getEndTangent(), 0.001);
+	
+			galign = profile.derivative();
+			Assert.assertNotNull(galign);
+			Assert.assertEquals(profile.getStartS(), galign.getStartS(), 0.001);
+			Assert.assertEquals(profile.getAlign(0).getStartTangent(), galign.getAlign(0).getStartZ(), 0.001);
+			Assert.assertEquals(profile.getEndS(), galign.getEndS(), 0.001);
+			Assert.assertEquals(profile.getAlign(profile.size()-1).getEndTangent(), galign.getAlign(galign.size()-1).getEndZ(), 0.001);
+			Assert.assertEquals(profile.getLength(), galign.getEndS() - galign.getStartS(), 0.001);
 		}
-		Assert.assertNotNull(align);
-		Assert.assertEquals(grade1.getEndS(), align.getStartS(), 0.001);
-		Assert.assertEquals(grade1.getEndZ(), align.getStartZ(), 0.001);
-		Assert.assertEquals(grade1.getStartTangent(), align.getStartTangent(), 0.001);
-		
-		GradeProfileAlignment galign = align.derivative();
-		Assert.assertNotNull(galign);
-		Assert.assertEquals(align.getStartS(), galign.getStartS(), 0.001);
-		Assert.assertEquals(align.getStartTangent(), galign.getStartZ(), 0.001);
-		Assert.assertEquals(align.getEndS(), galign.getEndS(), 0.001);
-		Assert.assertEquals(align.getEndTangent(), galign.getEndZ(), 0.001);
-		Assert.assertEquals(align.getLength(), galign.getLength(), 0.001);
-
 		
 	}
 
