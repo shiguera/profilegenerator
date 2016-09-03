@@ -400,12 +400,12 @@ public class EssayFactory {
 	
 	private void showReport() {
 		// LOG.debug("showError()");
-		System.out.println("\n\n");
+		System.out.println("\n");
 		System.out.println(profileFactory.getFactoryName());
 		System.out.println(profileFactory.getDescription());
 		System.out.println("Essays count                   : " + essaysCount);
 		System.out.println("Point distance                 : " + (!randomPointSeparation?pointSeparation:"Random"));
-		System.out.println("Interpolation straights length : " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
+		System.out.println("Interpolation straight length  : " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
 		System.out.println("Threshold slope                : " + thresholdSlope);
 		System.out.println("-------------------------------------------------------------------------");
 
