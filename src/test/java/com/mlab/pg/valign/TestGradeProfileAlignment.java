@@ -5,9 +5,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.random.RandomFactory;
-import com.mlab.pg.random.RandomGradeFactory;
+import com.mlab.pg.random.RandomProfileFactory;
+import com.mlab.pg.random.RandomProfileType_III_Factory;
+import com.mlab.pg.random.RandomProfileType_I_Factory;
 import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 
@@ -41,44 +41,78 @@ public class TestGradeProfileAlignment {
 	@Test
 	public void testIntegrateWithRandomAlignments() {
 		LOG.debug("testIntegrateWithRandomAlignments()");
-		DesignSpeed dspeed = DesignSpeed.DS120;
-		double s0 = 1000.0;
-		double z0 = 1000.0;
-		GradeAlignment grade1 = RandomGradeFactory.randomGradeAlignment(dspeed, s0, z0);
-		
-		GradeProfileAlignment galign = grade1.derivative();
-		
-		double startZ = z0;
-		VAlignment align = galign.integrate(startZ);
-		Assert.assertNotNull(align);
-		Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
-		Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
-		Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
-		Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
-		Assert.assertEquals(align.getStartZ(), z0, 0.001);
-		
-		double g2 = RandomGradeFactory.randomUniformGradeSlope(dspeed);
-		VerticalCurveAlignment vcalign = null;
-		if (grade1.getStartTangent() > 0) {
-			g2 = - Math.abs(g2);
-			vcalign = RandomFactory.randomSagCurve(dspeed, grade1.getEndS(),
-					grade1.getEndZ(), grade1.getEndTangent(), true);
-		} else {
-			g2 = Math.abs(g2);
-			vcalign = RandomFactory.randomCrestCurve(dspeed, grade1.getEndS(),
-					grade1.getEndZ(), grade1.getEndTangent(), true);
+		for(int i=0; i<1000; i++) {
+			RandomProfileFactory factory = new RandomProfileType_I_Factory();
+			VerticalProfile profile = factory.createRandomProfile();
+			VerticalGradeProfile gprofile = profile.derivative();
+			
+			double z0 = profile.getAlign(0).getStartZ();
+			VerticalProfile resultProfile = gprofile.integrate(z0);
+
+			VAlignment align = resultProfile.getAlign(0);
+			GradeAlignment galign = gprofile.getAlign(0);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(0).getStartZ(), 0.001);
+
+			align = resultProfile.getAlign(1);
+			galign = gprofile.getAlign(1);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(1).getStartZ(), 0.001);
+
+			align = resultProfile.getAlign(2);
+			galign = gprofile.getAlign(2);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(2).getStartZ(), 0.001);
+
+			factory = new RandomProfileType_III_Factory();
+			profile = factory.createRandomProfile();
+			gprofile = profile.derivative();
+			
+			z0 = profile.getAlign(0).getStartZ();
+			resultProfile = gprofile.integrate(z0);
+
+			align = resultProfile.getAlign(0);
+			galign = gprofile.getAlign(0);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(0).getStartZ(), 0.001);
+
+			align = resultProfile.getAlign(1);
+			galign = gprofile.getAlign(1);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(1).getStartZ(), 0.001);
+
+			align = resultProfile.getAlign(2);
+			galign = gprofile.getAlign(2);
+			Assert.assertNotNull(align);
+			Assert.assertEquals(galign.getStartS(), align.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), align.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), align.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), align.getEndTangent(), 0.001);
+			Assert.assertEquals(align.getStartZ(), profile.getAlign(2).getStartZ(), 0.001);
+
+			
+			
 		}
-		
-		Assert.assertNotNull(align);
-		galign = vcalign.derivative();
-		
-		VAlignment vcintegrate = galign.integrate(vcalign.getStartZ()); 
-		Assert.assertEquals(vcalign.getStartS(), vcintegrate.getStartS(), 0.001);
-		Assert.assertEquals(vcalign.getStartZ(), vcintegrate.getStartZ(), 0.001);
-		Assert.assertEquals(vcalign.getStartTangent(), vcintegrate.getStartTangent(), 0.001);
-		Assert.assertEquals(vcalign.getEndS(), vcintegrate.getEndS(), 0.001);
-		Assert.assertEquals(vcalign.getEndZ(), vcintegrate.getEndZ(), 0.001);
-		Assert.assertEquals(vcalign.getEndTangent(), vcintegrate.getEndTangent(), 0.001);
 		
 		
 
@@ -127,7 +161,7 @@ public class TestGradeProfileAlignment {
 	@Test
 	public void testGetAlignIndex() {
 		LOG.debug("testGetAlignIndex()");
-		DesignSpeed dspeed = DesignSpeed.DS120;
+		//DesignSpeed dspeed = DesignSpeed.DS120;
 		double starts1 = 1000.0;
 		double startz1 = 900.0;
 		double startslope1 = 0.03;

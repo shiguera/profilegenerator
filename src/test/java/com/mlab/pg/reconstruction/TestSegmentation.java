@@ -42,6 +42,6 @@ private static Logger LOG = Logger.getLogger(TestSegmentation.class);
 		}
 		Segmentation typearray = new Segmentation(array);
 		Assert.assertNotNull(typearray);
-		System.out.println(typearray);
+		//System.out.println(typearray);
 	}
 }

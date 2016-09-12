@@ -37,10 +37,10 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 	double slopeIncrement = 0.005;
 	double minGradeLength = 100.0;
 	double maxGradeLength = 1500.0;
-	double gradeLengthIncrement = 100.0;
-	double minVerticalCurveLength = 100.0;
+	double gradeLengthIncrement = 20.1;
+	double minVerticalCurveLength = 50.0;
 	protected double maxVerticalCurveLength = 1500.0;
-	protected double verticalCurveLengthIncrement = 50.0;
+	protected double verticalCurveLengthIncrement = 20.1;
 	protected double maxKv = 60000.0;
 	protected double minKv = 200.0;
 	
@@ -75,10 +75,10 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 		//LOG.debug("randomVerticalCurve()");
 		double Kv=maxKv+1;
 		double verticalCurveLength = 0.0;
+		double theta = g2 - g1;
 		while(Math.abs(Kv)>maxKv || Math.abs(Kv) < minKv) {
 			verticalCurveLength = RandomFactory.randomUniformLength(minVerticalCurveLength, maxVerticalCurveLength, verticalCurveLengthIncrement);
-			double theta = g2 - g1;
-			Kv = Math.rint(verticalCurveLength / theta);	
+			Kv = Math.rint(verticalCurveLength * 10.0 / theta) / 10.0;	
 			//LOG.debug("verticalCurveLength= " + verticalCurveLength);
 		}
 		// double s2 = s1 + verticalCurveLength;

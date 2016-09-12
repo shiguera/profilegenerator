@@ -37,7 +37,7 @@ public class RandomProfileType_III_Factory extends AbstractRandomProfileFactory 
 		// Generar alineación grade de salida
 		double s2 = vc.getEndS();
 		double z2 = vc.getEndZ();
-		GradeAlignment grade2 = randomGrade(s2, z2, g2);
+		GradeAlignment grade2 = randomGrade(s2, z2, vc.getEndTangent());
 		vp.add(grade2);
 		
 		return vp;

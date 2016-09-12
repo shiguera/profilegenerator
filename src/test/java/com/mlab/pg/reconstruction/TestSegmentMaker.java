@@ -53,11 +53,11 @@ public class TestSegmentMaker {
 		Assert.assertNotNull(maker.getOriginalPointTypes());
 		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
 		for(PointType type : maker.getOriginalPointTypes()) {
-			System.out.println(type);
+			//System.out.println(type);
 		}
 		Assert.assertNotNull(maker.getOriginalSegmentation());
 		for(TypeInterval segment : maker.getOriginalSegmentation()) {
-			System.out.println(segment.toString());
+			//System.out.println(segment.toString());
 		}
 		Assert.assertEquals(1, maker.getOriginalSegmentation().size());
 	}
@@ -86,11 +86,11 @@ public class TestSegmentMaker {
 		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
 		
 		for(PointType type : maker.getOriginalPointTypes()) {
-			System.out.println(type);
+			//System.out.println(type);
 		}
 		Assert.assertNotNull(maker.getOriginalSegmentation());
 		for(TypeInterval segment : maker.getOriginalSegmentation()) {
-			System.out.println(segment.toString());
+			//System.out.println(segment.toString());
 		}
 		Assert.assertEquals(1, maker.getOriginalSegmentation().size());	
 	}
@@ -99,7 +99,7 @@ public class TestSegmentMaker {
 		LOG.debug("testProcessBorder1()");
 		VerticalProfile profile = getSampleProfile1();
 		VerticalGradeProfile gradeprofile = profile.derivative();
-		System.out.println(gradeprofile);
+		//System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
 		double space = 5.0;
@@ -107,15 +107,15 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getOriginalSegmentation());
-		System.out.println(maker.getResultSegmentation());
+		//System.out.println(maker.getOriginalSegmentation());
+		//System.out.println(maker.getResultSegmentation());
 	}
 	@Test
 	public void testProcessBorder2() throws NullTypeException {
 		LOG.debug("testProcessBorder2()");
 		VerticalProfile profile = getSampleProfile2();
 		VerticalGradeProfile gradeprofile = profile.derivative();
-		System.out.println(gradeprofile);
+		//System.out.println(gradeprofile);
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
 		double space = 5.0;
@@ -123,14 +123,14 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getOriginalSegmentation());		
-		System.out.println(maker.getResultSegmentation());
+		//System.out.println(maker.getOriginalSegmentation());		
+		//System.out.println(maker.getResultSegmentation());
 	}
 	@Test
 	public void testProcessBorder3() throws NullTypeException {
 		LOG.debug("testProcessBorder3()");
 		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
-		System.out.println(profile);
+		//System.out.println(profile);
 		VerticalGradeProfile gradeprofile = profile.derivative();
 		double starts = gradeprofile.getStartS();
 		double ends = gradeprofile.getEndS();
@@ -139,8 +139,8 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getOriginalSegmentation());
-		System.out.println(maker.getResultSegmentation());
+		//System.out.println(maker.getOriginalSegmentation());
+		//System.out.println(maker.getResultSegmentation());
 	}
 
 	
@@ -199,8 +199,8 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-6;
 		int baseSize = 3;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getOriginalSegmentation());
-		System.out.println(maker.getResultSegmentation());
+		//System.out.println(maker.getOriginalSegmentation());
+		//System.out.println(maker.getResultSegmentation());
 		Assert.assertEquals(4, maker.getResultSegmentation().size());
 	}
 	private VerticalProfile getSampleProfileTypeIIa_1() {
@@ -228,8 +228,8 @@ public class TestSegmentMaker {
 		double thresholdSlope = 1e-6;
 		int baseSize = 4;
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getOriginalSegmentation());
-		System.out.println(maker.getResultSegmentation());
+		//System.out.println(maker.getOriginalSegmentation());
+		//System.out.println(maker.getResultSegmentation());
 		Assert.assertEquals(4, maker.getResultSegmentation().size());
 	}	
 	private VerticalProfile getSampleProfileTypeIIa_2() {
@@ -274,7 +274,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
 		Segmentation segments = maker.getOriginalSegmentation();
 		
-		System.out.println(segments);
+		//System.out.println(segments);
 		
 		
 	}

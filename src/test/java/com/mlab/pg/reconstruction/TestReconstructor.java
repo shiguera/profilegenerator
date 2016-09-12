@@ -34,13 +34,13 @@ public class TestReconstructor {
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
 		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0);
 		VerticalProfile vprofile = generator.getVerticalProfile();
-		System.out.println(vprofile);
+		//System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
 		for(int i=0; i<processedPoints.size(); i++) {
-			System.out.println(originalVProfilePoints.getX(i) + ", " + originalVProfilePoints.getY(i) + " --- " + processedPoints.getX(i) + ", " + processedPoints.getY(i));
+			//System.out.println(originalVProfilePoints.getX(i) + ", " + originalVProfilePoints.getY(i) + " --- " + processedPoints.getX(i) + ", " + processedPoints.getY(i));
 		}
 		
-		System.out.println("ecm = "  + MathUtil.ecm(originalVProfilePoints.getYValues(), processedPoints.getYValues()));
+		//System.out.println("ecm = "  + MathUtil.ecm(originalVProfilePoints.getYValues(), processedPoints.getYValues()));
 	}
 	@Test
 	public void test2() throws Exception {
@@ -54,13 +54,13 @@ public class TestReconstructor {
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
 		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0);
 		VerticalProfile vprofile = generator.getVerticalProfile();
-		System.out.println(vprofile);
+		//System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
 		for(int i=0; i<processedPoints.size(); i++) {
-			System.out.println(originalVProfilePoints.getX(i) + ", " + originalVProfilePoints.getY(i) + " --- " + processedPoints.getX(i) + ", " + processedPoints.getY(i));
+			//System.out.println(originalVProfilePoints.getX(i) + ", " + originalVProfilePoints.getY(i) + " --- " + processedPoints.getX(i) + ", " + processedPoints.getY(i));
 		}
 		
-		System.out.println("ecm = "  + MathUtil.ecm(originalVProfilePoints.getYValues(), processedPoints.getYValues()));
+		//System.out.println("ecm = "  + MathUtil.ecm(originalVProfilePoints.getYValues(), processedPoints.getYValues()));
 	}
 	/**
 	 * Una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
@@ -80,7 +80,7 @@ public class TestReconstructor {
 		VerticalProfile profile = new VerticalProfile();
 		profile.add(vc);
 		profile.add(grade);
-		System.out.println(profile);
+		//System.out.println(profile);
 		return profile;
 	}
 	/**
@@ -95,14 +95,14 @@ public class TestReconstructor {
 		double kv = 6000.0;
 		double ends = 250.0;
 		VerticalCurveAlignment vc = new VerticalCurveAlignment(s0, z0, g0, kv, ends);		
-		System.out.println(vc.getEndZ());
+		//System.out.println(vc.getEndZ());
 		Straight r = new Straight(250.0, vc.getY(250.0), vc.getTangent(250.0));
 		GradeAlignment grade = new GradeAlignment( r, 250.0, 500.0);
-		System.out.println(grade.getStartZ());
+		//System.out.println(grade.getStartZ());
 		VerticalProfile profile = new VerticalProfile();
 		profile.add(vc);
 		profile.add(grade);
-		System.out.println(profile);
+		//System.out.println(profile);
 		return profile;
 	}
 

@@ -62,9 +62,10 @@ public class TestRandomProfileType_IVa_Factory {
 			Assert.assertTrue(grade1.getClass().isAssignableFrom(GradeAlignment.class));
 			Assert.assertEquals(vc.getEndS(), grade2.getStartS(), 0.001);
 			Assert.assertEquals(vc.getEndZ(), grade2.getStartZ(), 0.001);
-			Assert.assertEquals(vc.getEndTangent(), grade2.getSlope(), 0.001);		
-			Assert.assertTrue(grade2.getLength() >= factory.getMinGradeLength());
-			Assert.assertTrue(grade2.getLength() <= factory.getMaxGradeLength());		
+			Assert.assertEquals(vc.getEndTangent(), grade2.getSlope(), 0.001);	
+			double length = Math.rint(grade2.getLength()*10.0)/10.0;
+			Assert.assertTrue(length >= factory.getMinGradeLength());
+			Assert.assertTrue(length <= factory.getMaxGradeLength());		
 			Assert.assertTrue(grade2.getSlope() < 0);
 			Assert.assertTrue(Math.abs(grade2.getSlope()) >= factory.getMinSlope());
 			Assert.assertTrue(Math.abs(grade2.getSlope()) <= factory.getMaxSlope());

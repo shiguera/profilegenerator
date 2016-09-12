@@ -405,17 +405,20 @@ public class EssayFactory {
 		System.out.println(profileFactory.getDescription());
 		System.out.println("Essays count                   : " + essaysCount);
 		System.out.println("Point distance                 : " + (!randomPointSeparation?pointSeparation:"Random"));
-		System.out.println("Interpolation straight length  : " + (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
+		System.out.format("Interpolation straight length  : %10.4f \n", (!randomPointSeparation?(mobileBaseSize-1)*pointSeparation:"Random"));
 		System.out.println("Threshold slope                : " + thresholdSlope);
 		System.out.println("-------------------------------------------------------------------------");
 
+		// Porcentajes de ensayos correctos y fallidos
 		double wrongpercentage = (double) wrongProfileCount * 100 / (double)essaysCount;
 		double rightpercentage = 100.0 - wrongpercentage;
 		double correctedpercentage = correctedWrongProfilesCount * 100 / (double)essaysCount;
-		System.out.format("Correct essays percentage                                 : %6.2f \n", rightpercentage);
-		System.out.format("Wrong essays percentage                                   : %6.2f \n", wrongpercentage);
-		System.out.format("Corrected essays percentage using a lower threshold slope : " + (tryWithLessThresholdSlope?"%6.2f":"%s") + " \n", 
+		System.out.format("Correct essays percentage                                     : %6.2f \n", rightpercentage);
+		System.out.format("Wrong essays percentage                                       : %6.2f \n", wrongpercentage);
+		System.out.format("Corrected essays percentage after using lower threshold slope : " + (tryWithLessThresholdSlope?"%6.2f":"%s") + " \n", 
 				(tryWithLessThresholdSlope?correctedpercentage:"NOT USED"));
+		System.out.format("Correct essays percentage after using lower threshold slope   : " + (tryWithLessThresholdSlope?"%6.2f":"%s") + " \n", 
+				(tryWithLessThresholdSlope?rightpercentage + correctedpercentage:"NOT USED"));
 		
 		System.out.println("\n");
 		
@@ -431,6 +434,18 @@ public class EssayFactory {
 		for(int i=0; i < alignmentCount-1; i++) {
 			System.out.format("%5d \t %12.8f \t %12.8f \t %12.8f \t %12.8f\n", i+1, meand[i], desvd[i], maxd[i], mind[i]);
 		}
+		// Calculo la media de las distancias medias y el máximo de la distancia máxima 
+		double ddmean=0.0, ddmax=maxd[0];
+		for(int i=0; i < alignmentCount-1; i++) {
+			ddmean += meand[i];
+			if(maxd[i] > ddmax) {
+				ddmax = maxd[i];
+			}
+		}
+		ddmean = ddmean / ((double)meand.length - 1.0);
+		System.out.println("\n");
+		System.out.format("Mean d = %6.2f \n", ddmean);
+		System.out.format("Max  d = %6.2f \n", ddmax);
 	}
 
 	// Getters and Setters

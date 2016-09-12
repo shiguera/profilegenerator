@@ -42,7 +42,7 @@ public class TestRandomGradeFactory {
 			double slope = RandomGradeFactory.randomGaussianGradeSlope(mean, sd);
 			//System.out.println(i + " " + slope);
 			if(slope > mean + 3*sd || slope < mean - 3*sd) {
-				System.out.println(i + " " + slope);	
+				//System.out.println(i + " " + slope);	
 			}			
 		}
 	}
@@ -61,14 +61,14 @@ public class TestRandomGradeFactory {
 			double length = RandomGradeFactory.randomGaussianGradeLength(mean, sd, min, max);
 			if(length > (mean + 3.0*sd) || length < (mean - 3.0*sd)) {
 				countoutsiders ++;
-				System.out.println(length);
+				//System.out.println(length);
 			}
 			sum += length;
 		}
 		double resultmean = sum/numensayos;
 		Assert.assertTrue(resultmean<(mean+sd));
-		System.out.println("Media = " + resultmean);
-		System.out.println("Outsiders = " + countoutsiders);
+		//System.out.println("Media = " + resultmean);
+		//System.out.println("Outsiders = " + countoutsiders);
 	}
 	@Test
 	public void testRandomGradeAlign() {

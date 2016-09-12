@@ -286,7 +286,8 @@ public class RandomFactory {
 	 * máximo y mínimo, redondeada a incrementosincrement
 	 */
 	public static double randomUniformLength(double min, double max, double increment) {
-		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, increment));
+		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, increment)*10.0)/10.0;
+		//System.out.println(length);
 		return length;
 	}
 	// Funciones utilitarias

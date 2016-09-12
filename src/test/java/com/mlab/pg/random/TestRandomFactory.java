@@ -789,7 +789,7 @@ public class TestRandomFactory {
 		int numeventos = contador[0] + contador[1] + contador[2] + contador[3] + contador[4];
 		Assert.assertEquals(200, numeventos);
 		for(int  i=0; i<5; i++) {
-			System.out.println(contador[i]);
+			//System.out.println(contador[i]);
 		}
 	}
 	
@@ -825,7 +825,7 @@ public class TestRandomFactory {
 		Assert.assertEquals(200, numeventos);
 		Assert.assertEquals(0, contador[5]);
 		for(int  i=0; i<6; i++) {
-			System.out.println(contador[i]);
+			//System.out.println(contador[i]);
 		}
 
 		min= 1.0;
@@ -853,7 +853,7 @@ public class TestRandomFactory {
 		Assert.assertEquals(200, numeventos);
 		Assert.assertEquals(0, contador[3]);
 		for(int  i=0; i<4; i++) {
-			System.out.println(contador[i]);
+			//System.out.println(contador[i]);
 		}
 
 	}

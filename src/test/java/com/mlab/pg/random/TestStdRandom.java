@@ -25,16 +25,16 @@ public class TestStdRandom {
 
 		System.out.println("seed = " + StdRandom.getSeed());
 		for (int i = 0; i < n; i++) {
-			System.out.printf("%2d ", StdRandom.uniform(100));
-			System.out.printf("%8.5f ", StdRandom.uniform(10.0, 99.0));
-			System.out.printf("%5b ", StdRandom.bernoulli(0.5));
-			System.out.printf("%7.5f ", StdRandom.gaussian(9.0, 0.2));
-			System.out.printf("%1d ", StdRandom.discrete(probabilities));
-			System.out.printf("%1d ", StdRandom.discrete(frequencies));
+//			System.out.printf("%2d ", StdRandom.uniform(100));
+//			System.out.printf("%8.5f ", StdRandom.uniform(10.0, 99.0));
+//			System.out.printf("%5b ", StdRandom.bernoulli(0.5));
+//			System.out.printf("%7.5f ", StdRandom.gaussian(9.0, 0.2));
+//			System.out.printf("%1d ", StdRandom.discrete(probabilities));
+//			System.out.printf("%1d ", StdRandom.discrete(frequencies));
 			StdRandom.shuffle(a);
-			for (String s : a)
-				System.out.print(s);
-			System.out.println();
+			//for (String s : a)
+				//System.out.print(s);
+			//System.out.println();
 		}
 	}
 }

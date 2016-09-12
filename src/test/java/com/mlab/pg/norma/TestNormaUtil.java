@@ -37,15 +37,15 @@ public class TestNormaUtil {
 		double[] r = MathUtil.rectaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((r[0] + r[1]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println("--------------------------------------------------");
+		//System.out.println("--------------------------------------------------");
 		double[] p = MathUtil.parabolaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((p[0] + p[1]*xy[i][0] + p[2]*xy[i][0]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println(p[0] + " " + p[1] + " " + p[2]);
+		//System.out.println(p[0] + " " + p[1] + " " + p[2]);
 	}
 	
 	@Test
@@ -90,15 +90,15 @@ public class TestNormaUtil {
 		double[] r = MathUtil.rectaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((r[0] + r[1]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println("--------------------------------------------------");
+		//System.out.println("--------------------------------------------------");
 		double[] p = MathUtil.parabolaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((p[0] + p[1]*xy[i][0] + p[2]*xy[i][0]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println(p[0] + " " + p[1] + " " + p[2]);
+		//System.out.println(p[0] + " " + p[1] + " " + p[2]);
 	}
 	@Test
 	public void testDistanciaInicioProhibicionAdelantamiento() {
@@ -135,15 +135,15 @@ public class TestNormaUtil {
 		double[] r = MathUtil.rectaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((r[0] + r[1]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println("--------------------------------------------------");
+		//System.out.println("--------------------------------------------------");
 		double[] p = MathUtil.parabolaMinimosCuadrados(xy);
 		for(int i=0; i<xy.length; i++) {
 			double yy = Math.rint((p[0] + p[1]*xy[i][0] + p[2]*xy[i][0]*xy[i][0])*1000.0) / 1000.0;
-			System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
+			//System.out.println(xy[i][0] + " " + xy[i][1] + " " + yy + " " + (yy-xy[i][1]));			
 		}
-		System.out.println(p[0] + " " + p[1] + " " + p[2]);
+		//System.out.println(p[0] + " " + p[1] + " " + p[2]);
 	}
 
 	@Test
