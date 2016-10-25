@@ -5,15 +5,15 @@ import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
 /**
- * Genera perfiles aleatorios tipo IVa = upgrade + sag curve + upgrade
+ * Genera perfiles aleatorios tipo IVa = downgrade + sag curve + downgrade
  * @author shiguera
  *
  */
-public class RandomProfileType_IVa_Factory extends AbstractRandomProfileFactory {
+public class RandomProfileType_IVb_Factory extends AbstractRandomProfileFactory {
 
-	public RandomProfileType_IVa_Factory() {
-		this.factoryName = "RandomProfileType_IVa_Factory";
-		this.description = "Random essays with profiles type IVa";
+	public RandomProfileType_IVb_Factory() {
+		this.factoryName = "RandomProfileType_IVb_Factory";
+		this.description = "Random essays with profiles type IVb";
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class RandomProfileType_IVa_Factory extends AbstractRandomProfileFactory 
 			gmax = g2;
 			gmin = g1;
 		} 
-		g1 = gmax;
-		g2 = gmin;
+		g1 = -gmax;
+		g2 = -gmin;
 		
 		// Generar alineacion grade de entrada
 		GradeAlignment grade1 = randomGrade(s0, z0, g1);

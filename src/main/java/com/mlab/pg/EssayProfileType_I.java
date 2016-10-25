@@ -18,16 +18,21 @@ public class EssayProfileType_I {
 		profileFactory.setMinGradeLength(50.0);
 		profileFactory.setMinVerticalCurveLength(50);
 		
+		profileFactory.setGradeLengthIncrement(10.1);
+		profileFactory.setVerticalCurveLengthIncrement(10.1);
+		
+		
 		EssayFactory essayFactory = new EssayFactory(profileFactory);
-		essayFactory.setEssaysCount(1000);
+		essayFactory.setEssaysCount(1);
 		essayFactory.setThresholdSlope(1e-5);
 		
-		essayFactory.setDisplayProfiles(false);
-		essayFactory.setRandomPointSeparation(false);
-		essayFactory.setTryWithLessThresholdSlope(false);
 		
-		essayFactory.setPointSeparation(7.3);
-		essayFactory.setMobileBaseSize(4);
+		essayFactory.setDisplayProfiles(true);
+		essayFactory.setRandomPointSeparation(false);
+		essayFactory.setTryWithLessThresholdSlope(true);
+		
+		essayFactory.setPointSeparation(5.0);
+		essayFactory.setMobileBaseSize(6);
 		
 		essayFactory.doEssays();
 	}

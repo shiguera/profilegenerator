@@ -4,16 +4,21 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.random.RandomProfileType_VI_Factory;
+import com.mlab.pg.random.RandomProfileType_VIII_Factory;
 
-public class EssayProfileType_VI {
+/**
+ * Profile type VIII = downgrade + sag + crest + downgrade
+ * @author shiguera
+ *
+ */
+public class EssayProfileType_VIII {
 	
-	private static Logger LOG = Logger.getLogger(EssayProfileType_VI.class);
+	private static Logger LOG = Logger.getLogger(EssayProfileType_VIII.class);
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		LOG.debug("EssayProfileType_VI.main()");
-		RandomProfileFactory profileFactory = new RandomProfileType_VI_Factory();
+		//LOG.debug("EssayProfileType_VIII.main()");
+		RandomProfileFactory profileFactory = new RandomProfileType_VIII_Factory();
 		profileFactory.setMinGradeLength(50.0);
 		profileFactory.setMinVerticalCurveLength(50.0);
 		

@@ -7,16 +7,16 @@ import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
 
 /**
- * Genera un perfil aleatorio tipo VII = upgrade + crest + sag + upgrade
+ * Genera un perfil aleatorio tipo VII = downgrade + sag + crest + downgrade
  * @author shiguera
  *
  */
-public class RandomProfileType_VII_Factory extends AbstractRandomProfileFactory {
-	Logger LOG = Logger.getLogger(RandomProfileType_VII_Factory.class);
+public class RandomProfileType_VIII_Factory extends AbstractRandomProfileFactory {
+	Logger LOG = Logger.getLogger(RandomProfileType_VIII_Factory.class);
 	
-	public RandomProfileType_VII_Factory() {
-		this.factoryName = "RandomProfileType_VII_Factory";
-		this.description = "Random essays with profiles type VII";
+	public RandomProfileType_VIII_Factory() {
+		this.factoryName = "RandomProfileType_VIII_Factory";
+		this.description = "Random essays with profiles type VIII";
 	}
 
 	@Override
@@ -37,6 +37,10 @@ public class RandomProfileType_VII_Factory extends AbstractRandomProfileFactory 
 			g1 = slopes[2];
 			g3 = slopes[1];
 		}
+		// Hago negativas todas las pendientes
+		g1=-g1;
+		g2=-g2;
+		g3=-g3;
 		
 		// Generar alineacion grade de entrada
 		double grade1Length = RandomFactory.randomUniformLength(minGradeLength, maxGradeLength, gradeLengthIncrement);

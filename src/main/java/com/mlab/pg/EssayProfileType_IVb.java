@@ -4,16 +4,16 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.random.RandomProfileType_VI_Factory;
+import com.mlab.pg.random.RandomProfileType_IVb_Factory;
 
-public class EssayProfileType_VI {
+public class EssayProfileType_IVb {
 	
-	private static Logger LOG = Logger.getLogger(EssayProfileType_VI.class);
+	private static Logger LOG = Logger.getLogger(EssayProfileType_IVb.class);
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		LOG.debug("EssayProfileType_VI.main()");
-		RandomProfileFactory profileFactory = new RandomProfileType_VI_Factory();
+		LOG.debug("EssayProfileType_IVb.main()");
+		RandomProfileFactory profileFactory = new RandomProfileType_IVb_Factory();
 		profileFactory.setMinGradeLength(50.0);
 		profileFactory.setMinVerticalCurveLength(50.0);
 		
@@ -22,7 +22,7 @@ public class EssayProfileType_VI {
 
 		EssayFactory essayFactory = new EssayFactory(profileFactory);
 		essayFactory.setEssaysCount(1000);
-		essayFactory.setThresholdSlope(1.5e-6);
+		essayFactory.setThresholdSlope(1.5e-5);
 
 		essayFactory.setDisplayProfiles(false);
 		essayFactory.setRandomPointSeparation(false);
