@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.essays;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;

@@ -1,24 +1,19 @@
-package com.mlab.pg;
+package com.mlab.pg.essays;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.random.RandomProfileType_V_Factory;
+import com.mlab.pg.random.RandomProfileType_VI_Factory;
 
-/**
- * Profile type V= upgrade + crest + crest + upgrade
- * @author shiguera
- *
- */
-public class EssayProfileType_V {
+public class EssayProfileType_VI {
 	
-	private static Logger LOG = Logger.getLogger(EssayProfileType_V.class);
+	private static Logger LOG = Logger.getLogger(EssayProfileType_VI.class);
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-		//LOG.debug("EssayProfileType_V.main()");
-		RandomProfileFactory profileFactory = new RandomProfileType_V_Factory();
+		LOG.debug("EssayProfileType_VI.main()");
+		RandomProfileFactory profileFactory = new RandomProfileType_VI_Factory();
 		profileFactory.setMinGradeLength(50.0);
 		profileFactory.setMinVerticalCurveLength(50.0);
 		
@@ -33,8 +28,8 @@ public class EssayProfileType_V {
 		essayFactory.setRandomPointSeparation(false);
 		essayFactory.setTryWithLessThresholdSlope(true);
 		
-		essayFactory.setPointSeparation(2.0);
-		essayFactory.setMobileBaseSize(6);
+		essayFactory.setPointSeparation(10.0);
+		essayFactory.setMobileBaseSize(11);
 		
 		essayFactory.doEssays();
 	}

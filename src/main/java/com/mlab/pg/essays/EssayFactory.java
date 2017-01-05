@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.essays;
 
 import java.util.ArrayList;
 import java.util.List;
