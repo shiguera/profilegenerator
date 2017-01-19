@@ -2,7 +2,6 @@ package com.mlab.pg.valign;
 
 import java.util.ArrayList;
 
-import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.XYVector;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 

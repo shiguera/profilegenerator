@@ -1,6 +1,5 @@
 package com.mlab.pg.valign;
 
-import com.mlab.pg.norma.DesignSpeed;
 import com.mlab.pg.xyfunction.Straight;
 
 /**

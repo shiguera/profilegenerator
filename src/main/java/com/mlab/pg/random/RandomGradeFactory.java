@@ -4,11 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
-import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.norma.GradeLimits;
-import com.mlab.pg.valign.GradeAlignment;
-import com.mlab.pg.xyfunction.Straight;
-
 /**
  * Genera penientes aleatorias para carreteras
  * @author shiguera
@@ -19,8 +14,7 @@ public class RandomGradeFactory {
 	private static Random rnd;
 	
 	static {
-		rnd = new Random(new Date().getTime());
-		
+		rnd = new Random(new Date().getTime());	
 	}
 	/**
 	 * Devuelve una pendiente aleatoria distribuida uniformemente en el intervalo [min, max]
@@ -48,42 +42,6 @@ public class RandomGradeFactory {
 		return z;
 	}
 
-
-	/**
-	 * Calcula una pendiente aleatoria positiva o negativa para una Grade 
-	 * de una determinada DesignSpeed
-	 * @param dspeed Velocidad de proyecto de la carretera
-	 * @return Pendiente positiva o negativa aleatoria entre los valores 
-	 * máximo y mínimo de esa categoría de carreteras a intervalos de 0.005%
-	 */
-	public static double randomUniformGradeSlope(DesignSpeed dspeed) {
-		GradeLimits limits = new GradeLimits(dspeed);
-		double min = limits.getMinSlope();
-		double max = limits.getMaxSlope();
-		double inc = limits.getSlopeIncrements();
-		double slope = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc)*1000)/1000;
-		double sign = RandomFactory.randomSign();
-		return sign*slope;
-	}
-	
-	/**
-	 * Calcula una longitud aleatoria para una Grade de una determinada
-	 * DesignSpeed
-	 * @param dspeed Velocidad de proyecto de la carretera
-	 * @return Longitud aleatoria entre los valores 
-	 * máximo y mínimo de esa categoría de carreteras a intervalos de la longitud
-	 * mímima para la velocidad de proyecto
-	 */
-	public static double randomUniformGradeLength(DesignSpeed dspeed) {
-		GradeLimits limits = new GradeLimits(dspeed);
-		double min = limits.getMinLength();
-		double max = limits.getMaxLength();
-		double inc = 50.0; // limits.getMinLength();
-		double length = Math.rint(RandomFactory.randomDoubleByIncrements(min, max, inc));
-		return length;
-	}
-	
-
 	/**
 	 * Genera una longitud aleatoria positiva para una grade según una distribución
 	 * Normal de media mean y desviación típica sd. Los valores no podrán ser 
@@ -99,63 +57,7 @@ public class RandomGradeFactory {
 		return length;
 	}
 
-	/**
-	 * Genera una alineación grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente puede ser positiva o negativa.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static GradeAlignment randomGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
-		double slope = randomUniformGradeSlope(dspeed);
-		double length = randomUniformGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		GradeAlignment align = new GradeAlignment(r, s0, ends);
-		return align;
-	}
-	/**
-	 * Genera una alineación up-grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente será positiva.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static GradeAlignment randomUpGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
-		double slope = Math.abs(randomUniformGradeSlope(dspeed));
-		double length = randomUniformGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		GradeAlignment align = new GradeAlignment(r, s0, ends);
-		return align;
-	}
-	/**
-	 * Genera una alineación down-grade aleatoria para una velocidad de proyecto
-	 * y un punto inicial. La pendiente será aleatoria entre el minSlope
-	 * y el maxSlope de la categoría. La pendiente será negativa.
-	 * La longitud será aleatoria entre el minLength y el maxLength de la 
-	 * categoría.
-	 * @param dspeed Velocidad de proyecto
-	 * @param s0 Abscisa inicial de la alineación
-	 * @param z0 Altitud inicial de la alineación
-	 * @return GradeAlign resultado
-	 */
-	public static GradeAlignment randomDownGradeAlignment(DesignSpeed dspeed, double s0, double z0) {
-		double slope = -Math.abs(randomUniformGradeSlope(dspeed));
-		double length = randomUniformGradeLength(dspeed);
-		Straight r = new Straight(s0, z0, slope);
-		double ends =s0 + length;
-		GradeAlignment align = new GradeAlignment(r, s0, ends);
-		return align;
-	}
+
 
 	public static double[] generateThreeOrderedSlopes(double minSlope, double maxSlope, double slopeIncrement) {
 		double[] slopes = new double[3];

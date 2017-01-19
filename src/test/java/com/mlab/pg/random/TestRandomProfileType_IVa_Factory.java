@@ -36,7 +36,7 @@ public class TestRandomProfileType_IVa_Factory {
 			Assert.assertEquals(factory.getZ0(), grade1.getStartZ(), 0.001);
 			Assert.assertTrue(grade1.getLength() >= factory.getMinGradeLength());
 			Assert.assertTrue(grade1.getLength() <= factory.getMaxGradeLength());		
-			Assert.assertTrue(grade1.getSlope() < 0);
+			Assert.assertTrue(grade1.getSlope() > 0);
 			Assert.assertTrue(Math.abs(grade1.getSlope()) >= factory.getMinSlope());
 			Assert.assertTrue(Math.abs(grade1.getSlope()) <= factory.getMaxSlope());
 			
@@ -66,7 +66,7 @@ public class TestRandomProfileType_IVa_Factory {
 			double length = Math.rint(grade2.getLength()*10.0)/10.0;
 			Assert.assertTrue(length >= factory.getMinGradeLength());
 			Assert.assertTrue(length <= factory.getMaxGradeLength());		
-			Assert.assertTrue(grade2.getSlope() < 0);
+			Assert.assertTrue(grade2.getSlope() > 0);
 			Assert.assertTrue(Math.abs(grade2.getSlope()) >= factory.getMinSlope());
 			Assert.assertTrue(Math.abs(grade2.getSlope()) <= factory.getMaxSlope());
 		}

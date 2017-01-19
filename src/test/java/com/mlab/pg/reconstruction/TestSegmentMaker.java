@@ -8,8 +8,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.norma.DesignSpeed;
-import com.mlab.pg.random.RandomFactory;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
@@ -126,24 +124,6 @@ public class TestSegmentMaker {
 		//System.out.println(maker.getOriginalSegmentation());		
 		//System.out.println(maker.getResultSegmentation());
 	}
-	@Test
-	public void testProcessBorder3() throws NullTypeException {
-		LOG.debug("testProcessBorder3()");
-		VerticalProfile profile = RandomFactory.randomVerticalProfileType_I(DesignSpeed.DS100, 0.0, 0.0);
-		//System.out.println(profile);
-		VerticalGradeProfile gradeprofile = profile.derivative();
-		double starts = gradeprofile.getStartS();
-		double ends = gradeprofile.getEndS();
-		double space = 5.0;
-		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
-		double thresholdSlope = 1e-5;
-		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		//System.out.println(maker.getOriginalSegmentation());
-		//System.out.println(maker.getResultSegmentation());
-	}
-
-	
 	/**
 	 * Una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
 	 * DesignSpeed = 40

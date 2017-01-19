@@ -32,8 +32,8 @@ public class RandomProfileType_IVa_Factory extends AbstractRandomProfileFactory 
 			gmax = g2;
 			gmin = g1;
 		} 
-		g1 = gmax;
-		g2 = gmin;
+		g2 = gmax;
+		g1 = gmin;
 		
 		// Generar alineacion grade de entrada
 		GradeAlignment grade1 = randomGrade(s0, z0, g1);
