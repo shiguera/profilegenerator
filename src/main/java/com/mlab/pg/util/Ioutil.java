@@ -53,6 +53,51 @@ public class Ioutil {
 		return arrvpoint.toArray(result);
 	}
 	/**
+	 * Lee una matriz de doubles desde un fichero CSV, que puede tener líneas de cabecera a descartar
+	 * @param file Nombre del fichero
+	 * @param delimiter Delimitador de campos
+	 * @param numberOfHeaderLines Número de líneas de cabecera a descartar en la lectura
+	 * @return Matriz con los doubles leidos
+	 */
+	static public double[][] read(File file, String delimiter, int numberOfHeaderLines) {
+		LOG.info("Util.read("+file.getPath()+", "+delimiter+")");
+		ArrayList<double[]> arrvpoint=new ArrayList<double[]>();
+		BufferedReader reader;
+		String line="";	
+		int numcolumns=0;
+		double d[];
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			line="";
+			if (numberOfHeaderLines > 0) {
+				for(int i=0; i<numberOfHeaderLines; i++) {
+					reader.readLine();
+				}
+			}
+			while((line=reader.readLine()) != null) {
+				String[] arr=line.split(delimiter);
+				d = new double[arr.length];
+				for(int i=0; i<d.length; i++) {
+					d[i]=Double.parseDouble(arr[i].trim());
+				}
+				arrvpoint.add(d);
+				numcolumns=d.length; //
+			}
+			reader.close();
+		} catch (FileNotFoundException fe) {
+			LOG.info("File "+file.getPath()+" not found.\n"+fe.getMessage());
+			return null;
+		} catch (NumberFormatException ne) {
+			LOG.info("Number format error. "+ne.getMessage());
+			return null;
+		} catch (Exception e) {
+			LOG.info("Unidentified error. "+e.getMessage());
+			return null;
+		}
+		double[][] result= new double[arrvpoint.size()][numcolumns];
+		return arrvpoint.toArray(result);
+	}
+	/**
 	 *  Escribe una matriz de doubles en un fichero CSV 
 	 * @param filename nombre del fichero
 	 * @param d matriz de doubles
