@@ -1,9 +1,15 @@
 package com.mlab.pg.reconstruction;
 
+import java.io.File;
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.mlab.pg.xyfunction.XYVectorFunction;
+import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 import junit.framework.Assert;
 
@@ -16,7 +22,25 @@ private static Logger LOG = Logger.getLogger(TestSegmentation.class);
 		PropertyConfigurator.configure("log4j.properties");	
 	}
 	
-
+	@Test
+	public void testM320() {
+		LOG.debug("testM320()");
+		
+		URL url = ClassLoader.getSystemResource("N-320_xyvector_fragment.csv");
+		File file = new File(url.getPath());
+		Assert.assertNotNull(file);
+		
+		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
+		XYVectorFunction data = reader.read();
+		Assert.assertNotNull(data);
+		
+		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		PointTypeArray typeArray = characteriser.characterise(data, 4, 1e-5);
+		Assert.assertNotNull(typeArray);
+		for(int i=0; i<typeArray.size(); i++) {
+			System.out.println(typeArray.get(i).toString());
+		}
+	}
 	@Test
 	public void test() {
 		LOG.debug("test()");
@@ -44,4 +68,6 @@ private static Logger LOG = Logger.getLogger(TestSegmentation.class);
 		Assert.assertNotNull(typearray);
 		//System.out.println(typearray);
 	}
+	
+	
 }

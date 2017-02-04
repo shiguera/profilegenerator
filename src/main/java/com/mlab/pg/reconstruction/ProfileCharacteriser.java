@@ -19,6 +19,7 @@ public class ProfileCharacteriser {
 	
 	
 	public ProfileCharacteriser() {
+		
 	}
 
 	/**

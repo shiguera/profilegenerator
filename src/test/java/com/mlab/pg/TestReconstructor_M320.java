@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.jfree.data.xy.XYSeries;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class TestReconstructor_M320 {
 	@Test
 	public void testM320() {
 		LOG.debug("testM320()");
-		URL url = ClassLoader.getSystemResource("N-320_xyvector.csv");
+		URL url = ClassLoader.getSystemResource("N-320_xyvector_fragment.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
@@ -59,7 +60,19 @@ public class TestReconstructor_M320 {
 		VerticalProfile profile = rec.getVerticalProfile();
 		Assert.assertNotNull(profile);
 		System.out.println(profile.toString());
-
 		
+		XYVectorFunction func = gradeProfile.getSample(gradeProfile.getStartS(), gradeProfile.getEndS(), 5, true);
+		drawChart(func);
+		
+	}
+	
+	private void drawChart(XYVectorFunction func) {
+		
+		XYSeries series1 = new XYSeries("First");
+		for(int i=0; i<func.size();i++) {
+			series1.add(func.getX(i), func.getY(i));
+		}
+		Assert.assertNotNull(series1);
+		Assert.assertEquals(func.size(), series1.getItemCount());
 	}
 }
