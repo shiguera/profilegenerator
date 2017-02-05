@@ -17,6 +17,7 @@ public class ProfileCharacteriser {
 	
 	Logger LOG = Logger.getLogger(ProfileCharacteriser.class);
 	
+	PointCharacteriser pointCharacteriser;
 	
 	public ProfileCharacteriser() {
 		
@@ -49,11 +50,13 @@ public class ProfileCharacteriser {
 		for(int i=0; i<gpsample.size(); i++) {
 			types.add(PointType.NULL);
 		}
+		
 		// Se caracterizan los puntos caracterizables, excluyendo los de los extremos
 		int first = mobileBaseSize-1;
 		int last = gpsample.size()-mobileBaseSize;
+		pointCharacteriser = new PointCharacteriser();
 		for(int i=first; i<=last; i++) {
-			types.set(i, findPointType(gpsample, i, mobileBaseSize,thresholdSlope));
+			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope));
 		}
 		
 		// Los puntos anteriores a first se caracterizan del mismo tipo que first
@@ -69,9 +72,5 @@ public class ProfileCharacteriser {
 		return types;
 	}
 
-	private PointType findPointType(XYVectorFunction gpsample, int i, int mobileBaseSize, double thresholdSlope) {
-		PointCharacteriser pch = new PointCharacteriser();
-		return pch.characterise(gpsample, i, mobileBaseSize, thresholdSlope);
-	}
 	
 }
