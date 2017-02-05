@@ -1,5 +1,6 @@
 package com.mlab.pg.reconstruction;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class TestPointCharacteriser {
 		PropertyConfigurator.configure("log4j.properties");	
 	}
 	
+		
 	@Test
 	public void testGradePoint() {
 		LOG.debug("testGradePoint()");

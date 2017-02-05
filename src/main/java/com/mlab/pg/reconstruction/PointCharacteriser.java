@@ -49,66 +49,56 @@ public class PointCharacteriser {
 		}
 	}
 	private boolean isEqualSlope(double[] r1, double[] r2, double threshold) {
-		if(isHorizontal(r1, threshold) && isHorizontal(r2, threshold)) {
-			return true;
-		}		
 		double slope1 = r1[1];
 		double slope2 = r2[1];
-		if(isEqualSign(slope1, slope2)) {
-			if(Math.abs(slope1 - slope2)<threshold) {
-				return true;
-			} else {
-				return false;
-			}
+		if(Math.abs(slope1 - slope2)< threshold) {
+			return true;
 		} else {
 			return false;
 		}
 	}
-	private boolean isEqualSign(double d1, double d2) {
-		if(d1>=0 && d2>=0) {
-			return true;
-		}
-		if(d1<=0 && d2<=0) {
-			return true;
-		}
-		return false;
-	}
 	/**
 	 * Calcula la interpolación por mínimos cuadrados de la recta anterior de un 
-	 * punto de una XYSample
+	 * punto de una XYSample. La recta anterior es la formada por el punto y 
+	 * los puntos anteriores 
 	 *  
 	 * @param function XYSample que incluye los puntos de la recta a calcular
-	 * @param last Índice del punto del que se quiere calcular la recta anterior
+	 * @param pointIndex Índice del punto del que se quiere calcular la recta anterior
  	 * @param straightsize Número de puntos de la recta
  	 * 
 	 * @return double[] con la recta en la forma y = a[0] + a[1]x
 	 */
-	private static double[] calculaRectaAnterior(XYVectorFunction function, int last, int straightsize) {
-		if(function.size()<last+1) {
+	private static double[] calculaRectaAnterior(XYVectorFunction function, int pointIndex, int straightsize) {
+		if(function.size()<pointIndex+1) {
+			// Si elíndice del punto es mayor que el del último de la XYVectorFunction
 			return null;
 		}
-		int first = last - straightsize +1;
+		// Determinar el primer punto de la recta de interpolación
+		int first = pointIndex - straightsize +1;
 		if(first<0) {
+			// Si el primer punto de la recta es anterior al primero de 
+			// la XYVectorFunction
 			return null;
 		}
-		return function.rectaMinimosCuadrados(first, last);
+		return function.rectaMinimosCuadrados(first, pointIndex);
 	}
 	/**
 	 * Calcula la interpolación por mínimos cuadrados de la recta posterior de un
-	 * punto de una XYVectorFunction
+	 * punto de una XYVectorFunction. La recta posterior está formada por el punto
+	 * en cuestión y una serie de puntos posteriores al mismo
 	 * 
 	 * @param function XYVectorFunction que incluye los puntos de la recta a calcular
-	 * @param first Índice del punto del que se quiere calcular la recta posterior
+	 * @param pointIndex Índice del punto del que se quiere calcular la recta posterior
 	 * @param straightsize Número de puntos de la recta
 	 * 
 	 * @return double[] con la recta en la forma y = a[0] + a[1]x
 	 */
-	private static double[] calculaRectaPosterior(XYVectorFunction function, int first, int straightsize) {
-		int last = first + straightsize-1;
+	private static double[] calculaRectaPosterior(XYVectorFunction function, int pointIndex, int straightsize) {
+		int last = pointIndex + straightsize-1;
 		if(function.size()<last+1) {
 			return null;
 		}
-		return function.rectaMinimosCuadrados(first, last);
+		return function.rectaMinimosCuadrados(pointIndex, last);
 	}
 
 	
