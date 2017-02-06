@@ -45,13 +45,32 @@ public class Reconstructor {
 			double[] r = originalPoints.rectaMinimosCuadrados(interval);
 			Straight straight = new Straight(r[0], r[1]);
 			GradeProfileAlignment align = new GradeProfileAlignment(straight, originalPoints.getX(first), originalPoints.getX(last));
+			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
 			gradeProfile.add(align);
 		}
-		
+		adjustEndingsWithBeginnings();
 		verticalProfile = gradeProfile.integrate(startZ);
 		
 	}
-
+	/** 
+	 * Ajusta los finales y principios de alineaciones
+	 * para que pasen por la misma z. Para ello, cada 
+	 * alineación excepto la primera la sustituye por una 
+	 * recta paralela que pase por la z final de la 
+	 * alineación anterior
+	 */
+	private void adjustEndingsWithBeginnings() {
+		for(int i=1; i<gradeProfile.size(); i++) {
+			double lastx = gradeProfile.get(i-1).getEndS();
+			double lastg = gradeProfile.get(i-1).getEndZ();
+			double r1 = gradeProfile.get(i).getPolynom2().getA1();
+			double newr0 = lastg - r1*lastx;
+			Straight straight = new Straight(newr0, r1);
+			GradeProfileAlignment align = new GradeProfileAlignment(straight, lastx, gradeProfile.get(i).getEndS());
+			gradeProfile.set(i, align);
+			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
+		}
+	}
 	public VerticalProfile getVerticalProfile() {
 		return verticalProfile;
 	}
