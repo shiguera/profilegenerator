@@ -44,7 +44,7 @@ public class TestCharterShow {
 
 	private static XYVectorFunction readData() {
 		LOG.debug("readData()");
-		URL url = ClassLoader.getSystemResource("N-320_xyvector_fragment.csv");
+		URL url = ClassLoader.getSystemResource("N-320_xyvector.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		

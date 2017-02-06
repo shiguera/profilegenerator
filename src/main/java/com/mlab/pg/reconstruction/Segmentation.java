@@ -18,15 +18,11 @@ public class Segmentation extends ArrayList<TypeInterval> {
 	}
 	
 	public Segmentation(PointTypeArray pointTypes) {
-		TypeInterval currentSegment = null;
+		TypeInterval currentSegment = new TypeInterval(0,0,pointTypes.get(0));
 		
-		for(int i=0; i<pointTypes.size(); i++) {
-			if(currentSegment == null) {
-				currentSegment = new TypeInterval(i,i,pointTypes.get(i));
-				continue;
-			}
+		for(int i=1; i<pointTypes.size(); i++) {
+			currentSegment.setEnd(i);
 			if(pointTypes.get(i)==currentSegment.getPointType()) {
-				currentSegment.setEnd(i);
 				continue;
 			} else {
 				add(currentSegment);

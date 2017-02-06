@@ -38,7 +38,7 @@ public class TestReconstructor_M320 {
 	@Test
 	public void testM320() {
 		LOG.debug("testM320()");
-		URL url = ClassLoader.getSystemResource("N-320_xyvector_fragment.csv");
+		URL url = ClassLoader.getSystemResource("N-320_xyvector.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
