@@ -55,9 +55,10 @@ public class Charter {
 		);
 		
 		XYPlot plot = chart.getXYPlot();
-		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
-		renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
-		renderer.setLegendItemLabelGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
+		
+		//XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+		// renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
+		
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 500));
 		return chartPanel; 
