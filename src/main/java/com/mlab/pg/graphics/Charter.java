@@ -4,7 +4,10 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -50,6 +53,11 @@ public class Charter {
 				true, // tooltips
 				false // urls		
 		);
+		
+		XYPlot plot = chart.getXYPlot();
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+		renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
+		renderer.setLegendItemLabelGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 500));
 		return chartPanel; 
