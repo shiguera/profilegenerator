@@ -21,9 +21,16 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	private static final long serialVersionUID = 1L;
 	private static Logger LOG = Logger.getLogger(XYVectorFunction.class);
 
+	/**
+	 * Crea una XYVectorFunction vacía
+	 */
 	public XYVectorFunction() {
 		super();
 	}
+	/**
+	 * Crea una XYVectorFunction a partir de un array de valores {xi, yi}
+	 * @param values
+	 */
 	public XYVectorFunction(List<double[]> values) {
 		super(values);
 	}
@@ -40,40 +47,42 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	public boolean containsX(double x) {
 		return (size()>0 && x >= getStartX() && x <= getEndX());
 	}
+	/**
+	 * Devuelve el índice que corresponde a una determinada
+	 * abscisa x, o el índice inmediatamente anterior
+	 * @param x Abscisa de la que se busca el índice
+	 * @return Índice correspondiente a la abscisa x, o el 
+	 * índice inmediatamente anterior
+	 */
 	public int previousIndex(double x) {
 		if(containsX(x)) {
 			if(getStartX()==x) {
-				return -1;
+				return 0;
 			}
 			for(int i=1;i<size();i++) {
-				if(getX(i)>=x) {
+				if(getX(i)>x) {
 					return i-1;
 				}
 			}
-			if(getEndX()==x && size()>1) {
-				return size()-2;
+			if(getEndX()==x) {
+				return size()-1;
 			}
 		} 
 		return -1;
 	}
+	/**
+	 * Devuelve el indice que corresponde a una determinada abscisa 
+	 * o el inmediatamente posterior
+	 * @param x Abscisa de la que se busca el índice
+	 * @return Índice correspondiente a la abscisa x 
+	 * o el inmediatamente posterior
+	 */
 	public int followingIndex(double x) {
 		if(containsX(x)) {
-			if(getStartX()==x && size()>1) {
-				return 1;
-			}
-			for(int i=0;i<size()-1;i++) {
-				if(getX(i)==x) {
-					return i+1;
-				}
-				if(getX(i)>x) {
+			for(int i=0;i<size();i++) {
+				if(getX(i)>=x) {
 					return i;
 				}
-			}
-			if(getEndX()>x) {
-				return size()-1;
-			}
-			if(getEndX()==x) {
-				return -1;
 			}
 		} 
 		return -1;		
@@ -112,13 +121,23 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 	
 	/**
-	 * Sublista desde fromIndex inclusive hasta toIndex exclusivo
+	 * Extrae una XYFunction compuesta por los valores 
+	 * comprendidos desde fromIndex inclusive hasta toIndex exclusivo
 	 */
 	@Override
 	public XYVectorFunction subList(int fromIndex, int toIndex) {
 		return new XYVectorFunction(super.subList(fromIndex, toIndex));
 	}
-	
+	/**
+	 * Extrae una XYFunction de un subintervalo del original
+	 * comprendida entre el índice anterior a x1 y el posterior a x2
+	 * @param x1 Valor de la x del extremo izquierdo del intervalo
+	 * @param x2 Valor de la x del extremo derecho del intervalo
+	 * @return XYVectorFunction comprendida en el intervalo
+	 */
+//	public XYVectorFunction subList(double x1, double x2) {
+//		
+//	}
 	// Interface InInterval
 	@Override
 	public double getStartX() {
@@ -152,44 +171,51 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	@Override
 	public double getY(double x) {
 		if(containsX(x)) {
-			if(getStartX()==x) {
-				return get(0)[1];
-			}
-			if(getEndX()==x) {
-				return get(size()-1)[1];
-			}
 			int previous = previousIndex(x);
 			int following =followingIndex(x);
-			if(following-previous==1) {
+			if(previous==following) {
+				return get(previous)[1];
+			} else {
 				// Punto intermedio: Aproximación lineal
-				return (get(previous)[1]+get(following)[1])/2.0;
+				double x1 = get(previous)[0];
+				double x2 = get(following)[0];
+				double y1 = get(previous)[1];
+				double y2 = get(following)[1];
+				double tg_alfa = (y2-y1) / (x2-x1);
+				double y = y1 + (x-x1)*tg_alfa;
+				return y;
 			}
-			// Punto exacto
-			return get(previous+1)[1];
 		} else {
 			return Double.NaN;			
 		}
 	}
 
 	/**
-	 * Calcula la tangente según la fórmula:
-	 * tangent = inc(Y)/inc(X) 
-	 * Si el punto coincide con uno de la serie, excepto el último,
-	 *  el valor es exacto. El último punto no tiene tangente.
-	 *  Si el punto es intermedio, devuelve la interpolación 
-	 *  lineal de la tangente del punto anterior y el siguiente
+	 * Calcula la tangente mediante:
+	 * tangent = (y(i+1) - y(i))/(x(i+1)-x(i))
+	 * Si el punto es intermedio a un segmento dentro de la serie,
+	 * la tangente es la misma que la del punto anterior
+	 * Si el punto coincide con el último de la serie, 
+	 * la tangente tambien es la misma que la del punto anterior 
 	 *  @param x valor de la abscisa
 	 *  @return valor de la tangente
 	 */
 	@Override
 	public double getTangent(double x) {
+		if(size()==1) {
+			return Double.NaN;
+		}
 		if(containsX(x)) {
-			int following = followingIndex(x);
-			if(following ==-1) {
-				return Double.NaN;
+			int previous = previousIndex(x);
+			if(previous==size()-1) {
+				previous = size()-2;
 			}
-			double x1 = x;
-			double y1 = getY(x);
+			int following = followingIndex(x);
+			if(previous==following) {
+				following=following+1;
+			}
+			double x1 = getX(previous);
+			double y1 = getY(previous);
 			double x2 = getX(following);
 			double y2 = getY(following);
 			double incx = x2 - x1;

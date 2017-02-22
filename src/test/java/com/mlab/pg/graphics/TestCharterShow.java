@@ -25,6 +25,7 @@ public class TestCharterShow {
 		
 		Charter charter = new Charter("M-320 slopes", "S", "G");
 		XYVectorFunction data = readData();
+		
 		charter.addXYVectorFunction(data);
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {

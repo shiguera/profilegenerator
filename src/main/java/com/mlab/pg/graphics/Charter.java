@@ -56,7 +56,9 @@ public class Charter {
 		
 		XYPlot plot = chart.getXYPlot();
 		
-		//XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+		// Cuando activo estas dos siguientes líneas, parece no hacer nada
+		// El elemento ToolTipGenerator por defecto funciona igual
+		// XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
 		// renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("Legend {0}, {1}, {2}"));
 		
 		ChartPanel chartPanel = new ChartPanel(chart);
