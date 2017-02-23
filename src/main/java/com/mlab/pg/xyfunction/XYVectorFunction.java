@@ -12,6 +12,8 @@ import com.mlab.pg.util.MathUtil;
  * representan los valores (x,y) de una determinada función en un intervalo.
  * Se sobrescribe el método add() de forma que cada valor x debe ser mayor 
  * que el anterior.
+ * En la extracción de sublistas, el extremo derecho es inclusivo, al contrario
+ * de lo que ocurre con XYVector y ArrayList
  * 
  * @author shiguera
  *
@@ -122,22 +124,46 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	
 	/**
 	 * Extrae una XYFunction compuesta por los valores 
-	 * comprendidos desde fromIndex inclusive hasta toIndex exclusivo
+	 * comprendidos desde fromIndex inclusive hasta toIndex inclusivo.
+	 * La clase padre XYVector, al igual que ArrayList, no incluye el
+	 * extremo derecho en las sublistas. Esta clase sí que lo hace
 	 */
 	@Override
 	public XYVectorFunction subList(int fromIndex, int toIndex) {
-		return new XYVectorFunction(super.subList(fromIndex, toIndex));
+		if(!contains(fromIndex) || !contains(toIndex) || (fromIndex>toIndex)) {
+			return new XYVectorFunction();
+		}
+		XYVectorFunction sublist = new XYVectorFunction(super.subList(fromIndex, toIndex));
+		// Añado el extremo derecho del intervalo
+		sublist.add(get(toIndex));
+		return sublist;
 	}
+	
 	/**
 	 * Extrae una XYFunction de un subintervalo del original
-	 * comprendida entre el índice anterior a x1 y el posterior a x2
+	 * comprendida entre el índice anterior a x1 y el posterior a x2.
+	 * Si x1 es menor que startX(), se coge desde startX().
+	 * Si x2 es mayor que endX(), se coge hasta endX().
 	 * @param x1 Valor de la x del extremo izquierdo del intervalo
 	 * @param x2 Valor de la x del extremo derecho del intervalo
 	 * @return XYVectorFunction comprendida en el intervalo
 	 */
-//	public XYVectorFunction subList(double x1, double x2) {
-//		
-//	}
+	public XYVectorFunction extract(double x1, double x2) {
+		if(x1>x2 || x1>getEndX() || x2<getStartX()) {
+			return new XYVectorFunction();
+		}
+		int i1 = 0;
+		if (x1>getStartX()) {
+			i1 = previousIndex(x1);	
+		}
+		int i2 = size()-1;
+		if (x2 < getEndX()) {
+			i2 = followingIndex(x2);
+		}
+		XYVectorFunction sublist = subList(i1,i2);
+		return sublist;
+	}
+	
 	// Interface InInterval
 	@Override
 	public double getStartX() {

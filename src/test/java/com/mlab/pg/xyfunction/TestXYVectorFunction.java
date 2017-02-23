@@ -182,4 +182,52 @@ public class TestXYVectorFunction {
 		Assert.assertEquals(20.0-16.0, vector.getTangent(2.0), 0.001);		
 	}
 
+	@Test
+	public void testSubList() {
+		LOG.debug("testSubList()");
+		XYVectorFunction vector = new XYVectorFunction();
+		vector.add(new double[]{-2.0,10.0});
+		vector.add(new double[]{-1.5,11.0});
+		vector.add(new double[]{0.0,12.0});
+		vector.add(new double[]{1.5,13.0});
+		vector.add(new double[]{2.0,14.0});
+		
+		XYVectorFunction sublist = vector.subList(0, 4);
+		// Comprobar que incluyeelextremo derecho del intervalo
+		Assert.assertEquals(5, sublist.size());
+		Assert.assertEquals(2.0, sublist.getEndX(), 0.001);
+		
+		// Comprobar que si los índices no están en la lista
+		// devuelve una lista vacía 
+		sublist = vector.subList(0, 6);
+		Assert.assertEquals(0, sublist.size());
+		sublist = vector.subList(-1, 3);
+		Assert.assertEquals(0, sublist.size());
+		
+	}
+	
+	
+	@Test
+	public void testExtract() {
+		LOG.debug("testExtract()");
+		XYVectorFunction vector = new XYVectorFunction();
+		vector.add(new double[]{-2.0,10.0});
+		vector.add(new double[]{-1.5,11.0});
+		vector.add(new double[]{0.0,12.0});
+		vector.add(new double[]{1.5,13.0});
+		vector.add(new double[]{2.0,14.0});
+		
+		XYVectorFunction f = vector.extract(-3.0, 2.5);
+		Assert.assertEquals(-2.0,f.getStartX(), 0.001);
+		Assert.assertEquals(2.0,f.getEndX(), 0.001);
+		Assert.assertEquals(5,f.size());
+
+		f = vector.extract(-3.0, -1.4);
+		Assert.assertEquals(-2.0,f.getStartX(), 0.001);
+		Assert.assertEquals(0.0,f.getEndX(), 0.001);
+		Assert.assertEquals(3,f.size());
+		
+		
+
+	}
 }

@@ -64,6 +64,9 @@ public class XYVector extends ArrayList<double[]>  {
 	 */
 	@Override
 	public XYVector subList(int fromIndex, int toIndex) {
+		if ( fromIndex < 0 || toIndex > size()-1) {
+			return null;
+		}
 		return new XYVector(super.subList(fromIndex, toIndex));
 	}
 	

@@ -180,8 +180,6 @@ public class TestXYVector {
 		Assert.assertEquals(11, values.length, 0.001);	
 
 	}
-
-
 	@Test
 	public void testContains() {
 		LOG.debug("testContains()");
@@ -202,5 +200,26 @@ public class TestXYVector {
 
 		
 		
+	}
+
+	@Test
+	public void testSubList() {
+		LOG.debug("testSubList()");
+		XYVector vector = new XYVector();
+		vector.add(new double[]{-2.0,10.0});
+		vector.add(new double[]{-1.5,11.0});
+		vector.add(new double[]{0.0,12.0});
+		vector.add(new double[]{1.5,13.0});
+		vector.add(new double[]{2.0,14.0});
+
+		// Al extraer una sublista, el extremo derecho es exclusivo, no se incluye en la extracción
+		XYVector sublist = vector.subList(0, 4);
+		Assert.assertEquals(4, sublist.size()); 
+		
+		// La lista devuelta es un objeto diferente de la lista original
+		// si variamos su contenido la lista original no se altera
+		sublist.set(0, new double[]{-3.0,10.0});
+		Assert.assertEquals(-3.0, sublist.getX(0), 0.001);
+		Assert.assertEquals(-2.0, vector.getX(0), 0.001);
 	}
 }

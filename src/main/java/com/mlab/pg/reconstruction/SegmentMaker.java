@@ -182,7 +182,7 @@ public class SegmentMaker {
 		// los segmentos anterior y posterior hasta él
 		TypeInterval previousSegment = originalSegmentation.get(index-1).copy();
 		int startOfPreviousSegment = previousSegment.getStart();
-		XYVectorFunction originalpoints = originalGradePoints.subList(startOfPreviousSegment, endOfFollowingSegment+1);
+		XYVectorFunction originalpoints = originalGradePoints.subList(startOfPreviousSegment, endOfFollowingSegment);
 		double[] originalY = originalpoints.getYValues();
 				
 		double ecmmin = -1.0;
