@@ -25,7 +25,7 @@ public class Reconstructor {
 	Logger LOG = Logger.getLogger(Reconstructor.class);
 
 	protected XYVectorFunction originalPoints;
-	protected Segmentation segmentation;
+	protected TypeIntervalArrayList segmentation;
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
 	protected SegmentMaker segmentMaker;
@@ -78,7 +78,7 @@ public class Reconstructor {
 	public XYVectorFunction getOriginalPoints() {
 		return originalPoints;
 	}
-	public Segmentation getSegments() {
+	public TypeIntervalArrayList getSegments() {
 		return segmentation;
 	}
 	public VerticalGradeProfile getGradeProfile() {

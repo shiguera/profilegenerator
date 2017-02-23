@@ -13,9 +13,9 @@ import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 import junit.framework.Assert;
 
-public class TestSegmentation {
+public class TestTypeIntervalArrayList {
 	
-private static Logger LOG = Logger.getLogger(TestSegmentation.class);
+private static Logger LOG = Logger.getLogger(TestTypeIntervalArrayList.class);
 	
 	@BeforeClass
 	public static void beforeClass() {
@@ -64,7 +64,7 @@ private static Logger LOG = Logger.getLogger(TestSegmentation.class);
 		for(int i=2652; i<3400; i++) {
 			array.add(PointType.GRADE);
 		}
-		Segmentation typearray = new Segmentation(array);
+		TypeIntervalArrayList typearray = new TypeIntervalArrayList(array);
 		Assert.assertNotNull(typearray);
 		//System.out.println(typearray);
 	}

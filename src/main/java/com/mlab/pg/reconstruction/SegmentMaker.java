@@ -47,12 +47,12 @@ public class SegmentMaker {
 	 * Segmentación obtenida a partir de los puntos caracterizados en originalPointTypes. Se calcula
 	 * en el constructor. Tiene segmentos tipo Grade, Border y VerticalCurve
 	 */
-	protected Segmentation originalSegmentation;
+	protected TypeIntervalArrayList originalSegmentation;
 	
 	/**
 	 * Segmentación resultante después del procesamiento. Solo tiene tramos tipo Grade y VerticalCurve
 	 */
-	protected Segmentation resultSegmentation;
+	protected TypeIntervalArrayList resultSegmentation;
 	
 	/**
 	 * Construye una Segmentation a partir de una XYVectorFunction. La Segmentation resultado se
@@ -72,7 +72,7 @@ public class SegmentMaker {
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 
-		this.originalSegmentation = new Segmentation(originalPointTypes);
+		this.originalSegmentation = new TypeIntervalArrayList(originalPointTypes);
 		
 		if(!originalSegmentation.hasNullSegments()) {
 			processBorderSegments();			
@@ -88,7 +88,7 @@ public class SegmentMaker {
 	 * @throws CloneNotSupportedException
 	 */
 	private void processBorderSegments() {
-		resultSegmentation = new Segmentation();
+		resultSegmentation = new TypeIntervalArrayList();
 		
 		for(int i=0; i<originalSegmentation.size(); i++) {
 
@@ -248,10 +248,10 @@ public class SegmentMaker {
 		return originalPointTypes;
 	}
 
-	public Segmentation getOriginalSegmentation() {
+	public TypeIntervalArrayList getOriginalSegmentation() {
 		return originalSegmentation;
 	}
-	public Segmentation getResultSegmentation() {
+	public TypeIntervalArrayList getResultSegmentation() {
 		return resultSegmentation;
 	}
 	
