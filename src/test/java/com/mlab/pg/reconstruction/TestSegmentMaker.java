@@ -252,7 +252,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
-		TypeIntervalArrayList segments = maker.getOriginalSegmentation();
+		TypeIntervalArray segments = maker.getOriginalSegmentation();
 		
 		//System.out.println(segments);
 		

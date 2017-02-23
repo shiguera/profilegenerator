@@ -9,15 +9,15 @@ import java.util.ArrayList;
  * @author shiguera
  *
  */
-public class TypeIntervalArrayList extends ArrayList<TypeInterval> {
+public class TypeIntervalArray extends ArrayList<TypeInterval> {
 	
 	private static final long serialVersionUID = 1L;
 
-	public TypeIntervalArrayList() {
+	public TypeIntervalArray() {
 		
 	}
 	
-	public TypeIntervalArrayList(PointTypeArray pointTypes) {
+	public TypeIntervalArray(PointTypeArray pointTypes) {
 		TypeInterval currentSegment = new TypeInterval(0,0,pointTypes.get(0));
 		
 		for(int i=1; i<pointTypes.size(); i++) {
@@ -84,8 +84,8 @@ public class TypeIntervalArrayList extends ArrayList<TypeInterval> {
 	}
 	
 	
-	public TypeIntervalArrayList copy() {
-		TypeIntervalArrayList copy = new TypeIntervalArrayList();
+	public TypeIntervalArray copy() {
+		TypeIntervalArray copy = new TypeIntervalArray();
 		for(int i=0; i<this.size(); i++) {
 			copy.add(this.get(i));
 		}
