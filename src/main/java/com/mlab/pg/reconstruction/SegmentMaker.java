@@ -56,8 +56,8 @@ public class SegmentMaker {
 	protected TypeIntervalArray resultTypeIntervalArray;
 	
 	/**
-	 * Construye una Segmentation a partir de una XYVectorFunction. La Segmentation resultado se
-	 * puede consultar en getResultSegmentation() y solo tiene segmentos del tipo Grade o VerticalCurve.
+	 * Construye una TypeIntervalArray a partir de una XYVectorFunction. La TypeIntervalArray resultado se
+	 * puede consultar en getResultTypeIntervalArray() y solo tiene segmentos del tipo Grade o VerticalCurve.
 	 * Si se generan segmentos NULL arroja una excepción
 	 * 
 	 * @param gradesample
@@ -105,14 +105,10 @@ public class SegmentMaker {
 			if(currentSegment.getPointType()==PointType.BORDER_POINT) {
 				if(currentSegment.size() == 1) {	
 					// Si el border segment tiene solo un punto, lo añado al final del previousSegment y al inicio del followingSegment
-					TypeInterval lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1); 
-					lastSegmentAdded.setEnd(currentSegment.getStart());
-					TypeInterval followingSegment = originalTypeIntervalArray.get(i+1).copy();
-					resultTypeIntervalArray.add(followingSegment);
-					lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1);
-					lastSegmentAdded.setStart(currentSegment.getEnd());
+					processBorderSegmentWithOnePoint(i);
 				} else {
-					processCurrentBorderSegment(i);	
+					// Si el BorderSegment tiene más de un punto hay que seleccionar el punto Border que mejor aproxima
+					processBorderSegmentWithMoreThanOnePoint(i);	
 				}
 				i++;				
 			} else {
@@ -170,7 +166,16 @@ public class SegmentMaker {
 			}
 		}
 	}
-	private void processCurrentBorderSegment(int index) {
+	private void processBorderSegmentWithOnePoint(int i) {
+		TypeInterval currentSegment = originalTypeIntervalArray.get(i);
+		TypeInterval lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1); 
+		lastSegmentAdded.setEnd(currentSegment.getStart());
+		TypeInterval followingSegment = originalTypeIntervalArray.get(i+1).copy();
+		resultTypeIntervalArray.add(followingSegment);
+		lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1);
+		lastSegmentAdded.setStart(currentSegment.getEnd());
+	}
+	private void processBorderSegmentWithMoreThanOnePoint(int index) {
 		TypeInterval currentBorderSegment = originalTypeIntervalArray.get(index).copy();
 		int startOfCurrentBorderSegment = currentBorderSegment.getStart();
 		int endOfCurrentBorderSegment = currentBorderSegment.getEnd();
