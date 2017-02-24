@@ -31,6 +31,8 @@ public class ReconstructN320 {
 
 		LOG.debug("main()");
 		
+		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
+		
 		XYVectorFunction data = readData();
 		Reconstructor reconstructor = null;
 		try {
@@ -43,44 +45,58 @@ public class ReconstructN320 {
 		System.out.println(gprofile);
 		VerticalProfile vprofile = reconstructor.getVerticalProfile();
 		System.out.println(vprofile);
+		XYVectorFunction vprofilesample = vprofile.getSample(0.0, vprofile.getEndS(), 10, true);
+		for(int i=0; i<vprofilesample.size(); i++) {
+			double[] sz = vprofilesample.get(i);
+			vprofilesample.set(i, new double[]{sz[0], sz[1]+ originalVProfile.get(0)[1]});
+			double y1 = originalVProfile.getY(i);
+			double y2 = vprofilesample.getY(i);
+			double dif = y1-y2;
+			System.out.println(y1+" "+y2+" "+dif);
+		}
+		showOriginalVProfile(originalVProfile, vprofilesample);
 		
-		
-		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-        		charter = new Charter(charterName, "S", "G");
-        		charter.addXYVectorFunction(data);
-            	JFrame frame = new JFrame("Charter");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        		frame.setContentPane(charter.getChartPanel());
-        		frame.pack();
-        		RefineryUtilities.centerFrameOnScreen(frame);
-        		frame.setVisible(true);
-        		
-        		Charter charter2 = new Charter("Perfil de pdtes reconstruido", "S", "G");
-        		charter2.addXYVectorFunction(gprofile.getSample(gprofile.getStartS(), gprofile.getEndS(), 10.0, true));
-            	JFrame frame2 = new JFrame("Charter");
-                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        		frame2.setContentPane(charter2.getChartPanel());
-        		frame2.pack();
-        		RefineryUtilities.centerFrameOnScreen(frame2);
-        		frame2.setVisible(true);
-        		
-        		Charter charter3 = new Charter("Perfil logitudinal reconstruido", "S", "G");
-        		charter3.addXYVectorFunction(vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 10.0, true));
-            	JFrame frame3 = new JFrame("Charter");
-                frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        		frame3.setContentPane(charter3.getChartPanel());
-        		frame3.pack();
-        		RefineryUtilities.centerFrameOnScreen(frame3);
-        		frame3.setVisible(true);
-        		
-        		
-            }
-        });
 	}
 
 	
+
+	private static void showOriginalVProfile(XYVectorFunction data, XYVectorFunction data2) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+        		charter = new Charter("N-320: Original VProfile", "S", "G");
+        		charter.addXYVectorFunction(data);
+        		charter.addXYVectorFunction(data2);
+        		
+            	JFrame frame = new JFrame("Charter");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        		frame.setContentPane(charter.getChartPanel());
+        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 750.0);
+        		frame.pack();
+        		RefineryUtilities.centerFrameOnScreen(frame);
+        		frame.setVisible(true);
+        		        		
+            }
+        });
+		
+	}
+
+
+
+	private static XYVectorFunction readOriginalVerticalProfile() {
+		LOG.debug("readOriginalVerticalProfile()");
+		charterName = "N-320: Original VeticalProfile";
+		URL url = ClassLoader.getSystemResource("N-320_SZ.csv");
+		File file = new File(url.getPath());
+		Assert.assertNotNull(file);
+		
+		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
+		XYVectorFunction data = reader.read();
+		Assert.assertNotNull(data);
+		XYVectorFunction subdata = data.extract(477.34, 1050.0);
+		return subdata;		
+	}
+
+
 
 	private static XYVectorFunction readData() {
 		LOG.debug("readData()");
@@ -92,8 +108,11 @@ public class ReconstructN320 {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		XYVectorFunction subdata = data.extract(0.0, 807.022);
+		XYVectorFunction subdata = data.extract(477.34, 1050.0);
 		return subdata;
+		
+		
+		
 	}
 	
 }

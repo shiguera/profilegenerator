@@ -49,7 +49,7 @@ public class GradeProfileAlignment extends GradeAlignment {
 	}
 	
 	public boolean isHorizontal() {
-		return polynom.getA1() == 0;
+		return polynom.getA1() == 0.0;
 	}
 
 	

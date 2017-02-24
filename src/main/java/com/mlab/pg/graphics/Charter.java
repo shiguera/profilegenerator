@@ -20,6 +20,7 @@ public class Charter {
 	
 	XYSeriesCollection seriesCollection;
 	String name, xLabel, yLabel;
+	JFreeChart chart =null;
 	
 	public Charter(String name, String xlabel, String ylabel) {
 		LOG.debug("Charter()");
@@ -43,7 +44,7 @@ public class Charter {
 	
 	public ChartPanel getChartPanel() {
 		LOG.debug("getchartPanel()");
-		JFreeChart chart = ChartFactory.createXYLineChart(
+		chart = ChartFactory.createXYLineChart(
 				name, // chart title
 				xLabel, // x axis label
 				yLabel, // y axis label
@@ -76,5 +77,8 @@ public class Charter {
 		return seriesCollection.getSeries(i);
 	}
 	
+	public JFreeChart getChart() {
+		return chart;
+	}
 
 }

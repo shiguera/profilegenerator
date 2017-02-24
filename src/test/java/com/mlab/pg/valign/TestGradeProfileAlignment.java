@@ -35,9 +35,91 @@ public class TestGradeProfileAlignment {
 		Assert.assertEquals(galignment.getStartS(), valignment.getStartS(), 0.001);
 		Assert.assertEquals(galignment.getEndS(), valignment.getEndS(), 0.001);
 		Assert.assertEquals(galignment.getStartZ(), valignment.getStartTangent(), 0.001);
-		Assert.assertEquals(galignment.getEndZ(), valignment.getEndTangent(), 0.001);
-		
+		Assert.assertEquals(galignment.getEndZ(), valignment.getEndTangent(), 0.001);	
 	}
+	@Test
+	public void testZWhenIntegrate() {
+		LOG.debug("testZWhenIntegrate()");
+		for(int i=0; i<1000; i++) {
+			System.out.println(i);
+			RandomProfileFactory factory = new RandomProfileType_I_Factory();
+			VerticalProfile originalVProfile = factory.createRandomProfile();
+			VerticalGradeProfile gprofile = originalVProfile.derivative();
+			
+			double z0 = originalVProfile.getAlign(0).getStartZ();
+			VerticalProfile resultVProfile = gprofile.integrate(z0);
+	
+			VAlignment valign = resultVProfile.getAlign(0);
+			GradeAlignment galign = gprofile.getAlign(0);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(0).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(0).getEndZ(), 0.001);
+			
+	
+			valign = resultVProfile.getAlign(1);
+			galign = gprofile.getAlign(1);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(1).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(1).getEndZ(), 0.001);
+			
+			valign = resultVProfile.getAlign(2);
+			galign = gprofile.getAlign(2);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(2).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(2).getEndZ(), 0.001);
+			
+			factory = new RandomProfileType_III_Factory();
+			originalVProfile = factory.createRandomProfile();
+			gprofile = originalVProfile.derivative();
+			z0 = originalVProfile.getAlign(0).getStartZ();
+			resultVProfile = gprofile.integrate(z0);
+			
+			valign = resultVProfile.getAlign(0);
+			galign = gprofile.getAlign(0);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(0).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(0).getEndZ(), 0.001);
+			
+	
+			valign = resultVProfile.getAlign(1);
+			galign = gprofile.getAlign(1);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(1).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(1).getEndZ(), 0.001);
+			
+			valign = resultVProfile.getAlign(2);
+			galign = gprofile.getAlign(2);
+			Assert.assertNotNull(valign);
+			Assert.assertEquals(galign.getStartS(), valign.getStartS(), 0.001);
+			Assert.assertEquals(galign.getEndS(), valign.getEndS(), 0.001);
+			Assert.assertEquals(galign.getStartZ(), valign.getStartTangent(), 0.001);
+			Assert.assertEquals(galign.getEndZ(), valign.getEndTangent(), 0.001);
+			Assert.assertEquals(valign.getStartZ(), originalVProfile.getAlign(2).getStartZ(), 0.001);
+			Assert.assertEquals(valign.getEndZ(), originalVProfile.getAlign(2).getEndZ(), 0.001);
+
+		}
+	}
+
 	@Test
 	public void testIntegrateWithRandomAlignments() {
 		LOG.debug("testIntegrateWithRandomAlignments()");
