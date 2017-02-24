@@ -35,7 +35,7 @@ public class Reconstructor {
 		this.originalPoints = originalPoints.clone();
 		
 		segmentMaker = new SegmentMaker(originalPoints, mobilebasesize, thresholdslope);
-		segmentation = segmentMaker.getResultSegmentation();
+		segmentation = segmentMaker.getResultTypeSegmentArray();
 		
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<segmentation.size(); i++) {

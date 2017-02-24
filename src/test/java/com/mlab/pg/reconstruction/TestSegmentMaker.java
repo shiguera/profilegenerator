@@ -53,11 +53,11 @@ public class TestSegmentMaker {
 		for(PointType type : maker.getOriginalPointTypes()) {
 			//System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getOriginalSegmentation());
-		for(TypeInterval segment : maker.getOriginalSegmentation()) {
+		Assert.assertNotNull(maker.getOriginalTypeSegmentArray());
+		for(TypeInterval segment : maker.getOriginalTypeSegmentArray()) {
 			//System.out.println(segment.toString());
 		}
-		Assert.assertEquals(1, maker.getOriginalSegmentation().size());
+		Assert.assertEquals(1, maker.getOriginalTypeSegmentArray().size());
 	}
 
 	@Test
@@ -86,11 +86,11 @@ public class TestSegmentMaker {
 		for(PointType type : maker.getOriginalPointTypes()) {
 			//System.out.println(type);
 		}
-		Assert.assertNotNull(maker.getOriginalSegmentation());
-		for(TypeInterval segment : maker.getOriginalSegmentation()) {
+		Assert.assertNotNull(maker.getOriginalTypeSegmentArray());
+		for(TypeInterval segment : maker.getOriginalTypeSegmentArray()) {
 			//System.out.println(segment.toString());
 		}
-		Assert.assertEquals(1, maker.getOriginalSegmentation().size());	
+		Assert.assertEquals(1, maker.getOriginalTypeSegmentArray().size());	
 	}
 	@Test
 	public void testProcessBorder1() throws NullTypeException {
@@ -181,7 +181,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
-		Assert.assertEquals(4, maker.getResultSegmentation().size());
+		Assert.assertEquals(4, maker.getResultTypeSegmentArray().size());
 	}
 	private VerticalProfile getSampleProfileTypeIIa_1() {
 		VerticalProfile vp = new VerticalProfile();
@@ -210,7 +210,7 @@ public class TestSegmentMaker {
 		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
-		Assert.assertEquals(4, maker.getResultSegmentation().size());
+		Assert.assertEquals(4, maker.getResultTypeSegmentArray().size());
 	}	
 	private VerticalProfile getSampleProfileTypeIIa_2() {
 		VerticalProfile vp = new VerticalProfile();
@@ -252,7 +252,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
-		TypeIntervalArray segments = maker.getOriginalSegmentation();
+		TypeIntervalArray segments = maker.getOriginalTypeSegmentArray();
 		
 		//System.out.println(segments);
 		

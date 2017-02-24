@@ -10,8 +10,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /** 
  * A partir de un perfil de pendientes en la forma de una XYVectorFunction, un tamaño
- * de la mobileBaseSize y un valor límite para el thresholdSlope genera un PointTypeSegmentArray 
- * caracterizando los distintos segmentos que encuentra en el perfil de pendientes
+ * de la mobileBaseSize y un valor límite para el thresholdSlope genera un TypeIntervalArray 
+ * caracterizando los distintos segmentos que encuentra en el perfil de pendientes.
+ * El resultado se obtiene, tras llamar al constructor, en el método getResultTypeSegmentArray()
  *  
  * @author shiguera
  *
@@ -47,12 +48,12 @@ public class SegmentMaker {
 	 * Segmentación obtenida a partir de los puntos caracterizados en originalPointTypes. Se calcula
 	 * en el constructor. Tiene segmentos tipo Grade, Border y VerticalCurve
 	 */
-	protected TypeIntervalArray originalSegmentation;
+	protected TypeIntervalArray originalTypeIntervalArray;
 	
 	/**
 	 * Segmentación resultante después del procesamiento. Solo tiene tramos tipo Grade y VerticalCurve
 	 */
-	protected TypeIntervalArray resultSegmentation;
+	protected TypeIntervalArray resultTypeIntervalArray;
 	
 	/**
 	 * Construye una Segmentation a partir de una XYVectorFunction. La Segmentation resultado se
@@ -72,9 +73,9 @@ public class SegmentMaker {
 		ProfileCharacteriser characteriser = new ProfileCharacteriser();
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 
-		this.originalSegmentation = new TypeIntervalArray(originalPointTypes);
+		this.originalTypeIntervalArray = new TypeIntervalArray(originalPointTypes);
 		
-		if(!originalSegmentation.hasNullSegments()) {
+		if(!originalTypeIntervalArray.hasNullSegments()) {
 			processBorderSegments();			
 		} else {
 			throw(new NullTypeException());
@@ -88,27 +89,27 @@ public class SegmentMaker {
 	 * @throws CloneNotSupportedException
 	 */
 	private void processBorderSegments() {
-		resultSegmentation = new TypeIntervalArray();
+		resultTypeIntervalArray = new TypeIntervalArray();
 		
-		for(int i=0; i<originalSegmentation.size(); i++) {
+		for(int i=0; i<originalTypeIntervalArray.size(); i++) {
 
-			TypeInterval currentSegment = originalSegmentation.get(i).copy();
+			TypeInterval currentSegment = originalTypeIntervalArray.get(i).copy();
 			
 			// El primer y último segmento los añado como están
 			// Más adelante, si son Border, los procesaré
-			if(i==0 || i==originalSegmentation.size()-1) {
-				resultSegmentation.add(currentSegment);
+			if(i==0 || i==originalTypeIntervalArray.size()-1) {
+				resultTypeIntervalArray.add(currentSegment);
 				continue;
 			}
 			
 			if(currentSegment.getPointType()==PointType.BORDER_POINT) {
 				if(currentSegment.size() == 1) {	
 					// Si el border segment tiene solo un punto, lo añado al final del previousSegment y al inicio del followingSegment
-					TypeInterval lastSegmentAdded = resultSegmentation.get(resultSegmentation.size()-1); 
+					TypeInterval lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1); 
 					lastSegmentAdded.setEnd(currentSegment.getStart());
-					TypeInterval followingSegment = originalSegmentation.get(i+1).copy();
-					resultSegmentation.add(followingSegment);
-					lastSegmentAdded = resultSegmentation.get(resultSegmentation.size()-1);
+					TypeInterval followingSegment = originalTypeIntervalArray.get(i+1).copy();
+					resultTypeIntervalArray.add(followingSegment);
+					lastSegmentAdded = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1);
 					lastSegmentAdded.setStart(currentSegment.getEnd());
 				} else {
 					processCurrentBorderSegment(i);	
@@ -116,28 +117,28 @@ public class SegmentMaker {
 				i++;				
 			} else {
 				// Los segmentos que no son BORDER los añado como están
-				resultSegmentation.add(currentSegment);
+				resultTypeIntervalArray.add(currentSegment);
 			}
 		}
 		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
-		if(resultSegmentation.get(0).getPointType() == PointType.BORDER_POINT) {
+		if(resultTypeIntervalArray.get(0).getPointType() == PointType.BORDER_POINT) {
 			processFirstSegmentAsBorder();
 		}
 		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
-		int last = resultSegmentation.size()-1;
-		if(resultSegmentation.get(last).getPointType() == PointType.BORDER_POINT) {
-			resultSegmentation.get(last-1).setEnd(resultSegmentation.get(last).getEnd());
-			resultSegmentation.remove(last);
+		int last = resultTypeIntervalArray.size()-1;
+		if(resultTypeIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
+			resultTypeIntervalArray.get(last-1).setEnd(resultTypeIntervalArray.get(last).getEnd());
+			resultTypeIntervalArray.remove(last);
 		}
 	}
 	private void processFirstSegmentAsBorder() {
-		if(resultSegmentation.get(0).size()<4) {
+		if(resultTypeIntervalArray.get(0).size()<4) {
 			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultSegmentation.get(1).setStart(0);
-			resultSegmentation.remove(0);
+			resultTypeIntervalArray.get(1).setStart(0);
+			resultTypeIntervalArray.remove(0);
 			return;
 		}
-		int last = resultSegmentation.get(0).getEnd();
+		int last = resultTypeIntervalArray.get(0).getEnd();
 		double[][] origvalues = originalGradePoints.getValuesAsArray(new IntegerInterval(0, last));
 		double[] rr = MathUtil.rectaMinimosCuadrados(origvalues);
 		Straight r = new Straight(rr[0], rr[1]);
@@ -145,42 +146,42 @@ public class SegmentMaker {
 		Parabole p = new Parabole(pp[0], pp[1], pp[2]);
 		double ecmrecta = MathUtil.ecmPolynomToPoints(r, origvalues);
 		double ecmparab = MathUtil.ecmPolynomToPoints(p, origvalues);
-		TypeInterval nextSegment =resultSegmentation.get(1);
+		TypeInterval nextSegment =resultTypeIntervalArray.get(1);
 		if(ecmrecta<=ecmparab) {
 			// Caso aproxima mejor la recta
 			if(nextSegment.getPointType()==PointType.GRADE) {
 				// Si el siguiente es recta, los uno en uno solo
 				nextSegment.setStart(0);
-				resultSegmentation.remove(0);
+				resultTypeIntervalArray.remove(0);
 			} else {
 				// Si el siguiente es VC, el primero lo convierto en recta
-				resultSegmentation.get(0).setPointType(PointType.GRADE);
+				resultTypeIntervalArray.get(0).setPointType(PointType.GRADE);
 			}
 		} else {
 			// Caso aproxima mejor la parábola
 			if(nextSegment.getPointType()==PointType.GRADE) {
 				// Si el siguiente es recta, el primero lo convierto en VC
-				resultSegmentation.get(0).setPointType(PointType.VERTICAL_CURVE);
+				resultTypeIntervalArray.get(0).setPointType(PointType.VERTICAL_CURVE);
 			} else {
 				// Si el siguiente es VC las uno en una sola 
 				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
 				nextSegment.setStart(0);
-				resultSegmentation.remove(0);
+				resultTypeIntervalArray.remove(0);
 			}
 		}
 	}
 	private void processCurrentBorderSegment(int index) {
-		TypeInterval currentBorderSegment = originalSegmentation.get(index).copy();
+		TypeInterval currentBorderSegment = originalTypeIntervalArray.get(index).copy();
 		int startOfCurrentBorderSegment = currentBorderSegment.getStart();
 		int endOfCurrentBorderSegment = currentBorderSegment.getEnd();
-		TypeInterval followingSegment = originalSegmentation.get(index+1).copy();
+		TypeInterval followingSegment = originalTypeIntervalArray.get(index+1).copy();
 		int endOfFollowingSegment = followingSegment.getEnd();
 		//PointTypeSegment lastProcessedSegment = processedSegments.get(processedSegments.size()-1);
 		
 		// Si el border segment tiene más de un punto busco
 		// el que mejor ajuste da por ecm y prolongo 
 		// los segmentos anterior y posterior hasta él
-		TypeInterval previousSegment = originalSegmentation.get(index-1).copy();
+		TypeInterval previousSegment = originalTypeIntervalArray.get(index-1).copy();
 		int startOfPreviousSegment = previousSegment.getStart();
 		XYVectorFunction originalpoints = originalGradePoints.subList(startOfPreviousSegment, endOfFollowingSegment);
 		double[] originalY = originalpoints.getYValues();
@@ -233,9 +234,9 @@ public class SegmentMaker {
 		}
 		//LOG.debug("ecm = " + ecmmin);
 		//LOG.debug("ecmmin_index = " + ecmmin_index);
-		resultSegmentation.get(resultSegmentation.size()-1).setEnd(ecmmin_index);
-		resultSegmentation.add(followingSegment.copy());
-		resultSegmentation.get(resultSegmentation.size()-1).setStart(ecmmin_index);
+		resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1).setEnd(ecmmin_index);
+		resultTypeIntervalArray.add(followingSegment.copy());
+		resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1).setStart(ecmmin_index);
 	}
 	
 	
@@ -248,11 +249,11 @@ public class SegmentMaker {
 		return originalPointTypes;
 	}
 
-	public TypeIntervalArray getOriginalSegmentation() {
-		return originalSegmentation;
+	public TypeIntervalArray getOriginalTypeSegmentArray() {
+		return originalTypeIntervalArray;
 	}
-	public TypeIntervalArray getResultSegmentation() {
-		return resultSegmentation;
+	public TypeIntervalArray getResultTypeSegmentArray() {
+		return resultTypeIntervalArray;
 	}
 	
 	public int getMobileBaseSize() {

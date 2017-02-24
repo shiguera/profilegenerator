@@ -59,7 +59,7 @@ public class TypeIntervalArray extends ArrayList<TypeInterval> {
 		return false;
 	}
 	/**
-	 * Devuelve true s exsten dos segmentos del tipo Grade consecutivos
+	 * Devuelve true si exsten dos segmentos del tipo Grade consecutivos
 	 * @return
 	 */
 	public boolean hasTwoGradesConsecutive() {

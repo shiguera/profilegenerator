@@ -18,14 +18,17 @@ public class TestCharterShow {
 	
 	static Logger LOG = Logger.getLogger(TestCharter.class);
 	
+	static Charter charter = null;
+	// Lo establece el método readData
+	static String charterName = "";
+	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
 
 		LOG.debug("main()");
 		
-		Charter charter = new Charter("M-320 slopes", "S", "G");
 		XYVectorFunction data = readData();
-		
+		charter = new Charter(charterName, "S", "G");
 		charter.addXYVectorFunction(data);
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -45,6 +48,7 @@ public class TestCharterShow {
 
 	private static XYVectorFunction readData() {
 		LOG.debug("readData()");
+		charterName = "N-320";
 		URL url = ClassLoader.getSystemResource("N-320_xyvector.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
@@ -52,7 +56,7 @@ public class TestCharterShow {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		
-		return data;
+		XYVectorFunction subdata = data.extract(0.0, 807.022);
+		return subdata;
 	}
 }
