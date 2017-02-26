@@ -304,6 +304,25 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return MathUtil.parabolaMinimosCuadrados(xy);
 	}
 
+	/**
+	 * Calcula el área encerrada entre los puntos y el eje X según la foŕmula del trapecio
+	 * @param i1 Indice del extremo izquierdo del intervalo
+	 * @param i2 Indice del extremo derecho del intervalo
+	 * @return Area encerrada
+	 */
+	public double areaEncerrada(int i1, int i2) {
+		double sumaarea= 0.0;
+		for (int i= i1; i<i2; i++) {
+			double x1 = getX(i1);
+			double y1 = getY(i1);
+			double x2 = getX(i2);
+			double y2 = getY(i2);
+			double area = 0.5*(y1+y2)*(x2-x1);
+			sumaarea = sumaarea + area;
+		}
+		return sumaarea;
+	}
+	
 	@Override
 	public XYVectorFunction clone() {
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);

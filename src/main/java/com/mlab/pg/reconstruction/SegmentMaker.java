@@ -195,11 +195,10 @@ public class SegmentMaker {
 		int ecmmin_index = -1;
 		for(int i=startOfCurrentBorderSegment; i<=endOfCurrentBorderSegment; i++) {
 			XYVectorFunction adjustedPoints = new XYVectorFunction();
-			double[][] coords_r1 = originalGradePoints.getValuesAsArray(new IntegerInterval(startOfPreviousSegment,i));
-			double[] r1 = MathUtil.rectaMinimosCuadrados(coords_r1);
 			
-			double[][] coords_r2 = originalGradePoints.getValuesAsArray(new IntegerInterval(i, endOfFollowingSegment));
-			double[] r2 = MathUtil.rectaMinimosCuadrados(coords_r2);
+			double[] r1 = originalGradePoints.rectaMinimosCuadrados(startOfPreviousSegment, i);
+			
+			double[] r2 = originalGradePoints.rectaMinimosCuadrados(i, endOfFollowingSegment);
 			
 			// Hay que ajustarlas en el último punto. Las desplazo paralelamente
 			// a la ordenada media
@@ -211,6 +210,7 @@ public class SegmentMaker {
 			r1 = MathUtil.rectaPtoPendiente(xcomun, ycomun, pdte1);
 			double pdte2 = r2[1];
 			r2 = MathUtil.rectaPtoPendiente(xcomun, ycomun, pdte2);
+			
 			// Genero las coordenadas de los puntos ajustados
 			for(int j=startOfPreviousSegment; j<i; j++) {
 				double x = originalGradePoints.getX(j);
@@ -227,6 +227,7 @@ public class SegmentMaker {
 			double ecm = MathUtil.ecm(originalY, adjustedY);
 			//LOG.debug(ecm);
 			if(ecmmin==-1.0) {
+				// primera iteración
 				ecmmin = ecm;
 				ecmmin_index = i;
 				continue;

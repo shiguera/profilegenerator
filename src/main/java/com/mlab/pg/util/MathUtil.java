@@ -62,7 +62,7 @@ public class MathUtil {
 	 * @return Recta en la forma [a0, a1] => y = a0 + a1*x. Si la recta es
 	 * vertical devuelve null
 	 */
-	public static double[] straightByTwoPoints(double[] p1,double[] p2) {
+	public static double[] rectaPorDosPuntos(double[] p1,double[] p2) {
 		// Comprobar si es vertical
 		double denom = p2[0] - p1[0];
 		if(denom == 0.0) {
@@ -103,6 +103,39 @@ public class MathUtil {
 		return new double[] {u/mod, v/mod};
 	}
 
+	/**
+	 * Area encerrada entre un segmento de recta y el eje de las x
+	 * @param r Recta en la forma y=r[0] + r[1]*x
+	 * @param x1 abscisa del extremo izquierdo del segmento
+	 * @param x2 abscisa del extremo derecho del segmento
+	 * @return Area encerrada entre la recta y el eje X en el segmento [x1,x2]
+	 */
+	public static double areaBajoRecta(double[] r, double x1, double x2) {
+		double area= r[0]*(x2 - x1 ) + 0.5*r[1]*(x2*x2 - x1*x1);
+		return area;
+	}
+	/**
+	 * Calcula dos rectas paralelas a las anteriores pero que tienen la ordenada central común
+	 * y encierran un area S entre las rectas y el eje de las X
+	 * @param r1 Primera recta en la forma y = r1[0] + r1[1]*x
+	 * @param r2 Segunda recta en la forma y = r2[0] + r2[1]*x
+	 * @param x1 Abscisa del extremo izquierdo de la primera recta
+	 * @param x2 Abscisa común, del extremo derecho de la primera recta y el extremo izquierdo de la segunda
+	 * @param x3 Abscisa del extremo derecho de la segunda recta
+	 * @return Devuelve un double[3]. Las rectas solución serán las y=a1+b1*x; y=a2+b2*x. Los coeficientes b1 y b2 son las 
+	 * pendientes y coinciden con los de las rectas oroginales, esto es, b1 = r1[1] y b2 = r2[1]. Los 
+	 * valores devueltos son los coeficientes a1 y a2. El tercer valor del double[3] devuelto 
+	 * es la ordenada en el punto común de x=x2
+	 */
+	public static double[] mueveRactasParaEncerrarArea(double[] r1, double[] r2, double x1, double x2, double x3, double S) {
+		double[][] A = new double[][] {{1, -1}, {x2-x1, x3-x2}};
+		double[] C = new double[]{x2*(r2[1]-r1[1]), S - 0.5*r1[1]*(x2*x2-x1*x1) - 0.5*r2[1]*(x3*x3-x2*x2)};
+		double[] a = solve(A,C);
+		double ycomun = a[0] + r1[1]*x2;
+		double[] result = new double[]{a[0], a[1], ycomun};
+		return result;
+	}
+	
 	/**
 	 * Calcula el módulo de un vector
 	 * @param v Componentes del vector
@@ -305,6 +338,12 @@ public class MathUtil {
 		return suma;
 	}
 
+	/**
+	 * Resuelve un sistema lineal de eciaciones
+	 * @param a Matriz de coeficientes
+	 * @param c Vector terminosindependientes
+	 * @return Vector de soluciones
+	 */
 	static public double[] solve(double a[][], double c[]) {
         // Resuelve un sistema lineal de ecuaciones
 		int n = a.length, i, j, k;
