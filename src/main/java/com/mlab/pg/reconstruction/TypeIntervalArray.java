@@ -21,15 +21,17 @@ public class TypeIntervalArray extends ArrayList<TypeInterval> {
 		TypeInterval currentSegment = new TypeInterval(0,0,pointTypes.get(0));
 		
 		for(int i=1; i<pointTypes.size(); i++) {
-			currentSegment.setEnd(i);
 			if(pointTypes.get(i)==currentSegment.getPointType()) {
+				currentSegment.setEnd(i);
 				continue;
 			} else {
 				add(currentSegment);
+				//System.out.println("Added " + currentSegment);
 				currentSegment = new TypeInterval(i,i,pointTypes.get(i));
 			}
 		}
 		add(currentSegment);		
+		//System.out.println("Added " + currentSegment);
 	}
 	
 

@@ -58,17 +58,21 @@ public class ProfileCharacteriser {
 		for(int i=first; i<=last; i++) {
 			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope));
 		}
+		// El primer punto se caracteriza como BorderPoint
+		types.set(0, PointType.BORDER_POINT);
 		
-		// Los puntos anteriores a first se caracterizan del mismo tipo que first
-		for (int i=0; i<first; i++) {
+		// Los puntos anteriores a first, excepto el primer punto, se caracterizan del mismo tipo que first
+		for (int i=1; i<first; i++) {
 			types.set(i, types.get(first));
 		}
 		
-		// Los puntos posteriores a last se caracterizan del mismo tipo que last
-		for (int i=last+1; i<types.size(); i++) {
+		// Los puntos posteriores a last,excepto el último, se caracterizan del mismo tipo que last
+		for (int i=last+1; i<types.size()-1; i++) {
 			types.set(i, types.get(last));
 		}
 		
+		// El último punto se caracteriza como BorderPoint
+		types.set(types.size()-1, PointType.BORDER_POINT);
 		return types;
 	}
 

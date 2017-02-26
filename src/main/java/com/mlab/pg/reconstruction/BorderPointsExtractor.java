@@ -33,18 +33,18 @@ public class BorderPointsExtractor {
 		originalPointTypes = characteriser.characterise(function, baseSize, thresholdSlope); 
 
 		typeIntervalArray = new TypeIntervalArray(originalPointTypes);
+		
 		resultTypeIntervalArray = new TypeIntervalArray();
-	
 		borderPointIndexes = new ArrayList<Integer>();
 
-		if(!typeIntervalArray.hasNullSegments()) {
-			processBorderIntervals();			
-		} else {
+		if(typeIntervalArray.hasNullSegments()) {
 			throw(new NullTypeException());
 		}
+		
+		processTypeIntervalArray();
 	}
 	
-	private void processBorderIntervals() {
+	private void processTypeIntervalArray() {
 		for (int i=0; i<typeIntervalArray.size(); i++) {
 			TypeInterval currentInterval = typeIntervalArray.get(i);
 			
@@ -53,33 +53,39 @@ public class BorderPointsExtractor {
 			if(i==0 || i==typeIntervalArray.size()-1) {
 				resultTypeIntervalArray.add(currentInterval);
 				continue;
+			}			
+			
+			// Los segmentos que no son BORDER los añado como están
+			if(currentInterval.getPointType() != PointType.BORDER_POINT) {
+				resultTypeIntervalArray.add(currentInterval);
+				continue;
 			}
 			
-			if(currentInterval.getPointType() == PointType.BORDER_POINT) {
-				if(currentInterval.size() == 1) {
-					// Si el intervalo solo tiene unpunto, añado su índice a la lista de BorderPoints
-					borderPointIndexes.add(currentInterval.getStart());
-				} else {
-					// Si tiene más de un punto, proceso para ver cuál es el que mejor aproxima
-					processBorderSegmentWithMoreThanOnePoint(i);
-				}
-				i=i+2;				
-			} else {
-				// Los segmentos que no son BORDER los añado como están
+			if(currentInterval.size() == 1) {
+				// Si el intervalo solo tiene un punto, añado su índice a la lista de BorderPoints
+				borderPointIndexes.add(currentInterval.getStart());
 				resultTypeIntervalArray.add(currentInterval);
+				continue;
+			} else {
+				// Si tiene más de un punto, proceso para ver cuál es el que mejor aproxima
+				processBorderSegmentWithMoreThanOnePoint(i);
+				i=i+1;					
 			}
-		}
+		} 
+		
 		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
 		if(resultTypeIntervalArray.get(0).getPointType() == PointType.BORDER_POINT) {
 			processFirstSegmentAsBorder();
 		}
+		
 		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
 		int last = resultTypeIntervalArray.size()-1;
 		if(resultTypeIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
 			resultTypeIntervalArray.get(last-1).setEnd(resultTypeIntervalArray.get(last).getEnd());
 			resultTypeIntervalArray.remove(last);
-		}
+		}					
 	}
+	
 	private void processFirstSegmentAsBorder() {
 		if(resultTypeIntervalArray.get(0).size()<4) {
 			// Si tiene menos de cuatro puntos se lo asigno al siguiente
@@ -120,46 +126,43 @@ public class BorderPointsExtractor {
 		}
 	}
 	private void processBorderSegmentWithMoreThanOnePoint(int index) {
-		TypeInterval currentBorderSegment = typeIntervalArray.get(index).copy();
-		int startOfCurrentBorderSegment = currentBorderSegment.getStart();
-		int endOfCurrentBorderSegment = currentBorderSegment.getEnd();
-		TypeInterval followingSegment = typeIntervalArray.get(index+1).copy();
-		int endOfFollowingSegment = followingSegment.getEnd();
-		//PointTypeSegment lastProcessedSegment = processedSegments.get(processedSegments.size()-1);
 		
+		TypeInterval currentBorderSegment = typeIntervalArray.get(index).copy();
+		TypeInterval followingSegment = typeIntervalArray.get(index+1).copy();
+		TypeInterval previousSegment = typeIntervalArray.get(index-1).copy();
+
 		// Si el border segment tiene más de un punto busco
 		// el que mejor ajuste da por ecm y prolongo 
 		// los segmentos anterior y posterior hasta él
-		TypeInterval previousSegment = typeIntervalArray.get(index-1).copy();
-		int startOfPreviousSegment = previousSegment.getStart();
-		XYVectorFunction originalpoints = function.subList(startOfPreviousSegment, endOfFollowingSegment);
+		
+		XYVectorFunction originalpoints = function.subList(previousSegment.getStart(), followingSegment.getEnd());
 		double[] originalY = originalpoints.getYValues();
 				
 		double ecmmin = -1.0;
 		int ecmmin_index = -1;
-		for(int i=startOfCurrentBorderSegment; i<=endOfCurrentBorderSegment; i++) {
+		for(int i=currentBorderSegment.getStart(); i<= currentBorderSegment.getEnd(); i++) {
 			XYVectorFunction adjustedPoints = new XYVectorFunction();
 			
-			double[] r1 = function.rectaMinimosCuadrados(startOfPreviousSegment, i);
+			double[] r1 = function.rectaMinimosCuadrados(previousSegment.getStart(), i);
 			
-			double[] r2 = function.rectaMinimosCuadrados(i, endOfFollowingSegment);
+			double[] r2 = function.rectaMinimosCuadrados(i, followingSegment.getEnd());
 			
 			// Calculo el area encerrado bajo la muestra original de puntos
-			double area = function.areaEncerrada(startOfPreviousSegment, endOfFollowingSegment);
+			double area = function.areaEncerrada(previousSegment.getStart(), followingSegment.getEnd());
 			
 			// Calculo las rectas desplazadas que encierran el mismo area
-			double[] coefs = MathUtil.mueveRactasParaEncerrarArea(r1, r2, startOfPreviousSegment, i, endOfFollowingSegment, area);
+			double[] coefs = MathUtil.mueveRactasParaEncerrarArea(r1, r2, previousSegment.getStart(), i, followingSegment.getEnd(), area);
 			r1 = new double[] {coefs[0], r1[1]};
 			r2 = new double[]{coefs[1], r2[1]};
 			double ycomun = coefs[2];
 						
 			// Genero las coordenadas de los puntos ajustados
-			for(int j=startOfPreviousSegment; j<i; j++) {
+			for(int j=previousSegment.getStart(); j<i; j++) {
 				double x = function.getX(j);
 				double y = r1[0] + r1[1] * x;
 				adjustedPoints.add(new double[]{x, y});
 			}
-			for(int j=i; j<=endOfFollowingSegment; j++) {
+			for(int j=i; j<=followingSegment.getEnd(); j++) {
 				double x = function.getX(j);
 				double y = r2[0] + r2[1] * x;
 				adjustedPoints.add(new double[]{x, y});
@@ -196,7 +199,6 @@ public class BorderPointsExtractor {
 	public TypeIntervalArray getTypeIntervalArray() {
 		return typeIntervalArray;
 	}
-
 	public TypeIntervalArray getResultTypeIntervalArray() {
 		return resultTypeIntervalArray;
 	}

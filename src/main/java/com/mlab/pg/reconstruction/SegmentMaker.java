@@ -117,23 +117,26 @@ public class SegmentMaker {
 			}
 		}
 		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
-		if(resultTypeIntervalArray.get(0).getPointType() == PointType.BORDER_POINT) {
+		TypeInterval firstInterval = resultTypeIntervalArray.get(0); 
+		if(firstInterval.getPointType() == PointType.BORDER_POINT && firstInterval.size()>1 ) {
 			processFirstSegmentAsBorder();
 		}
+		
 		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
 		int last = resultTypeIntervalArray.size()-1;
 		if(resultTypeIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
-			resultTypeIntervalArray.get(last-1).setEnd(resultTypeIntervalArray.get(last).getEnd());
-			resultTypeIntervalArray.remove(last);
+			resultTypeIntervalArray.get(last-1).setEnd(resultTypeIntervalArray.get(last).getEnd()-1);
+			//resultTypeIntervalArray.remove(last);
 		}
 	}
 	private void processFirstSegmentAsBorder() {
 		if(resultTypeIntervalArray.get(0).size()<4) {
 			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultTypeIntervalArray.get(1).setStart(0);
+			resultTypeIntervalArray.get(1).setStart(1);
 			resultTypeIntervalArray.remove(0);
 			return;
 		}
+		
 		int last = resultTypeIntervalArray.get(0).getEnd();
 		double[][] origvalues = originalGradePoints.getValuesAsArray(new IntegerInterval(0, last));
 		double[] rr = MathUtil.rectaMinimosCuadrados(origvalues);
@@ -161,7 +164,7 @@ public class SegmentMaker {
 			} else {
 				// Si el siguiente es VC las uno en una sola 
 				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
-				nextSegment.setStart(0);
+				nextSegment.setStart(1);
 				resultTypeIntervalArray.remove(0);
 			}
 		}
