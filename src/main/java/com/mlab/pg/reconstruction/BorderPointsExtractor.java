@@ -29,18 +29,24 @@ public class BorderPointsExtractor {
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser();
-		originalPointTypes = characteriser.characterise(function, baseSize, thresholdSlope); 
-
-		typeIntervalArray = new TypeIntervalArray(originalPointTypes);
-		
+		// Inicializa las variables que albergarán los resultados
 		resultTypeIntervalArray = new TypeIntervalArray();
 		borderPointIndexes = new ArrayList<Integer>();
 
+		// Caracterizo un PoinType a cada punto del perfil 
+		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		originalPointTypes = characteriser.characterise(function, baseSize, thresholdSlope); 
+
+		// Reuno en un TypeInterval los puntos consecutivos que tienen el mismo PointType
+		typeIntervalArray = new TypeIntervalArray(originalPointTypes);
+		
+		// Si en la creación de los TypeInterval aparece algún intervalo 
+		// de PointType.NULL error, cancelo la operación
 		if(typeIntervalArray.hasNullSegments()) {
 			throw(new NullTypeException());
 		}
 		
+		// Proceso el Array de TypeInterval
 		processTypeIntervalArray();
 	}
 	
@@ -49,9 +55,9 @@ public class BorderPointsExtractor {
 			TypeInterval currentInterval = typeIntervalArray.get(i);
 			
 			// El primer y último segmento los añado como están
-			// Más adelante, si son Border, los procesaré
 			if(i==0 || i==typeIntervalArray.size()-1) {
 				resultTypeIntervalArray.add(currentInterval);
+				borderPointIndexes.add(currentInterval.getStart());
 				continue;
 			}			
 			
@@ -73,78 +79,39 @@ public class BorderPointsExtractor {
 			}
 		} 
 		
-		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
-		if(resultTypeIntervalArray.get(0).getPointType() == PointType.BORDER_POINT) {
-			processFirstSegmentAsBorder();
+		// Si el primer segmento tiene más de un punto, asigno todos
+		// los puntos menos el primero al segundo segmento
+		TypeInterval firstInterval = resultTypeIntervalArray.get(0);
+		if(firstInterval.getPointType() == PointType.BORDER_POINT && firstInterval.size()>1) {
+			//processFirstSegmentAsBorder();
+			resultTypeIntervalArray.get(1).setStart(1);
 		}
 		
-		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
-		int last = resultTypeIntervalArray.size()-1;
-		if(resultTypeIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
-			resultTypeIntervalArray.get(last-1).setEnd(resultTypeIntervalArray.get(last).getEnd());
-			resultTypeIntervalArray.remove(last);
-		}					
+		// Si el último segmento tiene más de un punto, asigno todos lo puntos,
+		// excepto el último, al penultimo segmento
+		TypeInterval lastInterval = resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1);
+		if(lastInterval.getPointType() == PointType.BORDER_POINT && lastInterval.size() > 1) {
+			resultTypeIntervalArray.get(resultTypeIntervalArray.size()-2).setEnd(lastInterval.getEnd()-1);
+			lastInterval.setStart(lastInterval.getEnd());
+			
+		}
 	}
 	
-	private void processFirstSegmentAsBorder() {
-		if(resultTypeIntervalArray.get(0).size()<4) {
-			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultTypeIntervalArray.get(1).setStart(0);
-			resultTypeIntervalArray.remove(0);
-			return;
-		}
-		int last = resultTypeIntervalArray.get(0).getEnd();
-		double[][] origvalues = function.getValuesAsArray(new IntegerInterval(0, last));
-		double[] rr = MathUtil.rectaMinimosCuadrados(origvalues);
-		Straight r = new Straight(rr[0], rr[1]);
-		double[] pp = MathUtil.parabolaMinimosCuadrados(origvalues);
-		Parabole p = new Parabole(pp[0], pp[1], pp[2]);
-		double ecmrecta = MathUtil.ecmPolynomToPoints(r, origvalues);
-		double ecmparab = MathUtil.ecmPolynomToPoints(p, origvalues);
-		TypeInterval nextSegment =resultTypeIntervalArray.get(1);
-		if(ecmrecta<=ecmparab) {
-			// Caso aproxima mejor la recta
-			if(nextSegment.getPointType()==PointType.GRADE) {
-				// Si el siguiente es recta, los uno en uno solo
-				nextSegment.setStart(0);
-				resultTypeIntervalArray.remove(0);
-			} else {
-				// Si el siguiente es VC, el primero lo convierto en recta
-				resultTypeIntervalArray.get(0).setPointType(PointType.GRADE);
-			}
-		} else {
-			// Caso aproxima mejor la parábola
-			if(nextSegment.getPointType()==PointType.GRADE) {
-				// Si el siguiente es recta, el primero lo convierto en VC
-				resultTypeIntervalArray.get(0).setPointType(PointType.VERTICAL_CURVE);
-			} else {
-				// Si el siguiente es VC las uno en una sola 
-				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
-				nextSegment.setStart(0);
-				resultTypeIntervalArray.remove(0);
-			}
-		}
-	}
 	private void processBorderSegmentWithMoreThanOnePoint(int index) {
 		
 		TypeInterval currentBorderSegment = typeIntervalArray.get(index).copy();
-		TypeInterval followingSegment = typeIntervalArray.get(index+1).copy();
 		TypeInterval previousSegment = typeIntervalArray.get(index-1).copy();
+		TypeInterval followingSegment = typeIntervalArray.get(index+1).copy();
 
-		// Si el border segment tiene más de un punto busco
-		// el que mejor ajuste da por ecm y prolongo 
-		// los segmentos anterior y posterior hasta él
-		
+		// Extraigo los puntos afectados en el procesamiento
 		XYVectorFunction originalpoints = function.subList(previousSegment.getStart(), followingSegment.getEnd());
-		double[] originalY = originalpoints.getYValues();
 				
 		double ecmmin = -1.0;
 		int ecmmin_index = -1;
 		for(int i=currentBorderSegment.getStart(); i<= currentBorderSegment.getEnd(); i++) {
-			XYVectorFunction adjustedPoints = new XYVectorFunction();
 			
+			// Calculo las rectas de minimos cuadrados a ambos lados del borderpoint
 			double[] r1 = function.rectaMinimosCuadrados(previousSegment.getStart(), i);
-			
 			double[] r2 = function.rectaMinimosCuadrados(i, followingSegment.getEnd());
 			
 			// Calculo el area encerrado bajo la muestra original de puntos
@@ -157,6 +124,7 @@ public class BorderPointsExtractor {
 			double ycomun = coefs[2];
 						
 			// Genero las coordenadas de los puntos ajustados
+			XYVectorFunction adjustedPoints = new XYVectorFunction();
 			for(int j=previousSegment.getStart(); j<i; j++) {
 				double x = function.getX(j);
 				double y = r1[0] + r1[1] * x;
@@ -167,7 +135,9 @@ public class BorderPointsExtractor {
 				double y = r2[0] + r2[1] * x;
 				adjustedPoints.add(new double[]{x, y});
 			}
+			
 			// Calculo el ecm
+			double[] originalY = originalpoints.getYValues();
 			double[] adjustedY = adjustedPoints.getYValues();
 			double ecm = MathUtil.ecm(originalY, adjustedY);
 			//LOG.debug(ecm);
@@ -184,8 +154,7 @@ public class BorderPointsExtractor {
 			}
 		}
 		borderPointIndexes.add(ecmmin_index);
-		//LOG.debug("ecm = " + ecmmin);
-		//LOG.debug("ecmmin_index = " + ecmmin_index);
+		
 		resultTypeIntervalArray.get(resultTypeIntervalArray.size()-1).setEnd(ecmmin_index-1);
 		resultTypeIntervalArray.add(new TypeInterval(ecmmin_index, ecmmin_index, PointType.BORDER_POINT));
 		resultTypeIntervalArray.add(followingSegment.copy());

@@ -42,12 +42,9 @@ public class TestBorderPointsExtractor {
 		System.out.println(extractor.getBorderPointIndexes());
 		System.out.println(extractor.getResultTypeIntervalArray());
 		
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
-		System.out.println(maker.getResultTypeSegmentArray());
 	}
 	/**
 	 * Una VC(S0=0;G0=0.02;Kv=3000;L=80) seguida de una grade con pendiente=0.04672
-	 * DesignSpeed = 40
 	 * El punto VCE está en s=80, que corresponde al índice i=16 en la XYVectorFunction
 	 */
 	private VerticalProfile getSampleProfile1() {
@@ -72,7 +69,7 @@ public class TestBorderPointsExtractor {
 		LOG.debug("testWithN320()");
 		
 		XYVectorFunction data = readDataN320();
-		data = data.extract(0.0, 500.0);
+		data = data.extract(0.0, 1500.0);
 		Assert.assertNotNull(data);
 		
 		
