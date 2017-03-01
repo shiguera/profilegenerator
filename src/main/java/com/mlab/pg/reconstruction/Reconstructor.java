@@ -30,13 +30,13 @@ public class Reconstructor {
 	protected TypeIntervalArray segmentation;
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
-	protected SegmentMaker2 segmentMaker;
+	protected SegmentMaker segmentMaker;
 	
 	
 	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, double startZ) throws NullTypeException {
 		this.originalGradePoints = originalGradePoints.clone();
 		
-		segmentMaker = new SegmentMaker2(originalGradePoints, mobilebasesize, thresholdslope);
+		segmentMaker = new SegmentMaker(originalGradePoints, mobilebasesize, thresholdslope);
 		segmentation = segmentMaker.getResultTypeSegmentArray();
 		
 		gradeProfile = new VerticalGradeProfile();

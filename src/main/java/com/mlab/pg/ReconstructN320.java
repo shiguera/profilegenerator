@@ -36,7 +36,7 @@ public class ReconstructN320 {
 		
 		Reconstructor reconstructor = null;
 		try {
-			reconstructor = new Reconstructor(gradeData, 4, 1e-5, 727.0);
+			reconstructor = new Reconstructor(gradeData, 4, 0.75e-5, 727.0);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);
@@ -66,7 +66,7 @@ public class ReconstructN320 {
             	JFrame frame = new JFrame("Charter");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
-        		//charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 1000.0);
+        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 850.0);
         		frame.pack();
         		RefineryUtilities.centerFrameOnScreen(frame);
         		frame.setVisible(true);

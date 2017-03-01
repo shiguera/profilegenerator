@@ -330,10 +330,10 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	public double areaEncerrada(int i1, int i2) {
 		double sumaarea= 0.0;
 		for (int i= i1; i<i2; i++) {
-			double x1 = getX(i1);
-			double y1 = getY(i1);
-			double x2 = getX(i2);
-			double y2 = getY(i2);
+			double x1 = getX(i);
+			double y1 = getY(i);
+			double x2 = getX(i+1);
+			double y2 = getY(i+1);
 			double area = 0.5*(y1+y2)*(x2-x1);
 			sumaarea = sumaarea + area;
 		}
