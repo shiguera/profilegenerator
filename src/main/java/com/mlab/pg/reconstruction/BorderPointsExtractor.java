@@ -31,7 +31,7 @@ public class BorderPointsExtractor {
 		borderPointIndexes = new ArrayList<Integer>();
 
 		// Caracterizo un PoinType a cada punto del perfil 
-		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		ProfileCharacteriser characteriser = new ProfileCharacteriser(new PointCharacteriserStrategy_EqualArea());
 		originalPointTypes = characteriser.characterise(function, baseSize, thresholdSlope); 
 
 		// Reuno en un TypeInterval los puntos consecutivos que tienen el mismo PointType

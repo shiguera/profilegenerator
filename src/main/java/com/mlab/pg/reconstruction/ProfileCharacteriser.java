@@ -18,9 +18,10 @@ public class ProfileCharacteriser {
 	Logger LOG = Logger.getLogger(ProfileCharacteriser.class);
 	
 	PointCharacteriser pointCharacteriser;
+	PointCharacteriserStrategy strategy;
 	
-	public ProfileCharacteriser() {
-		
+	public ProfileCharacteriser(PointCharacteriserStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class ProfileCharacteriser {
 		int last = gpsample.size()-mobileBaseSize;
 		pointCharacteriser = new PointCharacteriser();
 		for(int i=first; i<=last; i++) {
-			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope, new PointCharacteriserStrategy_EqualArea()));
+			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope, strategy));
 		}
 		// El primer punto se caracteriza como BorderPoint
 		types.set(0, PointType.BORDER_POINT);

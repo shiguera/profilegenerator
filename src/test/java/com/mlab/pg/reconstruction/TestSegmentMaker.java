@@ -47,7 +47,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		Assert.assertNotNull(maker.getOriginalPointTypes());
 		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
 		
@@ -82,7 +82,7 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		Assert.assertNotNull(maker.getOriginalPointTypes());
 		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
 		
@@ -107,7 +107,7 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
 	}
@@ -123,7 +123,7 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		//System.out.println(maker.getOriginalSegmentation());		
 		//System.out.println(maker.getResultSegmentation());
 	}
@@ -181,7 +181,7 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-6;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		System.out.println(maker.getOriginalTypeSegmentArray());
 		System.out.println(maker.getResultTypeSegmentArray());
 		Assert.assertEquals(6, maker.getResultTypeSegmentArray().size());
@@ -210,7 +210,7 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-6;
 		int baseSize = 4;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
 		Assert.assertEquals(6, maker.getResultTypeSegmentArray().size());
@@ -254,7 +254,7 @@ public class TestSegmentMaker {
 		
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
-		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope);
+		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
 		TypeIntervalArray segments = maker.getOriginalTypeSegmentArray();
 		
 		//System.out.println(segments);

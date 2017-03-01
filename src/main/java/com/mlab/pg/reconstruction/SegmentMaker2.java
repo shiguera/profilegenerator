@@ -70,7 +70,7 @@ public class SegmentMaker2 {
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		ProfileCharacteriser characteriser = new ProfileCharacteriser(new PointCharacteriserStrategy_EqualArea());
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 
 		this.originalTypeIntervalArray = new TypeIntervalArray(originalPointTypes);

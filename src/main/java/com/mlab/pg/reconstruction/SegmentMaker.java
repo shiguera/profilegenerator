@@ -55,6 +55,7 @@ public class SegmentMaker {
 	 */
 	protected TypeIntervalArray resultTypeIntervalArray;
 	
+	PointCharacteriserStrategy strategy;
 	/**
 	 * Construye una TypeIntervalArray a partir de una XYVectorFunction. La TypeIntervalArray resultado se
 	 * puede consultar en getResultTypeIntervalArray() y solo tiene segmentos del tipo Grade o VerticalCurve.
@@ -65,12 +66,13 @@ public class SegmentMaker {
 	 * @param thresholdslope
 	 * @throws NullTypeException
 	 */
-	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope) throws NullTypeException {
+	public SegmentMaker(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope, PointCharacteriserStrategy strategy) throws NullTypeException {
 		this.originalGradePoints = gradesample;
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
+		this.strategy = strategy;
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser();
+		ProfileCharacteriser characteriser = new ProfileCharacteriser(strategy);
 		this.originalPointTypes = characteriser.characterise(originalGradePoints, mobileBaseSize, thresholdSlope); 
 
 		this.originalTypeIntervalArray = new TypeIntervalArray(originalPointTypes);
