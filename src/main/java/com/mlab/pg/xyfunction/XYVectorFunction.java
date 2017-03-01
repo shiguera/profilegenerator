@@ -90,7 +90,24 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return -1;		
 	}
 
-	public boolean containsInterval(IntegerInterval interval) {
+	/**
+	 * Devuelve el índoce del punto más próximo a una determinada abscisa
+	 * @param x Abscisa del punto
+	 * @return indice cuya abscisa es la más proxima a x
+	 */
+	public int getNearestIndex(double x) {
+		int previous = previousIndex(x);
+		double previousx = getX(previous);
+		int following = followingIndex(x);
+		double followingx = getX(following);
+		if(Math.abs(x - previousx) >= Math.abs(followingx-x)) {
+			return following;
+		} else {
+			return previous;
+		}
+		
+	}
+ 	public boolean containsInterval(IntegerInterval interval) {
 		if(interval.getStart()>=0 && interval.getStart()<size() && 
 				interval.getEnd()>=0 && interval.getEnd()<size()) {
 			return true;
@@ -322,6 +339,18 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		}
 		return sumaarea;
 	}
+	/**
+	 * Calcula el area encerrada entre dos abscisas según la fórmula del trapecio
+	 * @param startx abscisa inicial
+	 * @param endx abscisa final
+	 * @return Area encerrada
+	 */
+	public double areaEncerrada(double startx, double endx) {
+		int left = getNearestIndex(startx);
+		int right = getNearestIndex(endx);
+		return areaEncerrada(left, right);
+	}
+	
 	
 	@Override
 	public XYVectorFunction clone() {

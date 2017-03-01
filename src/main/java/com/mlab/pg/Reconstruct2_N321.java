@@ -10,7 +10,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
-import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.Reconstructor2;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -34,10 +33,10 @@ public class Reconstruct2_N321 {
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		
-		XYVectorFunction data = readData();
+		XYVectorFunction originalGData = readData();
 		Reconstructor2 reconstructor = null;
 		try {
-			reconstructor = new Reconstructor2(data, 10, 0.5e-5, 727.0);
+			reconstructor = new Reconstructor2(originalGData, 10, 0.5e-5, 727.0);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);
@@ -53,12 +52,12 @@ public class Reconstruct2_N321 {
 
 	
 
-	private static void showOriginalVProfile(XYVectorFunction data, XYVectorFunction data2) {
+	private static void showOriginalVProfile(XYVectorFunction originalData, XYVectorFunction resultData) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
         		charter = new Charter("N-320: Original VProfile", "S", "G");
-        		charter.addXYVectorFunction(data);
-        		charter.addXYVectorFunction(data2);
+        		charter.addXYVectorFunction(originalData, "Original Data");
+        		charter.addXYVectorFunction(resultData, "Result Data");
         		
             	JFrame frame = new JFrame("Charter");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

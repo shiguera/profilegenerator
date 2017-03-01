@@ -56,7 +56,7 @@ public class ProfileCharacteriser {
 		int last = gpsample.size()-mobileBaseSize;
 		pointCharacteriser = new PointCharacteriser();
 		for(int i=first; i<=last; i++) {
-			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope));
+			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation()));
 		}
 		// El primer punto se caracteriza como BorderPoint
 		types.set(0, PointType.BORDER_POINT);

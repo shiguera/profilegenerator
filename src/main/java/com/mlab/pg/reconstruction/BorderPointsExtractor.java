@@ -6,9 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.xyfunction.IntegerInterval;
-import com.mlab.pg.xyfunction.Parabole;
-import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class BorderPointsExtractor {
@@ -95,6 +92,9 @@ public class BorderPointsExtractor {
 			lastInterval.setStart(lastInterval.getEnd());
 			
 		}
+		
+		OnePointIntervalFilter filter = new OnePointIntervalFilter(resultTypeIntervalArray);
+		resultTypeIntervalArray = filter.getFilteredTypeIntervalArray();
 	}
 	
 	private void processBorderSegmentWithMoreThanOnePoint(int index) {

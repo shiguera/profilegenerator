@@ -32,7 +32,7 @@ public class TestCharter {
 		XYVectorFunction data = readData();
 		Assert.assertNotNull(data);
 		
-		charter.addXYVectorFunction(data);
+		charter.addXYVectorFunction(data, "Data");
 		Assert.assertEquals(1, charter.getSeriesCount());
 		Assert.assertEquals(charter.getSeries(0).getItemCount(), data.size());
 		

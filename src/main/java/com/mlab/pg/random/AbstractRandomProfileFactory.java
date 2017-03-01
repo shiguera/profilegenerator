@@ -54,7 +54,8 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 		random = new Random();
 	}
 	
-	
+	abstract public VerticalProfile createRandomProfile();
+
 	
 	public GradeAlignment randomUpGrade(double starts, double startz) {
 		//LOG.debug("randomUpGrade()");
@@ -208,8 +209,7 @@ public abstract class AbstractRandomProfileFactory implements RandomProfileFacto
 		this.minKv = minKv;
 	}
 
-	abstract public VerticalProfile createRandomProfile();
-
+	
 	
 	
 }

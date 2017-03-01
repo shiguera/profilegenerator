@@ -11,6 +11,7 @@ public class EssayProfileType_I {
 	private static Logger LOG = Logger.getLogger(EssayProfileType_I.class);
 	
 	public static void main(String[] args) {
+		LOG.debug("EssayProfileType_I.main()");
 		PropertyConfigurator.configure("log4j.properties");	
 		//LOG.debug("EssayProfileType_I.main()");
 		

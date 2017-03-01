@@ -32,45 +32,41 @@ public class ReconstructN320 {
 		LOG.debug("main()");
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
+		XYVectorFunction gradeData = readGradeData();
 		
-		XYVectorFunction data = readData();
 		Reconstructor reconstructor = null;
 		try {
-			reconstructor = new Reconstructor(data, 4, 1e-5, 0.0);
+			reconstructor = new Reconstructor(gradeData, 4, 1e-5, 727.0);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);
 		}
+		
 		VerticalGradeProfile gprofile = reconstructor.getGradeProfile();
-		System.out.println(gprofile);
+		//System.out.println(gprofile);
+		
 		VerticalProfile vprofile = reconstructor.getVerticalProfile();
-		System.out.println(vprofile);
-		XYVectorFunction vprofilesample = vprofile.getSample(0.0, vprofile.getEndS(), 10, true);
-		for(int i=0; i<vprofilesample.size(); i++) {
-			double[] sz = vprofilesample.get(i);
-			vprofilesample.set(i, new double[]{sz[0], sz[1]+ originalVProfile.get(0)[1]});
-			double y1 = originalVProfile.getY(i);
-			double y2 = vprofilesample.getY(i);
-			double dif = y1-y2;
-			System.out.println(y1+" "+y2+" "+dif);
-		}
-		showOriginalVProfile(originalVProfile, vprofilesample);
+		//System.out.println(vprofile);
+		
+		XYVectorFunction resultVProfileSample = vprofile.getSample(0.0, vprofile.getEndS(), 10, true);
+		
+		showVProfiles(originalVProfile, resultVProfileSample);
 		
 	}
 
 	
 
-	private static void showOriginalVProfile(XYVectorFunction data, XYVectorFunction data2) {
+	private static void showVProfiles(XYVectorFunction originalData, XYVectorFunction resultData) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
         		charter = new Charter("N-320: Original VProfile", "S", "G");
-        		charter.addXYVectorFunction(data);
-        		charter.addXYVectorFunction(data2);
+        		charter.addXYVectorFunction(originalData, "Original Data");
+        		charter.addXYVectorFunction(resultData, "Result Data");
         		
             	JFrame frame = new JFrame("Charter");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
-        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 750.0);
+        		//charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 1000.0);
         		frame.pack();
         		RefineryUtilities.centerFrameOnScreen(frame);
         		frame.setVisible(true);
@@ -85,31 +81,31 @@ public class ReconstructN320 {
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
 		charterName = "N-320: Original VeticalProfile";
-		URL url = ClassLoader.getSystemResource("N-320_SZ.csv");
+		URL url = ClassLoader.getSystemResource("N-320_CalculoDeZ_APartirDeG.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		XYVectorFunction subdata = data.extract(477.34, 1050.0);
-		return subdata;		
+		// data = data.extract(0.0, 1050.0);
+		return data;		
 	}
 
 
 
-	private static XYVectorFunction readData() {
+	private static XYVectorFunction readGradeData() {
 		LOG.debug("readData()");
 		charterName = "N-320";
-		URL url = ClassLoader.getSystemResource("N-320_xyvector.csv");
+		URL url = ClassLoader.getSystemResource("N-320_SG.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		XYVectorFunction subdata = data.extract(477.34, 1050.0);
-		return subdata;
+		//data = data.extract(0.0, 1050.0);
+		return data;
 		
 		
 		

@@ -29,7 +29,7 @@ public class TestCharterShow {
 		
 		XYVectorFunction data = readData();
 		charter = new Charter(charterName, "S", "G");
-		charter.addXYVectorFunction(data);
+		charter.addXYVectorFunction(data, "Data");
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {

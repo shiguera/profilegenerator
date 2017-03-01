@@ -33,9 +33,9 @@ public class Charter {
 		
 	}
 	
-	public void addXYVectorFunction(XYVectorFunction func) {
+	public void addXYVectorFunction(XYVectorFunction func, String name) {
 		LOG.debug("addXYVectorFunction()");
-		XYSeries series = new XYSeries(String.format("%d", getSeriesCount()));
+		XYSeries series = new XYSeries(name);
 		for(int i=0; i<func.size(); i++) {
 			series.add(func.getX(i), func.getY(i));
 		}
