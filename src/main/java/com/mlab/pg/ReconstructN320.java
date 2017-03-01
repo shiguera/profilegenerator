@@ -10,7 +10,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
+import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -37,7 +39,8 @@ public class ReconstructN320 {
 		
 		Reconstructor reconstructor = null;
 		try {
-			reconstructor = new Reconstructor(gradeData, 4, 0.75e-5, 727.0, new PointCharacteriserStrategy_LessSquareAproximation());
+			reconstructor = new Reconstructor(gradeData, 4, 1e-5, 727.0, new PointCharacteriserStrategy_EqualArea(),
+					new ProcessBorderIntervalsStrategy_LessSquares());
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

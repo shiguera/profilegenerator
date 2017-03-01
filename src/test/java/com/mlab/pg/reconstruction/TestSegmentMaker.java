@@ -41,26 +41,21 @@ public class TestSegmentMaker {
 		pts.add(new double[] {12.0, 0.04});
 		pts.add(new double[] {14.0, 0.04});
 		pts.add(new double[] {16.0, 0.04});
-		
-		
 		XYVectorFunction gp = new XYVectorFunction(pts);
+
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
-		Assert.assertNotNull(maker.getOriginalPointTypes());
-		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(gp, mobileBaseSize, thresholdSlope, 
+				new PointCharacteriserStrategy_LessSquareAproximation(), new ProcessBorderIntervalsStrategy_LessSquares());
+			
 		
-		for(PointType type : maker.getOriginalPointTypes()) {
-			System.out.println(type);
-		}
-		
-		Assert.assertNotNull(maker.getOriginalTypeSegmentArray());
-		for(TypeInterval segment : maker.getOriginalTypeSegmentArray()) {
+		Assert.assertNotNull(maker.getOriginalTypeIntervalArray());
+		for(TypeInterval segment : maker.getOriginalTypeIntervalArray()) {
 			System.out.println(segment.toString());
 		}
 		
-		Assert.assertEquals(3, maker.getOriginalTypeSegmentArray().size());
+		Assert.assertEquals(3, maker.getOriginalTypeIntervalArray().size());
 	}
 
 	@Test
@@ -82,18 +77,13 @@ public class TestSegmentMaker {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		SegmentMaker maker = new SegmentMaker(gp, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
-		Assert.assertNotNull(maker.getOriginalPointTypes());
-		Assert.assertEquals(gp.size(), maker.getOriginalPointTypes().size());
-		
-		for(PointType type : maker.getOriginalPointTypes()) {
-			//System.out.println(type);
-		}
-		Assert.assertNotNull(maker.getOriginalTypeSegmentArray());
-		for(TypeInterval segment : maker.getOriginalTypeSegmentArray()) {
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(gp, mobileBaseSize, thresholdSlope, 
+				new PointCharacteriserStrategy_LessSquareAproximation(), new ProcessBorderIntervalsStrategy_LessSquares());
+		Assert.assertNotNull(maker.getOriginalTypeIntervalArray());
+		for(TypeInterval segment : maker.getOriginalTypeIntervalArray()) {
 			//System.out.println(segment.toString());
 		}
-		Assert.assertEquals(3, maker.getOriginalTypeSegmentArray().size());	
+		Assert.assertEquals(3, maker.getOriginalTypeIntervalArray().size());	
 	}
 	@Test
 	public void testProcessBorder1() throws NullTypeException {
@@ -107,7 +97,8 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointCharacteriserStrategy strategy = new PointCharacteriserStrategy_LessSquareAproximation();
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdSlope, strategy, new ProcessBorderIntervalsStrategy_LessSquares());
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
 	}
@@ -123,7 +114,8 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeprofile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-5;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointCharacteriserStrategy strategy = new PointCharacteriserStrategy_LessSquareAproximation();
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdSlope, strategy, new ProcessBorderIntervalsStrategy_LessSquares());
 		//System.out.println(maker.getOriginalSegmentation());		
 		//System.out.println(maker.getResultSegmentation());
 	}
@@ -181,8 +173,10 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-6;
 		int baseSize = 3;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
-		System.out.println(maker.getOriginalTypeSegmentArray());
+		PointCharacteriserStrategy strategy = new PointCharacteriserStrategy_LessSquareAproximation();
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdSlope, 
+				strategy, new ProcessBorderIntervalsStrategy_LessSquares());
+		System.out.println(maker.getOriginalTypeIntervalArray());
 		System.out.println(maker.getResultTypeSegmentArray());
 		Assert.assertEquals(6, maker.getResultTypeSegmentArray().size());
 	}
@@ -210,7 +204,8 @@ public class TestSegmentMaker {
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 		double thresholdSlope = 1e-6;
 		int baseSize = 4;
-		SegmentMaker maker = new SegmentMaker(originalGradePoints, baseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointCharacteriserStrategy strategy = new PointCharacteriserStrategy_LessSquareAproximation();
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdSlope, strategy, new ProcessBorderIntervalsStrategy_LessSquares());
 		//System.out.println(maker.getOriginalSegmentation());
 		//System.out.println(maker.getResultSegmentation());
 		Assert.assertEquals(6, maker.getResultTypeSegmentArray().size());
@@ -254,8 +249,9 @@ public class TestSegmentMaker {
 		
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
-		SegmentMaker maker = new SegmentMaker(gradesample, mobileBaseSize, thresholdSlope, new PointCharacteriserStrategy_LessSquareAproximation());
-		TypeIntervalArray segments = maker.getOriginalTypeSegmentArray();
+		PointCharacteriserStrategy strategy = new PointCharacteriserStrategy_LessSquareAproximation();
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(gradesample, mobileBaseSize, thresholdSlope, strategy, new ProcessBorderIntervalsStrategy_LessSquares());
+		TypeIntervalArray segments = maker.getOriginalTypeIntervalArray();
 		
 		//System.out.println(segments);
 		

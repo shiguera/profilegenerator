@@ -3,7 +3,6 @@ package com.mlab.pg.reconstruction;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -30,14 +29,17 @@ public class Reconstructor {
 	protected TypeIntervalArray segmentation;
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
-	protected SegmentMaker segmentMaker;
+	protected TypeIntervalArrayGenerator segmentMaker;
 	protected PointCharacteriserStrategy strategy;
+	protected ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
 	
-	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, double startZ, PointCharacteriserStrategy strategy) throws NullTypeException {
+	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, 
+			double startZ, PointCharacteriserStrategy strategy, ProcessBorderIntervalsStrategy processBorderIntervalsStrategy) {
 		this.originalGradePoints = originalGradePoints.clone();
 		this.strategy = strategy;
+		this.processBorderIntervalsStrategy = processBorderIntervalsStrategy;
 
-		segmentMaker = new SegmentMaker(originalGradePoints, mobilebasesize, thresholdslope, strategy);
+		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, strategy, processBorderIntervalsStrategy);
 		segmentation = segmentMaker.getResultTypeSegmentArray();
 		
 		gradeProfile = new VerticalGradeProfile();

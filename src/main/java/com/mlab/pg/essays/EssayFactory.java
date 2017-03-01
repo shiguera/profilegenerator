@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
+import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -273,7 +274,8 @@ public class EssayFactory {
 		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
 		Reconstructor generator = null;
 		try {
-			generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0, new PointCharacteriserStrategy_LessSquareAproximation());
+			generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0, 
+					new PointCharacteriserStrategy_LessSquareAproximation(), new ProcessBorderIntervalsStrategy_LessSquares());
 		} catch(Exception e) {
 			LOG.error("Error en el constructor de Reconstructor");
 			System.exit(1);
