@@ -351,7 +351,42 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return areaEncerrada(left, right);
 	}
 	
-	
+	/**
+	 * Recta que pasa por (s2,z2) y tiene igual area encerrada
+	 * que los puntos entre i1 y i2
+	 * @param i1
+	 * @param i2
+	 * @return
+	 */
+	public double[] rectaAnteriorEqualArea(int i1, int i2) {
+		double area = areaEncerrada(i1, i2);
+		double s1 = getX(i1);
+		double s2 = getX(i2);
+		double z2 = getY(i2);
+		double[][] A = new double[][] {{(s2 - s1), (s1*s2 - s1*s1)}, {1, s2}};
+		double[] C = new double[] {2*area - z2 * (s2 - s1), z2};
+		double[] r = MathUtil.solve(A, C);
+		return r;
+	}
+
+	/**
+	 * Recta que pasa por (s1,z1) y tiene igual area encerrada
+	 * que los puntos entre i1 y i2
+	 * @param i1
+	 * @param i2
+	 * @return
+	 */
+	public double[] rectaPosteriorEqualArea(int i1, int i2) {
+		double area = areaEncerrada(i1, i2);
+		double s1 = getX(i1);
+		double z1 = getY(i1);
+		double s2 = getX(i2);
+		double[][] A = new double[][] {{(s2 - s1), (s2*s2 - s1*s2)}, {1, s1}};
+		double[] C = new double[] {2*area - z1 * (s2 - s1), z1};
+		double[] r = MathUtil.solve(A, C);
+		return r;
+	}
+
 	@Override
 	public XYVectorFunction clone() {
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
