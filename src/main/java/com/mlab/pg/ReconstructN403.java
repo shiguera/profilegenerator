@@ -23,13 +23,12 @@ import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 import junit.framework.Assert;
 
-public class ReconstructN320 {
+public class ReconstructN403 {
 
-	static Logger LOG = Logger.getLogger(ReconstructN320.class);
+	static Logger LOG = Logger.getLogger(ReconstructN403.class);
 	
 	static Charter charter = null;
 	// Lo establece el método readData
-	static String charterName = "";
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
@@ -46,7 +45,7 @@ public class ReconstructN320 {
 		
 		IterativeReconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 727.0);
+			rec = new IterativeReconstructor(gradeData, 765.0);
 			//rec = new IterativeReconstructor(modifiedGradeData, 727.0);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());
@@ -59,9 +58,9 @@ public class ReconstructN320 {
 		
 		Reconstructor reconstructor = null;
 		try {
-			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
+			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, new PointCharacteriserStrategy_EqualArea(),
 					new ProcessBorderIntervalsStrategy_LessSquares());
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
@@ -86,14 +85,14 @@ public class ReconstructN320 {
 	private static void showVProfiles(XYVectorFunction originalData, XYVectorFunction resultData) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-        		charter = new Charter("N-320: Original VProfile", "S", "G");
+        		charter = new Charter("N-403: Original VProfile", "S", "G");
         		charter.addXYVectorFunction(originalData, "Original Data");
         		charter.addXYVectorFunction(resultData, "Result Data");
         		
             	JFrame frame = new JFrame("Charter");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
-        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 850.0);
+        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 870.0);
         		frame.pack();
         		RefineryUtilities.centerFrameOnScreen(frame);
         		frame.setVisible(true);
@@ -107,8 +106,7 @@ public class ReconstructN320 {
 
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
-		charterName = "N-320: Original VeticalProfile";
-		URL url = ClassLoader.getSystemResource("N-320_CalculoDeZ_APartirDeG.csv");
+		URL url = ClassLoader.getSystemResource("N-403_SZ.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
@@ -123,8 +121,7 @@ public class ReconstructN320 {
 
 	private static XYVectorFunction readGradeData() {
 		LOG.debug("readData()");
-		charterName = "N-320";
-		URL url = ClassLoader.getSystemResource("N-320_SG.csv");
+		URL url = ClassLoader.getSystemResource("N-403_SG.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		

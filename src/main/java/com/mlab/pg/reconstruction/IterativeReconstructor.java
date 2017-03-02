@@ -66,4 +66,7 @@ public class IterativeReconstructor {
 	public double[][] getResults() {
 		return results;
 	}
+	public double getSeparacionMedia() {
+		return separacionMedia;
+	}
 }
