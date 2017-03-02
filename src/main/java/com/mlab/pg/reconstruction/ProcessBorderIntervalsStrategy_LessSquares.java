@@ -89,16 +89,11 @@ public class ProcessBorderIntervalsStrategy_LessSquares implements ProcessBorder
 		}
 		
 		int last = resultIntervalArray.get(0).getEnd();
-		double[][] origvalues = originalGradePoints.getValuesAsArray(new IntegerInterval(0, last));
-		double[] rr = MathUtil.rectaMinimosCuadrados(origvalues);
-		Straight r = new Straight(rr[0], rr[1]);
-		double[] pp = MathUtil.parabolaMinimosCuadrados(origvalues);
-		Parabole p = new Parabole(pp[0], pp[1], pp[2]);
-		double ecmrecta = MathUtil.ecmPolynomToPoints(r, origvalues);
-		double ecmparab = MathUtil.ecmPolynomToPoints(p, origvalues);
+		double[] rr = originalGradePoints.rectaMinimosCuadrados(0, last);
+		
 		TypeInterval nextSegment =resultIntervalArray.get(1);
-		if(ecmrecta<=ecmparab) {
-			// Caso aproxima mejor la recta
+		if(rr[1]<=thresholdSlope) {
+			// Es una grade
 			if(nextSegment.getPointType()==PointType.GRADE) {
 				// Si el siguiente es recta, los uno en uno solo
 				nextSegment.setStart(0);
