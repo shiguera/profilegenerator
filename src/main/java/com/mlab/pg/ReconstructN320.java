@@ -10,8 +10,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
+import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
+import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -35,11 +38,26 @@ public class ReconstructN320 {
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
+		//gradeData = gradeData.extract(0.0, 1000.0);
+		
+		IterativeReconstructor rec = null;
+		try {
+			rec = new IterativeReconstructor(gradeData, 727.0);
+		} catch (Exception e) {
+			System.out.println("ERROR " + e.getMessage());
+			System.exit(-1);
+		}
+		
+		int bestTest = rec.getBestTest();
+		int baseSize = (int)rec.getResults()[bestTest][0];
+		double thresholdSlope = rec.getResults()[bestTest][1];
 		
 		Reconstructor reconstructor = null;
 		try {
-			reconstructor = new Reconstructor(gradeData, 4, 1.5e-5, 727.0, new PointCharacteriserStrategy_EqualArea(),
-					new ProcessBorderIntervalsStrategy_EqualArea());
+			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
+			//		new ProcessBorderIntervalsStrategy_EqualArea());
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
+					new ProcessBorderIntervalsStrategy_LessSquares());
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

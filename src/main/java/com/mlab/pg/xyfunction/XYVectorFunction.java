@@ -396,6 +396,18 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return suma/size();
 	}
 	
+	public double ecm(XYVectorFunction other) {
+		double ecm = 0.0;
+		for(int i=0; i<size(); i++) {
+			double x1 = getX(i);
+			double y1 = getY(i);
+			double y2 = other.getY(x1);
+			ecm = ecm + (y2-y1)*(y2-y1);
+		}
+		ecm = ecm / size();
+		return ecm;
+	}
+	
 	@Override
 	public XYVectorFunction clone() {
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
