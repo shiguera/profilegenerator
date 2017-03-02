@@ -387,6 +387,15 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return r;
 	}
 
+	public double separacionMedia() {
+		double suma = 0.0;
+		for (int i=1; i<size(); i++) {
+			double sep = getX(i) - getX(i-1);
+			suma = suma + sep;
+		}
+		return suma/size();
+	}
+	
 	@Override
 	public XYVectorFunction clone() {
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
