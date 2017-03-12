@@ -12,7 +12,7 @@ import org.jfree.ui.RefineryUtilities;
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
+import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -21,31 +21,22 @@ import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 import junit.framework.Assert;
 
-public class ReconstructN320 {
+public class ReconstructM607_TrackLeika_1 {
 
-	static Logger LOG = Logger.getLogger(ReconstructN320.class);
+	static Logger LOG = Logger.getLogger(ReconstructM607_TrackLeika_1.class);
 	
 	static Charter charter = null;
-	// Lo establece el método readData
-	static String charterName = "";
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
-
 		LOG.debug("main()");
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
-		XYVectorFunction modifiedGradeData = new XYVectorFunction();
-		for (double x=gradeData.getStartX(); x<=gradeData.getEndX(); x=x+5.0) {
-			double g = gradeData.getY(x);
-			modifiedGradeData.add(new double[]{x,g});
-		}
 		
 		IterativeReconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 727.0);
-			//rec = new IterativeReconstructor(modifiedGradeData, 727.0);
+			rec = new IterativeReconstructor(gradeData, 906.26);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());
 			System.exit(-1);
@@ -59,8 +50,8 @@ public class ReconstructN320 {
 		try {
 			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
-					new ProcessBorderIntervalsStrategy_LessSquares());
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 906.26, new PointCharacteriserStrategy_EqualArea(),
+					new ProcessBorderIntervalsStrategy_EqualArea());
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);
@@ -84,14 +75,14 @@ public class ReconstructN320 {
 	private static void showVProfiles(XYVectorFunction originalData, XYVectorFunction resultData) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-        		charter = new Charter("N-320: Original VProfile", "S", "G");
+        		charter = new Charter("M-607: Track Leika", "S", "Z");
         		charter.addXYVectorFunction(originalData, "Original Data");
         		charter.addXYVectorFunction(resultData, "Result Data");
         		
             	JFrame frame = new JFrame("Charter");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
-        		charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 850.0);
+        		charter.getChart().getXYPlot().getRangeAxis().setRange(800.0, 950.0);
         		frame.pack();
         		RefineryUtilities.centerFrameOnScreen(frame);
         		frame.setVisible(true);
@@ -101,12 +92,24 @@ public class ReconstructN320 {
 		
 	}
 
+	private static XYVectorFunction readGradeData() {
+		LOG.debug("readGradeData()");
+		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SG.csv");
+		
+		File file = new File(url.getPath());
+		Assert.assertNotNull(file);
+		
+		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
+		XYVectorFunction data = reader.read();
+		Assert.assertNotNull(data);
+		//data = data.extract(0.0, 1050.0);
+		return data;
+	}
 
 
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
-		charterName = "N-320: Original VeticalProfile";
-		URL url = ClassLoader.getSystemResource("N-320_CalculoDeZ_APartirDeG.csv");
+		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SZ.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
@@ -119,21 +122,5 @@ public class ReconstructN320 {
 
 
 
-	private static XYVectorFunction readGradeData() {
-		LOG.debug("readGradeData()");
-		charterName = "N-320";
-		URL url = ClassLoader.getSystemResource("N-320_SG.csv");
-		File file = new File(url.getPath());
-		Assert.assertNotNull(file);
-		
-		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
-		XYVectorFunction data = reader.read();
-		Assert.assertNotNull(data);
-		//data = data.extract(0.0, 1050.0);
-		return data;
-		
-		
-		
-	}
 	
 }

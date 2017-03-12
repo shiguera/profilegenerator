@@ -40,8 +40,9 @@ public class Reconstructor {
 		this.processBorderIntervalsStrategy = processBorderIntervalsStrategy;
 
 		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, strategy, processBorderIntervalsStrategy);
+		//LOG.debug("segmentMaker: " + segmentMaker);
 		segmentation = segmentMaker.getResultTypeSegmentArray();
-		
+		//LOG.debug("segmentation: " + segmentation.size());
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<segmentation.size(); i++) {
 			int first = segmentation.get(i).getStart();

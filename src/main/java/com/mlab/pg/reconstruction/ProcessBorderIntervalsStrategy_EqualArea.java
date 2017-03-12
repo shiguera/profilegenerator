@@ -64,18 +64,20 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 				i++;				
 			}
 		}
-
-		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
-		TypeInterval firstInterval = resultIntervalArray.get(0); 
-		if(firstInterval.getPointType() == PointType.BORDER_POINT && firstInterval.size()>1 ) {
-			processFirstSegmentAsBorder();
-		}
-		
-		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
-		int last = resultIntervalArray.size()-1;
-		if(resultIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
-			resultIntervalArray.get(last-1).setEnd(resultIntervalArray.get(last).getEnd()-1);
-			//resultTypeIntervalArray.remove(last);
+		System.out.println(resultIntervalArray.size());
+		if(resultIntervalArray.size()>1) {			
+			// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
+			TypeInterval firstInterval = resultIntervalArray.get(0); 
+			if(firstInterval.getPointType() == PointType.BORDER_POINT && firstInterval.size()>1 ) {
+				processFirstSegmentAsBorder();
+			}
+			
+			// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
+			int last = resultIntervalArray.size()-1;
+			if(resultIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
+				resultIntervalArray.get(last-1).setEnd(resultIntervalArray.get(last).getEnd()-1);
+				//resultTypeIntervalArray.remove(last);
+			}
 		}
 		return resultIntervalArray;
 	}
