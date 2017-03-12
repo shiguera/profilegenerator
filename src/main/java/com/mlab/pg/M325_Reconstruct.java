@@ -37,7 +37,7 @@ public class M325_Reconstruct {
 		
 		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ);
 		
-		boolean unique = true;
+		boolean unique = false;
 		if (unique) {
 			int baseSize = 46;
 			double thresholdSlope = 1e-5;

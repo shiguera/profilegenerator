@@ -17,6 +17,7 @@ public class IterativeReconstructor {
 	//double[] thresholdSlopes = new double[] {1.0e-4}; 
 	
 	XYVectorFunction originalGradePoints;
+	XYVectorFunction integralProfile;
 	double startZ;
 	double separacionMedia;
 	double[][] results;
@@ -27,7 +28,7 @@ public class IterativeReconstructor {
 		this.originalGradePoints = gradepoints;
 		this.startZ = startz;
 		this.separacionMedia = originalGradePoints.separacionMedia();
-		
+		integralProfile = gradepoints.integrate(startz);
 	}
 	
 	public void processUnique(int basesize, double thresholdslope) {
@@ -74,7 +75,9 @@ public class IterativeReconstructor {
 				XYVectorFunction resultVProfilePoints = rec.getVerticalProfile().getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
 						separacionMedia, true);
 				
+				//double ecm = integralProfile.ecm(resultVProfilePoints);
 				double ecm = originalGradePoints.ecm(resultGradePoints);
+				
 				System.out.println(i + " - " + thresholdSlopes[j] + " - " + ecm);
 				results[contador][0] = i; // baseSize;
 				results[contador][1] = thresholdSlopes[j]; // thresholdSlope

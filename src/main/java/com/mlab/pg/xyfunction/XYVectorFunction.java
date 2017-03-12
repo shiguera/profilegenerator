@@ -408,6 +408,25 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return ecm;
 	}
 	
+	public XYVectorFunction integrate(double startY) {
+		if(size()<2) {
+			return null;
+		}
+		XYVectorFunction result = new XYVectorFunction();
+		double previousY = startY;
+		result.add(new double[]{getX(0), startY});
+		for(int i=1; i<size()-1; i++) {
+			double y1 = getY(i);
+			double y2 = getY(i+1);
+			double s = getX(i+1) - getX(i);
+			double area = 0.5 * (y1 + y2) * s;
+			double integral = previousY + area;
+			result.add(new double[]{getX(i), integral});
+			previousY = integral;
+		}
+		return result;
+	}
+	
 	@Override
 	public XYVectorFunction clone() {
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
