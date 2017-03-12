@@ -36,6 +36,13 @@ public class TypeIntervalArray extends ArrayList<TypeInterval> {
 	
 
 
+	public TypeInterval getFirst() {
+		return get(0);
+	}
+	public TypeInterval getLast() {
+		return get(size()-1);
+	}
+	
 	/**
 	 * Devuelve true si existe algún segmento del tipo Border
 	 * @return

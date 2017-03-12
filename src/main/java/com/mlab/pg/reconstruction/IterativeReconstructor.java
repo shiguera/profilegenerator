@@ -60,12 +60,9 @@ public class IterativeReconstructor {
 		int contador = 0;
 		for (int i=15; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
-				//System.out.println(i + ", " + thresholdSlopes[j]);
 				Reconstructor rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, 
 						new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
-				//LOG.debug("Reconstructor: " + rec);
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
-				//LOG.debug("gradeProfile: " + gradeProfile.size());
 				if(gradeProfile == null || gradeProfile.size()<2) {
 					Log.warn("gradeProfile null");
 					continue;

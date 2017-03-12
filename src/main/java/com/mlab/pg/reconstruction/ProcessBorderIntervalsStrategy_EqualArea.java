@@ -182,9 +182,9 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 		}
 		//LOG.debug("ecm = " + ecmmin);
 		//LOG.debug("ecmmin_index = " + ecmmin_index);
-		resultIntervalArray.get(resultIntervalArray.size()-1).setEnd(ecmmin_index);
+		resultIntervalArray.getLast().setEnd(ecmmin_index);
 		resultIntervalArray.add(followingSegment.copy());
-		resultIntervalArray.get(resultIntervalArray.size()-1).setStart(ecmmin_index);
+		resultIntervalArray.getLast().setStart(ecmmin_index);
 	}
 	@Override
 	public TypeIntervalArray getOriginalTypeIntervalArray() {

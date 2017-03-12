@@ -30,19 +30,17 @@ public class Reconstructor {
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
 	protected TypeIntervalArrayGenerator segmentMaker;
-	protected PointCharacteriserStrategy strategy;
+	protected PointCharacteriserStrategy pointCharacteriserStrategy;
 	protected ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
 	
 	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, 
-			double startZ, PointCharacteriserStrategy strategy, ProcessBorderIntervalsStrategy processBorderIntervalsStrategy) {
+			double startZ, PointCharacteriserStrategy pCharacteriserStrategy, ProcessBorderIntervalsStrategy processBorderIntervalsStrategy) {
 		this.originalGradePoints = originalGradePoints.clone();
-		this.strategy = strategy;
+		this.pointCharacteriserStrategy = pCharacteriserStrategy;
 		this.processBorderIntervalsStrategy = processBorderIntervalsStrategy;
 
-		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, strategy, processBorderIntervalsStrategy);
-		//LOG.debug("segmentMaker: " + segmentMaker);
+		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, pCharacteriserStrategy, processBorderIntervalsStrategy);
 		segmentation = segmentMaker.getResultTypeSegmentArray();
-		//LOG.debug("segmentation: " + segmentation.size());
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<segmentation.size(); i++) {
 			int first = segmentation.get(i).getStart();

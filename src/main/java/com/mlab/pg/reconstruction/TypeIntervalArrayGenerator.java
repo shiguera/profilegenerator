@@ -53,11 +53,11 @@ public class TypeIntervalArrayGenerator {
 	 * @throws NullTypeException
 	 */
 	public TypeIntervalArrayGenerator(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope, 
-			PointCharacteriserStrategy strategy, ProcessBorderIntervalsStrategy processBorderIntervalStrategy) {
+			PointCharacteriserStrategy pCharacteriserStrategy, ProcessBorderIntervalsStrategy processBorderIntervalStrategy) {
 		this.originalGradePoints = gradesample;
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
-		this.pointCharacteriserStrategy = strategy;
+		this.pointCharacteriserStrategy = pCharacteriserStrategy;
 		this.processBorderIntervalsStrategy = processBorderIntervalStrategy;
 		
 		processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
