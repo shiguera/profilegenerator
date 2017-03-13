@@ -181,6 +181,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return sublist;
 	}
 	
+	public double getX(int index) {
+		return get(index)[0];
+	}
 	// Interface InInterval
 	@Override
 	public double getStartX() {
@@ -191,6 +194,10 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		}
 	}
 
+	public double[] getFirst() {
+		return get(0);
+	}
+	
 	@Override
 	public double getEndX() {
 		if(size()>0) {
@@ -200,6 +207,12 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		}
 	}
 
+	public double[] getLast() {
+		return new double[]{getEndX(), getEndY()};
+	}
+	public double getY(int index) {
+		return get(index)[1];
+	}
 	// Interface XYFunction
 	/**
 	 * Devuelve el valor de Y para un valor de x comprendido
@@ -233,6 +246,13 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		}
 	}
 
+	public double getEndY() {
+		if(size()>0) {
+			return getY(size()-1);
+		} else {
+			return Double.NaN;			
+		}
+	}
 	/**
 	 * Calcula la tangente mediante:
 	 * tangent = (y(i+1) - y(i))/(x(i+1)-x(i))
@@ -402,6 +422,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 			double x1 = getX(i);
 			double y1 = getY(i);
 			double y2 = other.getY(x1);
+			if(Double.isNaN(y2)) {
+				continue;
+			}
 			ecm = ecm + (y2-y1)*(y2-y1);
 		}
 		ecm = ecm / size();

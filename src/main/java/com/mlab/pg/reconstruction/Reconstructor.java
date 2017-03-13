@@ -41,6 +41,15 @@ public class Reconstructor {
 
 		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, pCharacteriserStrategy, processBorderIntervalsStrategy);
 		segmentation = segmentMaker.getResultTypeSegmentArray();
+		
+		createGradeProfile();
+		
+		adjustEndingsWithBeginnings2();
+		
+		verticalProfile = gradeProfile.integrate(startZ);
+		
+	}
+	private void createGradeProfile() {
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<segmentation.size(); i++) {
 			int first = segmentation.get(i).getStart();
@@ -52,9 +61,6 @@ public class Reconstructor {
 			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
 			gradeProfile.add(align);
 		}
-		adjustEndingsWithBeginnings2();
-		verticalProfile = gradeProfile.integrate(startZ);
-		
 	}
 	/** 
 	 * Ajusta los finales y principios de alineaciones
@@ -86,7 +92,9 @@ public class Reconstructor {
 	 * conseguir el mismo area
 	 */
 	private void adjustEndingsWithBeginnings2() {
+		
 		adjustFirsAlignment();
+		
 		for(int i=1; i<gradeProfile.size(); i++) {
 			// Calcular el area bajo los puntos originales			
 			double starts = gradeProfile.get(i-1).getEndS();
@@ -99,7 +107,9 @@ public class Reconstructor {
 			GradeProfileAlignment align = new GradeProfileAlignment(straight, starts, ends);
 			gradeProfile.set(i, align);
 		}
+	
 	}
+	
 	private void adjustFirsAlignment() {
 		GradeProfileAlignment currentAlignment = gradeProfile.get(0);
 		double starts = currentAlignment.getStartS();
@@ -110,6 +120,7 @@ public class Reconstructor {
 		Straight newr = new Straight(newA0, A1);
 		gradeProfile.set(0, new GradeProfileAlignment(newr, starts,ends));
 	}
+	
 	public VerticalProfile getVerticalProfile() {
 		return verticalProfile;
 	}

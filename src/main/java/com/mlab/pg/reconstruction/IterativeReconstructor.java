@@ -43,7 +43,7 @@ public class IterativeReconstructor {
 		System.out.println("ECM: " + ecm);
 		
 		VerticalProfile vp = rec.getVerticalProfile();
-		System.out.println(vp);		
+		//System.out.println(vp);		
 	}
 	
 	public void processIterative() throws Exception {
@@ -103,7 +103,7 @@ public class IterativeReconstructor {
 		//LOG.debug("Reconstructor: " + rec);
 		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 		VerticalProfile vp = rec.getVerticalProfile();
-		System.out.println(vp);
+		//System.out.println(vp);
 		
 
 	}

@@ -10,6 +10,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.GradeProfileFilter;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
@@ -37,7 +38,7 @@ public class M325_Reconstruct {
 		
 		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ);
 		
-		boolean unique = false;
+		boolean unique = true;
 		if (unique) {
 			int baseSize = 46;
 			double thresholdSlope = 1e-5;
@@ -53,10 +54,17 @@ public class M325_Reconstruct {
 				System.exit(-1);
 			}
 			VerticalGradeProfile resultGProfile = reconstructor.getGradeProfile();
-			//System.out.println(gprofile);
+			
+			//System.out.println("Result size before filter: " + resultGProfile.size());
+			//GradeProfileFilter filter = new GradeProfileFilter(resultGProfile, gradeData, startZ);
+			//VerticalGradeProfile filteredGProfile = filter.getResultGradeProfile();
+			//System.out.println("Result size after filter: " + filteredGProfile.size());
+			//VerticalProfile resultVProfile = filteredGProfile.integrate(startZ);
 			
 			VerticalProfile resultVProfile = reconstructor.getVerticalProfile();
-			//System.out.println(vprofile);
+			System.out.println(resultVProfile);
+			
+			
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
 					resultVProfile.getEndS(), rec.getSeparacionMedia(), true);

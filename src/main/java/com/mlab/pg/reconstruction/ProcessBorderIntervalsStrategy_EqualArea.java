@@ -64,7 +64,7 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 				i++;				
 			}
 		}
-		System.out.println(resultIntervalArray.size());
+		//System.out.println(resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {			
 			// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
 			TypeInterval firstInterval = resultIntervalArray.get(0); 
@@ -79,7 +79,14 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 				//resultTypeIntervalArray.remove(last);
 			}
 		}
+		filter();
 		return resultIntervalArray;
+	}
+	
+	private void filter() {
+		for(int i=0; i<resultIntervalArray.size(); i++) {
+			
+		}
 	}
 
 	private void processFirstSegmentAsBorder() {
