@@ -37,8 +37,7 @@ public class Reconstructor {
 	
 	protected EndingsWithBeginnersAdjuster adjuster;
 	
-	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, 
-			double startZ, InterpolationStrategy strategy) {
+	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, double startZ, InterpolationStrategy strategy) {
 		this.baseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
 		
@@ -51,16 +50,20 @@ public class Reconstructor {
 		
 		createGradeProfile();
 		
-		if(strategy == InterpolationStrategy.EqualArea) {
+		adjustEndingsWithBeginnings();
+		
+		verticalProfile = gradeProfile.integrate(startZ);
+		
+	}
+	private void adjustEndingsWithBeginnings() {
+		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
 			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
 		} else {
 			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
 		}
 		adjuster.adjustEndingsWithBeginnings(gradeProfile);
-		
-		verticalProfile = gradeProfile.integrate(startZ);
-		
 	}
+	
 	private void createGradeProfile() {
 		gradeProfile = new VerticalGradeProfile();
 		for(int i=0; i<typeIntervalArray.size(); i++) {
