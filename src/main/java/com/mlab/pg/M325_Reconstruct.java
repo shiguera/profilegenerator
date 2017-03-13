@@ -40,20 +40,20 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 46;
-			double thresholdSlope = 1e-5;
-			rec.processUnique(46, 1e-5);
-			Reconstructor reconstructor = null;
-			try {
-				//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
-				//		new ProcessBorderIntervalsStrategy_EqualArea());
-				reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, new PointCharacteriserStrategy_EqualArea(),
-						new ProcessBorderIntervalsStrategy_EqualArea());
-			} catch(Exception e) {
-				LOG.error("Error creating Reconstructor");
-				System.exit(-1);
-			}
-			VerticalGradeProfile resultGProfile = reconstructor.getGradeProfile();
+			int baseSize = 40;
+			double thresholdSlope = 1.75e-5;
+			rec.processUnique(baseSize, thresholdSlope);
+//			Reconstructor reconstructor = null;
+//			try {
+//				//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
+//				//		new ProcessBorderIntervalsStrategy_EqualArea());
+//				reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, new PointCharacteriserStrategy_EqualArea(),
+//						new ProcessBorderIntervalsStrategy_EqualArea());
+//			} catch(Exception e) {
+//				LOG.error("Error creating Reconstructor");
+//				System.exit(-1);
+//			}
+			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
 			
 			//System.out.println("Result size before filter: " + resultGProfile.size());
 			//GradeProfileFilter filter = new GradeProfileFilter(resultGProfile, gradeData, startZ);
@@ -61,7 +61,7 @@ public class M325_Reconstruct {
 			//System.out.println("Result size after filter: " + filteredGProfile.size());
 			//VerticalProfile resultVProfile = filteredGProfile.integrate(startZ);
 			
-			VerticalProfile resultVProfile = reconstructor.getVerticalProfile();
+			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
 			System.out.println(resultVProfile);
 			
 			

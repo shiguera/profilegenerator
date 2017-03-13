@@ -22,7 +22,7 @@ public class IterativeReconstructor {
 	double separacionMedia;
 	double[][] results;
 	int bestTest;
-	
+	Reconstructor rec;
 	
 	public IterativeReconstructor(XYVectorFunction gradepoints, double startz) {
 		this.originalGradePoints = gradepoints;
@@ -32,7 +32,7 @@ public class IterativeReconstructor {
 	}
 	
 	public void processUnique(int basesize, double thresholdslope) {
-		Reconstructor rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, 
+		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, 
 				new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
 		VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 		XYVectorFunction resultGradePoints = gradeProfile.getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
@@ -60,7 +60,7 @@ public class IterativeReconstructor {
 		int contador = 0;
 		for (int i=15; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
-				Reconstructor rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, 
+				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, 
 						new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 				if(gradeProfile == null || gradeProfile.size()<2) {
@@ -98,7 +98,7 @@ public class IterativeReconstructor {
 		System.out.println("ThresholdSlope: " + results[bestTest][1]);
 		System.out.println("ECM: " + results[bestTest][2]);
 		
-		Reconstructor rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, 
+		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, 
 				new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
 		//LOG.debug("Reconstructor: " + rec);
 		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
@@ -116,5 +116,8 @@ public class IterativeReconstructor {
 	}
 	public double getSeparacionMedia() {
 		return separacionMedia;
+	}
+	public Reconstructor getReconstructor() {
+		return rec;
 	}
 }

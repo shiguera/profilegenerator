@@ -65,9 +65,12 @@ public class TypeIntervalArrayGenerator {
 		
 		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
 		
+		System.out.println("Before filter: " + resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {
+			System.out.println("Filtering...");
 			resultIntervalArray = filter(resultIntervalArray);
 		}
+		System.out.println("AfterFilter: " + resultIntervalArray.size());
 	}
 
 	private TypeIntervalArray filter(TypeIntervalArray intervalArray) {
@@ -82,7 +85,7 @@ public class TypeIntervalArrayGenerator {
 			System.out.println("Ronda filtro: " + contador);
 			changes = false;
 			result = new TypeIntervalArray();
-			result.add(intervalArray.get(0));
+			result.add(processIntervalArray.get(0));
 			for(int i=1; i<processIntervalArray.size(); i++) {
 				TypeInterval current = processIntervalArray.get(i);
 				TypeInterval previous = result.getLast();
@@ -91,6 +94,8 @@ public class TypeIntervalArrayGenerator {
 					if(previous.getPointType() == current.getPointType()) {
 						result.getLast().setEnd(current.getEnd());
 						changes = true;
+					} else {
+						result.add(current);
 					}
 				} else {
 					result.add(current);
