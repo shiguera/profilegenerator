@@ -35,6 +35,8 @@ public class Reconstructor {
 	protected int baseSize;
 	protected double thresholdSlope;
 	
+	protected EndingsWithBeginnersAdjuster adjuster;
+	
 	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, 
 			double startZ, InterpolationStrategy strategy) {
 		this.baseSize = mobilebasesize;
@@ -49,7 +51,12 @@ public class Reconstructor {
 		
 		createGradeProfile();
 		
-		adjustEndingsWithBeginnings2();
+		if(strategy == InterpolationStrategy.EqualArea) {
+			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
+		} else {
+			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
+		}
+		adjuster.adjustEndingsWithBeginnings(gradeProfile);
 		
 		verticalProfile = gradeProfile.integrate(startZ);
 		
@@ -67,68 +74,6 @@ public class Reconstructor {
 			gradeProfile.add(align);
 		}
 	}
-	/** 
-	 * Ajusta los finales y principios de alineaciones
-	 * para que pasen por la misma z. Para ello, cada 
-	 * alineación excepto la primera la sustituye por una 
-	 * recta paralela que pase por la z final de la 
-	 * alineación anterior
-	 */
-	private void adjustEndingsWithBeginnings() {
-		for(int i=1; i<gradeProfile.size(); i++) {
-			double lastx = gradeProfile.get(i-1).getEndS();
-			double lastg = gradeProfile.get(i-1).getEndZ();
-			double r1 = gradeProfile.get(i).getPolynom2().getA1();
-			double newr0 = lastg - r1*lastx;
-			Straight straight = new Straight(newr0, r1);
-			GradeProfileAlignment align = new GradeProfileAlignment(straight, lastx, gradeProfile.get(i).getEndS());
-			gradeProfile.set(i, align);
-			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
-		}
-	}
-	/** 
-	 * Ajusta los finales y principios de alineaciones
-	 * para que pasen por la misma z. Para ello, cada 
-	 * alineación excepto la primera la sustituye por una 
-	 * recta con el primer punto el mismo, pero girada
-	 * para que el area encerrada sea el mismo que el area
-	 * encerrada bajo el perfil de pendientes original.
-	 * La primera alineación solo la desplaza paralelamente para 
-	 * conseguir el mismo area
-	 */
-	private void adjustEndingsWithBeginnings2() {
-		
-		adjustFirsAlignment();
-		
-		for(int i=1; i<gradeProfile.size(); i++) {
-			// Calcular el area bajo los puntos originales			
-			double starts = gradeProfile.get(i-1).getEndS();
-			double starty = gradeProfile.get(i-1).getEndZ();
-			double ends = gradeProfile.get(i).getEndS();
-			double area = originalGradePoints.areaEncerrada(starts, ends);
-			double newendy = 2*area/(ends-starts) - starty;
-			double[] newr = MathUtil.rectaPorDosPuntos(new double[]{starts,  starty}, new double[]{ends, newendy});
-			Straight straight = new Straight(newr[0], newr[1]);
-			if(Math.abs(straight.getA1()) < thresholdSlope) {
-				straight.setA1(0.0);
-			}
-			GradeProfileAlignment align = new GradeProfileAlignment(straight, starts, ends);
-			gradeProfile.set(i, align);
-		}
-	
-	}
-	
-	private void adjustFirsAlignment() {
-		GradeProfileAlignment currentAlignment = gradeProfile.get(0);
-		double starts = currentAlignment.getStartS();
-		double ends = currentAlignment.getEndS();
-		double area0 = originalGradePoints.areaEncerrada(starts, ends);
-		double A1 = currentAlignment.getPolynom2().getA1();
-		double newA0 = area0/(ends -starts) -  A1 * (starts + ends) / 2;
-		Straight newr = new Straight(newA0, A1);
-		gradeProfile.set(0, new GradeProfileAlignment(newr, starts,ends));
-	}
-	
 	public VerticalProfile getVerticalProfile() {
 		return verticalProfile;
 	}
