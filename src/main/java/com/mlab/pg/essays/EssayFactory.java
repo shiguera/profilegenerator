@@ -7,7 +7,8 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
+import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.util.MathUtil;
@@ -150,15 +151,21 @@ public class EssayFactory {
 	
 	double[] maxd, mind, meand, desvd; 
 	
-	
+	InterpolationStrategy interpolationStrategy;
 	
 	public EssayFactory(RandomProfileFactory profilefactory) {
 		this.profileFactory = profilefactory;
 	}
 	
-	
 	public void doEssays() {
+		interpolationStrategy = InterpolationStrategy.LessSquares;
+		doEssays(interpolationStrategy);
+	}
+	
+	public void doEssays(InterpolationStrategy strategy) {
 		//LOG.debug("doEssays()");
+		
+		interpolationStrategy = strategy;
 		
 		random = new Random();
 		
@@ -272,17 +279,16 @@ public class EssayFactory {
 		//LOG.debug("doGradeProfileReconstruction()");
 		double z0 = originalVerticalProfile.getFirstAlign().getStartZ();
 		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
-		Reconstructor generator = null;
+		Reconstructor reconstructor = null;
 		try {
-			generator = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0, 
-					new PointCharacteriserStrategy_LessSquareAproximation(), new ProcessBorderIntervalsStrategy_LessSquares());
+			reconstructor = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0, interpolationStrategy);
 		} catch(Exception e) {
 			LOG.error("Error en el constructor de Reconstructor");
 			System.exit(1);
 		}
-		resultGradeProfile = generator.getGradeProfile();
+		resultGradeProfile = reconstructor.getGradeProfile();
 		resultGradePoints = resultGradeProfile.getSample(s0,z0, pointSeparation, true);
-		resultVerticalProfile = generator.getVerticalProfile();
+		resultVerticalProfile = reconstructor.getVerticalProfile();
 	}
 	
 	private void calculateEcmError() {

@@ -23,17 +23,20 @@ public class IterativeReconstructor {
 	double[][] results;
 	int bestTest;
 	Reconstructor rec;
+	InterpolationStrategy interpolationStrategy;
 	
-	public IterativeReconstructor(XYVectorFunction gradepoints, double startz) {
+	public IterativeReconstructor(XYVectorFunction gradepoints, double startz, InterpolationStrategy strategy) {
 		this.originalGradePoints = gradepoints;
 		this.startZ = startz;
+		this.interpolationStrategy = strategy;
+		
 		this.separacionMedia = originalGradePoints.separacionMedia();
 		integralProfile = gradepoints.integrate(startz);
+	
 	}
 	
 	public void processUnique(int basesize, double thresholdslope) {
-		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, 
-				new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
+		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, interpolationStrategy);
 		VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 		XYVectorFunction resultGradePoints = gradeProfile.getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
 				separacionMedia, true);
@@ -60,8 +63,7 @@ public class IterativeReconstructor {
 		int contador = 0;
 		for (int i=15; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
-				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, 
-						new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
+				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, interpolationStrategy);
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 				if(gradeProfile == null || gradeProfile.size()<2) {
 					Log.warn("gradeProfile null");
@@ -98,8 +100,7 @@ public class IterativeReconstructor {
 		System.out.println("ThresholdSlope: " + results[bestTest][1]);
 		System.out.println("ECM: " + results[bestTest][2]);
 		
-		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, 
-				new PointCharacteriserStrategy_EqualArea(), new ProcessBorderIntervalsStrategy_EqualArea());
+		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, interpolationStrategy);
 		//LOG.debug("Reconstructor: " + rec);
 		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 		VerticalProfile vp = rec.getVerticalProfile();

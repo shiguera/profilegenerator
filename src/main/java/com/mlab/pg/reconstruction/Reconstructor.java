@@ -26,21 +26,26 @@ public class Reconstructor {
 	Logger LOG = Logger.getLogger(Reconstructor.class);
 
 	protected XYVectorFunction originalGradePoints;
-	protected TypeIntervalArray segmentation;
+	protected TypeIntervalArray typeIntervalArray;
 	protected VerticalGradeProfile gradeProfile;
 	protected VerticalProfile verticalProfile;
-	protected TypeIntervalArrayGenerator segmentMaker;
-	protected PointCharacteriserStrategy pointCharacteriserStrategy;
-	protected ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
+	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
+	protected InterpolationStrategy interpolationStrategy;
+	
+	protected int baseSize;
+	protected double thresholdSlope;
 	
 	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, 
-			double startZ, PointCharacteriserStrategy pCharacteriserStrategy, ProcessBorderIntervalsStrategy processBorderIntervalsStrategy) {
+			double startZ, InterpolationStrategy strategy) {
+		this.baseSize = mobilebasesize;
+		this.thresholdSlope = thresholdslope;
+		
 		this.originalGradePoints = originalGradePoints.clone();
-		this.pointCharacteriserStrategy = pCharacteriserStrategy;
-		this.processBorderIntervalsStrategy = processBorderIntervalsStrategy;
-
-		segmentMaker = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, pCharacteriserStrategy, processBorderIntervalsStrategy);
-		segmentation = segmentMaker.getResultTypeSegmentArray();
+		
+		interpolationStrategy = strategy;
+		
+		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, interpolationStrategy);
+		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeSegmentArray();
 		
 		createGradeProfile();
 		
@@ -51,9 +56,9 @@ public class Reconstructor {
 	}
 	private void createGradeProfile() {
 		gradeProfile = new VerticalGradeProfile();
-		for(int i=0; i<segmentation.size(); i++) {
-			int first = segmentation.get(i).getStart();
-			int last = segmentation.get(i).getEnd();
+		for(int i=0; i<typeIntervalArray.size(); i++) {
+			int first = typeIntervalArray.get(i).getStart();
+			int last = typeIntervalArray.get(i).getEnd();
 			IntegerInterval interval = new IntegerInterval(first, last);
 			double[] r = originalGradePoints.rectaMinimosCuadrados(interval);
 			Straight straight = new Straight(r[0], r[1]);
@@ -104,6 +109,9 @@ public class Reconstructor {
 			double newendy = 2*area/(ends-starts) - starty;
 			double[] newr = MathUtil.rectaPorDosPuntos(new double[]{starts,  starty}, new double[]{ends, newendy});
 			Straight straight = new Straight(newr[0], newr[1]);
+			if(Math.abs(straight.getA1()) < thresholdSlope) {
+				straight.setA1(0.0);
+			}
 			GradeProfileAlignment align = new GradeProfileAlignment(straight, starts, ends);
 			gradeProfile.set(i, align);
 		}
@@ -129,7 +137,7 @@ public class Reconstructor {
 		return originalGradePoints;
 	}
 	public TypeIntervalArray getSegments() {
-		return segmentation;
+		return typeIntervalArray;
 	}
 	public VerticalGradeProfile getGradeProfile() {
 		return gradeProfile;

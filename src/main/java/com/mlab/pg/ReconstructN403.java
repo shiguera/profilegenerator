@@ -10,9 +10,10 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
+import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
@@ -29,12 +30,15 @@ public class ReconstructN403 {
 	
 	static Charter charter = null;
 	// Lo establece el método readData
+	static InterpolationStrategy interpolationStrategy;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
 
 		LOG.debug("main()");
 		
+		interpolationStrategy = InterpolationStrategy.EqualArea;
+
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
 		XYVectorFunction modifiedGradeData = new XYVectorFunction();
@@ -45,7 +49,7 @@ public class ReconstructN403 {
 		
 		IterativeReconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 765.0);
+			rec = new IterativeReconstructor(gradeData, 765.0, interpolationStrategy);
 			//rec = new IterativeReconstructor(modifiedGradeData, 727.0);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());
@@ -60,8 +64,7 @@ public class ReconstructN403 {
 		try {
 			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, new PointCharacteriserStrategy_EqualArea(),
-					new ProcessBorderIntervalsStrategy_LessSquares());
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, interpolationStrategy);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

@@ -11,6 +11,7 @@ import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.GradeProfileFilter;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
@@ -27,16 +28,19 @@ public class M325_Reconstruct {
 	static Logger LOG = Logger.getLogger(M325_Reconstruct.class);
 	
 	static Charter charter = null;
+	static InterpolationStrategy interpolationStrategy;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
 		LOG.debug("main()");
 		
+		interpolationStrategy = InterpolationStrategy.EqualArea;
+		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
 		double startZ = 589.274;
 		
-		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ);
+		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ, interpolationStrategy);
 		
 		boolean unique = true;
 		if (unique) {
@@ -86,8 +90,7 @@ public class M325_Reconstruct {
 			try {
 				//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
 				//		new ProcessBorderIntervalsStrategy_EqualArea());
-				reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, new PointCharacteriserStrategy_EqualArea(),
-						new ProcessBorderIntervalsStrategy_EqualArea());
+				reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, interpolationStrategy);
 			} catch(Exception e) {
 				LOG.error("Error creating Reconstructor");
 				System.exit(-1);

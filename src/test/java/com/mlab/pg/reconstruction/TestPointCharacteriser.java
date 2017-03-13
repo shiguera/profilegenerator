@@ -36,7 +36,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
 		Assert.assertTrue(type.equals(PointType.GRADE));
 	}
 	@Test
@@ -52,7 +52,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
 		Assert.assertTrue(type.equals(PointType.VERTICAL_CURVE));
 	}
 	@Test
@@ -70,7 +70,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 
@@ -89,7 +89,7 @@ public class TestPointCharacteriser {
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
 		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 3, 3, 1e-5, new PointCharacteriserStrategy_LessSquareAproximation());
+		PointType type = ch.characterise(gp, 3, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 

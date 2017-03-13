@@ -34,7 +34,7 @@ private static Logger LOG = Logger.getLogger(TestTypeIntervalArray.class);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser(new PointCharacteriserStrategy_LessSquareAproximation());
+		ProfileCharacteriser characteriser = new ProfileCharacteriser(new PointCharacteriserStrategy_LessSquares());
 		PointTypeArray typeArray = characteriser.characterise(data, 4, 1e-5);
 		Assert.assertNotNull(typeArray);
 		for(int i=0; i<typeArray.size(); i++) {

@@ -10,9 +10,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -26,6 +25,7 @@ public class ReconstructM607_TrackLeika_2 {
 	static Logger LOG = Logger.getLogger(ReconstructM607_TrackLeika_2.class);
 	
 	static Charter charter = null;
+	static InterpolationStrategy interpolationStrategy;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
@@ -34,9 +34,11 @@ public class ReconstructM607_TrackLeika_2 {
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
 		
+		interpolationStrategy = InterpolationStrategy.EqualArea;
+		
 		IterativeReconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 913.24);
+			rec = new IterativeReconstructor(gradeData, 913.24, interpolationStrategy);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());
 			System.exit(-1);
@@ -50,8 +52,7 @@ public class ReconstructM607_TrackLeika_2 {
 		try {
 			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 913.24, new PointCharacteriserStrategy_EqualArea(),
-					new ProcessBorderIntervalsStrategy_EqualArea());
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 913.24, interpolationStrategy);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

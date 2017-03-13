@@ -10,9 +10,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -28,6 +27,7 @@ public class ReconstructN320 {
 	static Charter charter = null;
 	// Lo establece el método readData
 	static String charterName = "";
+	static InterpolationStrategy interpolationStrategy;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
@@ -36,6 +36,9 @@ public class ReconstructN320 {
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
+		
+		interpolationStrategy = InterpolationStrategy.EqualArea;
+
 		XYVectorFunction modifiedGradeData = new XYVectorFunction();
 		for (double x=gradeData.getStartX(); x<=gradeData.getEndX(); x=x+5.0) {
 			double g = gradeData.getY(x);
@@ -44,7 +47,7 @@ public class ReconstructN320 {
 		
 		IterativeReconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 727.0);
+			rec = new IterativeReconstructor(gradeData, 727.0, interpolationStrategy);
 			//rec = new IterativeReconstructor(modifiedGradeData, 727.0);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());
@@ -59,8 +62,7 @@ public class ReconstructN320 {
 		try {
 			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
-					new ProcessBorderIntervalsStrategy_LessSquares());
+			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, interpolationStrategy);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

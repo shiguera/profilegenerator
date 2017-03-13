@@ -39,9 +39,8 @@ public class TypeIntervalArrayGenerator {
 	 */
 	protected double thresholdSlope;
 
-	
+	InterpolationStrategy interpolationStrategy;
 	ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
-	
 	PointCharacteriserStrategy pointCharacteriserStrategy;
 	
 	TypeIntervalArray resultIntervalArray;
@@ -55,13 +54,20 @@ public class TypeIntervalArrayGenerator {
 	 * @param thresholdslope
 	 * @throws NullTypeException
 	 */
-	public TypeIntervalArrayGenerator(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope, 
-			PointCharacteriserStrategy pCharacteriserStrategy, ProcessBorderIntervalsStrategy processBorderIntervalStrategy) {
+	public TypeIntervalArrayGenerator(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy) {
 		this.originalGradePoints = gradesample;
 		this.mobileBaseSize = mobilebasesize;
 		this.thresholdSlope = thresholdslope;
-		this.pointCharacteriserStrategy = pCharacteriserStrategy;
-		this.processBorderIntervalsStrategy = processBorderIntervalStrategy;
+		
+		interpolationStrategy = strategy;
+		if (interpolationStrategy == InterpolationStrategy.EqualArea) {
+			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
+			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
+		} else {
+			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_LessSquares();
+			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_LessSquares();				
+		}
+
 		
 		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
 		

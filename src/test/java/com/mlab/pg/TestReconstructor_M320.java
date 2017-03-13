@@ -10,7 +10,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquareAproximation;
+import com.mlab.pg.reconstruction.InterpolationStrategy;
+import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -49,8 +50,7 @@ public class TestReconstructor_M320 {
 		Assert.assertNotNull(data);
 		Reconstructor rec = null;
 		try {
-			rec = new Reconstructor(data, 6, 1e-5, 0.0, new PointCharacteriserStrategy_LessSquareAproximation(), 
-					new ProcessBorderIntervalsStrategy_LessSquares());			
+			rec = new Reconstructor(data, 6, 1e-5, 0.0, InterpolationStrategy.LessSquares);			
 		} catch(Exception e) {
 			LOG.error("testM320() ERROR: Error creating Reconstructor");
 			System.exit(-1);

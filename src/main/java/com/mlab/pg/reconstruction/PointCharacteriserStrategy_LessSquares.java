@@ -2,9 +2,9 @@ package com.mlab.pg.reconstruction;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public class PointCharacteriserStrategy_LessSquareAproximation implements PointCharacteriserStrategy {
+public class PointCharacteriserStrategy_LessSquares implements PointCharacteriserStrategy {
 
-	public PointCharacteriserStrategy_LessSquareAproximation() {
+	public PointCharacteriserStrategy_LessSquares() {
 
 	}
 
