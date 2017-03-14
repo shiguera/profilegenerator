@@ -44,29 +44,21 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 40;
-			double thresholdSlope = 1.75e-5;
+			int baseSize = 44;
+			double thresholdSlope = 1e-4;
 			rec.processUnique(baseSize, thresholdSlope);
-//			Reconstructor reconstructor = null;
-//			try {
-//				//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
-//				//		new ProcessBorderIntervalsStrategy_EqualArea());
-//				reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, new PointCharacteriserStrategy_EqualArea(),
-//						new ProcessBorderIntervalsStrategy_EqualArea());
-//			} catch(Exception e) {
-//				LOG.error("Error creating Reconstructor");
-//				System.exit(-1);
-//			}
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
-			
-			//System.out.println("Result size before filter: " + resultGProfile.size());
-			//GradeProfileFilter filter = new GradeProfileFilter(resultGProfile, gradeData, startZ);
-			//VerticalGradeProfile filteredGProfile = filter.getResultGradeProfile();
-			//System.out.println("Result size after filter: " + filteredGProfile.size());
-			//VerticalProfile resultVProfile = filteredGProfile.integrate(startZ);
+			for(int i=0; i<resultGProfile.size(); i++) {
+				double slope = resultGProfile.get(i).getSlope();
+				if(Math.abs(slope)< thresholdSlope) {
+					System.out.println(resultGProfile.get(i));
+				} else {
+					System.out.println("No");
+				}
+			}
 			
 			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
-			System.out.println(resultVProfile);
+			//System.out.println(resultVProfile);
 			
 			
 			

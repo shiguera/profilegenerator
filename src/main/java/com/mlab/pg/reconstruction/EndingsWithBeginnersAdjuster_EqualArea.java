@@ -1,6 +1,7 @@
 package com.mlab.pg.reconstruction;
 
 import com.mlab.pg.util.MathUtil;
+import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.xyfunction.Straight;
@@ -36,21 +37,36 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 		adjustFirsAlignment();
 		
 		for(int i=1; i<gradeProfile.size(); i++) {
-			// Calcular el area bajo los puntos originales			
-			double starts = gradeProfile.get(i-1).getEndS();
-			double starty = gradeProfile.get(i-1).getEndZ();
-			double ends = gradeProfile.get(i).getEndS();
-			double area = originalGradePoints.areaEncerrada(starts, ends);
-			double newendy = 2*area/(ends-starts) - starty;
-			double[] newr = MathUtil.rectaPorDosPuntos(new double[]{starts,  starty}, new double[]{ends, newendy});
-			Straight straight = new Straight(newr[0], newr[1]);
-			if(Math.abs(straight.getA1()) < thresholdSlope) {
-				straight.setA1(0.0);
+			// Calcular el area bajo los puntos originales	
+			double s1 = gradeProfile.get(i-1).getStartS();
+			double g1 = gradeProfile.get(i-1).getStartZ();
+			double s2 = gradeProfile.get(i-1).getEndS();
+			double g2 = gradeProfile.get(i-1).getEndZ();
+			double s3 = gradeProfile.get(i).getEndS();
+			double g3 = gradeProfile.get(i).getEndZ();
+			double area = 0.5*(g1+g2)*(s2-s1) + 0.5*(g2+g3)*(s3-s2);
+			GradeProfileAlignment align = gradeProfile.get(i);
+			double a2 = align.getPolynom2().getA2();
+			double newg2, newg3;
+			if(Math.abs(align.getSlope()) < thresholdSlope) {
+				newg2 = (2*area - g1*(s2-s1))/(-s1-s2+2*s3);
+				newg3 = newg2;
+			} else {
+				// Traslado la recta paralelamente y muevo el vertice 
+				// común con la recta anterior para que de el mismo area
+				double[][] A = new double[][]{{s3-s1, s3-s2, 0}, {1, 0, -1}, {0, 1, -1}}; // Incognitas newg2, newg3, newa2
+				double[] C = new double[]{2*area-g1*(s2-s1), a2*s2, a2*s3};
+				double[] sol = MathUtil.solve(A, C);
+				newg2 = sol[0];
+				newg3 = sol[1];
+				//double newa2 = sol[2];
 			}
-			GradeProfileAlignment align = new GradeProfileAlignment(straight, starts, ends);
-			gradeProfile.set(i, align);
+			Straight newr1 = new Straight(new double[]{s1,g1}, new double[]{s2, newg2});
+			gradeProfile.set(i-1, new GradeProfileAlignment(newr1, s1,s2));
+			Straight newr2 = new Straight(new double[]{s2, newg2}, new double[]{s3, newg3});
+			gradeProfile.set(i, new GradeProfileAlignment(newr2, s2,s3));
 		}
-		return null;
+		return gradeProfile;
 	}
 
 	private void adjustFirsAlignment() {

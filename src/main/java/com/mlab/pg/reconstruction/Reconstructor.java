@@ -2,7 +2,6 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
-import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
