@@ -45,8 +45,32 @@ public class IterativeReconstructor {
 		System.out.println("ThresholdSlope: " + thresholdslope);
 		System.out.println("ECM: " + ecm);
 		
-		VerticalProfile vp = rec.getVerticalProfile();
+		VerticalProfile resultVProfile = rec.getVerticalProfile();
 		//System.out.println(vp);		
+		System.out.println("Número de alineaciones:" + resultVProfile.size());
+		double sumaErrorAbsoluto = 0.0;
+		double maxErrorAbsoluto = 0.0;
+		double sumaErrorAbsolutoAlCuadrado = 0.0;
+		XYVectorFunction resultVProfilePoints = resultVProfile.getSample(resultVProfile.getStartS(), resultVProfile.getEndS(), separacionMedia, true);
+		int pointsCount = resultVProfilePoints.size();
+		for(int i=0; i<pointsCount; i++) {
+			double x = resultVProfilePoints.getX(i);
+			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(i) - integralProfile.getY(x));
+			if(Double.isNaN(errorAbsoluto)) {
+				continue;
+			}
+			sumaErrorAbsoluto = sumaErrorAbsoluto + errorAbsoluto;
+			sumaErrorAbsolutoAlCuadrado = sumaErrorAbsolutoAlCuadrado + errorAbsoluto * errorAbsoluto;
+			if(errorAbsoluto > maxErrorAbsoluto) {
+				maxErrorAbsoluto = errorAbsoluto;
+			}
+		}
+		double media = sumaErrorAbsoluto / pointsCount;
+		double varianza = sumaErrorAbsolutoAlCuadrado / pointsCount - media*media;
+		System.out.println("Error absoluto medio: " + media);
+		System.out.println("Error absoluto máximo: " + maxErrorAbsoluto);
+		System.out.println("Varianza en el error absoluto: " + varianza);
+
 	}
 	
 	public void processIterative() throws Exception {

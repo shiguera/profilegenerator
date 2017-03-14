@@ -8,20 +8,17 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
+import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
-import com.mlab.pg.reconstruction.GradeProfileFilter;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_EqualArea;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
-import junit.framework.Assert;
 
 public class M325_Reconstruct {
 
@@ -44,22 +41,21 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 44;
+			int baseSize = 40;
 			double thresholdSlope = 1e-4;
 			rec.processUnique(baseSize, thresholdSlope);
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
-			for(int i=0; i<resultGProfile.size(); i++) {
-				double slope = resultGProfile.get(i).getSlope();
-				if(Math.abs(slope)< thresholdSlope) {
-					System.out.println(resultGProfile.get(i));
-				} else {
-					System.out.println("No");
-				}
-			}
+//			for(int i=0; i<resultGProfile.size(); i++) {
+//				double slope = resultGProfile.get(i).getSlope();
+//				if(Math.abs(slope)< thresholdSlope) {
+//					System.out.println(resultGProfile.get(i));
+//				} else {
+//					System.out.println("No");
+//				}
+//			}
 			
 			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
 			//System.out.println(resultVProfile);
-			
 			
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 

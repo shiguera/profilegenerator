@@ -4,10 +4,7 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -23,7 +20,7 @@ public class Charter {
 	JFreeChart chart =null;
 	
 	public Charter(String name, String xlabel, String ylabel) {
-		LOG.debug("Charter()");
+		//LOG.debug("Charter()");
 		this.name = name;
 		this.xLabel = xlabel;
 		this.yLabel = ylabel;
@@ -34,7 +31,7 @@ public class Charter {
 	}
 	
 	public void addXYVectorFunction(XYVectorFunction func, String name) {
-		LOG.debug("addXYVectorFunction()");
+		//LOG.debug("addXYVectorFunction()");
 		XYSeries series = new XYSeries(name);
 		for(int i=0; i<func.size(); i++) {
 			series.add(func.getX(i), func.getY(i));
@@ -43,7 +40,7 @@ public class Charter {
 	}
 	
 	public ChartPanel getChartPanel() {
-		LOG.debug("getchartPanel()");
+		//LOG.debug("getchartPanel()");
 		chart = ChartFactory.createXYLineChart(
 				name, // chart title
 				xLabel, // x axis label
@@ -55,7 +52,7 @@ public class Charter {
 				false // urls		
 		);
 		
-		XYPlot plot = chart.getXYPlot();
+		//XYPlot plot = chart.getXYPlot();
 		
 		// Cuando activo estas dos siguientes líneas, parece no hacer nada
 		// El elemento ToolTipGenerator por defecto funciona igual

@@ -35,6 +35,7 @@ public class Reconstructor {
 	protected double thresholdSlope;
 	
 	protected EndingsWithBeginnersAdjuster adjuster;
+	protected GradeProfileCreator gradeProfileCreator;
 	
 	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, double startZ, InterpolationStrategy strategy) {
 		this.baseSize = mobilebasesize;
@@ -64,18 +65,15 @@ public class Reconstructor {
 	}
 	
 	private void createGradeProfile() {
-		gradeProfile = new VerticalGradeProfile();
-		for(int i=0; i<typeIntervalArray.size(); i++) {
-			int first = typeIntervalArray.get(i).getStart();
-			int last = typeIntervalArray.get(i).getEnd();
-			IntegerInterval interval = new IntegerInterval(first, last);
-			double[] r = originalGradePoints.rectaMinimosCuadrados(interval);
-			Straight straight = new Straight(r[0], r[1]);
-			GradeProfileAlignment align = new GradeProfileAlignment(straight, originalGradePoints.getX(first), originalGradePoints.getX(last));
-			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
-			gradeProfile.add(align);
+		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
+			gradeProfileCreator = new GradeProfileCreator_EqualArea();
+		} else {
+			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
 		}
+		gradeProfile = gradeProfileCreator.createGradeProfile(originalGradePoints, typeIntervalArray);		
 	}
+	
+	// Getters
 	public VerticalProfile getVerticalProfile() {
 		return verticalProfile;
 	}
@@ -83,7 +81,7 @@ public class Reconstructor {
 	public XYVectorFunction getOriginalPoints() {
 		return originalGradePoints;
 	}
-	public TypeIntervalArray getSegments() {
+	public TypeIntervalArray getTypeIntervalArray() {
 		return typeIntervalArray;
 	}
 	public VerticalGradeProfile getGradeProfile() {
