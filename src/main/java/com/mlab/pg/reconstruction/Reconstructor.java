@@ -2,11 +2,8 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
-import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
-import com.mlab.pg.xyfunction.IntegerInterval;
-import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**

@@ -92,7 +92,7 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 	private void processFirstSegmentAsBorder() {
 		if(resultIntervalArray.get(0).size()<4) {
 			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultIntervalArray.get(1).setStart(1);
+			resultIntervalArray.get(1).setStart(0);
 			resultIntervalArray.remove(0);
 			return;
 		}

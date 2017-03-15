@@ -49,17 +49,17 @@ public class TypeIntervalArrayGenerator {
 	 * puede consultar en getResultTypeIntervalArray() y solo tiene segmentos del tipo Grade o VerticalCurve.
 	 * Si se generan segmentos NULL arroja una excepción
 	 * 
-	 * @param gradesample
+	 * @param originalgradePoints
 	 * @param mobilebasesize
 	 * @param thresholdslope
 	 * @throws NullTypeException
 	 */
-	public TypeIntervalArrayGenerator(XYVectorFunction gradesample, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy) {
-		this.originalGradePoints = gradesample;
-		this.mobileBaseSize = mobilebasesize;
-		this.thresholdSlope = thresholdslope;
-		
+	public TypeIntervalArrayGenerator(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy) {
+		originalGradePoints = originalgradePoints;
+		mobileBaseSize = mobilebasesize;
+		thresholdSlope = thresholdslope;
 		interpolationStrategy = strategy;
+		
 		if (interpolationStrategy == InterpolationStrategy.EqualArea) {
 			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
 			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
@@ -71,12 +71,14 @@ public class TypeIntervalArrayGenerator {
 		
 		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
 		
-		System.out.println("Before filter: " + resultIntervalArray.size());
+		LOG.debug("TypeIntervalArray before filter: " + resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {
-			System.out.println("Filtering...");
+			LOG.debug("Filtered: YES");
 			resultIntervalArray = filter(resultIntervalArray);
+		} else{
+			LOG.debug("Filtered: NO");
 		}
-		System.out.println("AfterFilter: " + resultIntervalArray.size());
+		LOG.debug("After Filter: " + resultIntervalArray.size());
 	}
 
 	private TypeIntervalArray filter(TypeIntervalArray intervalArray) {

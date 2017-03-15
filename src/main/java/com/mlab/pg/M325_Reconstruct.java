@@ -41,7 +41,7 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 40;
+			int baseSize = 44;
 			double thresholdSlope = 1e-4;
 			rec.processUnique(baseSize, thresholdSlope);
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
