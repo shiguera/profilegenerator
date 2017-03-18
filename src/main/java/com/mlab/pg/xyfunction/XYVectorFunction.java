@@ -91,7 +91,7 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 
 	/**
-	 * Devuelve el índoce del punto más próximo a una determinada abscisa
+	 * Devuelve el índice del punto más próximo a una determinada abscisa
 	 * @param x Abscisa del punto
 	 * @return indice cuya abscisa es la más proxima a x
 	 */
@@ -407,6 +407,14 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return r;
 	}
 
+	public double[] rectaHorizontalEqualArea(int i1, int i2) {
+		double area = areaEncerrada(i1, i2);
+		double s1 = getX(i1);
+		double s2 = getX(i2);
+		double g1 = area/(s2-s1);
+		double[] r = new double[]{g1, 0.0};
+		return r;
+	}
 	public double separacionMedia() {
 		double suma = 0.0;
 		for (int i=1; i<size(); i++) {
@@ -430,7 +438,20 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		ecm = ecm / size();
 		return ecm;
 	}
-	
+	public double errorAbsolutoMedio(XYVectorFunction other) {
+		double error = 0.0;
+		for(int i=0; i<size(); i++) {
+			double x1 = getX(i);
+			double y1 = getY(i);
+			double y2 = other.getY(x1);
+			if(Double.isNaN(y2)) {
+				continue;
+			}
+			error = error + Math.abs(y2-y1);
+		}
+		error = error / size();
+		return error;
+	}
 	public XYVectorFunction integrate(double startY) {
 		if(size()<2) {
 			return null;

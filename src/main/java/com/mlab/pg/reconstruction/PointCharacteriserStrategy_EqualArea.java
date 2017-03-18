@@ -31,13 +31,7 @@ public class PointCharacteriserStrategy_EqualArea implements PointCharacteriserS
 		if (firstIndex < 0) {
 			return null;
 		}
-		double area = function.areaEncerrada(firstIndex, pointIndex);
-		double s1 = function.getX(firstIndex);
-		double s2 = function.getX(pointIndex);
-		double z2 = function.getY(pointIndex);
-		double[][] A = new double[][] {{(s2 - s1), (s1*s2 - s1*s1)}, {1, s2}};
-		double[] C = new double[] {2*area - z2 * (s2 - s1), z2};
-		double[] r = MathUtil.solve(A, C);
+		double[] r = function.rectaAnteriorEqualArea(firstIndex, pointIndex);
 		return r;
 	}
 	/**
@@ -58,15 +52,25 @@ public class PointCharacteriserStrategy_EqualArea implements PointCharacteriserS
 		if (lastIndex > function.size()-1) {
 			return null;
 		}
-		double area = function.areaEncerrada(pointIndex, lastIndex);
-		double s1 = function.getX(pointIndex);
-		double z1 = function.getY(pointIndex);
-		double s2 = function.getX(lastIndex);
-		double[][] A = new double[][] {{(s2 - s1), (s2*s2 - s1*s2)}, {1, s1}};
-		double[] C = new double[] {2*area - z1 * (s2 - s1), z1};
-		double[] r = MathUtil.solve(A, C);
+		double[] r = function.rectaPosteriorEqualArea(pointIndex, lastIndex);
 		return r;
 	
 	}
+//	@Override
+//	public double[] calculaRectaPosterior(XYVectorFunction function, int pointIndex, int basesize) {
+//		int lastIndex = pointIndex + basesize - 1;
+//		if (lastIndex > function.size()-1) {
+//			return null;
+//		}
+//		double area = function.areaEncerrada(pointIndex, lastIndex);
+//		double s1 = function.getX(pointIndex);
+//		double z1 = function.getY(pointIndex);
+//		double s2 = function.getX(lastIndex);
+//		double[][] A = new double[][] {{(s2 - s1), (s2*s2 - s1*s2)}, {1, s1}};
+//		double[] C = new double[] {2*area - z1 * (s2 - s1), z1};
+//		double[] r = MathUtil.solve(A, C);
+//		return r;
+//	
+//	}
 
 }

@@ -13,12 +13,13 @@ public class IterativeReconstructor {
 
 	double MIN_ALIGNMENT_LENGTH = 50.0;
 	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6, 1.5e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6 }; 
 	//double[] thresholdSlopes = new double[] {1.0e-4}; 
 	
 	XYVectorFunction originalGradePoints;
 	XYVectorFunction integralProfile;
-	double startZ;
+	double startX, endX, startZ;
 	double separacionMedia;
 	double[][] results;
 	int bestTest;
@@ -29,17 +30,16 @@ public class IterativeReconstructor {
 		this.originalGradePoints = gradepoints;
 		this.startZ = startz;
 		this.interpolationStrategy = strategy;
-		
+		startX = originalGradePoints.getStartX();
+		endX = originalGradePoints.getEndX();
 		this.separacionMedia = originalGradePoints.separacionMedia();
 		integralProfile = gradepoints.integrate(startz);
-	
 	}
 	
 	public void processUnique(int basesize, double thresholdslope) {
 		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, interpolationStrategy);
 		VerticalGradeProfile gradeProfile = rec.getGradeProfile();
-		XYVectorFunction resultGradePoints = gradeProfile.getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
-				separacionMedia, true);
+		XYVectorFunction resultGradePoints = gradeProfile.getSample(startX, endX, separacionMedia, true);
 		double ecm = originalGradePoints.ecm(resultGradePoints);
 		System.out.println("BaseSize: " + basesize);
 		System.out.println("ThresholdSlope: " + thresholdslope);
@@ -85,7 +85,7 @@ public class IterativeReconstructor {
 		double ecmMin = -1.0;
 		bestTest = 0;
 		int contador = 0;
-		for (int i=15; i<=maxBaseSize; i++) {
+		for (int i=30; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
 				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, interpolationStrategy);
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
@@ -98,10 +98,12 @@ public class IterativeReconstructor {
 				XYVectorFunction resultVProfilePoints = rec.getVerticalProfile().getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
 						separacionMedia, true);
 				
-				//double ecm = integralProfile.ecm(resultVProfilePoints);
-				double ecm = originalGradePoints.ecm(resultGradePoints);
+				//double ecm = integralProfile.errorAbsolutoMedio(resultVProfilePoints);
+				double ecm = integralProfile.ecm(resultVProfilePoints);
+				//double ecm = originalGradePoints.ecm(resultGradePoints);
+				//double ecm = originalGradePoints.errorAbsolutoMedio(resultGradePoints);
 				
-				System.out.println(i + " - " + thresholdSlopes[j] + " - " + ecm);
+				//System.out.println(i + " - " + thresholdSlopes[j] + " - " + ecm);
 				results[contador][0] = i; // baseSize;
 				results[contador][1] = thresholdSlopes[j]; // thresholdSlope
 				results[contador][2] = ecm; // ecm

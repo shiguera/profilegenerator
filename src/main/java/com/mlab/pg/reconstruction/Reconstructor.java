@@ -63,7 +63,7 @@ public class Reconstructor {
 	
 	private void createGradeProfile() {
 		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
-			gradeProfileCreator = new GradeProfileCreator_EqualArea();
+			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdSlope);
 		} else {
 			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
 		}

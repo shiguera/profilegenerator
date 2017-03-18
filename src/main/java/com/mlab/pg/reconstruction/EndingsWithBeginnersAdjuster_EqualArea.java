@@ -29,7 +29,6 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 	 * La primera alineación solo la desplaza paralelamente para 
 	 * conseguir el mismo area
 	 */
-
 	@Override
 	public VerticalGradeProfile adjustEndingsWithBeginnings( VerticalGradeProfile gradeProfile) {
 		this.gradeProfile = gradeProfile;
@@ -37,20 +36,30 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 		adjustFirsAlignment();
 		
 		for(int i=1; i<gradeProfile.size(); i++) {
-			// Calcular el area bajo los puntos originales	
-			double s1 = gradeProfile.get(i-1).getStartS();
-			double g1 = gradeProfile.get(i-1).getStartZ();
-			double s2 = gradeProfile.get(i-1).getEndS();
-			double g2 = gradeProfile.get(i-1).getEndZ();
-			double s3 = gradeProfile.get(i).getEndS();
-			double g3 = gradeProfile.get(i).getEndZ();
+			GradeProfileAlignment current = gradeProfile.get(i);
+			GradeProfileAlignment previous = gradeProfile.get(i-1);
+			double s1 = previous.getStartS();
+			double g1 = previous.getStartZ();
+			double s2 = previous.getEndS();
+			double g2 = previous.getEndZ();
+			double s3 = current.getEndS();
+			double g3 = current.getEndZ();
 			double area = 0.5*(g1+g2)*(s2-s1) + 0.5*(g2+g3)*(s3-s2);
-			GradeProfileAlignment align = gradeProfile.get(i);
-			double a2 = align.getPolynom2().getA2();
+			double a2 = current.getPolynom2().getA2();
 			double newg2, newg3;
-			if(Math.abs(align.getSlope()) < thresholdSlope) {
+			
+			if(Math.abs(current.getSlope()) < thresholdSlope) {
+				// Si la recta es horizontal la muevo paralelamente hasta el vertice anterior
 				newg2 = (2*area - g1*(s2-s1))/(-s1-s2+2*s3);
 				newg3 = newg2;
+			} else if (Math.abs(previous.getSlope()) < thresholdSlope) {
+				// Si la recta anterior es horizontal calculo la recta que pasa 
+				// por el final de la anterior y tiene el mismo area
+				int i1 = originalGradePoints.getNearestIndex(s2);
+				int i2 = originalGradePoints.getNearestIndex(s3);
+				double[] r = originalGradePoints.rectaPosteriorEqualArea(i1, i2);
+				newg2 = r[0] + r[1]*s2;
+				newg3 = r[0] + r[1]*s3;
 			} else {
 				// Traslado la recta paralelamente y muevo el vertice 
 				// común con la recta anterior para que de el mismo area

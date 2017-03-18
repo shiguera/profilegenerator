@@ -71,16 +71,48 @@ public class TypeIntervalArrayGenerator {
 		
 		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
 		
-		LOG.debug("TypeIntervalArray before filter: " + resultIntervalArray.size());
+		//LOG.debug("TypeIntervalArray before filter: " + resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {
-			LOG.debug("Filtered: YES");
-			resultIntervalArray = filter(resultIntervalArray);
+			//LOG.debug("Filtered: YES");
+			//resultIntervalArray = filter(resultIntervalArray);
+			resultIntervalArray = filterTwoGrades(resultIntervalArray);
 		} else{
-			LOG.debug("Filtered: NO");
+			//LOG.debug("Filtered: NO");
 		}
-		LOG.debug("After Filter: " + resultIntervalArray.size());
+		//LOG.debug("After Filter: " + resultIntervalArray.size());
 	}
 
+	private TypeIntervalArray filterTwoGrades(TypeIntervalArray intervalArray) {
+		TypeIntervalArray result = new TypeIntervalArray();
+
+		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
+		processIntervalArray.addAll(intervalArray);
+		boolean changes = true;
+		int contador = 0;
+		while(changes) {
+			contador++;
+			//System.out.println("Ronda filtro: " + contador);
+			changes = false;
+			result = new TypeIntervalArray();
+			result.add(processIntervalArray.get(0));
+			for(int i=1; i<processIntervalArray.size(); i++) {
+				TypeInterval current = processIntervalArray.get(i);
+				TypeInterval previous = result.getLast();
+				if(previous.getPointType() == PointType.GRADE && current.getPointType() == PointType.GRADE) {					
+					result.getLast().setEnd(current.getEnd());
+					changes = true;
+				} else {
+					result.add(current);
+				}
+			}
+			processIntervalArray = new TypeIntervalArray();
+			processIntervalArray.addAll(result);
+		}
+		return result;
+		
+	}
+	
+	// Filtra las alineaciones de longitud menor que la mínima
 	private TypeIntervalArray filter(TypeIntervalArray intervalArray) {
 		TypeIntervalArray result = new TypeIntervalArray();
 		
@@ -90,7 +122,7 @@ public class TypeIntervalArrayGenerator {
 		int contador = 0;
 		while(changes) {
 			contador++;
-			System.out.println("Ronda filtro: " + contador);
+			//System.out.println("Ronda filtro: " + contador);
 			changes = false;
 			result = new TypeIntervalArray();
 			result.add(processIntervalArray.get(0));

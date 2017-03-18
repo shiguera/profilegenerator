@@ -32,6 +32,7 @@ public class M325_Reconstruct {
 		LOG.debug("main()");
 		
 		interpolationStrategy = InterpolationStrategy.EqualArea;
+		//interpolationStrategy = InterpolationStrategy.LessSquares;
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();
@@ -41,26 +42,30 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 44;
-			double thresholdSlope = 1e-4;
+			int baseSize = 42;
+			double thresholdSlope = 1.75e-5;
 			rec.processUnique(baseSize, thresholdSlope);
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
+			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
 //			for(int i=0; i<resultGProfile.size(); i++) {
 //				double slope = resultGProfile.get(i).getSlope();
-//				if(Math.abs(slope)< thresholdSlope) {
+//				if (Math.abs(slope) == 0.0) {
+//					System.out.println("Horizontal");
+//				} else if(Math.abs(slope)< thresholdSlope) {
 //					System.out.println(resultGProfile.get(i));
+//					System.out.println(resultVProfile.get(i));
 //				} else {
 //					System.out.println("No");
 //				}
 //			}
 			
-			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
-			//System.out.println(resultVProfile);
+			System.out.println(resultVProfile);
 			
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
 					resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
 			showVProfiles(originalVProfile, resultVProfileSample);
+			
 
 		} else {
 			try {
@@ -87,7 +92,7 @@ public class M325_Reconstruct {
 			//System.out.println(gprofile);
 			
 			VerticalProfile resultVProfile = reconstructor.getVerticalProfile();
-			//System.out.println(vprofile);
+			//System.out.println(resultVProfile);
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
 					resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
@@ -128,7 +133,8 @@ public class M325_Reconstruct {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(0.0, 8450.0);
+		//data = data.extract(0.0, 8450.0);
+		data = data.extract(0.0, 6500.0);
 		return data;
 	}
 
@@ -142,7 +148,8 @@ public class M325_Reconstruct {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(0.0, 8450.0);
+		//data = data.extract(0.0, 8450.0);
+		data = data.extract(0.0, 6500.0);
 		return data;		
 	}
 
