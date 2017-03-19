@@ -61,8 +61,10 @@ public class M325_Reconstruct {
 			int countG = 0;
 			int countCuasiG = 0;
 			int countShorAlignments = 0;
+			int countTwoGrades = 0;
 			for(int i=0; i<resultGProfile.size(); i++) {
-				double slope = resultGProfile.get(i).getSlope();
+				//System.out.println(resultGProfile.getAlign(i).getPolynom2());
+				double slope = resultGProfile.get(i).getPolynom2().getA1();
 				double length = resultGProfile.get(i).getEndS() - resultGProfile.get(i).getStartS();
 				if(length<50.0) {
 					countShorAlignments++;
@@ -72,7 +74,10 @@ public class M325_Reconstruct {
 					//System.out.println("Horizontal");
 				} else if(Math.abs(slope)< thresholdSlope) {
 					countCuasiG ++;
-					System.out.println(resultVProfile.getAlign(i).getPolynom2().getKv());
+					if(i>0 && Math.abs(resultGProfile.get(i-1).getSlope())<thresholdSlope) {
+						countTwoGrades++;
+					}
+					//System.out.println(resultGProfile.getAlign(i).getPolynom2());
 					//System.out.println(resultGProfile.get(i));
 					//System.out.println(resultVProfile.get(i));
 				} else {
@@ -84,8 +89,8 @@ public class M325_Reconstruct {
 			System.out.println("Cuasi Grades: " + countCuasiG);
 			System.out.println("Vertical Curves: " + countVC);
 			System.out.println("ShortAlignments: : " + countShorAlignments);
-			
-			System.out.println(resultVProfile);
+			System.out.println("Two grades: " + countTwoGrades);
+			//System.out.println(resultVProfile);
 			
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 

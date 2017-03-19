@@ -2,6 +2,7 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -46,21 +47,28 @@ public class Reconstructor {
 		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeSegmentArray();
 		
 		createGradeProfile();
+		int count = countGradeAlignments();
+		System.out.println("After createGradeProfile(): " + count);
 		
 		adjustEndingsWithBeginnings();
+		count = countGradeAlignments();
+		System.out.println("After adjustEndingsWithBeginnings(): " + count);
+		
 		
 		verticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
 		
 	}
-	private void adjustEndingsWithBeginnings() {
-		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
-			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
-		} else {
-			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
+	private int countGradeAlignments() {
+		int count = 0;
+		for(int i=0; i<gradeProfile.size(); i++) {
+			GradeProfileAlignment align = gradeProfile.get(i);
+			double slope = align.getSlope();
+			if(slope==0.0) {
+				count++;
+			}
 		}
-		adjuster.adjustEndingsWithBeginnings(gradeProfile);
+		return count;
 	}
-	
 	private void createGradeProfile() {
 		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
 			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdSlope);
@@ -69,6 +77,15 @@ public class Reconstructor {
 		}
 		gradeProfile = gradeProfileCreator.createGradeProfile(originalGradePoints, typeIntervalArray);		
 	}
+	private void adjustEndingsWithBeginnings() {
+		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
+			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
+		} else {
+			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
+		}
+		gradeProfile = adjuster.adjustEndingsWithBeginnings(gradeProfile);
+	}
+	
 	
 	// Getters
 	public VerticalProfile getVerticalProfile() {

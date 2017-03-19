@@ -1,13 +1,15 @@
 package com.mlab.pg.reconstruction;
 
+import org.apache.log4j.Logger;
+
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
-import com.mlab.pg.xyfunction.IntegerInterval;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 
+	Logger LOG = Logger.getLogger(GradeProfileCreator_EqualArea.class);
 	
 	XYVectorFunction originalGradePoints;
 	TypeIntervalArray typeIntervalArray;
@@ -46,42 +48,52 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 			//System.out.println(String.format("%f %f", align.getStartZ(), align.getEndZ()));
 			gradeProfile.add(align);
 		}
-		System.out.println(gradeProfile.size());
 		gradeProfile = filterGrades(gradeProfile);
-		System.out.println(gradeProfile.size());
 		gradeProfile = filterTwoGrades(gradeProfile);
-		System.out.println(gradeProfile.size());
 		return gradeProfile;
 	}
 
 	private VerticalGradeProfile filterGrades(VerticalGradeProfile gprofile) {
+		LOG.debug("filterGrades()");
+		System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
+		int counter = 0;
 		for(int i=0; i<gprofile.size(); i++) {
 			GradeProfileAlignment current = gprofile.get(i);
 			if(Math.abs(current.getSlope())<thresholdSlope) {
+				//System.out.println("Filtering..." + i);
+				counter++;
 				double s1 = current.getStartS();
 				int i1 = originalGradePoints.getNearestIndex(s1);
 				double s2 = current.getEndS();
 				int i2 = originalGradePoints.getNearestIndex(s2);
 				double[] r = originalGradePoints.rectaHorizontalEqualArea(i1, i2);
-				Straight straight = new Straight(r[0], r[1]);
+				Straight straight = new Straight(r[0], 0.0);
 				GradeProfileAlignment align = new GradeProfileAlignment(straight, s1, s2);
 				result.add(align);
 			} else {
 				result.add(current);
 			}
 		}
+		System.out.println("Filtered: " + counter);
+		System.out.println("After filter: " + result.size());
 		return result;
 	}
 
 	// Comprueba si hay dos alineaciones seguidas con pendiente menor que thresholdSlope, 
 	// y si es así las une en una única y horizontal
 	private VerticalGradeProfile filterTwoGrades(VerticalGradeProfile gprofile) {
+		LOG.debug("filterTwoGrades()");
+		System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
 		VerticalGradeProfile processGP = new VerticalGradeProfile();
 		processGP.addAll(gprofile);
 		boolean changes = true;
+		int counter = 0;
+		int filteredCounter = 0;
 		while(changes) {
+			counter++;
+			System.out.println("Ronda filtro: " + counter);
 			changes = false;
 			result = new VerticalGradeProfile();
 			result.add(processGP.get(0));
@@ -89,12 +101,14 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 				GradeProfileAlignment current = processGP.get(i);
 				GradeProfileAlignment previous = result.getLastAlign();
 				if(Math.abs(current.getSlope())<thresholdSlope && Math.abs(previous.getSlope()) < thresholdSlope) {
+					System.out.println("Filtering...");
+					filteredCounter++;
 					double s1 = previous.getStartS();
 					int i1 = originalGradePoints.getNearestIndex(s1);
 					double s2 = current.getEndS();
 					int i2 = originalGradePoints.getNearestIndex(s2);
 					double[] r = originalGradePoints.rectaHorizontalEqualArea(i1, i2);
-					Straight straight = new Straight(r[0], r[1]);
+					Straight straight = new Straight(r[0], 0.0);
 					GradeProfileAlignment align = new GradeProfileAlignment(straight, s1, s2);
 					result.remove(previous);
 					result.add(align);
@@ -106,6 +120,8 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 			processGP = new VerticalGradeProfile();
 			processGP.addAll(result);
 		}
+		System.out.println("Filtered: " + filteredCounter);
+		System.out.println("After: " + result.size());
 		return result;
 	}
 

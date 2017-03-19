@@ -91,7 +91,8 @@ public class TypeIntervalArrayGenerator {
 		int contador = 0;
 		while(changes) {
 			contador++;
-			//System.out.println("Ronda filtro: " + contador);
+			System.out.println("Ronda filtro: " + contador);
+			System.out.println(processIntervalArray.size());
 			changes = false;
 			result = new TypeIntervalArray();
 			result.add(processIntervalArray.get(0));

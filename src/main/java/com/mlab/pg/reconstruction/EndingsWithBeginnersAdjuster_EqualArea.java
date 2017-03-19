@@ -1,7 +1,8 @@
 package com.mlab.pg.reconstruction;
 
+import org.apache.log4j.Logger;
+
 import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.xyfunction.Straight;
@@ -9,11 +10,14 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginnersAdjuster{
 
+	Logger LOG = Logger.getLogger(getClass());
+	
 	double thresholdSlope;
 	XYVectorFunction originalGradePoints;
 	VerticalGradeProfile gradeProfile;
 	
 	public EndingsWithBeginnersAdjuster_EqualArea(XYVectorFunction originalGradePoints, double thresholdSlope) {
+		LOG.debug("EndingsWithBeginnersAdjuster_EqualArea()");
 		this.thresholdSlope = thresholdSlope;
 		this.originalGradePoints = originalGradePoints;
 		
@@ -30,8 +34,12 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 	 * conseguir el mismo area
 	 */
 	@Override
-	public VerticalGradeProfile adjustEndingsWithBeginnings( VerticalGradeProfile gradeProfile) {
-		this.gradeProfile = gradeProfile;
+	public VerticalGradeProfile adjustEndingsWithBeginnings( VerticalGradeProfile gradeprofile) {
+		LOG.debug("adjustEndingsWithBeginnings");
+		gradeProfile = new VerticalGradeProfile();
+		gradeProfile.addAll(gradeprofile);
+		
+		filterTwoGrades();
 		
 		adjustFirsAlignment();
 		
@@ -41,33 +49,39 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 			double s1 = previous.getStartS();
 			double g1 = previous.getStartZ();
 			double s2 = previous.getEndS();
-			double g2 = previous.getEndZ();
+			double g21 = previous.getEndZ();
+			double g22 = current.getStartZ();
 			double s3 = current.getEndS();
 			double g3 = current.getEndZ();
-			double area = 0.5*(g1+g2)*(s2-s1) + 0.5*(g2+g3)*(s3-s2);
-			double a2 = current.getPolynom2().getA2();
+			double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+			double a2 = current.getPolynom2().getA1();
 			double newg2, newg3;
+			double slope1 = Math.abs(previous.getSlope());
+			double slope2 = Math.abs(current.getSlope());
 			
-			if(Math.abs(current.getSlope()) < thresholdSlope) {
+			if (slope1<thresholdSlope && slope2<thresholdSlope) {
+				// Las dos rectas son horizontales
+				LOG.error("Error, dos rectas horizontales, no debería pasar ");
+				newg2 = Double.NaN;
+				newg3 = Double.NaN;
+			}
+			else if(Math.abs(current.getSlope()) < thresholdSlope) {
 				// Si la recta es horizontal la muevo paralelamente hasta el vertice anterior
+				//System.out.println("adjust: caso 1");
 				newg2 = (2*area - g1*(s2-s1))/(-s1-s2+2*s3);
 				newg3 = newg2;
 			} else if (Math.abs(previous.getSlope()) < thresholdSlope) {
 				// Si la recta anterior es horizontal calculo la recta que pasa 
 				// por el final de la anterior y tiene el mismo area
-				int i1 = originalGradePoints.getNearestIndex(s2);
-				int i2 = originalGradePoints.getNearestIndex(s3);
-				double[] r = originalGradePoints.rectaPosteriorEqualArea(i1, i2);
-				newg2 = r[0] + r[1]*s2;
-				newg3 = r[0] + r[1]*s3;
+				//System.out.println("adjust: caso 2");
+				newg2 = g21;
+				newg3 = g22-g21+g3;
 			} else {
 				// Traslado la recta paralelamente y muevo el vertice 
 				// común con la recta anterior para que de el mismo area
-				double[][] A = new double[][]{{s3-s1, s3-s2, 0}, {1, 0, -1}, {0, 1, -1}}; // Incognitas newg2, newg3, newa2
-				double[] C = new double[]{2*area-g1*(s2-s1), a2*s2, a2*s3};
-				double[] sol = MathUtil.solve(A, C);
-				newg2 = sol[0];
-				newg3 = sol[1];
+				//System.out.println("adjust: caso 3");
+				newg3 = (2*area -(g1+g22-g3)*(s2-s1) - (g22-g3)*(s3-s2)) / (-s1 -s2 + 2*s3);
+				newg2 = g22 - g3 + newg3;
 				//double newa2 = sol[2];
 			}
 			Straight newr1 = new Straight(new double[]{s1,g1}, new double[]{s2, newg2});
@@ -78,6 +92,47 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 		return gradeProfile;
 	}
 
+	private void filterTwoGrades() {
+		LOG.debug("filterTwoGrades()");
+		VerticalGradeProfile process = new VerticalGradeProfile();
+		process.addAll(gradeProfile);
+		System.out.println("Before filter: " + process.size());
+		VerticalGradeProfile result = new VerticalGradeProfile();
+		boolean changes = true;
+		while(changes) {
+			changes = false;
+			result.add(process.get(0));
+			for(int i=1; i<process.size(); i++) {
+				GradeProfileAlignment current = process.get(i);
+				GradeProfileAlignment previous = result.getLastAlign();
+				double slope1 = previous.getSlope();
+				double slope2 =current.getSlope();
+				if(Math.abs(slope1)<thresholdSlope && Math.abs(slope2)<thresholdSlope) {
+					// Si las dos rectas son horizontales las cambio por una sola de igual area
+					double s1 = previous.getStartS();
+					double g1 = previous.getStartZ();
+					double s2 = previous.getEndS();
+					double g22 = current.getStartZ();
+					double s3 = current.getEndS();
+					double area = g1*(s2-s1) + g22*(s3-s2);
+					double newg1 = area/(s3-s1);
+					Straight straight = new Straight(new double[]{s1, newg1}, new double[]{s3,newg1});
+					GradeProfileAlignment align = new GradeProfileAlignment(straight, s1, s3);
+					result.remove(previous);
+					result.add(align);
+					changes = true;
+				} else {
+					result.add(current);
+				}
+			}
+			process = new VerticalGradeProfile();
+			process.addAll(result);
+		}
+		gradeProfile = new VerticalGradeProfile();
+		gradeProfile.addAll(result);
+		System.out.println("After filter: " + gradeProfile.size());
+
+	}
 	private void adjustFirsAlignment() {
 		GradeProfileAlignment currentAlignment = gradeProfile.get(0);
 		double starts = currentAlignment.getStartS();

@@ -88,7 +88,7 @@ public abstract class AbstractVAlignment implements VAlignment {
 
 	@Override
 	public double getStartTangent() {
-		return polynom.getTangent(startS);
+		return getTangent(startS);
 	}
 	@Override
 	public double getEndTangent() {
