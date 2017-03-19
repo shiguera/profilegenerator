@@ -23,14 +23,16 @@ public class GradeProfileFilter {
 	XYVectorFunction originalGradePoints;
 	VerticalGradeProfile resultGradeProfile;
 	double startZ;
+	double thresholdSlope;
 	
 	private XYVectorFunction verticalProfilePoints;
 	private double meanSeparation;
 	
-	public GradeProfileFilter(VerticalGradeProfile gradeprofile, XYVectorFunction originalgradePoints, double startz) {
+	public GradeProfileFilter(VerticalGradeProfile gradeprofile, XYVectorFunction originalgradePoints, double startz, double thresholdSlope) {
 		this.originalGradeProfile = gradeprofile;
 		this.originalGradePoints = originalgradePoints;
 		this.startZ = startz;
+		this.thresholdSlope = thresholdSlope;
 		this.meanSeparation = originalGradePoints.separacionMedia();
 		
 		
@@ -97,7 +99,7 @@ public class GradeProfileFilter {
 				if(previousAlignment.getLength() < MIN_ALIGNMENT_LENGTH) {
 					double originalEcm = calculateOriginalEcm(previousAlignment, currentAlignment);
 					GradeProfileAlignment joined = joinAlignments(previousAlignment, currentAlignment);
-					VAlignment vpJoined = joined.integrate(verticalProfilePoints.getY(joined.getStartS()));
+					VAlignment vpJoined = joined.integrate(verticalProfilePoints.getY(joined.getStartS()), thresholdSlope);
 					XYVectorFunction joinedPoints = vpJoined.getSample(joined.getStartS(), joined.getEndS(), meanSeparation);
 	
 					XYVectorFunction newpoints = verticalProfilePoints.extract(joinedPoints.getStartX(), joinedPoints.getEndX());
@@ -124,7 +126,7 @@ public class GradeProfileFilter {
 		VerticalGradeProfile gprofile = new VerticalGradeProfile();
 		gprofile.add(alignment1);
 		gprofile.add(alignment2);
-		VerticalProfile vp = gprofile.integrate(verticalProfilePoints.getY(gprofile.getStartS()));
+		VerticalProfile vp = gprofile.integrate(verticalProfilePoints.getY(gprofile.getStartS()), thresholdSlope);
 		
 		XYVectorFunction points = vp.getSample(gprofile.getStartS(), gprofile.getEndS(), meanSeparation, true);
 		XYVectorFunction points2 = verticalProfilePoints.extract(gprofile.getStartS(), gprofile.getEndS());

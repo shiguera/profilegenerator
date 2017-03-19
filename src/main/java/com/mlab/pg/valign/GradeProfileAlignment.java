@@ -15,6 +15,7 @@ import com.mlab.pg.xyfunction.Straight;
 public class GradeProfileAlignment extends GradeAlignment {
 
 	
+	double thresholdSlope;
 	
 	public GradeProfileAlignment(Straight straight, double starts, double ends) {
 		super(straight, starts, ends);
@@ -27,7 +28,8 @@ public class GradeProfileAlignment extends GradeAlignment {
 	 * @param startZ ordenada del primer punto del perfil longitudinal
 	 * @return VerticalProfileAlign que integra el GradeProfileAlign
 	 */
-	public VAlignment integrate(double startZ) {
+	public VAlignment integrate(double startZ, double thresholdslope) {
+		this.thresholdSlope = thresholdslope;
 		VAlignment valign = null;
 		double s1 = getStartS();
 		double g1 = getStartZ();
@@ -49,7 +51,7 @@ public class GradeProfileAlignment extends GradeAlignment {
 	}
 	
 	public boolean isHorizontal() {
-		return Math.abs(polynom.getA1()) < 1e-6;
+		return Math.abs(polynom.getA1()) < thresholdSlope;
 	}
 
 	

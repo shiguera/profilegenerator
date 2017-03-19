@@ -49,7 +49,7 @@ public class Reconstructor {
 		
 		adjustEndingsWithBeginnings();
 		
-		verticalProfile = gradeProfile.integrate(startZ);
+		verticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
 		
 	}
 	private void adjustEndingsWithBeginnings() {

@@ -11,9 +11,11 @@ import org.jfree.ui.RefineryUtilities;
 import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -47,17 +49,41 @@ public class M325_Reconstruct {
 			rec.processUnique(baseSize, thresholdSlope);
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
 			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
-//			for(int i=0; i<resultGProfile.size(); i++) {
-//				double slope = resultGProfile.get(i).getSlope();
-//				if (Math.abs(slope) == 0.0) {
-//					System.out.println("Horizontal");
-//				} else if(Math.abs(slope)< thresholdSlope) {
-//					System.out.println(resultGProfile.get(i));
-//					System.out.println(resultVProfile.get(i));
-//				} else {
-//					System.out.println("No");
-//				}
-//			}
+			
+			CheckEndingsWithBeginnings checker = new CheckEndingsWithBeginnings();
+			boolean result = checker.checkProfile(resultVProfile);
+			System.out.println("Check endings with beginnings: " + result);
+
+			VProfileFilter_ShortAlignments filter = new VProfileFilter_ShortAlignments(50);
+			filter.filter(resultVProfile);
+			
+			int countVC = 0;
+			int countG = 0;
+			int countCuasiG = 0;
+			int countShorAlignments = 0;
+			for(int i=0; i<resultGProfile.size(); i++) {
+				double slope = resultGProfile.get(i).getSlope();
+				double length = resultGProfile.get(i).getEndS() - resultGProfile.get(i).getStartS();
+				if(length<50.0) {
+					countShorAlignments++;
+				}
+				if (Math.abs(slope) == 0.0) {
+					countG ++;
+					//System.out.println("Horizontal");
+				} else if(Math.abs(slope)< thresholdSlope) {
+					countCuasiG ++;
+					System.out.println(resultVProfile.getAlign(i).getPolynom2().getKv());
+					//System.out.println(resultGProfile.get(i));
+					//System.out.println(resultVProfile.get(i));
+				} else {
+					countVC++;
+					//System.out.println("No");
+				}
+			}
+			System.out.println("Grades: " + countG);
+			System.out.println("Cuasi Grades: " + countCuasiG);
+			System.out.println("Vertical Curves: " + countVC);
+			System.out.println("ShortAlignments: : " + countShorAlignments);
 			
 			System.out.println(resultVProfile);
 			

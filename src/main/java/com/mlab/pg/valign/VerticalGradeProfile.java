@@ -139,14 +139,14 @@ public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 	 * @param startZ Altitud del primer punto del perfil.
 	 * @return Perfil longitudinal
 	 */
-	public VerticalProfile integrate(double startZ) {
+	public VerticalProfile integrate(double startZ, double thresholdSlope) {
 		if(this.size()==0) {
 			return null;
 		}
 		double currentStartZ = startZ;
 		VerticalProfile verticalProfile = new VerticalProfile();
 		for(int i=0; i<this.size(); i++) {
-			VAlignment valign = this.get(i).integrate(currentStartZ);
+			VAlignment valign = this.get(i).integrate(currentStartZ, thresholdSlope);
 			verticalProfile.add(valign);
 			currentStartZ = valign.getEndZ();
 		}

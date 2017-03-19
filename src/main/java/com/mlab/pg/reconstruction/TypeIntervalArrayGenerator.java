@@ -74,7 +74,7 @@ public class TypeIntervalArrayGenerator {
 		//LOG.debug("TypeIntervalArray before filter: " + resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {
 			//LOG.debug("Filtered: YES");
-			//resultIntervalArray = filter(resultIntervalArray);
+			resultIntervalArray = filter(resultIntervalArray);
 			resultIntervalArray = filterTwoGrades(resultIntervalArray);
 		} else{
 			//LOG.debug("Filtered: NO");

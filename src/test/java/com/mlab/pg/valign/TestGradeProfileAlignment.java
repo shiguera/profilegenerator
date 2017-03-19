@@ -2,6 +2,7 @@ package com.mlab.pg.valign;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import com.mlab.pg.random.RandomProfileType_I_Factory;
 import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 
-import junit.framework.Assert;
+
 
 public class TestGradeProfileAlignment {
 
@@ -31,7 +32,7 @@ public class TestGradeProfileAlignment {
 		double s1 = 1000.0;
 		Straight r = new Straight(s0, g0, 0.0);
 		GradeProfileAlignment galignment = new GradeProfileAlignment(r, s0, s1);
-		VAlignment valignment = galignment.integrate(z0);
+		VAlignment valignment = galignment.integrate(z0, 1e-6);
 		Assert.assertEquals(galignment.getStartS(), valignment.getStartS(), 0.001);
 		Assert.assertEquals(galignment.getEndS(), valignment.getEndS(), 0.001);
 		Assert.assertEquals(galignment.getStartZ(), valignment.getStartTangent(), 0.001);
@@ -47,7 +48,7 @@ public class TestGradeProfileAlignment {
 			VerticalGradeProfile gprofile = originalVProfile.derivative();
 			
 			double z0 = originalVProfile.getAlign(0).getStartZ();
-			VerticalProfile resultVProfile = gprofile.integrate(z0);
+			VerticalProfile resultVProfile = gprofile.integrate(z0, 1e-6);
 	
 			VAlignment valign = resultVProfile.getAlign(0);
 			GradeAlignment galign = gprofile.getAlign(0);
@@ -84,7 +85,7 @@ public class TestGradeProfileAlignment {
 			originalVProfile = factory.createRandomProfile();
 			gprofile = originalVProfile.derivative();
 			z0 = originalVProfile.getAlign(0).getStartZ();
-			resultVProfile = gprofile.integrate(z0);
+			resultVProfile = gprofile.integrate(z0, 1e-6);
 			
 			valign = resultVProfile.getAlign(0);
 			galign = gprofile.getAlign(0);
@@ -129,7 +130,7 @@ public class TestGradeProfileAlignment {
 			VerticalGradeProfile gprofile = profile.derivative();
 			
 			double z0 = profile.getAlign(0).getStartZ();
-			VerticalProfile resultProfile = gprofile.integrate(z0);
+			VerticalProfile resultProfile = gprofile.integrate(z0, 1e-6);
 
 			VAlignment align = resultProfile.getAlign(0);
 			GradeAlignment galign = gprofile.getAlign(0);
@@ -163,7 +164,7 @@ public class TestGradeProfileAlignment {
 			gprofile = profile.derivative();
 			
 			z0 = profile.getAlign(0).getStartZ();
-			resultProfile = gprofile.integrate(z0);
+			resultProfile = gprofile.integrate(z0, 1e-6);
 
 			align = resultProfile.getAlign(0);
 			galign = gprofile.getAlign(0);
