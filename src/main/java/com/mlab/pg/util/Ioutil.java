@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.valign.VerticalProfile;
+
 
 public class Ioutil {
 	private static final Logger LOG = Logger.getLogger(Ioutil.class);

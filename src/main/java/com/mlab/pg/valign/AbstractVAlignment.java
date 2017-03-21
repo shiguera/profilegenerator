@@ -152,5 +152,11 @@ public abstract class AbstractVAlignment implements VAlignment {
 				getLength(), endS, polynom.getY(endS), polynom.getTangent(endS),
 				polynom.getA0(), polynom.getA1(), polynom.getA2(), ((Double.isNaN(polynom.getKv()) || Math.abs(polynom.getKv())>1e7)?"-":String.format("%9.1f", polynom.getKv())));
 	}
+	public String toString2() {
+		return String.format("%12.6f %12.6f %12.6f %12.6f %10s", 
+				startS, polynom.getY(startS), polynom.getTangent(startS),
+				getLength(),
+				((Double.isNaN(polynom.getKv()) || Math.abs(polynom.getKv())>1e7)?"-":String.format("%9.1f", polynom.getKv())));
+	}
 	
 }

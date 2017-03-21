@@ -3,8 +3,10 @@ package com.mlab.pg.reconstruction;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.valign.GradeProfileAlignment;
+import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
@@ -48,15 +50,47 @@ public class Reconstructor {
 		
 		createGradeProfile();
 		int count = countGradeAlignments();
-		System.out.println("After createGradeProfile(): " + count);
+		//System.out.println("After createGradeProfile(): " + count);
 		
-		adjustEndingsWithBeginnings();
-		count = countGradeAlignments();
-		System.out.println("After adjustEndingsWithBeginnings(): " + count);
+
+		boolean changes = true;
+		VerticalGradeProfile process = new VerticalGradeProfile();
+		process.addAll(gradeProfile);
 		
-		
+		while(changes) {
+			changes=false;
+			process = adjustEndingsWithBeginnings(process);
+			verticalProfile = process.integrate(startZ, thresholdSlope);
+			for(int i=1; i<verticalProfile.size(); i++) {
+				VAlignment current = verticalProfile.get(i); 
+				VAlignment previous = verticalProfile.get(i-1);				
+				if(current.getPolynom2().getA2()==0 && previous.getPolynom2().getA2()==0) {
+					double s1 = process.get(i-1).getStartS();
+					double g1 = process.get(i-1).getStartZ();
+					double s2 = process.get(i-1).getEndS();
+					double s3 = process.get(i).getEndS();
+					double g2 = process.get(i).getStartZ();
+					double area = g1*(s2-s1) + g2*(s3-s2);
+					double newg = area / (s3-s1);
+					Straight r = new Straight(newg, 0.0);
+					GradeProfileAlignment align = new GradeProfileAlignment(r, s1, s3);
+					process.remove(i-1);
+					process.set(i-1, align);
+					changes = true;
+					break;
+				} 
+			}
+		}
+		gradeProfile = new VerticalGradeProfile();
+		gradeProfile.addAll(process);
 		verticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
 		
+		//System.out.println(gradeProfile);
+		count = countGradeAlignments();
+		//System.out.println("After adjustEndingsWithBeginnings(): " + count);
+		
+		
+		//System.out.println(verticalProfile);
 	}
 	private int countGradeAlignments() {
 		int count = 0;
@@ -77,13 +111,14 @@ public class Reconstructor {
 		}
 		gradeProfile = gradeProfileCreator.createGradeProfile(originalGradePoints, typeIntervalArray);		
 	}
-	private void adjustEndingsWithBeginnings() {
+	private VerticalGradeProfile adjustEndingsWithBeginnings(VerticalGradeProfile profile) {
 		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
 			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
 		} else {
 			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
 		}
-		gradeProfile = adjuster.adjustEndingsWithBeginnings(gradeProfile);
+		VerticalGradeProfile result = adjuster.adjustEndingsWithBeginnings(profile);
+		return result;
 	}
 	
 	

@@ -1,0 +1,801 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 18 36 577 806
+%%Title: Enscript Output
+%%Creator: GNU Enscript 1.6.5.90
+%%CreationDate: Tue Mar 21 03:00:01 2017
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6.5 90
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6.5 90
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [595 842] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6.5 90
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 559 def
+/d_page_h 770 def
+/d_header_x 0 def
+/d_header_y 755 def
+/d_header_w 559 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 559 def
+/d_footer_h 0 def
+/d_output_w 559 def
+/d_output_h 755 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 1 def
+/fname (M325.txt) def
+/fdir (.) def
+/ftail (M325.txt) def
+% User defined strings:
+/fmodstr (Tue Mar 21 02:56:29 2017) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 742 M
+(Reconstrucci\303\263n de la M-325: perfil longitudinal) s
+5 731 M
+(          SE           ZE           PE            L           SS           ZS           PS ) s
+5 720 M
+(          a0          a1x        a2x^2          K) s
+5 709 M
+(    0,060000   589,274000    -0,001493    99,485000    99,545000   589,125455    -0,001493 ) s
+5 698 M
+(  589,274090    -0,001493     0,000000          - GRADE ) s
+5 687 M
+(   99,545000   589,125455    -0,001493     9,522000   109,067000   589,093697    -0,005177 ) s
+5 676 M
+(  587,357082     0,037022    -0,000193    -2584,6 VERTICAL CURVE ) s
+5 665 M
+(  109,067000   589,093697    -0,005177   232,479000   341,546000   587,890074    -0,005177 ) s
+5 654 M
+(  589,658374    -0,005177     0,000000          - GRADE ) s
+5 643 M
+(  341,546000   587,890074    -0,005177    10,566000   352,112000   587,856323    -0,001211 ) s
+5 632 M
+(  611,551905    -0,133380     0,000188     2664,1 VERTICAL CURVE ) s
+5 621 M
+(  352,112000   587,856323    -0,001211   702,333000  1054,445000   587,005593    -0,001211 ) s
+5 610 M
+(  588,282833    -0,001211     0,000000          - GRADE ) s
+5 599 M
+( 1054,445000   587,005593    -0,001211    35,134000  1089,579000   587,137338     0,008711 ) s
+5 588 M
+(  745,281159    -0,298995     0,000141     3541,0 VERTICAL CURVE ) s
+5 577 M
+( 1089,579000   587,137338     0,008711   259,325000  1348,904000   589,396275     0,008711 ) s
+5 566 M
+(  577,646195     0,008711     0,000000          - GRADE ) s
+5 555 M
+( 1348,904000   589,396275     0,008711    13,091000  1361,995000   589,426276    -0,004127 ) s
+5 544 M
+( -314,564627     1,331579    -0,000490    -1019,7 VERTICAL CURVE ) s
+5 533 M
+( 1361,995000   589,426276    -0,004127   116,694000  1478,689000   588,944623    -0,004127 ) s
+5 522 M
+(  595,047890    -0,004127     0,000000          - GRADE ) s
+5 511 M
+( 1478,689000   588,944623    -0,004127     8,913000  1487,602000   588,927524     0,000291 ) s
+5 500 M
+( 1136,967328    -0,737100     0,000248     2017,4 VERTICAL CURVE ) s
+5 489 M
+( 1487,602000   588,927524     0,000291   182,832000  1670,434000   588,980656     0,000291 ) s
+5 478 M
+(  588,495214     0,000291     0,000000          - GRADE ) s
+5 467 M
+( 1670,434000   588,980656     0,000291    41,741000  1712,175000   589,089346     0,004917 ) s
+5 456 M
+(  743,137459    -0,184862     0,000055     9022,0 VERTICAL CURVE ) s
+5 445 M
+( 1712,175000   589,089346     0,004917    58,389000  1770,564000   590,231270     0,034197 ) s
+5 434 M
+( 1315,700727    -0,853676     0,000251     1994,2 VERTICAL CURVE ) s
+5 423 M
+( 1770,564000   590,231270     0,034197   409,919000  2180,483000   604,249331     0,034197 ) s
+5 412 M
+(  529,683033     0,034197     0,000000          - GRADE ) s
+5 401 M
+( 2180,483000   604,249331     0,034197     9,321000  2189,804000   604,573921     0,035450 ) s
+5 390 M
+(  849,225560    -0,258896     0,000067     7439,6 VERTICAL CURVE ) s
+5 379 M
+( 2189,804000   604,573921     0,035450   411,724000  2601,528000   619,169556     0,035450 ) s
+5 368 M
+(  526,945271     0,035450     0,000000          - GRADE ) s
+5 357 M
+( 2601,528000   619,169556     0,035450    16,010000  2617,538000   619,802365     0,043602 ) s
+5 346 M
+( 2249,920773    -1,289137     0,000255     1964,0 VERTICAL CURVE ) s
+5 335 M
+( 2617,538000   619,802365     0,043602   384,849000  3002,387000   636,582418     0,043602 ) s
+5 324 M
+(  505,673374     0,043602     0,000000          - GRADE ) s
+5 313 M
+( 3002,387000   636,582418     0,043602    13,308000  3015,695000   637,184638     0,046903 ) s
+5 302 M
+( 1623,885278    -0,701280     0,000124     4030,7 VERTICAL CURVE ) s
+5 291 M
+( 3015,695000   637,184638     0,046903   183,144000  3198,839000   645,774701     0,046903 ) s
+5 280 M
+(  495,738516     0,046903     0,000000          - GRADE ) s
+5 269 M
+( 3198,839000   645,774701     0,046903     4,846000  3203,685000   645,996146     0,044490 ) s
+5 258 M
+(-2052,343741     1,640033    -0,000249    -2007,9 VERTICAL CURVE ) s
+5 247 M
+( 3203,685000   645,996146     0,044490   400,051000  3603,736000   663,794357     0,044490 ) s
+5 236 M
+(  503,464669     0,044490     0,000000          - GRADE ) s
+5 225 M
+( 3603,736000   663,794357     0,044490    48,738000  3652,474000   665,223539     0,014158 ) s
+5 214 M
+(-3537,747388     2,287280    -0,000311    -1606,8 VERTICAL CURVE ) s
+5 203 M
+( 3652,474000   665,223539     0,014158    40,098000  3692,572000   665,791234     0,014158 ) s
+5 192 M
+(  613,512947     0,014158     0,000000          - GRADE ) s
+5 181 M
+( 3692,572000   665,791234     0,014158    29,717000  3722,289000   665,841080    -0,010803 ) s
+5 170 M
+(-5112,859428     3,115721    -0,000420    -1190,6 VERTICAL CURVE ) s
+5 159 M
+( 3722,289000   665,841080    -0,010803    10,370000  3732,659000   665,729052    -0,010803 ) s
+5 148 M
+(  706,052974    -0,010803     0,000000          - GRADE ) s
+5 137 M
+( 3732,659000   665,729052    -0,010803    44,877000  3777,536000   664,949269    -0,023949 ) s
+5 126 M
+(-1334,640441     1,082623    -0,000146    -3413,7 VERTICAL CURVE ) s
+5 115 M
+( 3777,536000   664,949269    -0,023949     7,846000  3785,382000   664,718968    -0,034756 ) s
+5 104 M
+(-9072,261182     5,179273    -0,000689     -726,0 VERTICAL CURVE ) s
+5 93 M
+( 3785,382000   664,718968    -0,034756    66,369000  3851,751000   662,412233    -0,034756 ) s
+5 82 M
+(  796,284509    -0,034756     0,000000          - GRADE ) s
+5 71 M
+( 3851,751000   662,412233    -0,034756    40,702000  3892,453000   661,505027    -0,009822 ) s
+5 60 M
+( 5340,625860    -2,394380     0,000306     1632,4 VERTICAL CURVE ) s
+5 49 M
+( 3892,453000   661,505027    -0,009822    40,515000  3932,968000   661,295661    -0,000513 ) s
+5 38 M
+( 2440,215397    -0,904106     0,000115     4352,6 VERTICAL CURVE ) s
+5 27 M
+( 3932,968000   661,295661    -0,000513    48,206000  3981,174000   661,270908    -0,000513 ) s
+5 16 M
+(  663,315178    -0,000513     0,000000          - GRADE ) s
+5 5 M
+( 3981,174000   661,270908    -0,000513    40,320000  4021,494000   661,544460     0,014082 ) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 2 def
+/fname (M325.txt) def
+/fdir (.) def
+/ftail (M325.txt) def
+% User defined strings:
+/fmodstr (Tue Mar 21 02:56:29 2017) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 742 M
+( 3532,146499    -1,441712     0,000181     2762,4 VERTICAL CURVE ) s
+5 731 M
+( 4021,494000   661,544460     0,014082    43,339000  4064,833000   662,575543     0,033500 ) s
+5 720 M
+( 4227,789410    -1,787675     0,000224     2232,0 VERTICAL CURVE ) s
+5 709 M
+( 4064,833000   662,575543     0,033500    20,903000  4085,736000   663,331562     0,038836 ) s
+5 698 M
+( 2635,512912    -1,004235     0,000128     3917,0 VERTICAL CURVE ) s
+5 687 M
+( 4085,736000   663,331562     0,038836    22,285000  4108,021000   664,197026     0,038836 ) s
+5 676 M
+(  504,657148     0,038836     0,000000          - GRADE ) s
+5 665 M
+( 4108,021000   664,197026     0,038836    49,600000  4157,621000   665,934288     0,031215 ) s
+5 654 M
+( -791,909019     0,670073    -0,000077    -6507,9 VERTICAL CURVE ) s
+5 643 M
+( 4157,621000   665,934288     0,031215    26,224000  4183,845000   666,821138     0,036422 ) s
+5 632 M
+( 2252,330058    -0,794341     0,000099     5036,1 VERTICAL CURVE ) s
+5 621 M
+( 4183,845000   666,821138     0,036422    53,194000  4237,039000   668,758561     0,036422 ) s
+5 610 M
+(  514,437829     0,036422     0,000000          - GRADE ) s
+5 599 M
+( 4237,039000   668,758561     0,036422    40,989000  4278,028000   669,205762    -0,014601 ) s
+5 588 M
+(-10659,203296     5,310691    -0,000622     -803,3 VERTICAL CURVE ) s
+5 577 M
+( 4278,028000   669,205762    -0,014601   173,750000  4451,778000   666,668786    -0,014601 ) s
+5 566 M
+(  731,670523    -0,014601     0,000000          - GRADE ) s
+5 555 M
+( 4451,778000   666,668786    -0,014601    84,778000  4536,556000   666,299354     0,005886 ) s
+5 544 M
+( 3126,300904    -1,090410     0,000121     4138,1 VERTICAL CURVE ) s
+5 533 M
+( 4536,556000   666,299354     0,005886    20,826000  4557,382000   666,421935     0,005886 ) s
+5 522 M
+(  639,597191     0,005886     0,000000          - GRADE ) s
+5 511 M
+( 4557,382000   666,421935     0,005886    64,205000  4621,587000   666,586508    -0,000760 ) s
+5 500 M
+( -435,285962     0,477597    -0,000052    -9661,4 VERTICAL CURVE ) s
+5 489 M
+( 4621,587000   666,586508    -0,000760    57,904000  4679,491000   667,644875     0,037315 ) s
+5 478 M
+( 7692,458054    -3,039699     0,000329     1520,8 VERTICAL CURVE ) s
+5 467 M
+( 4679,491000   667,644875     0,037315     5,644000  4685,135000   667,842952     0,032875 ) s
+5 456 M
+(-8120,767819     3,718825    -0,000393    -1271,1 VERTICAL CURVE ) s
+5 445 M
+( 4685,135000   667,842952     0,032875     4,869000  4690,004000   668,003021     0,032875 ) s
+5 434 M
+(  513,818600     0,032875     0,000000          - GRADE ) s
+5 423 M
+( 4690,004000   668,003021     0,032875    45,180000  4735,184000   669,665338     0,040711 ) s
+5 412 M
+( 2421,361065    -0,780575     0,000087     5765,6 VERTICAL CURVE ) s
+5 401 M
+( 4735,184000   669,665338     0,040711     9,986000  4745,170000   670,094599     0,045261 ) s
+5 390 M
+( 5584,893104    -2,116756     0,000228     2194,8 VERTICAL CURVE ) s
+5 379 M
+( 4745,170000   670,094599     0,045261   149,753000  4894,923000   676,872593     0,045261 ) s
+5 368 M
+(  455,322709     0,045261     0,000000          - GRADE ) s
+5 357 M
+( 4894,923000   676,872593     0,045261    42,220000  4937,143000   678,074921     0,011694 ) s
+5 346 M
+(-9069,464883     3,936962    -0,000398    -1257,8 VERTICAL CURVE ) s
+5 335 M
+( 4937,143000   678,074921     0,011694    40,571000  4977,714000   678,461865     0,007381 ) s
+5 324 M
+( -675,459606     0,536613    -0,000053    -9405,5 VERTICAL CURVE ) s
+5 313 M
+( 4977,714000   678,461865     0,007381    35,267000  5012,981000   678,722160     0,007381 ) s
+5 302 M
+(  641,722874     0,007381     0,000000          - GRADE ) s
+5 291 M
+( 5012,981000   678,722160     0,007381    41,550000  5054,531000   677,910186    -0,046465 ) s
+5 280 M
+(-15641,529873     6,503816    -0,000648     -771,7 VERTICAL CURVE ) s
+5 269 M
+( 5054,531000   677,910186    -0,046465    62,655000  5117,186000   674,998928    -0,046465 ) s
+5 258 M
+(  912,768393    -0,046465     0,000000          - GRADE ) s
+5 247 M
+( 5117,186000   674,998928    -0,046465    62,227000  5179,413000   671,563125    -0,063963 ) s
+5 236 M
+(-2768,937203     1,392492    -0,000141    -3556,2 VERTICAL CURVE ) s
+5 225 M
+( 5179,413000   671,563125    -0,063963   170,194000  5349,607000   660,676977    -0,063963 ) s
+5 214 M
+( 1002,854810    -0,063963     0,000000          - GRADE ) s
+5 203 M
+( 5349,607000   660,676977    -0,063963    23,653000  5373,260000   659,314331    -0,051257 ) s
+5 192 M
+( 8689,854503    -2,937819     0,000269     1861,5 VERTICAL CURVE ) s
+5 181 M
+( 5373,260000   659,314331    -0,051257   144,802000  5518,062000   651,892276    -0,051257 ) s
+5 170 M
+(  934,729223    -0,051257     0,000000          - GRADE ) s
+5 159 M
+( 5518,062000   651,892276    -0,051257    46,122000  5564,184000   650,204281    -0,021940 ) s
+5 148 M
+(10611,767724    -3,558661     0,000318     1573,3 VERTICAL CURVE ) s
+5 137 M
+( 5564,184000   650,204281    -0,021940    79,583000  5643,767000   649,184969    -0,003676 ) s
+5 126 M
+( 4324,987804    -1,298930     0,000115     4357,3 VERTICAL CURVE ) s
+5 115 M
+( 5643,767000   649,184969    -0,003676    65,329000  5709,096000   649,829882     0,023419 ) s
+5 104 M
+( 7275,322198    -2,344450     0,000207     2411,1 VERTICAL CURVE ) s
+5 93 M
+( 5709,096000   649,829882     0,023419   156,404000  5865,500000   653,492785     0,023419 ) s
+5 82 M
+(  516,125717     0,023419     0,000000          - GRADE ) s
+5 71 M
+( 5865,500000   653,492785     0,023419    26,962000  5892,462000   654,075042     0,019771 ) s
+5 60 M
+(-1811,385499     0,817047    -0,000068    -7390,7 VERTICAL CURVE ) s
+5 49 M
+( 5892,462000   654,075042     0,019771   113,602000  6006,064000   656,321115     0,019771 ) s
+5 38 M
+(  537,572683     0,019771     0,000000          - GRADE ) s
+5 27 M
+( 6006,064000   656,321115     0,019771    24,348000  6030,412000   656,909881     0,028591 ) s
+5 16 M
+( 7071,027977    -2,155848     0,000181     2760,6 VERTICAL CURVE ) s
+5 5 M
+( 6030,412000   656,909881     0,028591    15,391000  6045,803000   657,349928     0,028591 ) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 3 def
+/fname (M325.txt) def
+/fdir (.) def
+/ftail (M325.txt) def
+% User defined strings:
+/fmodstr (Tue Mar 21 02:56:29 2017) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 742 M
+(  484,493325     0,028591     0,000000          - GRADE ) s
+5 731 M
+( 6045,803000   657,349928     0,028591    29,160000  6074,963000   658,020198     0,017381 ) s
+5 720 M
+(-6541,584772     2,352874    -0,000192    -2601,1 VERTICAL CURVE ) s
+5 709 M
+( 6074,963000   658,020198     0,017381   265,804000  6340,767000   662,640068     0,017381 ) s
+5 698 M
+(  552,432861     0,017381     0,000000          - GRADE ) s
+5 687 M
+( 6340,767000   662,640068     0,017381     8,672000  6349,439000   662,770798     0,012769 ) s
+5 676 M
+(-10137,595993     3,389222    -0,000266    -1880,5 VERTICAL CURVE ) s
+5 665 M
+( 6349,439000   662,770798     0,012769    12,222000  6361,661000   662,926863     0,012769 ) s
+5 654 M
+(  581,693461     0,012769     0,000000          - GRADE ) s
+5 643 M
+( 6361,661000   662,926863     0,012769   136,840000  6498,501000   666,374906     0,037626 ) s
+5 632 M
+( 4257,422653    -1,142819     0,000091     5505,1 VERTICAL CURVE ) s
+5 621 M
+( 6498,501000   666,374906     0,037626     0,814000  6499,315000   666,431004     0,100208 ) s
+5 610 M
+(1623816,219611  -499,583550     0,038441       13,0 VERTICAL CURVE ) s
+_R
+S
+%%Trailer
+%%Pages: 3
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

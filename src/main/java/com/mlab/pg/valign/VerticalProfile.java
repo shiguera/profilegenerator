@@ -138,6 +138,18 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		}
 		return builder.toString();
 	}
+	
+	public String toString2() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Vertical Profile \n");
+		builder.append(VAlignment.CABECERA2);
+		builder.append('\n');
+		for(int i=0; i<this.size(); i++) {
+			builder.append(this.get(i).toString2());
+			builder.append('\n');
+		}
+		return builder.toString();
+	}
 
 	/**
 	 * Calcula el error cuadrático medio entre los puntos de dos perfiles longitudinales. 

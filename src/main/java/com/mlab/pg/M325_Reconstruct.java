@@ -16,6 +16,7 @@ import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
+import com.mlab.pg.reconstruction.VerticalProfileWriter;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -44,8 +45,8 @@ public class M325_Reconstruct {
 		
 		boolean unique = true;
 		if (unique) {
-			int baseSize = 42;
-			double thresholdSlope = 1.75e-5;
+			int baseSize = 38;
+			double thresholdSlope = 1.0e-4;
 			rec.processUnique(baseSize, thresholdSlope);
 			VerticalGradeProfile resultGProfile = rec.getReconstructor().getGradeProfile();
 			VerticalProfile resultVProfile = rec.getReconstructor().getVerticalProfile();
@@ -90,13 +91,16 @@ public class M325_Reconstruct {
 			System.out.println("Vertical Curves: " + countVC);
 			System.out.println("ShortAlignments: : " + countShorAlignments);
 			System.out.println("Two grades: " + countTwoGrades);
-			//System.out.println(resultVProfile);
-			
+			System.out.println(resultVProfile);
+			System.out.println("Puntos: " + gradeData.size());
+			System.out.println("Sep. Media: " + gradeData.separacionMedia());
 			
 			XYVectorFunction resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
 					resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
 			showVProfiles(originalVProfile, resultVProfileSample);
 			
+			File file = new File("/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/M325.txt");
+			VerticalProfileWriter.writeVerticalProfile(file, resultVProfile, "Reconstrucción de la M-325: perfil longitudinal");
 
 		} else {
 			try {
@@ -165,7 +169,7 @@ public class M325_Reconstruct {
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
 		//data = data.extract(0.0, 8450.0);
-		data = data.extract(0.0, 6500.0);
+		data = data.extract(0.0, 6499.0);
 		return data;
 	}
 
@@ -180,7 +184,7 @@ public class M325_Reconstruct {
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
 		//data = data.extract(0.0, 8450.0);
-		data = data.extract(0.0, 6500.0);
+		data = data.extract(0.0, 6499.0);
 		return data;		
 	}
 

@@ -39,7 +39,11 @@ public interface VAlignment extends XYFunction {
 	
 	public static String CABECERA = String.format("%12s %12s %12s %12s %12s %12s %12s %12s %12s %12s %10s", 
 			"SE","ZE", "PE", "L", "SS", "ZS", "PS", "a0", "a1x", "a2x^2", "K");
+	public static String CABECERA2 = String.format("%12s %12s %12s %12s %10s", 
+			"SE","ZE", "PE", "L", "K");
 	
 	@Override
 	public String toString();
+	
+	String toString2();
 }

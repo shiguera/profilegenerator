@@ -1,6 +1,7 @@
 package com.mlab.pg.util;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
