@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
+import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
@@ -18,7 +19,6 @@ import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
-import junit.framework.Assert;
 
 public class ReconstructM607_TrackLeika_1 {
 

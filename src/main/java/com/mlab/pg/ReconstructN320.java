@@ -25,7 +25,7 @@ public class ReconstructN320 {
 	static Logger LOG = Logger.getLogger(ReconstructN320.class);
 	
 	static Charter charter = null;
-	// Lo establece el método readData
+	// Lo establece el método readDataO
 	static String charterName = "";
 	static InterpolationStrategy interpolationStrategy;
 	

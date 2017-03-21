@@ -2,10 +2,10 @@ package com.mlab.pg.xyfunction;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.Assert;
 
 public class TestXYVectorFunction {
 
@@ -229,5 +229,25 @@ public class TestXYVectorFunction {
 		
 		
 
+	}
+
+	@Test
+	public void testCloneGenerateDifferentInstance() {
+		LOG.debug("testCloneGenerateDifferentInstance()");
+		XYVectorFunction vector = new XYVectorFunction();
+		vector.add(new double[]{-2.0,10.0});
+		vector.add(new double[]{-1.5,11.0});
+		vector.add(new double[]{0.0,12.0});
+		vector.add(new double[]{1.5,13.0});
+		vector.add(new double[]{2.0,14.0});
+		
+		int size = vector.size();
+		
+		XYVectorFunction f2 = vector.clone();
+		Assert.assertEquals(size, f2.size());
+		vector.remove(0);
+		Assert.assertEquals(size-1, vector.size());
+		Assert.assertEquals(size, f2.size());
+		
 	}
 }

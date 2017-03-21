@@ -23,30 +23,36 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 public class Reconstructor {
 
 	Logger LOG = Logger.getLogger(Reconstructor.class);
-
-	protected XYVectorFunction originalGradePoints;
-	protected TypeIntervalArray typeIntervalArray;
-	protected VerticalGradeProfile gradeProfile;
-	protected VerticalProfile verticalProfile;
-	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
-	protected InterpolationStrategy interpolationStrategy;
+	/**
+	 * Longitud mínima utilizada en TypeIntervalArrayGenerator para filtrar
+	 * tramos menores de esa longitud. Si el anterior o el siguiente son del
+	 * mismo tipo, TypeIntervalArrayGenerator los une
+	 */
+	double MIN_LENGTH = 40.0;
 	
+	protected XYVectorFunction originalGradePoints;
 	protected int baseSize;
 	protected double thresholdSlope;
+	protected double startZ;
+	protected InterpolationStrategy interpolationStrategy;
 	
+	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
+	protected TypeIntervalArray typeIntervalArray;
+	
+	protected VerticalGradeProfile gradeProfile;
+	protected VerticalProfile verticalProfile;
 	protected EndingsWithBeginnersAdjuster adjuster;
 	protected GradeProfileCreator gradeProfileCreator;
 	
-	public Reconstructor(XYVectorFunction originalGradePoints, int mobilebasesize, double thresholdslope, double startZ, InterpolationStrategy strategy) {
-		this.baseSize = mobilebasesize;
-		this.thresholdSlope = thresholdslope;
-		
-		this.originalGradePoints = originalGradePoints.clone();
-		
+	public Reconstructor(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, double startz, InterpolationStrategy strategy) {
+		originalGradePoints = originalgradePoints.clone();
+		baseSize = mobilebasesize;
+		thresholdSlope = thresholdslope;
+		startZ = startz;
 		interpolationStrategy = strategy;
 		
-		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, interpolationStrategy);
-		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeSegmentArray();
+		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, interpolationStrategy, MIN_LENGTH);
+		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeIntervalArray();
 		
 		createGradeProfile();
 		int count = countGradeAlignments();

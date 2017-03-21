@@ -67,53 +67,34 @@ public class ProcessBorderIntervalsStrategy_LessSquares implements ProcessBorder
 
 		// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
 		TypeInterval firstInterval = resultIntervalArray.get(0); 
-		if(firstInterval.getPointType() == PointType.BORDER_POINT && firstInterval.size()>1 ) {
+		if(firstInterval.getPointType() == PointType.BORDER_POINT) {
 			processFirstSegmentAsBorder();
 		}
 		
 		// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
 		int last = resultIntervalArray.size()-1;
 		if(resultIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
-			resultIntervalArray.get(last-1).setEnd(resultIntervalArray.get(last).getEnd()-1);
-			//resultTypeIntervalArray.remove(last);
+			resultIntervalArray.get(last-1).setEnd(resultIntervalArray.get(last).getEnd());
+			resultIntervalArray.remove(last);
 		}
 		return resultIntervalArray;
 	}
 
 	private void processFirstSegmentAsBorder() {
-		if(resultIntervalArray.get(0).size()<4) {
-			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultIntervalArray.get(1).setStart(1);
-			resultIntervalArray.remove(0);
-			return;
-		}
-		
-		int last = resultIntervalArray.get(0).getEnd();
-		double[] rr = originalGradePoints.rectaMinimosCuadrados(0, last);
+				
+		int first = resultIntervalArray.get(0).getStart();
+		int last = resultIntervalArray.get(1).getEnd();
+		double[] rr = originalGradePoints.rectaMinimosCuadrados(first, last);
 		
 		TypeInterval nextSegment =resultIntervalArray.get(1);
+		nextSegment.setStart(0);
 		if(rr[1]<=thresholdSlope) {
 			// Es una grade
-			if(nextSegment.getPointType()==PointType.GRADE) {
-				// Si el siguiente es recta, los uno en uno solo
-				nextSegment.setStart(0);
-				resultIntervalArray.remove(0);
-			} else {
-				// Si el siguiente es VC, el primero lo convierto en recta
-				resultIntervalArray.get(0).setPointType(PointType.GRADE);
-			}
+			nextSegment.setPointType(PointType.GRADE);
 		} else {
-			// Caso aproxima mejor la parábola
-			if(nextSegment.getPointType()==PointType.GRADE) {
-				// Si el siguiente es recta, el primero lo convierto en VC
-				resultIntervalArray.get(0).setPointType(PointType.VERTICAL_CURVE);
-			} else {
-				// Si el siguiente es VC las uno en una sola 
-				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
-				nextSegment.setStart(1);
-				resultIntervalArray.remove(0);
-			}
+			nextSegment.setPointType(PointType.VERTICAL_CURVE);
 		}
+		resultIntervalArray.remove(0);
 	}
 	/**
 	 * Procesa los intervalos BorderPoint con un solo punto
