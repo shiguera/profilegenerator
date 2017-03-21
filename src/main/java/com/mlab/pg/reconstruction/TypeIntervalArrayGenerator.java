@@ -121,10 +121,12 @@ public class TypeIntervalArrayGenerator {
 	
 	// Filtra las alineaciones de longitud menor que la mínima
 	private TypeIntervalArray filter(TypeIntervalArray intervalArray) {
-		TypeIntervalArray result = new TypeIntervalArray();
 		
 		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
 		processIntervalArray.addAll(intervalArray);
+		
+		TypeIntervalArray result = new TypeIntervalArray();
+		
 		boolean changes = true;
 		int contador = 0;
 		while(changes) {
@@ -132,13 +134,36 @@ public class TypeIntervalArrayGenerator {
 			//System.out.println("Ronda filtro: " + contador);
 			changes = false;
 			result = new TypeIntervalArray();
+			
+			// Primero trato de unir cada tramo corto con el anterior
 			result.add(processIntervalArray.get(0));
 			for(int i=1; i<processIntervalArray.size(); i++) {
 				TypeInterval current = processIntervalArray.get(i);
-				TypeInterval previous = result.getLast();
-				double lengthPrevious = originalGradePoints.getX(previous.getEnd()) - originalGradePoints.getX(previous.getStart());
-				if(lengthPrevious < minLength) {
+				double length = originalGradePoints.getX(current.getEnd()) - originalGradePoints.getX(current.getStart());
+				if(length<minLength) {
+					TypeInterval previous = result.getLast();
 					if(previous.getPointType() == current.getPointType()) {
+						result.getLast().setEnd(current.getEnd());
+						changes = true;
+					} else {
+						result.add(current);
+					}
+				} else {
+					result.add(current);
+				}
+			}
+			processIntervalArray = new TypeIntervalArray();
+			processIntervalArray.addAll(result);
+			
+			// Ahora trato de unir los cortos con el siguiente
+			result = new TypeIntervalArray();
+			result.add(processIntervalArray.get(0));
+			for(int i=1; i<processIntervalArray.size();i++) {
+				TypeInterval current = processIntervalArray.get(i);
+				TypeInterval previous = processIntervalArray.get(i);
+				double length = originalGradePoints.getX(previous.getEnd()) - originalGradePoints.getX(previous.getStart());
+				if(length < minLength) {
+					if(current.getPointType() == current.getPointType()) {
 						result.getLast().setEnd(current.getEnd());
 						changes = true;
 					} else {

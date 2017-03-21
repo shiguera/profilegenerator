@@ -28,7 +28,7 @@ public class Reconstructor {
 	 * tramos menores de esa longitud. Si el anterior o el siguiente son del
 	 * mismo tipo, TypeIntervalArrayGenerator los une
 	 */
-	double MIN_LENGTH = 40.0;
+	double MIN_LENGTH = 15.0;
 	
 	protected XYVectorFunction originalGradePoints;
 	protected int baseSize;
