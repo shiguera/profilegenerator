@@ -79,15 +79,9 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 				resultIntervalArray.remove(last);
 			}
 		}
-		filter();
 		return resultIntervalArray;
 	}
 	
-	private void filter() {
-		for(int i=0; i<resultIntervalArray.size(); i++) {
-			
-		}
-	}
 
 	private void processFirstSegmentAsBorder() {
 		if(resultIntervalArray.get(0).size()<4) {

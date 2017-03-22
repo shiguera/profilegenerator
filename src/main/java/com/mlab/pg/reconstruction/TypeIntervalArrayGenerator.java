@@ -80,7 +80,7 @@ public class TypeIntervalArrayGenerator {
 		
 		if(resultIntervalArray.size()>1) {
 			//LOG.debug("Filtered: YES");
-			resultIntervalArray = filter(resultIntervalArray);
+			resultIntervalArray = filterShortIntervals(resultIntervalArray);
 			resultIntervalArray = filterTwoGrades(resultIntervalArray);
 		} else{
 			//LOG.debug("Filtered: NO");
@@ -120,7 +120,7 @@ public class TypeIntervalArrayGenerator {
 	}
 	
 	// Filtra las alineaciones de longitud menor que la mínima
-	private TypeIntervalArray filter(TypeIntervalArray intervalArray) {
+	private TypeIntervalArray filterShortIntervals(TypeIntervalArray intervalArray) {
 		
 		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
 		processIntervalArray.addAll(intervalArray);

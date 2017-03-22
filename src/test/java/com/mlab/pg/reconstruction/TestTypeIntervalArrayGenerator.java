@@ -1,5 +1,6 @@
 package com.mlab.pg.reconstruction;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
-import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
@@ -99,6 +99,8 @@ public class TestTypeIntervalArrayGenerator {
 	public void testSampleProfileTypeV_1() {
 		LOG.debug("testSampleProfileTypeV_1");
 		VerticalProfile vp = getSampleProfileTypeV_1();
+		VerticalProfileWriter writer = new VerticalProfileWriter();
+		writer.writeVerticalProfile(new File("TestProfile.txt"), vp, "Vertical Profile");
 		VerticalGradeProfile gradeProfile = vp.derivative();
 		double starts = gradeProfile.getStartS();
 		double ends = gradeProfile.getEndS();
