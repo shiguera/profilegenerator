@@ -54,7 +54,7 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 	}
 
 	private VerticalGradeProfile filterGrades(VerticalGradeProfile gprofile) {
-		LOG.debug("filterGrades()");
+		//LOG.debug("filterGrades()");
 		//System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
 		int counter = 0;
@@ -83,7 +83,7 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 	// Comprueba si hay dos alineaciones seguidas con pendiente menor que thresholdSlope, 
 	// y si es así las une en una única y horizontal
 	private VerticalGradeProfile filterTwoGrades(VerticalGradeProfile gprofile) {
-		LOG.debug("filterTwoGrades()");
+		//LOG.debug("filterTwoGrades()");
 		//System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
 		VerticalGradeProfile processGP = new VerticalGradeProfile();

@@ -67,6 +67,7 @@ public class Reconstructor {
 			changes=false;
 			process = adjustEndingsWithBeginnings(process);
 			verticalProfile = process.integrate(startZ, thresholdSlope);
+			
 			for(int i=1; i<verticalProfile.size(); i++) {
 				VAlignment current = verticalProfile.get(i); 
 				VAlignment previous = verticalProfile.get(i-1);				
@@ -74,9 +75,11 @@ public class Reconstructor {
 					double s1 = process.get(i-1).getStartS();
 					double g1 = process.get(i-1).getStartZ();
 					double s2 = process.get(i-1).getEndS();
+					double g21 = process.get(i-1).getEndZ();
+					double g22 = process.get(i).getStartZ();
 					double s3 = process.get(i).getEndS();
-					double g2 = process.get(i).getStartZ();
-					double area = g1*(s2-s1) + g2*(s3-s2);
+					double g3 = process.get(i).getEndZ();
+					double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
 					double newg = area / (s3-s1);
 					Straight r = new Straight(newg, 0.0);
 					GradeProfileAlignment align = new GradeProfileAlignment(r, s1, s3);

@@ -11,7 +11,7 @@ public class IterativeReconstructor {
 	
 	Logger LOG = Logger.getLogger(getClass());
 
-	double MIN_ALIGNMENT_LENGTH = 50.0;
+	double MIN_ALIGNMENT_LENGTH = 1.0;
 	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6, 1.5e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6 }; 
@@ -76,7 +76,9 @@ public class IterativeReconstructor {
 	public void processIterative() throws Exception {
 		int maxBaseSize = (int)Math.rint(MIN_ALIGNMENT_LENGTH / separacionMedia);
 		if(maxBaseSize < 3) {
-			throw new Exception();
+			maxBaseSize = 5;
+			// LOG.error("ERROR: maxBaseSize < 3");
+			// throw new Exception();
 		}
 		int numBaseSizes = maxBaseSize - 2;
 		int numThresholdSlopes = thresholdSlopes.length;
@@ -85,8 +87,9 @@ public class IterativeReconstructor {
 		double ecmMin = -1.0;
 		bestTest = 0;
 		int contador = 0;
-		for (int i=30; i<=maxBaseSize; i++) {
+		for (int i=3; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
+				System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
 				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, interpolationStrategy);
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 				if(gradeProfile == null || gradeProfile.size()<2) {
@@ -100,6 +103,7 @@ public class IterativeReconstructor {
 				
 				//double ecm = integralProfile.errorAbsolutoMedio(resultVProfilePoints);
 				double ecm = integralProfile.ecm(resultVProfilePoints);
+				System.out.println("ecm: " + ecm);
 				//double ecm = originalGradePoints.ecm(resultGradePoints);
 				//double ecm = originalGradePoints.errorAbsolutoMedio(resultGradePoints);
 				
