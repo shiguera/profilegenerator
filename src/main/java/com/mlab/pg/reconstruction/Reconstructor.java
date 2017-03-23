@@ -31,18 +31,25 @@ public class Reconstructor {
 	double MIN_LENGTH = 15.0;
 	
 	protected XYVectorFunction originalGradePoints;
+	protected XYVectorFunction originalVerticalProfilePoints;
 	protected int baseSize;
 	protected double thresholdSlope;
 	protected double startZ;
 	protected InterpolationStrategy interpolationStrategy;
-	
+	protected double sepMedia;
 	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
 	protected TypeIntervalArray typeIntervalArray;
 	
 	protected VerticalGradeProfile gradeProfile;
-	protected VerticalProfile verticalProfile;
+	protected VerticalProfile resultVerticalProfile;
 	protected EndingsWithBeginnersAdjuster adjuster;
 	protected GradeProfileCreator gradeProfileCreator;
+	
+	protected int alignmentCount;
+	protected double meanError;
+	protected double maxError;
+	protected double ecm;
+	protected double varianza;
 	
 	public Reconstructor(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, double startz, InterpolationStrategy strategy) {
 		originalGradePoints = originalgradePoints.clone();
@@ -51,14 +58,15 @@ public class Reconstructor {
 		startZ = startz;
 		interpolationStrategy = strategy;
 		
+		sepMedia = originalGradePoints.separacionMedia();
+		
+		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
+		
 		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, interpolationStrategy, MIN_LENGTH);
 		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeIntervalArray();
 		
 		createGradeProfile();
-		int count = countGradeAlignments();
-		//System.out.println("After createGradeProfile(): " + count);
 		
-
 		boolean changes = true;
 		VerticalGradeProfile process = new VerticalGradeProfile();
 		process.addAll(gradeProfile);
@@ -66,20 +74,24 @@ public class Reconstructor {
 		while(changes) {
 			changes=false;
 			process = adjustEndingsWithBeginnings(process);
-			verticalProfile = process.integrate(startZ, thresholdSlope);
+			resultVerticalProfile = process.integrate(startZ, thresholdSlope);
 			
-			for(int i=1; i<verticalProfile.size(); i++) {
-				VAlignment current = verticalProfile.get(i); 
-				VAlignment previous = verticalProfile.get(i-1);				
-				if(current.getPolynom2().getA2()==0 && previous.getPolynom2().getA2()==0) {
-					double s1 = process.get(i-1).getStartS();
-					double g1 = process.get(i-1).getStartZ();
-					double s2 = process.get(i-1).getEndS();
-					double g21 = process.get(i-1).getEndZ();
-					double g22 = process.get(i).getStartZ();
-					double s3 = process.get(i).getEndS();
-					double g3 = process.get(i).getEndZ();
-					double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+			for(int i=1; i<resultVerticalProfile.size(); i++) {
+				VAlignment current = resultVerticalProfile.get(i); 
+				VAlignment previous = resultVerticalProfile.get(i-1);	
+				double previousA2 = previous.getPolynom2().getA2();
+				double currentA2 = current.getPolynom2().getA2();
+				double previousK = previous.getPolynom2().getKv();
+				double currentK = current.getPolynom2().getKv();
+				double s1 = process.get(i-1).getStartS();
+				double g1 = process.get(i-1).getStartZ();
+				double s2 = process.get(i-1).getEndS();
+				double g21 = process.get(i-1).getEndZ();
+				double g22 = process.get(i).getStartZ();
+				double s3 = process.get(i).getEndS();
+				double g3 = process.get(i).getEndZ();
+				double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+				if(currentA2==0 && previousA2==0) {
 					double newg = area / (s3-s1);
 					Straight r = new Straight(newg, 0.0);
 					GradeProfileAlignment align = new GradeProfileAlignment(r, s1, s3);
@@ -87,19 +99,67 @@ public class Reconstructor {
 					process.set(i-1, align);
 					changes = true;
 					break;
-				} 
+//				} else if (isSimilarKv(previousK, currentK)) {
+//					double newg = 2*area/(s3-s1) - g1;
+//					Straight r = new Straight(newg, 0.0);
+//					GradeProfileAlignment align = new GradeProfileAlignment(r, s1, s3);
+//					process.remove(i-1);
+//					process.set(i-1, align);
+//					changes = true;
+//					break;
+				}
 			}
 		}
 		gradeProfile = new VerticalGradeProfile();
 		gradeProfile.addAll(process);
-		verticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
+		resultVerticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
 		
 		//System.out.println(gradeProfile);
-		count = countGradeAlignments();
-		//System.out.println("After adjustEndingsWithBeginnings(): " + count);
+		alignmentCount = countGradeAlignments();
+		calculateErrors();
 		
 		
 		//System.out.println(verticalProfile);
+	}
+	private void calculateErrors() {
+		double sumaErrorAbsoluto = 0.0;
+		maxError = 0.0;
+		double sumaErrorAbsolutoAlCuadrado = 0.0;
+		XYVectorFunction resultVProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), sepMedia, true);
+		for(int i=0; i<getPointsCount(); i++) {
+			double x = resultVProfilePoints.getX(i);
+			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - originalVerticalProfilePoints.getY(x));
+			if(Double.isNaN(errorAbsoluto)) {
+				continue;
+			}
+			sumaErrorAbsoluto = sumaErrorAbsoluto + errorAbsoluto;
+			sumaErrorAbsolutoAlCuadrado = sumaErrorAbsolutoAlCuadrado + errorAbsoluto * errorAbsoluto;
+			if(errorAbsoluto > maxError) {
+				maxError = errorAbsoluto;
+			}
+		}
+		meanError = sumaErrorAbsoluto / getPointsCount();
+		varianza = sumaErrorAbsolutoAlCuadrado / getPointsCount() - meanError*meanError;
+		ecm = resultVProfilePoints.ecm(originalVerticalProfilePoints);
+	}
+	private boolean isSimilarKv(double k1, double k2) {
+		if(Double.isNaN(k1) || Double.isNaN(k2) || !sameSign(k1,k2)) {
+			return false;
+		}
+		double dif = Math.abs(k1-k2);
+		double perc = Math.abs(dif/k1);
+		if(perc<0.03) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	private boolean sameSign(double k1, double k2) {
+		if(k1*k2 > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	private int countGradeAlignments() {
 		int count = 0;
@@ -133,12 +193,16 @@ public class Reconstructor {
 	
 	// Getters
 	public VerticalProfile getVerticalProfile() {
-		return verticalProfile;
+		return resultVerticalProfile;
 	}
 	
-	public XYVectorFunction getOriginalPoints() {
+	public XYVectorFunction getOriginalGradePoints() {
 		return originalGradePoints;
 	}
+	public XYVectorFunction getOriginalVerticalProfilePoints() {
+		return originalVerticalProfilePoints;
+	}
+	
 	public TypeIntervalArray getTypeIntervalArray() {
 		return typeIntervalArray;
 	}
@@ -146,4 +210,28 @@ public class Reconstructor {
 		return gradeProfile;
 	}
 
+	public double getSeparacionMedia() {
+		return sepMedia;
+	}
+	public double getMeanError() {
+		return meanError;
+	}
+	public double getVarianza() {
+		return varianza;
+	}
+	public double getEcm() {
+		return ecm;
+	}
+	public double getMaxError() {
+		return maxError;
+	}
+	public int getPointsCount() {
+		return originalGradePoints.size();
+	}
+	public int getBaseSize() {
+		return baseSize;
+	}
+	public double getThresholdSlope() {
+		return thresholdSlope;
+	}
 }

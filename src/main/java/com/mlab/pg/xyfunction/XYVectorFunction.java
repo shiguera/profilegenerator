@@ -182,6 +182,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 	
 	public double getX(int index) {
+		if(!contains(index)) {
+			return Double.NaN;
+		}
 		return get(index)[0];
 	}
 	// Interface InInterval
@@ -211,6 +214,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return new double[]{getEndX(), getEndY()};
 	}
 	public double getY(int index) {
+		if(!contains(index)) {
+			return Double.NaN;
+		}
 		return get(index)[1];
 	}
 	// Interface XYFunction
@@ -421,7 +427,7 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 			double sep = getX(i) - getX(i-1);
 			suma = suma + sep;
 		}
-		return suma/size();
+		return suma/(size()-1);
 	}
 	
 	public double ecm(XYVectorFunction other) {
@@ -476,4 +482,24 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		IntegerInterval interval = new IntegerInterval(0, this.size()-1);
 		return new XYVectorFunction(this.getValues(interval));
 	}
+
+	public double getMaxY() {
+		double max = getY(0);
+		for(int i=1; i<size(); i++) {
+			if(getY(i)>max) {
+				max = getY(i);
+			}
+		}
+		return max;
+	}
+	public double getMinY() {
+		double min = getY(0);
+		for(int i=1; i<size(); i++) {
+			if(getY(i)<min) {
+				min = getY(i);
+			}
+		}
+		return min;
+	}
+
 }

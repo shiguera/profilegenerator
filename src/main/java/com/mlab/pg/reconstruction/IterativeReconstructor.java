@@ -11,7 +11,7 @@ public class IterativeReconstructor {
 	
 	Logger LOG = Logger.getLogger(getClass());
 
-	double MIN_ALIGNMENT_LENGTH = 1.0;
+	double MIN_ALIGNMENT_LENGTH = 10.0;
 	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6, 1.5e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4, 1.5e-5, 1.0e-5, 1.5e-6, 1.0e-6 }; 
@@ -38,45 +38,23 @@ public class IterativeReconstructor {
 	
 	public void processUnique(int basesize, double thresholdslope) {
 		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, interpolationStrategy);
-		VerticalGradeProfile gradeProfile = rec.getGradeProfile();
-		XYVectorFunction resultGradePoints = gradeProfile.getSample(startX, endX, separacionMedia, true);
-		double ecm = originalGradePoints.ecm(resultGradePoints);
-		System.out.println("BaseSize: " + basesize);
-		System.out.println("ThresholdSlope: " + thresholdslope);
-		System.out.println("ECM: " + ecm);
+		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
+		//XYVectorFunction resultGradePoints = gradeProfile.getSample(startX, endX, separacionMedia, true);
+		//double ecm = originalGradePoints.ecm(resultGradePoints);
+//		System.out.println("BaseSize: " + basesize);
+//		System.out.println("ThresholdSlope: " + thresholdslope);
+//		System.out.println("ECM: " + ecm);
 		
-		VerticalProfile resultVProfile = rec.getVerticalProfile();
+		//VerticalProfile resultVProfile = rec.getVerticalProfile();
 		//System.out.println(vp);		
-		System.out.println("Número de alineaciones:" + resultVProfile.size());
-		double sumaErrorAbsoluto = 0.0;
-		double maxErrorAbsoluto = 0.0;
-		double sumaErrorAbsolutoAlCuadrado = 0.0;
-		XYVectorFunction resultVProfilePoints = resultVProfile.getSample(resultVProfile.getStartS(), resultVProfile.getEndS(), separacionMedia, true);
-		int pointsCount = resultVProfilePoints.size();
-		for(int i=0; i<pointsCount; i++) {
-			double x = resultVProfilePoints.getX(i);
-			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(i) - integralProfile.getY(x));
-			if(Double.isNaN(errorAbsoluto)) {
-				continue;
-			}
-			sumaErrorAbsoluto = sumaErrorAbsoluto + errorAbsoluto;
-			sumaErrorAbsolutoAlCuadrado = sumaErrorAbsolutoAlCuadrado + errorAbsoluto * errorAbsoluto;
-			if(errorAbsoluto > maxErrorAbsoluto) {
-				maxErrorAbsoluto = errorAbsoluto;
-			}
-		}
-		double media = sumaErrorAbsoluto / pointsCount;
-		double varianza = sumaErrorAbsolutoAlCuadrado / pointsCount - media*media;
-		System.out.println("Error absoluto medio: " + media);
-		System.out.println("Error absoluto máximo: " + maxErrorAbsoluto);
-		System.out.println("Varianza en el error absoluto: " + varianza);
+		results = new double[][] {{basesize, thresholdslope, rec.getEcm()}};
 
 	}
 	
 	public void processIterative() throws Exception {
 		int maxBaseSize = (int)Math.rint(MIN_ALIGNMENT_LENGTH / separacionMedia);
 		if(maxBaseSize < 3) {
-			maxBaseSize = 5;
+			maxBaseSize = 10;
 			// LOG.error("ERROR: maxBaseSize < 3");
 			// throw new Exception();
 		}
@@ -96,18 +74,7 @@ public class IterativeReconstructor {
 					Log.warn("gradeProfile null");
 					continue;
 				}
-				XYVectorFunction resultGradePoints = gradeProfile.getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
-						separacionMedia, true);
-				XYVectorFunction resultVProfilePoints = rec.getVerticalProfile().getSample(originalGradePoints.getStartX(), originalGradePoints.getEndX(),
-						separacionMedia, true);
-				
-				//double ecm = integralProfile.errorAbsolutoMedio(resultVProfilePoints);
-				double ecm = integralProfile.ecm(resultVProfilePoints);
-				System.out.println("ecm: " + ecm);
-				//double ecm = originalGradePoints.ecm(resultGradePoints);
-				//double ecm = originalGradePoints.errorAbsolutoMedio(resultGradePoints);
-				
-				//System.out.println(i + " - " + thresholdSlopes[j] + " - " + ecm);
+				double ecm = rec.getEcm();
 				results[contador][0] = i; // baseSize;
 				results[contador][1] = thresholdSlopes[j]; // thresholdSlope
 				results[contador][2] = ecm; // ecm
@@ -133,7 +100,8 @@ public class IterativeReconstructor {
 		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, interpolationStrategy);
 		//LOG.debug("Reconstructor: " + rec);
 		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
-		VerticalProfile vp = rec.getVerticalProfile();
+		//VerticalProfile vp = rec.getVerticalProfile();
+		
 		//System.out.println(vp);
 		
 

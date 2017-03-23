@@ -1,5 +1,7 @@
 package com.mlab.pg;
 
+import java.awt.BasicStroke;
+import java.awt.Paint;
 import java.io.File;
 import java.net.URL;
 
@@ -23,19 +25,21 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_TrackLeica {
+public class M633_Reconstruct_1 {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_TrackLeica.class);
+	static Logger LOG = Logger.getLogger(M633_Reconstruct_1.class);
 	
-	static double startZ = 906.26;
-	static double hmax = 930.0;
-	static double hmin = 830.0;
+	static double startZ;
+	static double hmax;
+	static double hmin;
 
 	static Charter charter = null;
 	static InterpolationStrategy interpolationStrategy;
 	
 	static enum OPTION {ShowVerticalProfile, UNIQUE, ITERATIVE};
-	static OPTION option= OPTION.UNIQUE;
+	static OPTION option= OPTION.ITERATIVE;
+	//static OPTION option= OPTION.UNIQUE;
+	//static OPTION option= OPTION.ShowVerticalProfile;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
@@ -51,10 +55,14 @@ public class M607_Reconstruct_TrackLeica {
 		VerticalProfile resultVProfile = null;
 		XYVectorFunction resultVProfileSample = null;
 		
+		startZ = originalVProfile.getY(originalVProfile.getStartX());
+		hmin = originalVProfile.getMinY();
+		hmax = originalVProfile.getMaxY();
+		
 		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ, interpolationStrategy);
 		
-		int baseSize = 5;
-		double thresholdSlope = 1e-4;
+		int baseSize = 7;
+		double thresholdSlope = 1.75e-5;
 		
 		switch(option) {
 			case ShowVerticalProfile:
@@ -100,20 +108,28 @@ public class M607_Reconstruct_TrackLeica {
 						//System.out.println("No");
 					}
 				}
+				resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
+						resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
+				showVProfiles(originalVProfile, resultVProfileSample);
+				//showVProfiles(rec.getReconstructor().getOriginalVerticalProfilePoints(), resultVProfileSample);
+
+				System.out.println(resultVProfile);
+				System.out.println("Puntos: " + rec.getReconstructor().getPointsCount());
+				System.out.println("Sep. Media: " + rec.getReconstructor().getSeparacionMedia());
+				System.out.println("Alineaciones: " + resultVProfile.size());
 				System.out.println("Grades: " + countG);
 				System.out.println("Cuasi Grades: " + countCuasiG);
 				System.out.println("Vertical Curves: " + countVC);
 				System.out.println("ShortAlignments: : " + countShorAlignments);
 				System.out.println("Two grades: " + countTwoGrades);
-				System.out.println(resultVProfile);
-				System.out.println("Puntos: " + gradeData.size());
-				System.out.println("Sep. Media: " + gradeData.separacionMedia());
+				System.out.println("BaseSize: " + rec.getReconstructor().getBaseSize());
+				System.out.println("ThresholdSlope: " + rec.getReconstructor().getThresholdSlope());
+				System.out.println("Error medio: " + rec.getReconstructor().getMeanError());
+				System.out.println("Error max  : " + rec.getReconstructor().getMaxError());
+				System.out.println("ECM        : " + rec.getReconstructor().getEcm());
 				
-				resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
-						resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
-				showVProfiles(originalVProfile, resultVProfileSample);
 				
-				File file = new File("/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/M325.txt");
+				File file = new File("/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/M607-1.txt");
 				VerticalProfileWriter.writeVerticalProfile(file, resultVProfile, "Reconstrucción de la M-697 (Track Leika): perfil longitudinal");
 				break;
 			case ITERATIVE:
@@ -176,7 +192,7 @@ public class M607_Reconstruct_TrackLeica {
 	private static void showVProfiles(XYVectorFunction originalData, XYVectorFunction resultData) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-        		charter = new Charter("M-607.- Track Leika", "S", "Z");
+        		charter = new Charter("M-325", "S", "Z");
         		charter.addXYVectorFunction(originalData, "Original Data");
         		charter.addXYVectorFunction(resultData, "Result Data");
         		
@@ -184,6 +200,8 @@ public class M607_Reconstruct_TrackLeica {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
         		charter.getChart().getXYPlot().getRangeAxis().setRange(hmin, hmax);
+        		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(2.0f));
+        		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(1, new BasicStroke(2.0f));
         		frame.pack();
         		RefineryUtilities.centerFrameOnScreen(frame);
         		frame.setVisible(true);
@@ -195,7 +213,7 @@ public class M607_Reconstruct_TrackLeica {
 
 	private static XYVectorFunction readGradeData() {
 		LOG.debug("readGradeData()");
-		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SG.csv");
+		URL url = ClassLoader.getSystemResource("Cabanillas_Valdemanco_1_SG.csv");
 		
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
@@ -203,20 +221,20 @@ public class M607_Reconstruct_TrackLeica {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(0.0, 1050.0);
+		data = data.extract(3000.0, 7500.0);
 		return data;
 	}
 
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
-		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SZ.csv");
+		URL url = ClassLoader.getSystemResource("Cabanillas_Valdemanco_1_SZ.csv");
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		// data = data.extract(0.0, 1050.0);
+		data = data.extract(3000.0, 7500.0);
 		return data;		
 	}
 	
