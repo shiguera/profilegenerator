@@ -35,8 +35,10 @@ public class Reconstructor {
 	protected int baseSize;
 	protected double thresholdSlope;
 	protected double startZ;
+	protected double separacionMedia;
+	protected double trackLength;
+	
 	protected InterpolationStrategy interpolationStrategy;
-	protected double sepMedia;
 	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
 	protected TypeIntervalArray typeIntervalArray;
 	
@@ -58,7 +60,8 @@ public class Reconstructor {
 		startZ = startz;
 		interpolationStrategy = strategy;
 		
-		sepMedia = originalGradePoints.separacionMedia();
+		separacionMedia = originalGradePoints.separacionMedia();
+		trackLength = originalGradePoints.getLast()[0] - originalGradePoints.getX(0);
 		
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
@@ -125,7 +128,7 @@ public class Reconstructor {
 		double sumaErrorAbsoluto = 0.0;
 		maxError = 0.0;
 		double sumaErrorAbsolutoAlCuadrado = 0.0;
-		XYVectorFunction resultVProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), sepMedia, true);
+		XYVectorFunction resultVProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), separacionMedia, true);
 		for(int i=0; i<getPointsCount(); i++) {
 			double x = resultVProfilePoints.getX(i);
 			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - originalVerticalProfilePoints.getY(x));
@@ -211,7 +214,10 @@ public class Reconstructor {
 	}
 
 	public double getSeparacionMedia() {
-		return sepMedia;
+		return separacionMedia;
+	}
+	public double getTrackLength() {
+		return trackLength;
 	}
 	public double getMeanError() {
 		return meanError;
@@ -233,5 +239,8 @@ public class Reconstructor {
 	}
 	public double getThresholdSlope() {
 		return thresholdSlope;
+	}
+	public int getAlignmentCount() {
+		return resultVerticalProfile.size();
 	}
 }

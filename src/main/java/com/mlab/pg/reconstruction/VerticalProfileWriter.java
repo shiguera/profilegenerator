@@ -22,6 +22,7 @@ public class VerticalProfileWriter {
 		StringBuffer cad = new StringBuffer();
 		cad.append(title + "\n");
 		cad.append(VAlignment.CABECERA2 + "\n");
+		cad.append("----------------------------------------------------------------------------------\n");
 		for(int i=0; i<profile.size(); i++) {
 			cad.append(profile.get(i).toString2() + " ");
 			if(profile.get(i).getPolynom2().getA2() == 0) {
@@ -30,7 +31,8 @@ public class VerticalProfileWriter {
 				cad.append("VERTICAL CURVE \n");
 			}
 		}
-		
+		cad.append("----------------------------------------------------------------------------------\n");
+		cad.append("SE=Abscisa entrada; ZE=Cota entrada; PE=Pendiente entrada; L=Longitud; K=Parámetro \n");
 		BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
