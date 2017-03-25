@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.trackprocessor.TrackInverter;
+
 public class TestIoUtil {
 
 	private static final Logger LOG = Logger.getLogger(TestIoUtil.class);
@@ -30,7 +32,7 @@ public class TestIoUtil {
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
-		double[][] d = Ioutil.read(file, ",", 1);
+		double[][] d = IOUtil.read(file, ",", 1);
 		Assert.assertNotNull(d);
 		
 		Assert.assertEquals(15, d.length);
@@ -43,7 +45,7 @@ public class TestIoUtil {
 		file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		
-		d = Ioutil.read(file, ",", 2);
+		d = IOUtil.read(file, ",", 2);
 		Assert.assertNotNull(d);
 		
 		Assert.assertEquals(15, d.length);
@@ -52,5 +54,28 @@ public class TestIoUtil {
 		Assert.assertEquals(0.038, d[7][1], 0.001);
 		
 	}
-	
+	@Test
+	public void testInvert() {
+		LOG.debug("testInvert()");
+		URL url = ClassLoader.getSystemResource("M607_Desc_1.csv");
+		File file = new File(url.getPath());
+		Assert.assertNotNull(file);
+		Assert.assertTrue(file.exists());
+		
+		double[][] track = IOUtil.read(file, ",", 1);
+		Assert.assertNotNull(track);
+		Assert.assertEquals(485, track.length);
+		
+		double[][] inverted = IOUtil.invert(track);
+		Assert.assertNotNull(inverted);
+		Assert.assertEquals(485, inverted.length);
+		Assert.assertEquals(track[0][0], inverted[484][0], 0.00001);
+		Assert.assertEquals(track[0][1], inverted[484][1], 0.00001);
+		Assert.assertEquals(track[0][2], inverted[484][2], 0.00001);
+		Assert.assertEquals(track[484][0], inverted[0][0], 0.00001);
+		Assert.assertEquals(track[484][1], inverted[0][1], 0.00001);
+		Assert.assertEquals(track[484][2], inverted[0][2], 0.00001);
+		
+	}
+
 }

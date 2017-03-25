@@ -1,44 +1,34 @@
 Reconstrucción de la geometría del perfil longitudinal: M-607- Track Garmin
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-Longitud del track (m) : 8304.34
-Número de puntos       : 322
-Separación media   (m) : 25.87
+Longitud del track (m) : 2338.72
+Número de puntos       : 109
+Separación media   (m) : 21.65
 --------------------------------------------------------------------------
 Rectas Interpolación (Puntos) : 6
-Rectas Interpolación (m)      : 155.22
+Rectas Interpolación (m)      : 129.93
 Pendiente límite              : 1.25E-5
 --------------------------------------------------------------------------
-Número de alineaciones : 15
-    Grades             : 3
-    Vertical curves    : 12
+Número de alineaciones : 5
+    Grades             : 2
+    Vertical curves    : 3
     Cuasi grades       : 0
     Short alignments   : 0
     Two grades         : 0
 --------------------------------------------------------------------------
-Valor absoluto del Error (media)  (m)   : 1.3275614944562477
-Valor absoluto del Error (máximo) (m)   : 4.865021946667866
-Valor absoluto del Error (varianza)     : 1.276879733063079
-Error Cuadrático Medio ECM              : 3.039299254625985
+Valor absoluto del Error (media)  (m)   : 0.6473009014407914
+Valor absoluto del Error (máximo) (m)   : 1.880903537800691
+Valor absoluto del Error (varianza)     : 0.27388949162246534
+Error Cuadrático Medio ECM              : 0.6993035777824944
 --------------------------------------------------------------------------
 
           SE           ZE           PE            L          K
 ----------------------------------------------------------------------------------
-   16,113000   966,150000    -0,016985   401,559000     7107,3 VERTICAL CURVE 
-  417,672000   970,673325     0,039514   738,530000   -14300,7 VERTICAL CURVE 
- 1156,202000   980,785701    -0,012129   871,674000          - GRADE 
- 2027,876000   970,213260    -0,012129   266,818000    24582,4 VERTICAL CURVE 
- 2294,694000   968,425078    -0,001275   213,923000   -35140,0 VERTICAL CURVE 
- 2508,617000   967,501203    -0,007363    79,791000          - GRADE 
- 2588,408000   966,913734    -0,007363   444,531000    21146,1 VERTICAL CURVE 
- 3032,939000   968,313282     0,013659    97,726000    -9051,9 VERTICAL CURVE 
- 3130,665000   969,120620     0,002863   392,175000    -8650,2 VERTICAL CURVE 
- 3522,840000   961,353485    -0,042474  1089,262000    32091,5 VERTICAL CURVE 
- 4612,102000   933,574577    -0,008531  1765,449000          - GRADE 
- 6377,551000   918,513018    -0,008531   192,386000     4273,4 VERTICAL CURVE 
- 6569,937000   921,202223     0,036488   390,306000    -6096,0 VERTICAL CURVE 
- 6960,243000   922,948503    -0,027539   391,214000    11466,1 VERTICAL CURVE 
- 7351,457000   918,848682     0,006580   952,884000   -28135,9 VERTICAL CURVE 
+ 3507,171980   873,955000     0,026880   714,943748          - GRADE 
+ 4222,115728   893,173042     0,026880   448,914227   -10194,4 VERTICAL CURVE 
+ 4671,029955   895,355980    -0,017155   579,184754    10490,7 VERTICAL CURVE 
+ 5250,214709   901,408205     0,038054   347,925555    -5484,6 VERTICAL CURVE 
+ 5598,140264   903,612554    -0,025383   224,400097          - GRADE 
 ----------------------------------------------------------------------------------
 SE=Abscisa entrada; ZE=Cota entrada; PE=Pendiente entrada; L=Longitud; K=Parámetro 
 

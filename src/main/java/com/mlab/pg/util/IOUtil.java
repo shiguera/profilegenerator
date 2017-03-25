@@ -10,11 +10,9 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.mlab.pg.valign.VerticalProfile;
 
-
-public class Ioutil {
-	private static final Logger LOG = Logger.getLogger(Ioutil.class);
+public class IOUtil {
+	private static final Logger LOG = Logger.getLogger(IOUtil.class);
 	/**
 	 * Lee una matriz de doubles desde un fichero CSV
 	 * @param file Nombre del fichero
@@ -62,7 +60,7 @@ public class Ioutil {
 	 * @return Matriz con los doubles leidos
 	 */
 	static public double[][] read(File file, String delimiter, int numberOfHeaderLines) {
-		LOG.info("Util.read("+file.getPath()+", "+delimiter+")");
+		LOG.info("Util.read("+file.getPath()+", \""+delimiter+"\", " + numberOfHeaderLines +")");
 		ArrayList<double[]> arrvpoint=new ArrayList<double[]>();
 		BufferedReader reader;
 		String line="";	
@@ -191,4 +189,19 @@ public class Ioutil {
 		return cad;
 	}
 
+	/**
+	 * Invierte un array de doubles
+	 * @param originalArray
+	 * @return
+	 */
+	public static double[][] invert(double[][] originalArray) {
+		int length = originalArray.length;
+		double[][] result = new double[length][3];
+		int contador = 0;
+		for(int i=length-1; i>=0; i--) {
+			result[contador] = originalArray[i];
+			contador++;
+		}
+		return result;
+	}
 }

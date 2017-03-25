@@ -25,9 +25,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_Garmin_1 {
+public class M608_Reconstruct_Garmin_AverageTwoTracks {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_Garmin_1.class);
+	static Logger LOG = Logger.getLogger(M608_Reconstruct_Garmin_AverageTwoTracks.class);
 	
 	static double startZ;
 	static double hmax;
@@ -45,12 +45,14 @@ public class M607_Reconstruct_Garmin_1 {
 	static Reconstructor reconstructor;
 	
 	static enum OPTION {ShowVerticalProfile, UNIQUE, ITERATIVE};
-	//static OPTION option= OPTION.ITERATIVE;
-	static OPTION option= OPTION.UNIQUE;
+	static OPTION option= OPTION.ITERATIVE;
+	//static OPTION option= OPTION.UNIQUE;
 	//static OPTION option= OPTION.ShowVerticalProfile;
 	
-	static String graphTitle = "M-607- Track Garmin";
-	static String fileName = "M607_trackGarmin_1.txt";
+	static String graphTitle = "M-608- Axis as Average from two tracks Garmin ";
+	static String sginfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_Average_SG.csv";
+	static String szinfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_Average_SZ.csv";
+	static String outFileName = "M608_trackGarmin_AverageTwoTracks.txt";
 	static int baseSize = 6;
 	static double thresholdSlope = 1.25e-5;
 	static double SHORT_ALIGNMENT_LENGTH =50.0;
@@ -113,7 +115,7 @@ public class M607_Reconstruct_Garmin_1 {
 		int bestTest = iterativeReconstructor.getBestTest();
 		baseSize = (int)iterativeReconstructor.getResults()[bestTest][0];
 		thresholdSlope = iterativeReconstructor.getResults()[bestTest][1];
-		Reconstructor reconstructor = null;
+		reconstructor = null;
 		try {
 			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, interpolationStrategy);
 		} catch(Exception e) {
@@ -180,7 +182,7 @@ public class M607_Reconstruct_Garmin_1 {
 		System.out.println(getStringReport());
 	}
 	private static void printFile() {		
-		String filepath = "/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/" + fileName;
+		String filepath = "/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/" + outFileName;
 		File file = new File(filepath);
 		VerticalProfileWriter.writeVerticalProfile(file, resultVProfile, getStringReport());
 
@@ -230,28 +232,26 @@ public class M607_Reconstruct_Garmin_1 {
 
 	private static XYVectorFunction readGradeData() {
 		LOG.debug("readGradeData()");
-		URL url = ClassLoader.getSystemResource("M607_trackGarmin_1_ETRS89_SG.csv");
 		
-		File file = new File(url.getPath());
+		File file = new File(sginfilename);
 		Assert.assertNotNull(file);
-		
+		Assert.assertTrue(file.exists());		
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(6000.0, 9800.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;
 	}
 
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
-		URL url = ClassLoader.getSystemResource("M607_trackGarmin_1_ETRS89_SZ.csv");
-		File file = new File(url.getPath());
+		File file = new File(szinfilename);
 		Assert.assertNotNull(file);
-		
+		Assert.assertTrue(file.exists());
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(6000.0, 9800.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;		
 	}
 	
