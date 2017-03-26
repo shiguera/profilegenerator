@@ -55,5 +55,37 @@ public class TestSGFileGenerator {
 		Assert.assertEquals(1, result);
 	
 	}
+	@Test
+	public void testGenerateSGFile_M607_RoadRecorder() {
+		String filename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis.csv";
+		File filein = new File(filename);
+		Assert.assertTrue(filein.exists());
+		double[][] intrack = IOUtil.read(filein, ",", 1);
+		SGFileGenerator generator = new SGFileGenerator();
+		String outfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis_SG.csv";
+		int result = generator.generateSGFile(intrack, outfilename);
+		Assert.assertEquals(1, result);
+		SZFileGenerator generator2 = new SZFileGenerator();
+		outfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis_SZ.csv";
+		result = generator2.generateSZFile(intrack, outfilename);
+		Assert.assertEquals(1, result);
+	
+	}
+	@Test
+	public void testGenerateSGFile_M607_Leika() {
+		String filename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/trackLeika_M607_Axis.csv";
+		File filein = new File(filename);
+		Assert.assertTrue(filein.exists());
+		double[][] intrack = IOUtil.read(filein, ",", 1);
+		SGFileGenerator generator = new SGFileGenerator();
+		String outfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/trackLeika_M607_Axis_SG.csv";
+		int result = generator.generateSGFile(intrack, outfilename);
+		Assert.assertEquals(1, result);
+		SZFileGenerator generator2 = new SZFileGenerator();
+		outfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/trackLeika_M607_Axis_SZ.csv";
+		result = generator2.generateSZFile(intrack, outfilename);
+		Assert.assertEquals(1, result);
+	
+	}
 
 }

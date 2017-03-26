@@ -2,10 +2,6 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
-import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.xyfunction.IntegerInterval;
-import com.mlab.pg.xyfunction.Parabole;
-import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /** 

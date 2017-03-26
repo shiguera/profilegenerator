@@ -26,7 +26,6 @@ public class TestTrackAverage {
 	@Test
 	public void testAverage_M607() {
 		LOG.debug("testAverage_M607()");
-		
 		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/mergetracks/";
 		File file = new File(path + "M607_Desc_1.csv");
 		Assert.assertNotNull(file);
@@ -46,9 +45,65 @@ public class TestTrackAverage {
 		String outfilename = path + "M607_Asc_Average_1.csv";
 		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
+	}
+	@Test
+	public void testAverage_M607_Leika() {
+		LOG.debug("testAverage_M607_Leika()");
+		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/";
+		File file = new File(path + "trackLeika_2_M607_ED50.csv");
+		Assert.assertNotNull(file);
+		Assert.assertTrue(file.exists());
+		TrackInverter inverter = new TrackInverter();
+		int result = inverter.invert(file, path + "trackLeika_2_M607_ED50_Inverted.csv");
+		Assert.assertEquals(1, result);
+
+		
+		TrackAverage averager = new TrackAverage();
+		File file1 = new File(path + "trackLeika_1_M607_ED50.csv");
+		File file2 = new File(path + "trackLeika_2_M607_ED50_Inverted.csv");
+		double[][] track1 = IOUtil.read(file1, ",", 1);
+		double[][] track2 = IOUtil.read(file2, ",",0);
+		double[][] resultTrack = averager.average(track1, track2);
+		Assert.assertEquals(track1.length, resultTrack.length);
+		String outfilename = path + "trackLeika_M607_Axis.csv";
+		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		Assert.assertEquals(1, result);
+	}
+	
+	
+
+	@Test
+	public void testAverage_M607_RoadRecorder() {
+		LOG.debug("testAverage_M607_RoadRecorder()");
+		
+		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/";
+		File file = new File(path + "M607_Desc_1.csv");
+		Assert.assertNotNull(file);
+		Assert.assertTrue(file.exists());
+		TrackInverter inverter = new TrackInverter();
+		int result = inverter.invert(file, path + "M607_Desc_1_Inverted.csv");
+		Assert.assertEquals(1, result);
+
+		
+		TrackAverage averager = new TrackAverage();
+		File file1 = new File(path + "M607_Asc_1.csv");
+		File file2 = new File(path + "M607_Desc_1_Inverted.csv");
+		double[][] track1 = IOUtil.read(file1, ",", 1);
+		double[][] track2 = IOUtil.read(file2, ",",0);
+		double[][] resultTrack = averager.average(track1, track2);
+		Assert.assertEquals(track1.length, resultTrack.length);
+		String outfilename = path + "M607_Asc_Axis.csv";
+		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		Assert.assertEquals(1, result);
+		
+		file = new File(outfilename);
+		Assert.assertNotNull(file);
+		Assert.assertTrue(file.exists());
+		TrackReporter reporter = new TrackReporter(file, 0);
+		reporter.printReport();
 		
 	}
-
+	
 	@Test
 	public void testAverage_M608() {
 		LOG.debug("testAverage_M608()");

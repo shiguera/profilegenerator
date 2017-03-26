@@ -99,8 +99,8 @@ public class TestTypeIntervalArrayGenerator {
 	public void testSampleProfileTypeV_1() {
 		LOG.debug("testSampleProfileTypeV_1");
 		VerticalProfile vp = getSampleProfileTypeV_1();
-		VerticalProfileWriter writer = new VerticalProfileWriter();
-		writer.writeVerticalProfile(new File("TestProfile.txt"), vp, "Vertical Profile");
+		System.out.println(vp.toString2());
+		VerticalProfileWriter.writeVerticalProfile(new File("TestProfile.txt"), vp, "Vertical Profile");
 		VerticalGradeProfile gradeProfile = vp.derivative();
 		double starts = gradeProfile.getStartS();
 		double ends = gradeProfile.getEndS();
@@ -125,6 +125,8 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(2).getPointType());
+		Reconstructor rec = new Reconstructor(originalGradePoints, 3, thresholdSlope, vp.getAlign(0).getStartZ(), equalAreaSquaresStrategy);
+		System.out.println(rec.getVerticalProfile().toString2());
 		
 		// Con pendiente límite 1e-6 sí que distingue entre las dos vertical curves
 		thresholdSlope = 1e-6;
@@ -145,7 +147,9 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
-
+		rec = new Reconstructor(originalGradePoints, 3, thresholdSlope, vp.getAlign(0).getStartZ(), equalAreaSquaresStrategy);
+		System.out.println(rec.getVerticalProfile().toString());
+		
 	}
 	private VerticalProfile getSampleProfileTypeV_1() {
 		VerticalProfile vp = new VerticalProfile();

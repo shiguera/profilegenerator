@@ -37,6 +37,23 @@ public class TestTrackReporter {
 	}
 
 	@Test
+	public void testTracReporter_M607Axis_RoadRecorder() {
+		LOG.debug("testTracReporter_M607Axis_RoadRecorder()");
+		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_1.csv");
+		Assert.assertTrue(file1.exists());
+		File file2 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Desc_1_Inverted.csv");
+		Assert.assertTrue(file2.exists());
+		File file3 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis.csv");
+		Assert.assertTrue(file3.exists());
+		
+		TrackReporter reporter = new TrackReporter(file1, 1);
+		reporter.printReport();
+		reporter = new TrackReporter(file2, 0);
+		reporter.printReport();
+		reporter = new TrackReporter(file3, 0);
+		reporter.printReport();		
+	}
+	@Test
 	public void testTracReporter_M608Axis() {
 		LOG.debug("testTracReporter_M608Axis()");
 		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09.csv");
