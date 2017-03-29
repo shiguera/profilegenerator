@@ -1,7 +1,6 @@
 package com.mlab.pg;
 
 import java.awt.BasicStroke;
-import java.awt.Paint;
 import java.io.File;
 import java.net.URL;
 
@@ -15,9 +14,7 @@ import org.junit.Assert;
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
-import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.valign.VerticalProfileWriter;
@@ -41,7 +38,6 @@ public class M607_Reconstruct_Leika_2_Completo {
 	static VerticalProfile resultVProfile;
 	static XYVectorFunction resultVProfilePoints;
 
-	static IterativeReconstructor iterativeReconstructor;
 	static Reconstructor reconstructor;
 	
 	static enum OPTION {ShowVerticalProfile, UNIQUE, ITERATIVE};
@@ -73,7 +69,7 @@ public class M607_Reconstruct_Leika_2_Completo {
 		gradeData = readGradeData();
 		XYVectorFunction integratedFromGradesVProfilePoints = gradeData.integrate(startZ);
 				
-		iterativeReconstructor = new IterativeReconstructor(gradeData, startZ, interpolationStrategy);
+		reconstructor = new Reconstructor(gradeData, startZ, interpolationStrategy);
 		
 		
 		switch(option) {
@@ -91,7 +87,7 @@ public class M607_Reconstruct_Leika_2_Completo {
 		resultGProfile = reconstructor.getGradeProfile();
 		resultVProfile = reconstructor.getVerticalProfile();
 		resultVProfilePoints = resultVProfile.getSample(resultVProfile.getStartS(), 
-				resultVProfile.getEndS(), iterativeReconstructor.getSeparacionMedia(), true);
+				resultVProfile.getEndS(), reconstructor.getSeparacionMedia(), true);
 		System.out.println(resultVProfile);
 
 		calculateReport();
@@ -101,20 +97,19 @@ public class M607_Reconstruct_Leika_2_Completo {
 		System.out.println("Done!");
 	}
 	private static void processUnique(int basesize, double thresholdslope) {
-		iterativeReconstructor.processUnique(baseSize, thresholdSlope);
-		reconstructor = iterativeReconstructor.getReconstructor();
+		reconstructor.processUnique(baseSize, thresholdSlope);
 	}
 	private static void processIterative() {
 		try {
-			iterativeReconstructor.processIterative();
+			reconstructor.processIterative();
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getLocalizedMessage());
 			System.exit(-1);
 		}
 		
-		int bestTest = iterativeReconstructor.getBestTest();
-		baseSize = (int)iterativeReconstructor.getResults()[bestTest][0];
-		thresholdSlope = iterativeReconstructor.getResults()[bestTest][1];
+		int bestTest = reconstructor.getBestTest();
+		baseSize = (int)reconstructor.getResults()[bestTest][0];
+		thresholdSlope = reconstructor.getResults()[bestTest][1];
 		reconstructor = null;
 		try {
 			reconstructor = new Reconstructor(gradeData,  startZ, interpolationStrategy);

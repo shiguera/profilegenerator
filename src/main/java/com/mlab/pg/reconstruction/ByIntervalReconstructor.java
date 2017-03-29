@@ -21,8 +21,8 @@ public class ByIntervalReconstructor {
 	}
 	
 	public void reconstruct() {
-		IterativeReconstructor itrec = new IterativeReconstructor(originalGradePoints, startZ, interpolationStrategy);
-		itrec.processIterative();
+		Reconstructor rec = new Reconstructor(originalGradePoints, startZ, interpolationStrategy);
+		rec.processIterative();
 		
 	}
 

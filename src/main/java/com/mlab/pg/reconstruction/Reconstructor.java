@@ -55,6 +55,9 @@ public class Reconstructor {
 	protected EndingsWithBeginnersAdjuster adjuster;
 	protected GradeProfileCreator gradeProfileCreator;
 	
+	int bestTest;
+	double[][] results;
+	
 	double startX, endX;
 	protected double separacionMedia;
 	protected double trackLength;
@@ -155,9 +158,9 @@ public class Reconstructor {
 		int numBaseSizes = maxBaseSize - 2;
 		int numThresholdSlopes = thresholdSlopes.length;
 		int numTests = numBaseSizes * numThresholdSlopes;
-		double[][] results = new double[numTests][3];
+		results = new double[numTests][3];
 		double ecmMin = -1.0;
-		int bestTest = 0;
+		bestTest = 0;
 		int contador = 0;
 		for (int i=3; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
@@ -313,5 +316,13 @@ public class Reconstructor {
 	}
 	public int getAlignmentCount() {
 		return resultVerticalProfile.size();
+	}
+
+	public int getBestTest() {
+		return bestTest;
+	}
+
+	public double[][] getResults() {
+		return results;
 	}
 }

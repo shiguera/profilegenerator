@@ -10,12 +10,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
-import com.mlab.pg.reconstruction.IterativeReconstructor;
-import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_EqualArea;
-import com.mlab.pg.valign.VerticalGradeProfile;
-import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 

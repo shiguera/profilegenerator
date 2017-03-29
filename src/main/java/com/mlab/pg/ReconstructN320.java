@@ -11,7 +11,6 @@ import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
-import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -45,9 +44,9 @@ public class ReconstructN320 {
 			modifiedGradeData.add(new double[]{x,g});
 		}
 		
-		IterativeReconstructor rec = null;
+		Reconstructor rec = null;
 		try {
-			rec = new IterativeReconstructor(gradeData, 727.0, interpolationStrategy);
+			rec = new Reconstructor(gradeData, 727.0, interpolationStrategy);
 			//rec = new IterativeReconstructor(modifiedGradeData, 727.0);
 		} catch (Exception e) {
 			System.out.println("ERROR " + e.getMessage());

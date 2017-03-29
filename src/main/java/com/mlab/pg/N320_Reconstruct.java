@@ -1,7 +1,6 @@
 package com.mlab.pg;
 
 import java.awt.BasicStroke;
-import java.awt.Paint;
 import java.io.File;
 import java.net.URL;
 
@@ -15,7 +14,6 @@ import org.junit.Assert;
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
 import com.mlab.pg.reconstruction.InterpolationStrategy;
-import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -59,7 +57,7 @@ public class N320_Reconstruct {
 		hmin = originalVProfile.getMinY();
 		hmax = originalVProfile.getMaxY();
 		
-		IterativeReconstructor rec = new IterativeReconstructor(gradeData, startZ, interpolationStrategy);
+		Reconstructor rec = new Reconstructor(gradeData, startZ, interpolationStrategy);
 		
 		int baseSize = 9;
 		double thresholdSlope = 1.75e-5;
@@ -71,8 +69,8 @@ public class N320_Reconstruct {
 				break;
 			case UNIQUE:
 				rec.processUnique(baseSize, thresholdSlope);
-				resultGProfile = rec.getReconstructor().getGradeProfile();
-				resultVProfile = rec.getReconstructor().getVerticalProfile();
+				resultGProfile = rec.getGradeProfile();
+				resultVProfile = rec.getVerticalProfile();
 				
 				CheckEndingsWithBeginnings checker = new CheckEndingsWithBeginnings();
 				boolean result = checker.checkProfile(resultVProfile);
@@ -107,11 +105,11 @@ public class N320_Reconstruct {
 				resultVProfileSample = resultVProfile.getSample(resultVProfile.getStartS(), 
 						resultVProfile.getEndS(), rec.getSeparacionMedia(), true);
 				showVProfiles(originalVProfile, resultVProfileSample);
-				//showVProfiles(rec.getReconstructor().getOriginalVerticalProfilePoints(), resultVProfileSample);
+				//showVProfiles(rec.getOriginalVerticalProfilePoints(), resultVProfileSample);
 
 				System.out.println(resultVProfile);
-				System.out.println("Puntos: " + rec.getReconstructor().getPointsCount());
-				System.out.println("Sep. Media: " + rec.getReconstructor().getSeparacionMedia());
+				System.out.println("Puntos: " + rec.getPointsCount());
+				System.out.println("Sep. Media: " + rec.getSeparacionMedia());
 				System.out.println("Longitud: " + (originalVProfile.getLast()[0] - originalVProfile.getX(0)));
 				System.out.println("Alineaciones: " + resultVProfile.size());
 				System.out.println("Grades: " + countG);
@@ -119,11 +117,11 @@ public class N320_Reconstruct {
 				System.out.println("Vertical Curves: " + countVC);
 				System.out.println("ShortAlignments: : " + countShorAlignments);
 				System.out.println("Two grades: " + countTwoGrades);
-				System.out.println("BaseSize: " + rec.getReconstructor().getBaseSize());
-				System.out.println("ThresholdSlope: " + rec.getReconstructor().getThresholdSlope());
-				System.out.println("Error medio: " + rec.getReconstructor().getMeanError());
-				System.out.println("Error max  : " + rec.getReconstructor().getMaxError());
-				System.out.println("ECM        : " + rec.getReconstructor().getEcm());
+				System.out.println("BaseSize: " + rec.getBaseSize());
+				System.out.println("ThresholdSlope: " + rec.getThresholdSlope());
+				System.out.println("Error medio: " + rec.getMeanError());
+				System.out.println("Error max  : " + rec.getMaxError());
+				System.out.println("ECM        : " + rec.getEcm());
 				
 				
 				File file = new File("/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/M607-1.txt");
