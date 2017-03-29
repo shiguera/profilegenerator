@@ -1,5 +1,6 @@
 package com.mlab.pg.reconstruction;
 
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**

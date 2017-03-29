@@ -1,4 +1,4 @@
-package com.mlab.pg.reconstruction;
+package com.mlab.pg.reconstruction.strategy;
 
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;

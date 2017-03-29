@@ -1,4 +1,4 @@
-package com.mlab.pg.reconstruction;
+package com.mlab.pg.valign;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,9 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 import org.apache.log4j.Logger;
-
-import com.mlab.pg.valign.VAlignment;
-import com.mlab.pg.valign.VerticalProfile;
 
 public class VerticalProfileWriter {
 

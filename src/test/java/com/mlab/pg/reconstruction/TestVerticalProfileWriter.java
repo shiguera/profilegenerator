@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.VerticalProfileWriter;
 import com.mlab.pg.xyfunction.Straight;
 
 public class TestVerticalProfileWriter {

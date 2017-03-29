@@ -11,9 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.reconstruction.InterpolationStrategy;
-import com.mlab.pg.reconstruction.PointCharacteriserStrategy_LessSquares;
-import com.mlab.pg.reconstruction.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
+import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;

@@ -2,6 +2,12 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy;
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_EqualArea;
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
+import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy;
+import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_EqualArea;
+import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /** 

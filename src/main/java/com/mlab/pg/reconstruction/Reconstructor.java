@@ -2,6 +2,12 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster;
+import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster_EqualArea;
+import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster_LessSquares;
+import com.mlab.pg.reconstruction.strategy.GradeProfileCreator;
+import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_EqualArea;
+import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_LessSquares;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;

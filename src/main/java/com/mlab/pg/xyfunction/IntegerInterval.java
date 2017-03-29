@@ -1,7 +1,7 @@
 package com.mlab.pg.xyfunction;
 
 /**
- * Representa un intervalo de números enteros con inicio en 'start'
+ * Representa un intervalo de números naturales con inicio en 'start'
  * y final en 'end'. 'start' y 'end' Pueden tener el mismo valor, pero no
  * puede ser 'end' menor que 'start'.
  * 

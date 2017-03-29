@@ -15,6 +15,7 @@ import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.VerticalProfileWriter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
@@ -39,7 +40,7 @@ public class TestTypeIntervalArrayGenerator {
 	
 	
 	@Test
-	public void testGrade() throws NullTypeException {
+	public void testGrade() {
 		LOG.debug("testGrade()");
 		List<double[]> pts = new ArrayList<double[]>();
 		pts.add(new double[] {0.0, 0.04});

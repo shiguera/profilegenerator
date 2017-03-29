@@ -18,9 +18,9 @@ import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
-import com.mlab.pg.reconstruction.VerticalProfileWriter;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.VerticalProfileWriter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
@@ -238,7 +238,7 @@ public class M607_Reconstruct_Leika_Axis {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(4000.0, 10300.0);
+		data = data.extract(9786.0, 10651.0);
 		return data;
 	}
 
@@ -250,7 +250,7 @@ public class M607_Reconstruct_Leika_Axis {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(4000.0, 10300.0);
+		data = data.extract(9786.0, 10651.0);
 		return data;		
 	}
 	

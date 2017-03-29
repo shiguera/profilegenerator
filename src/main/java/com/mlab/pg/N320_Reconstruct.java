@@ -18,9 +18,9 @@ import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.IterativeReconstructor;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
-import com.mlab.pg.reconstruction.VerticalProfileWriter;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.VerticalProfileWriter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 

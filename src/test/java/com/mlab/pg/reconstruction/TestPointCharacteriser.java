@@ -9,6 +9,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 import junit.framework.Assert;

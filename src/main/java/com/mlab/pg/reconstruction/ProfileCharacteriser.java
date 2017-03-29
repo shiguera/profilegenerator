@@ -2,6 +2,7 @@ package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
 
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /**
@@ -40,7 +41,7 @@ public class ProfileCharacteriser {
 	 * @return Lista de puntos con un tipo PointType asignado. El tipo de los puntos es Grade, Border
 	 * o VerticalCurve 
 	 */
-	PointTypeArray characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
+	public PointTypeArray characterise(XYVectorFunction gpsample,int mobileBaseSize, double thresholdSlope) {
 		if(gpsample==null || gpsample.size()<2*mobileBaseSize-1) {
 			LOG.error("characterise() ERROR: NULL RESULT");
 			return null;
