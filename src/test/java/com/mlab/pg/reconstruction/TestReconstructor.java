@@ -32,7 +32,8 @@ public class TestReconstructor {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0, InterpolationStrategy.LessSquares);
+		Reconstructor generator = new Reconstructor(originalPoints,0.0, InterpolationStrategy.LessSquares);
+		generator.processUnique(3, 1e-5);
 		VerticalProfile vprofile = generator.getVerticalProfile();
 		//System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);
@@ -52,7 +53,8 @@ public class TestReconstructor {
 		XYVectorFunction originalVProfilePoints = profile.getSample(starts, ends, space, true);
 		VerticalGradeProfile gprofile = profile.derivative();
 		XYVectorFunction originalPoints = gprofile.getSample(starts, ends, space, true);
-		Reconstructor generator = new Reconstructor(originalPoints,3, 1e-5, 0.0, InterpolationStrategy.LessSquares);
+		Reconstructor generator = new Reconstructor(originalPoints, 0.0, InterpolationStrategy.LessSquares);
+		generator.processUnique(3, 1e-5);
 		VerticalProfile vprofile = generator.getVerticalProfile();
 		//System.out.println(vprofile);
 		XYVectorFunction processedPoints = vprofile.getSample(vprofile.getStartS(), vprofile.getEndS(), 5.0, true);

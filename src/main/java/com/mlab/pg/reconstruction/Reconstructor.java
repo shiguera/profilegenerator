@@ -1,6 +1,7 @@
 package com.mlab.pg.reconstruction;
 
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 
 import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster;
 import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster_EqualArea;
@@ -35,14 +36,15 @@ public class Reconstructor {
 	 * mismo tipo, TypeIntervalArrayGenerator los une
 	 */
 	double MIN_LENGTH = 15.0;
+	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+
 	
 	protected XYVectorFunction originalGradePoints;
 	protected XYVectorFunction originalVerticalProfilePoints;
+	protected XYVectorFunction integralVerticalProfilePoints;
 	protected int baseSize;
 	protected double thresholdSlope;
 	protected double startZ;
-	protected double separacionMedia;
-	protected double trackLength;
 	
 	protected InterpolationStrategy interpolationStrategy;
 	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
@@ -53,25 +55,39 @@ public class Reconstructor {
 	protected EndingsWithBeginnersAdjuster adjuster;
 	protected GradeProfileCreator gradeProfileCreator;
 	
+	double startX, endX;
+	protected double separacionMedia;
+	protected double trackLength;
 	protected int alignmentCount;
 	protected double meanError;
 	protected double maxError;
 	protected double ecm;
 	protected double varianza;
 	
-	public Reconstructor(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, double startz, InterpolationStrategy strategy) {
+	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategy strategy) {
 		originalGradePoints = originalgradePoints.clone();
-		baseSize = mobilebasesize;
-		thresholdSlope = thresholdslope;
 		startZ = startz;
 		interpolationStrategy = strategy;
 		
+		startX = originalGradePoints.getStartX();
+		endX = originalGradePoints.getEndX();
+		this.separacionMedia = originalGradePoints.separacionMedia();
+		integralVerticalProfilePoints = originalGradePoints.integrate(startz);
+
+	}
+	
+	public void processUnique(ReconstructionParameters parameters) {
+		processUnique(parameters.getBaseSize(), parameters.getThresholdSlope());		
+	}
+	public void processUnique(int basesize, double thresholdslope) {
+		this.baseSize = basesize;
+		this.thresholdSlope = thresholdslope;
 		separacionMedia = originalGradePoints.separacionMedia();
 		trackLength = originalGradePoints.getLast()[0] - originalGradePoints.getX(0);
 		
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
-		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, mobilebasesize, thresholdslope, interpolationStrategy, MIN_LENGTH);
+		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdslope, interpolationStrategy, MIN_LENGTH);
 		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeIntervalArray();
 		
 		createGradeProfile();
@@ -129,16 +145,55 @@ public class Reconstructor {
 		
 		
 		//System.out.println(verticalProfile);
+
 	}
-	
-	public void processUnique(ReconstructionParameters parameters) {
-		processUnique(parameters.getBaseSize(), parameters.getThresholdSlope());		
+	public void processIterative() {
+		int maxBaseSize = (int)Math.rint(MIN_LENGTH / separacionMedia);
+		if(maxBaseSize < 10) {
+			maxBaseSize = 10;
+		}
+		int numBaseSizes = maxBaseSize - 2;
+		int numThresholdSlopes = thresholdSlopes.length;
+		int numTests = numBaseSizes * numThresholdSlopes;
+		double[][] results = new double[numTests][3];
+		double ecmMin = -1.0;
+		int bestTest = 0;
+		int contador = 0;
+		for (int i=3; i<=maxBaseSize; i++) {
+			for (int j=0; j<thresholdSlopes.length; j++) {
+				System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
+				processUnique( i, thresholdSlopes[j]);
+				VerticalGradeProfile gradeProfile = getGradeProfile();
+				if(gradeProfile == null || gradeProfile.size()<2) {
+					Log.warn("gradeProfile null");
+					continue;
+				}
+				double ecm = getEcm();
+				results[contador][0] = i; // baseSize;
+				results[contador][1] = thresholdSlopes[j]; // thresholdSlope
+				results[contador][2] = ecm; // ecm
+				if(!Double.isNaN(ecm)) {
+					if(ecmMin == -1.0) {
+						ecmMin = ecm;
+						bestTest = contador;
+					} else {
+						if (ecm < ecmMin) {
+							ecmMin = ecm;
+							bestTest = contador;
+						}					
+					}
+				}
+				contador ++;
+			}
+		}
+		System.out.println("BestTest: " + bestTest);
+		System.out.println("BaseSize: " + results[bestTest][0]);
+		System.out.println("ThresholdSlope: " + results[bestTest][1]);
+		System.out.println("ECM: " + results[bestTest][2]);
+		
+		processUnique((int)results[bestTest][0] , results[bestTest][1]);
+
 	}
-	public void processUnique(int basesize, double thresholdslope) {
-		this.baseSize = basesize;
-		this.thresholdSlope = thresholdslope;
-	}
-	
 	
 	private void calculateErrors() {
 		double sumaErrorAbsoluto = 0.0;

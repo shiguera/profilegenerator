@@ -148,7 +148,9 @@ public class M633_Reconstruct_1 {
 				try {
 					//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 727.0, new PointCharacteriserStrategy_EqualArea(),
 					//		new ProcessBorderIntervalsStrategy_EqualArea());
-					reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, startZ, interpolationStrategy);
+					reconstructor = new Reconstructor(gradeData,  startZ, interpolationStrategy);
+					reconstructor.processUnique(baseSize, thresholdSlope);
+
 				} catch(Exception e) {
 					LOG.error("Error creating Reconstructor");
 					System.exit(-1);

@@ -64,7 +64,8 @@ public class ReconstructN403 {
 		try {
 			//reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, new PointCharacteriserStrategy_EqualArea(),
 			//		new ProcessBorderIntervalsStrategy_EqualArea());
-			reconstructor = new Reconstructor(gradeData, baseSize, thresholdSlope, 765.0, interpolationStrategy);
+			reconstructor = new Reconstructor(gradeData,  765.0, interpolationStrategy);
+			reconstructor.processUnique(baseSize, thresholdSlope);
 		} catch(Exception e) {
 			LOG.error("Error creating Reconstructor");
 			System.exit(-1);

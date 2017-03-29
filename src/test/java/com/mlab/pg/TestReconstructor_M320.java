@@ -50,7 +50,8 @@ public class TestReconstructor_M320 {
 		Assert.assertNotNull(data);
 		Reconstructor rec = null;
 		try {
-			rec = new Reconstructor(data, 6, 1e-5, 0.0, InterpolationStrategy.LessSquares);			
+			rec = new Reconstructor(data, 0.0, InterpolationStrategy.LessSquares);		
+			rec.processUnique(6, 1e-5);
 		} catch(Exception e) {
 			LOG.error("testM320() ERROR: Error creating Reconstructor");
 			System.exit(-1);

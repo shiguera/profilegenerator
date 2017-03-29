@@ -281,7 +281,8 @@ public class EssayFactory {
 		double s0 = originalVerticalProfile.getFirstAlign().getStartS();
 		Reconstructor reconstructor = null;
 		try {
-			reconstructor = new Reconstructor(originalGradePoints, mobileBaseSize, thresholdSlope, z0, interpolationStrategy);
+			reconstructor = new Reconstructor(originalGradePoints, z0, interpolationStrategy);
+			reconstructor.processUnique(mobileBaseSize, thresholdSlope);
 		} catch(Exception e) {
 			LOG.error("Error en el constructor de Reconstructor");
 			System.exit(1);

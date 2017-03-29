@@ -36,7 +36,8 @@ public class IterativeReconstructor {
 	}
 	
 	public void processUnique(int basesize, double thresholdslope) {
-		rec = new Reconstructor(originalGradePoints, basesize , thresholdslope, startZ, interpolationStrategy);
+		rec = new Reconstructor(originalGradePoints, startZ, interpolationStrategy);
+		rec.processUnique(basesize, thresholdslope);
 		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 		//XYVectorFunction resultGradePoints = gradeProfile.getSample(startX, endX, separacionMedia, true);
 		//double ecm = originalGradePoints.ecm(resultGradePoints);
@@ -65,7 +66,8 @@ public class IterativeReconstructor {
 		for (int i=3; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
 				System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
-				rec = new Reconstructor(originalGradePoints, i, thresholdSlopes[j], startZ, interpolationStrategy);
+				rec = new Reconstructor(originalGradePoints, startZ, interpolationStrategy);
+				rec.processUnique(i, thresholdSlopes[j]);
 				VerticalGradeProfile gradeProfile = rec.getGradeProfile();
 				if(gradeProfile == null || gradeProfile.size()<2) {
 					Log.warn("gradeProfile null");
@@ -94,7 +96,9 @@ public class IterativeReconstructor {
 		System.out.println("ThresholdSlope: " + results[bestTest][1]);
 		System.out.println("ECM: " + results[bestTest][2]);
 		
-		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, interpolationStrategy);
+		rec = new Reconstructor(originalGradePoints, startZ, interpolationStrategy);
+		rec.processUnique((int)results[bestTest][0] , results[bestTest][1]);
+		
 	}
 
 	public int getBestTest() {
