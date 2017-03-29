@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.jfree.util.Log;
 
 import com.mlab.pg.valign.VerticalGradeProfile;
-import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class IterativeReconstructor {
@@ -51,12 +50,10 @@ public class IterativeReconstructor {
 
 	}
 	
-	public void processIterative() throws Exception {
+	public void processIterative() {
 		int maxBaseSize = (int)Math.rint(MIN_ALIGNMENT_LENGTH / separacionMedia);
-		if(maxBaseSize < 3) {
+		if(maxBaseSize < 10) {
 			maxBaseSize = 10;
-			// LOG.error("ERROR: maxBaseSize < 3");
-			// throw new Exception();
 		}
 		int numBaseSizes = maxBaseSize - 2;
 		int numThresholdSlopes = thresholdSlopes.length;
@@ -98,13 +95,6 @@ public class IterativeReconstructor {
 		System.out.println("ECM: " + results[bestTest][2]);
 		
 		rec = new Reconstructor(originalGradePoints, (int)results[bestTest][0] , results[bestTest][1], startZ, interpolationStrategy);
-		//LOG.debug("Reconstructor: " + rec);
-		//VerticalGradeProfile gradeProfile = rec.getGradeProfile();
-		//VerticalProfile vp = rec.getVerticalProfile();
-		
-		//System.out.println(vp);
-		
-
 	}
 
 	public int getBestTest() {

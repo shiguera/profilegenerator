@@ -130,6 +130,16 @@ public class Reconstructor {
 		
 		//System.out.println(verticalProfile);
 	}
+	
+	public void processUnique(ReconstructionParameters parameters) {
+		processUnique(parameters.getBaseSize(), parameters.getThresholdSlope());		
+	}
+	public void processUnique(int basesize, double thresholdslope) {
+		this.baseSize = basesize;
+		this.thresholdSlope = thresholdslope;
+	}
+	
+	
 	private void calculateErrors() {
 		double sumaErrorAbsoluto = 0.0;
 		maxError = 0.0;
