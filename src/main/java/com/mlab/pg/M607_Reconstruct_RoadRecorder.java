@@ -12,8 +12,8 @@ import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
-import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.valign.VerticalProfileWriter;

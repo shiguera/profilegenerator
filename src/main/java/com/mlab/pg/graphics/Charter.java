@@ -1,5 +1,9 @@
 package com.mlab.pg.graphics;
 
+import java.awt.BasicStroke;
+
+import javax.swing.JFrame;
+
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -7,6 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -78,4 +83,5 @@ public class Charter {
 		return chart;
 	}
 
+	
 }

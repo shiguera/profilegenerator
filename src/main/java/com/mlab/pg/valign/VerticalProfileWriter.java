@@ -12,7 +12,7 @@ public class VerticalProfileWriter {
 	static Logger LOG = Logger.getLogger(VerticalProfileWriter.class);
 	
 	public VerticalProfileWriter() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public static int writeVerticalProfile(File file, VerticalProfile profile, String title) {

@@ -1,5 +1,6 @@
 package com.mlab.pg.reconstruction;
 
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 

@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;

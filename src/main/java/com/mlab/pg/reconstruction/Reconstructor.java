@@ -9,6 +9,7 @@ import com.mlab.pg.reconstruction.strategy.EndingsWithBeginnersAdjuster_LessSqua
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_EqualArea;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_LessSquares;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -74,7 +75,7 @@ public class Reconstructor {
 		
 		startX = originalGradePoints.getStartX();
 		endX = originalGradePoints.getEndX();
-		this.separacionMedia = originalGradePoints.separacionMedia();
+		separacionMedia = originalGradePoints.separacionMedia();
 		integralVerticalProfilePoints = originalGradePoints.integrate(startz);
 
 	}

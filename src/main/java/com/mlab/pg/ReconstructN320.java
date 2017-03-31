@@ -10,8 +10,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.graphics.Charter;
-import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;

@@ -13,6 +13,9 @@ import org.apache.log4j.Logger;
 
 public class IOUtil {
 	private static final Logger LOG = Logger.getLogger(IOUtil.class);
+	private static final char EXTENSION_SEPARATOR = '.';
+	private static final char DIRECTORY_SEPARATOR = '/';
+
 	/**
 	 * Lee una matriz de doubles desde un fichero CSV
 	 * @param file Nombre del fichero
@@ -137,6 +140,38 @@ public class IOUtil {
 		}
 		return 1;
 	}
+	static public int write(String filename, String firstColumnHeader, String secondColumnHeader, double[][] d, 
+			int width, int precission, char separator) {
+		//LOG.info("write()");
+		BufferedWriter writer;
+		String line="";	
+		try {
+			writer = new BufferedWriter(new FileWriter(filename));
+			writer.write(firstColumnHeader + String.valueOf(separator) + secondColumnHeader + "\n");
+			for(int i=0; i< d.length; i++) {
+				line="";
+				for(int j=0; j<d[i].length; j++) {
+					line += doubleToString(d[i][j], width, precission).trim();
+					if(j != d[i].length-1) {
+						line += String.valueOf(separator);
+					}
+				}
+				//LOG.info(line);
+				writer.write(line+"\n");
+			}
+			writer.close();
+		} catch (FileNotFoundException fe) {
+			LOG.info("File "+filename+" not found.\n"+fe.getMessage());
+			return -1;
+		} catch (NumberFormatException ne) {
+			LOG.info("Number format error. "+ne.getMessage());
+			return -2;
+		} catch (Exception e) {
+			LOG.info("Unidentified error. "+e.getMessage());
+			return -3;
+		}
+		return 1;
+	}
 	/**
 	 * Escribe una cadena de texto en un fichero
 	 * @param filename String Nombre del fichero
@@ -204,4 +239,72 @@ public class IOUtil {
 		}
 		return result;
 	}
+
+	public static String composeFileName(String path, String filename) {
+		String name = path;
+		if(path.charAt(path.length()-1) != '/') {
+			name += '/';
+		}
+		name += filename;
+		return name;
+	}
+	
+	/**
+	 * Remove the file extension from a filename, that may include a path.
+	 * 
+	 * e.g. /path/to/myfile.jpg -> /path/to/myfile 
+	 */
+	public static String removeExtension(String filename) {
+	    if (filename == null) {
+	        return null;
+	    }
+
+	    int index = indexOfExtension(filename);
+
+	    if (index == -1) {
+	        return filename;
+	    } else {
+	        return filename.substring(0, index);
+	    }
+	}
+
+	/**
+	 * Return the file extension from a filename, including the "."
+	 * 
+	 * e.g. /path/to/myfile.jpg -> .jpg
+	 */
+	public static String getExtension(String filename) {
+	    if (filename == null) {
+	        return null;
+	    }
+
+	    int index = indexOfExtension(filename);
+
+	    if (index == -1) {
+	        return filename;
+	    } else {
+	        return filename.substring(index);
+	    }
+	}
+
+	public static int indexOfExtension(String filename) {
+
+	    if (filename == null) {
+	        return -1;
+	    }
+
+	    // Check that no directory separator appears after the 
+	    // EXTENSION_SEPARATOR
+	    int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
+
+	    int lastDirSeparator = filename.lastIndexOf(DIRECTORY_SEPARATOR);
+
+	    if (lastDirSeparator > extensionPos) {
+	        LOG.warn("A directory separator appears after the file extension, assuming there is no file extension");
+	        return -1;
+	    }
+
+	    return extensionPos;
+	}
+
 }

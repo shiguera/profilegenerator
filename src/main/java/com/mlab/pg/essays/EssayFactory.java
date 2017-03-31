@@ -7,8 +7,8 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.random.RandomProfileFactory;
-import com.mlab.pg.reconstruction.InterpolationStrategy;
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.util.MathUtil;

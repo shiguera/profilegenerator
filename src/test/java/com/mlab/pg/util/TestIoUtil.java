@@ -78,4 +78,15 @@ public class TestIoUtil {
 		
 	}
 
+	@Test
+	public void test_ComposeFileName() {
+		LOG.debug("test_composeFileName()");
+		String path = "directorio";
+		String name = "fichero";
+		String filename = IOUtil.composeFileName(path, name);
+		Assert.assertEquals("directorio/fichero", filename);
+		path="directorio/";
+		Assert.assertEquals("directorio/fichero", filename);
+		
+	}
 }

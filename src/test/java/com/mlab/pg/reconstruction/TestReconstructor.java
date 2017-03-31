@@ -5,6 +5,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VerticalCurveAlignment;

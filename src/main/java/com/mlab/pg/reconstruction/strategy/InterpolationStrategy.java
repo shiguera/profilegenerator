@@ -1,4 +1,4 @@
-package com.mlab.pg.reconstruction;
+package com.mlab.pg.reconstruction.strategy;
 
 public enum InterpolationStrategy {
 
