@@ -126,6 +126,12 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return l;
 	}
 
+	public double[][] getValuesAsArray() {
+		int start = 0;
+		int end = size()-1;
+		IntegerInterval interval = new IntegerInterval(start, end);
+		return getValuesAsArray(interval);
+	}
 	public double[][] getValuesAsArray(IntegerInterval interval) {
 		if(!this.containsInterval(interval)) {
 			return null;
@@ -502,4 +508,21 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return min;
 	}
 
+	public int nearestInFunction2(int indexInFunction1, XYVectorFunction f2) {
+		double[][] track1 = this.getValuesAsArray();
+		double[][] track2 = f2.getValuesAsArray();
+		double x1 = track1[indexInFunction1][0];
+		double y1 = track1[indexInFunction1][1];
+		double d = Math.sqrt((x1-track2[0][0])*(x1-track2[0][0]) + (y1-track2[0][1])*(y1-track2[0][1]));
+		double dmin = d;
+		int indexMin = 0;
+		for(int i=1; i<track2.length; i++) {	
+			d = Math.sqrt((x1-track2[i][0])*(x1-track2[i][0]) + (y1-track2[i][1])*(y1-track2[i][1]));
+			if(d<dmin) {
+				dmin = d;
+				indexMin = i;
+			}
+		}
+		return indexMin;
+	}
 }
