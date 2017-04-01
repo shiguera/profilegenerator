@@ -67,11 +67,14 @@ public class TypeIntervalArrayGenerator {
 	public TypeIntervalArrayGenerator(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy, double minlength) {
 		originalGradePoints = originalgradePoints.clone();
 		mobileBaseSize = mobilebasesize;
+		if(originalGradePoints.size()<2*mobileBaseSize-1) {
+			System.out.println("Aquí");
+		}
 		thresholdSlope = thresholdslope;
 		interpolationStrategy = strategy;
 		minLength = minlength;
 		
-		if (interpolationStrategy == InterpolationStrategy.EqualArea) {
+		if (interpolationStrategy == InterpolationStrategy.EqualArea || interpolationStrategy == InterpolationStrategy.EqualArea_Multiparameter) {
 			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
 			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
 		} else {
@@ -142,8 +145,9 @@ public class TypeIntervalArrayGenerator {
 			result.add(processIntervalArray.get(0));
 			for(int i=1; i<processIntervalArray.size(); i++) {
 				TypeInterval current = processIntervalArray.get(i);
+				int numpoints = current.size();
 				double length = originalGradePoints.getX(current.getEnd()) - originalGradePoints.getX(current.getStart());
-				if(length<minLength) {
+				if(length<minLength || numpoints<5) {
 					TypeInterval previous = result.getLast();
 					if(previous.getPointType() == current.getPointType()) {
 						result.getLast().setEnd(current.getEnd());

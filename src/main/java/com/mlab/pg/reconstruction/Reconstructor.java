@@ -10,6 +10,7 @@ import com.mlab.pg.reconstruction.strategy.GradeProfileCreator;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_EqualArea;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_LessSquares;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -38,6 +39,7 @@ public class Reconstructor {
 	 */
 	double MIN_LENGTH = 15.0;
 	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+	//double[] thresholdSlopes = new double[] {1.0e-4}; 
 
 	
 	protected XYVectorFunction originalGradePoints;
@@ -153,9 +155,20 @@ public class Reconstructor {
 	}
 	public void processIterative() {
 		int maxBaseSize = (int)Math.rint(MIN_LENGTH / separacionMedia);
-		if(maxBaseSize < 10) {
+		if(maxBaseSize < 3) {
 			maxBaseSize = 10;
 		}
+		int maxbysize = originalGradePoints.size() / 2;
+		if(!MathUtil.isEven(originalGradePoints.size())) {
+			maxbysize = maxbysize + 1;
+		}
+		if(maxbysize < maxBaseSize) {
+			maxBaseSize = maxbysize;
+		}
+		if(maxBaseSize<3) {
+			System.out.println("Aquí");
+		}
+		
 		int numBaseSizes = maxBaseSize - 2;
 		int numThresholdSlopes = thresholdSlopes.length;
 		int numTests = numBaseSizes * numThresholdSlopes;
@@ -168,9 +181,9 @@ public class Reconstructor {
 				System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
 				processUnique( i, thresholdSlopes[j]);
 				VerticalGradeProfile gradeProfile = getGradeProfile();
-				if(gradeProfile == null || gradeProfile.size()<2) {
+				if(gradeProfile == null || gradeProfile.size()<1) {
 					Log.warn("gradeProfile null");
-					continue;
+					//continue;
 				}
 				double ecm = getEcm();
 				results[contador][0] = i; // baseSize;
@@ -199,14 +212,14 @@ public class Reconstructor {
 
 	}
 	
-	private void calculateErrors() {
+	protected void calculateErrors() {
 		double sumaErrorAbsoluto = 0.0;
 		maxError = 0.0;
 		double sumaErrorAbsolutoAlCuadrado = 0.0;
 		XYVectorFunction resultVProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), separacionMedia, true);
 		for(int i=0; i<getPointsCount(); i++) {
 			double x = resultVProfilePoints.getX(i);
-			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - originalVerticalProfilePoints.getY(x));
+			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - integralVerticalProfilePoints.getY(x));
 			if(Double.isNaN(errorAbsoluto)) {
 				continue;
 			}
@@ -218,7 +231,7 @@ public class Reconstructor {
 		}
 		meanError = sumaErrorAbsoluto / getPointsCount();
 		varianza = sumaErrorAbsolutoAlCuadrado / getPointsCount() - meanError*meanError;
-		ecm = resultVProfilePoints.ecm(originalVerticalProfilePoints);
+		ecm = resultVProfilePoints.ecm(integralVerticalProfilePoints);
 	}
 	private boolean isSimilarKv(double k1, double k2) {
 		if(Double.isNaN(k1) || Double.isNaN(k2) || !sameSign(k1,k2)) {

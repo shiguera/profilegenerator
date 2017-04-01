@@ -58,6 +58,9 @@ public class ProfileCharacteriser {
 		int last = gpsample.size()-mobileBaseSize;
 		pointCharacteriser = new PointCharacteriser();
 		for(int i=first; i<=last; i++) {
+			if(i==-1) {
+				System.out.println(i);				
+			}
 			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope, strategy));
 		}
 		// El primer punto se caracteriza como BorderPoint

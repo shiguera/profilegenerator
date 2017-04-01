@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 
 import com.mlab.pg.reconstruction.Reconstructor;
+import com.mlab.pg.reconstruction.ReconstructorByIntervals;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -48,7 +49,6 @@ public class ReconstructRunner {
 		
 		integrateGradeData();
 		
-		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy);
 		
 		
 	}
@@ -86,10 +86,12 @@ public class ReconstructRunner {
 	public void doUniqueReconstruction(int basesize, double thresholdslope) {
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
+		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy);
 		reconstructor.processUnique(baseSize, thresholdSlope);
 		getResults();
 	}
 	public void doIterativeReconstruction() {
+		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy);
 		reconstructor.processIterative();
 		
 		int bestTest = reconstructor.getBestTest();
@@ -99,6 +101,12 @@ public class ReconstructRunner {
 		reconstructor.processUnique(baseSize, thresholdSlope);
 		getResults();
 	}
+	public void doMultiparameterReconstruction() {
+		reconstructor = new ReconstructorByIntervals(originalGradeData, startZ, interpolationStrategy);
+		reconstructor.processIterative();
+		getResults();
+	}
+	
 
 	private void integrateGradeData() {
 		vProfileFromGradeDataIntegration = originalGradeData.integrate(startZ);

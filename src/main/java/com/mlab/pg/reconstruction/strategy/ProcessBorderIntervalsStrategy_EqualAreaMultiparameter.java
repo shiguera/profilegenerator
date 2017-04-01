@@ -12,7 +12,7 @@ import com.mlab.pg.xyfunction.Parabole;
 import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIntervalsStrategy {
+public class ProcessBorderIntervalsStrategy_EqualAreaMultiparameter implements ProcessBorderIntervalsStrategy {
 
 	protected XYVectorFunction originalGradePoints;
 	protected int baseSize;
@@ -21,7 +21,7 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 	protected TypeIntervalArray originalIntervalArray;
 	protected TypeIntervalArray resultIntervalArray;
 	
-	public ProcessBorderIntervalsStrategy_EqualArea() {
+	public ProcessBorderIntervalsStrategy_EqualAreaMultiparameter() {
 
 	}
 

@@ -9,5 +9,17 @@ public class ParameterIntervalArray extends ArrayList<ParameterInterval> {
 	public ParameterIntervalArray() {
 		super();
 	}
+	
+	public ReconstructionParameters getParameters(double x) {
+		for(int i=0; i<size(); i++) {
+			ParameterInterval interval = get(i);
+			if(interval.contains(x)) {
+				return interval.getParameters();
+			}
+		}
+		return null;
+	}
+	
+	
 
 }

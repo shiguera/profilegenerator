@@ -90,6 +90,9 @@ public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 		GradeProfileAlignment align = null;
 		for(x=starts; x<=ends; x+=space) {
 			align = getAlign(x);
+			if(align==null) {
+				System.out.println("wwww");
+			}
 			sample.add(new double[]{x, align.getY(x)});
 		}
 		if(includeLastPoint && sample.getEndX()<ends) {

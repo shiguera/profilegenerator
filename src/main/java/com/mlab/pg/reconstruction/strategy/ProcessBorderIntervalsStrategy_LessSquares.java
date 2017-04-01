@@ -1,5 +1,6 @@
 package com.mlab.pg.reconstruction.strategy;
 
+import com.mlab.pg.reconstruction.ParameterIntervalArray;
 import com.mlab.pg.reconstruction.PointType;
 import com.mlab.pg.reconstruction.PointTypeArray;
 import com.mlab.pg.reconstruction.ProfileCharacteriser;
@@ -86,7 +87,12 @@ public class ProcessBorderIntervalsStrategy_LessSquares implements ProcessBorder
 		}
 		return resultIntervalArray;
 	}
-
+	@Override
+	public TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints,
+			ParameterIntervalArray parameterarray, PointCharacteriserStrategy strategy) {
+		// No aplicable en esta estrategia
+		return null;
+	}
 	private void processFirstSegmentAsBorder() {
 		if(resultIntervalArray.size()<2) {
 			return;
@@ -194,4 +200,6 @@ public class ProcessBorderIntervalsStrategy_LessSquares implements ProcessBorder
 	public TypeIntervalArray getResultTypeIntervalArray() {
 		return resultIntervalArray;
 	}
+
+	
 }

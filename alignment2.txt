@@ -1,0 +1,24 @@
+Reconstrucción de la geometría del perfil longitudinal: M-607 - GPS LEika - Ascendente 1
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+Longitud del track (m) : 326.54
+Número de puntos       : 11
+Separación media   (m) : 32.65
+--------------------------------------------------------------------------
+Rectas Interpolación (Puntos) : 4
+Rectas Interpolación (m)      : 130.61
+Pendiente límite              : 1.0E-4
+--------------------------------------------------------------------------
+Número de alineaciones : 1
+    Grades             : 0
+    Vertical curves    : 1
+    Cuasi grades       : 0
+    Short alignments   : 0
+    Two grades         : 0
+--------------------------------------------------------------------------
+Valor absoluto del Error (media)  (m)   : 0.36851500966128403
+Valor absoluto del Error (máximo) (m)   : 0.9070718603855914
+Valor absoluto del Error (varianza)     : 0.1063308304378783
+Error Cuadrático Medio ECM              : 0.22195629755157334
+--------------------------------------------------------------------------
+
