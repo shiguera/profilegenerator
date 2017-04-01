@@ -53,10 +53,10 @@ public class Reconstructor {
 	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
 	protected TypeIntervalArray typeIntervalArray;
 	
-	protected VerticalGradeProfile gradeProfile;
+	protected VerticalGradeProfile resultGradeProfile;
 	protected VerticalProfile resultVerticalProfile;
-	protected EndingsWithBeginnersAdjuster adjuster;
-	protected GradeProfileCreator gradeProfileCreator;
+	protected XYVectorFunction resultVerticalProfilePoints;
+	//protected EndingsWithBeginnersAdjuster adjuster;
 	
 	int bestTest;
 	double[][] results;
@@ -78,42 +78,70 @@ public class Reconstructor {
 		startX = originalGradePoints.getStartX();
 		endX = originalGradePoints.getEndX();
 		separacionMedia = originalGradePoints.separacionMedia();
+		trackLength = originalGradePoints.getLast()[0] - originalGradePoints.getX(0);
 		integralVerticalProfilePoints = originalGradePoints.integrate(startz);
 
 	}
 	
+	/**
+	 * Realiza un areconstarucción única para unos valores concretos 
+	 * de baseSize y thresholdSlope, recibidos en forma de 
+	 * una instancia de ReconstructionParameters
+	 * @param parameters
+	 */
 	public void processUnique(ReconstructionParameters parameters) {
 		processUnique(parameters.getBaseSize(), parameters.getThresholdSlope());		
 	}
+	/**
+	 * Realiza una reconstrucción única para unos valores concretos 
+	 * de baseSize y thresholdSlope
+	 * @param basesize
+	 * @param thresholdslope
+	 */
 	public void processUnique(int basesize, double thresholdslope) {
-		this.baseSize = basesize;
-		this.thresholdSlope = thresholdslope;
-		separacionMedia = originalGradePoints.separacionMedia();
-		trackLength = originalGradePoints.getLast()[0] - originalGradePoints.getX(0);
+		baseSize = basesize;
+		thresholdSlope = thresholdslope;
 		
+		// Obtener originalVerticalProfilePoints mediante integración de originalGradePoints
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
+		// Obtener array de segmentos de puntos caracterizados en GRADE y VERTICALCURVE
 		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdslope, interpolationStrategy, MIN_LENGTH);
 		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeIntervalArray();
 		
-		createGradeProfile();
+		// Crear el diagrama de pendientes mediante una alineación para cada segemento de puntos
+		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, interpolationStrategy);
 		
+		// Ajustar finales y principios de alineaciones
+		resultGradeProfile = adjustEndingsAndBeginnings(originalGradePoints, resultGradeProfile, startZ, thresholdSlope, interpolationStrategy);
+		
+		// Obtener el perfil de pendientes mediante integración del diagrama de pendientes
+		resultVerticalProfile = resultGradeProfile.integrate(startZ, thresholdSlope);
+		
+		// Calcular resultados agregados y errores
+		resultVerticalProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), separacionMedia, true);
+		calculateErrors(integralVerticalProfilePoints, resultVerticalProfilePoints);
+		
+		
+
+	}
+	private VerticalGradeProfile adjustEndingsAndBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile gprofile, double startz, double thresholdslope, InterpolationStrategy strategy) {
 		boolean changes = true;
 		VerticalGradeProfile process = new VerticalGradeProfile();
-		process.addAll(gradeProfile);
+		process.addAll(gprofile);
 		
 		while(changes) {
 			changes=false;
-			process = adjustEndingsWithBeginnings(process);
-			resultVerticalProfile = process.integrate(startZ, thresholdSlope);
+			process = adjustEndingsWithBeginnings(originalgpoints, process, thresholdslope, strategy);
+			VerticalProfile verticalProfile = process.integrate(startz, thresholdslope);
 			
-			for(int i=1; i<resultVerticalProfile.size(); i++) {
-				VAlignment current = resultVerticalProfile.get(i); 
-				VAlignment previous = resultVerticalProfile.get(i-1);	
+			for(int i=1; i<verticalProfile.size(); i++) {
+				VAlignment current = verticalProfile.get(i); 
+				VAlignment previous = verticalProfile.get(i-1);	
 				double previousA2 = previous.getPolynom2().getA2();
 				double currentA2 = current.getPolynom2().getA2();
-				double previousK = previous.getPolynom2().getKv();
-				double currentK = current.getPolynom2().getKv();
+				//double previousK = previous.getPolynom2().getKv();
+				//double currentK = current.getPolynom2().getKv();
 				double s1 = process.get(i-1).getStartS();
 				double g1 = process.get(i-1).getStartZ();
 				double s2 = process.get(i-1).getEndS();
@@ -141,18 +169,16 @@ public class Reconstructor {
 				}
 			}
 		}
-		gradeProfile = new VerticalGradeProfile();
-		gradeProfile.addAll(process);
-		resultVerticalProfile = gradeProfile.integrate(startZ, thresholdSlope);
-		
-		//System.out.println(gradeProfile);
-		alignmentCount = countGradeAlignments();
-		calculateErrors();
-		
-		
-		//System.out.println(verticalProfile);
-
+		gprofile = new VerticalGradeProfile();
+		gprofile.addAll(process);
+		return gprofile;
 	}
+
+	/**
+	 * Realiza una reconstrucción mediante un proceso iterativo,
+	 * Probando varios valores de baseSize y thresholdSlope y
+	 * seleccionando el que de menor ecm
+	 */
 	public void processIterative() {
 		int maxBaseSize = (int)Math.rint(MIN_LENGTH / separacionMedia);
 		if(maxBaseSize < 3) {
@@ -211,15 +237,41 @@ public class Reconstructor {
 		processUnique((int)results[bestTest][0] , results[bestTest][1]);
 
 	}
-	
-	protected void calculateErrors() {
+
+	/**
+	 * Genera un perfil de pendientes a partir de un array de segmentos de tipos de puntos utilizando
+	 * un GradeProfileCreator
+	 * @param originalgradepoints puntos originales. Los utiliza el GradeProfileCreator 
+	 * @param typeintervalarray Segmentos de puntos clasificados
+	 * @param thresholdslope Lo utiliza el GradeProfileCreator_EqualArea
+	 * @param strategy Sirve para seleccionar la instancia de GradeProfileCreator
+	 * @return
+	 */
+	private VerticalGradeProfile createGradeProfile(XYVectorFunction originalgradepoints, TypeIntervalArray typeintervalarray, double thresholdslope, InterpolationStrategy strategy) {
+		GradeProfileCreator gradeProfileCreator = null;
+		if(strategy == InterpolationStrategy.EqualArea) {
+			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdslope);
+		} else {
+			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
+		}
+		VerticalGradeProfile gradeprofile = gradeProfileCreator.createGradeProfile(originalgradepoints, typeintervalarray);
+		return gradeprofile;
+	}
+
+	/**
+	 * Calcula valores agregados y errores.
+	 * Utiliza resultVerticalProfile y integralVerticalProfilePoints
+	 * Asigna valor a variables globales de la clase: alignmentCount, maxError,
+	 * meanError, varianza y ecm 
+	 */
+	protected void calculateErrors(XYVectorFunction originalVProfilePoints, XYVectorFunction resultVProfilePoints) {
+		alignmentCount = countGradeAlignments();
 		double sumaErrorAbsoluto = 0.0;
 		maxError = 0.0;
 		double sumaErrorAbsolutoAlCuadrado = 0.0;
-		XYVectorFunction resultVProfilePoints = resultVerticalProfile.getSample(resultVerticalProfile.getStartS(), resultVerticalProfile.getEndS(), separacionMedia, true);
 		for(int i=0; i<getPointsCount(); i++) {
 			double x = resultVProfilePoints.getX(i);
-			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - integralVerticalProfilePoints.getY(x));
+			double errorAbsoluto = Math.abs(resultVProfilePoints.getY(x) - originalVProfilePoints.getY(x));
 			if(Double.isNaN(errorAbsoluto)) {
 				continue;
 			}
@@ -231,7 +283,7 @@ public class Reconstructor {
 		}
 		meanError = sumaErrorAbsoluto / getPointsCount();
 		varianza = sumaErrorAbsolutoAlCuadrado / getPointsCount() - meanError*meanError;
-		ecm = resultVProfilePoints.ecm(integralVerticalProfilePoints);
+		ecm = resultVProfilePoints.ecm(originalVProfilePoints);
 	}
 	private boolean isSimilarKv(double k1, double k2) {
 		if(Double.isNaN(k1) || Double.isNaN(k2) || !sameSign(k1,k2)) {
@@ -254,8 +306,8 @@ public class Reconstructor {
 	}
 	private int countGradeAlignments() {
 		int count = 0;
-		for(int i=0; i<gradeProfile.size(); i++) {
-			GradeProfileAlignment align = gradeProfile.get(i);
+		for(int i=0; i<resultGradeProfile.size(); i++) {
+			GradeProfileAlignment align = resultGradeProfile.get(i);
 			double slope = align.getSlope();
 			if(slope==0.0) {
 				count++;
@@ -263,17 +315,10 @@ public class Reconstructor {
 		}
 		return count;
 	}
-	private void createGradeProfile() {
-		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
-			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdSlope);
-		} else {
-			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
-		}
-		gradeProfile = gradeProfileCreator.createGradeProfile(originalGradePoints, typeIntervalArray);		
-	}
-	private VerticalGradeProfile adjustEndingsWithBeginnings(VerticalGradeProfile profile) {
-		if(interpolationStrategy == InterpolationStrategy.EqualArea) {
-			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalGradePoints, thresholdSlope);
+	private VerticalGradeProfile adjustEndingsWithBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile profile, double thresholdslope, InterpolationStrategy strategy) {
+		EndingsWithBeginnersAdjuster adjuster = null;
+		if(strategy == InterpolationStrategy.EqualArea) {
+			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalgpoints, thresholdslope);
 		} else {
 			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
 		}
@@ -298,7 +343,7 @@ public class Reconstructor {
 		return typeIntervalArray;
 	}
 	public VerticalGradeProfile getGradeProfile() {
-		return gradeProfile;
+		return resultGradeProfile;
 	}
 
 	public double getSeparacionMedia() {
@@ -338,5 +383,57 @@ public class Reconstructor {
 
 	public double[][] getResults() {
 		return results;
+	}
+
+	public double getMIN_LENGTH() {
+		return MIN_LENGTH;
+	}
+
+	public void setMIN_LENGTH(double mIN_LENGTH) {
+		MIN_LENGTH = mIN_LENGTH;
+	}
+
+	public double[] getThresholdSlopes() {
+		return thresholdSlopes;
+	}
+
+	public void setThresholdSlopes(double[] thresholdSlopes) {
+		this.thresholdSlopes = thresholdSlopes;
+	}
+
+	public double getStartZ() {
+		return startZ;
+	}
+
+	public void setStartZ(double startZ) {
+		this.startZ = startZ;
+	}
+
+	public XYVectorFunction getIntegralVerticalProfilePoints() {
+		return integralVerticalProfilePoints;
+	}
+
+	public InterpolationStrategy getInterpolationStrategy() {
+		return interpolationStrategy;
+	}
+
+	public VerticalProfile getResultVerticalProfile() {
+		return resultVerticalProfile;
+	}
+
+	public XYVectorFunction getResultVerticalProfilePoints() {
+		return resultVerticalProfilePoints;
+	}
+
+	public double getStartX() {
+		return startX;
+	}
+
+	public double getEndX() {
+		return endX;
+	}
+
+	public void setThresholdSlope(double thresholdSlope) {
+		this.thresholdSlope = thresholdSlope;
 	}
 }

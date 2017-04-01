@@ -33,8 +33,8 @@ public class ReconstructorByIntervals extends Reconstructor {
 	public void processIterative() {
 		Reconstructor rec = new Reconstructor(originalGradePoints, startZ, interpolationStrategy);
 		rec.processIterative();
-		int bestBaseSize = rec.getBaseSize();
-		double bestThresholdSlope = rec.getThresholdSlope();
+		//int bestBaseSize = rec.getBaseSize();
+		//double bestThresholdSlope = rec.getThresholdSlope();
 		firstResultGradeProfile = rec.getGradeProfile();
 		resultVerticalProfile = rec.getVerticalProfile();
 		secondResultGradeProfile = new VerticalGradeProfile();
@@ -44,9 +44,7 @@ public class ReconstructorByIntervals extends Reconstructor {
 			
 			double x2 = firstResultGradeProfile.get(i).getEndS();
 			double z1 = resultVerticalProfile.get(i).getY(x1);
-			if(z1==Double.NaN) {
-				System.out.println("P");
-			}
+			
 			XYVectorFunction finterval = originalGradePoints.extract(x1, x2);
 			System.out.println("Alignment: " + i + ", Size: " + finterval.size());
 			if(finterval.size() < 5) {
@@ -61,19 +59,20 @@ public class ReconstructorByIntervals extends Reconstructor {
 			x1 = x2;
 		}
 		EndingsWithBeginnersAdjuster_Multiparameter adjuster = new EndingsWithBeginnersAdjuster_Multiparameter(originalGradePoints, parameterArray);
-		gradeProfile = adjuster.adjustEndingsWithBeginnings(secondResultGradeProfile);
+		resultGradeProfile = adjuster.adjustEndingsWithBeginnings(secondResultGradeProfile);
 		resultVerticalProfile = integrate();
-		calculateErrors();
+		resultVerticalProfilePoints = resultVerticalProfile.getSample(startX, endX, separacionMedia, true);
+		calculateErrors(integralVerticalProfilePoints, resultVerticalProfilePoints);
 		//showResults();
 	}
 	private VerticalProfile integrate() {
-		if(gradeProfile.size()==0) {
+		if(resultGradeProfile.size()==0) {
 			return null;
 		}
 		double currentStartZ = startZ;
 		VerticalProfile verticalProfile = new VerticalProfile();
-		for(int i=0; i<gradeProfile.size(); i++) {
-			GradeProfileAlignment current = gradeProfile.get(i);
+		for(int i=0; i<resultGradeProfile.size(); i++) {
+			GradeProfileAlignment current = resultGradeProfile.get(i);
 			double th = parameterArray.getParameters(current.getStartS()).getThresholdSlope();
 			
 			VAlignment valign = integrate(current, currentStartZ, th);
@@ -117,7 +116,7 @@ public class ReconstructorByIntervals extends Reconstructor {
 		double ends = firstResultGradeProfile.getEndS();
 		double space = originalGradePoints.separacionMedia();
 		XYVectorFunction data1 = firstResultGradeProfile.getSample(starts, ends, space, true);
-		XYVectorFunction data2 = gradeProfile.getSample(starts, ends, space, true);
+		XYVectorFunction data2 = resultGradeProfile.getSample(starts, ends, space, true);
 		FunctionDisplayer displayer = new FunctionDisplayer();
 		displayer.showTwoFunctions(data1, data2, "Prueba", "first", "second", "S", "G");
 	}
