@@ -1,18 +1,17 @@
 package com.mlab.pg.reconstruction;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-import junit.framework.Assert;
 
 public class TestPointCharacteriser {
 
@@ -36,8 +35,8 @@ public class TestPointCharacteriser {
 		
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
+		PointCharacteriser ch = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.GRADE));
 	}
 	@Test
@@ -52,8 +51,8 @@ public class TestPointCharacteriser {
 		
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
+		PointCharacteriser ch = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.VERTICAL_CURVE));
 	}
 	@Test
@@ -70,8 +69,8 @@ public class TestPointCharacteriser {
 		
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 2, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
+		PointCharacteriser ch = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointType type = ch.characterise(gp, 2, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 
@@ -89,8 +88,8 @@ public class TestPointCharacteriser {
 		
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		PointCharacteriser ch = new PointCharacteriser();
-		PointType type = ch.characterise(gp, 3, 3, 1e-5, new PointCharacteriserStrategy_LessSquares());
+		PointCharacteriser ch = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointType type = ch.characterise(gp, 3, 3, 1e-5);
 		Assert.assertTrue(type.equals(PointType.BORDER_POINT));
 	}
 

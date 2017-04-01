@@ -22,7 +22,8 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 
 	private static final long serialVersionUID = 1L;
 	private static Logger LOG = Logger.getLogger(XYVectorFunction.class);
-
+	private double separacionMedia = Double.NaN;
+	
 	/**
 	 * Crea una XYVectorFunction vacía
 	 */
@@ -428,12 +429,15 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		return r;
 	}
 	public double separacionMedia() {
-		double suma = 0.0;
-		for (int i=1; i<size(); i++) {
-			double sep = getX(i) - getX(i-1);
-			suma = suma + sep;
+		if(Double.isNaN(separacionMedia)) {
+			double suma = 0.0;
+			for (int i=1; i<size(); i++) {
+				double sep = getX(i) - getX(i-1);
+				suma = suma + sep;
+			}
+			separacionMedia = suma/(size()-1);
 		}
-		return suma/(size()-1);
+		return separacionMedia;
 	}
 	
 	public double ecm(XYVectorFunction other) {

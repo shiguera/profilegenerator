@@ -37,7 +37,8 @@ public class Reconstructor {
 	 * tramos menores de esa longitud. Si el anterior o el siguiente son del
 	 * mismo tipo, TypeIntervalArrayGenerator los une
 	 */
-	double MIN_LENGTH = 15.0;
+	double MIN_LENGTH = 15.0; // Lo utiliza el TypeIntervalArrayGenerator
+	protected int MIN_POINTS_COUNT = 5; // Lo utiliza el TypeIntervalArrayGenerator
 	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
 	//double[] thresholdSlopes = new double[] {1.0e-4}; 
 
@@ -105,8 +106,8 @@ public class Reconstructor {
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
 		// Obtener array de segmentos de puntos caracterizados en GRADE y VERTICALCURVE
-		TypeIntervalArrayGenerator typeIntervalArrayGenerator = new TypeIntervalArrayGenerator();
-		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, baseSize, thresholdslope, interpolationStrategy, MIN_LENGTH);
+		TypeIntervalArrayGenerator typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(interpolationStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, baseSize, thresholdslope);
 		
 		// Crear el diagrama de pendientes mediante una alineación para cada segemento de puntos
 		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, interpolationStrategy);

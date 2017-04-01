@@ -6,9 +6,11 @@ import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy;
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_EqualArea;
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_Multiparameter;
 import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy;
 import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_EqualArea;
 import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
+import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_Multiparameter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /** 
@@ -23,7 +25,6 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 public class TypeIntervalArrayGenerator {
 	
 	Logger LOG = Logger.getLogger(TypeIntervalArrayGenerator.class);
-	
 	
 	/**
 	 * Valores {si, gi} correspondientes a un perfil de pendientes que se quieren procesar.
@@ -41,20 +42,33 @@ public class TypeIntervalArrayGenerator {
 	 */
 	protected double thresholdSlope;
 
-	InterpolationStrategy interpolationStrategy;
+	protected InterpolationStrategy interpolationStrategy;
 	/**
 	 * Longitud mínima de los segmentos generados para que no se intente filtrarlos 
 	 * uniéndolos con el anterior o el siguiente si son del mismo tipo
 	 */
-	double minLength;
+	protected double minLength;
+	protected int minPointsCount;
+	
+	protected ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
+	protected PointCharacteriserStrategy pointCharacteriserStrategy;	
+	protected TypeIntervalArray resultIntervalArray;
+	
+	public TypeIntervalArrayGenerator(InterpolationStrategy strategy, double minlength, int minpointscount) {
+		interpolationStrategy = strategy;
+		minLength = minlength;
+		minPointsCount = minpointscount;
 
-	
-	ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
-	PointCharacteriserStrategy pointCharacteriserStrategy;	
-	TypeIntervalArray resultIntervalArray;
-	
-	public TypeIntervalArrayGenerator() {
-		
+		if (interpolationStrategy == InterpolationStrategy.EqualArea ) {
+			pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
+			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
+		} else if (interpolationStrategy == InterpolationStrategy.EqualArea_Multiparameter) {
+			pointCharacteriserStrategy = new PointCharacteriserStrategy_Multiparameter();
+			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_Multiparameter();
+		} else{
+			pointCharacteriserStrategy = new PointCharacteriserStrategy_LessSquares();
+			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_LessSquares();				
+		}
 	}
 
 	/**
@@ -69,52 +83,46 @@ public class TypeIntervalArrayGenerator {
 	 * @param minlength Longitud mínima de los segmentos para que no intente filtrarlos
 	 * uniéndolos al anterior o siguiente, si son del mismo tipo
 	 */
-	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy, double minlength) {	
+	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope) {	
 		originalGradePoints = originalgradePoints.clone();
 		mobileBaseSize = mobilebasesize;
 		if(originalGradePoints.size()<2*mobileBaseSize-1) {
-			System.out.println("Aquí");
+			return null;
 		}
 		thresholdSlope = thresholdslope;
-		interpolationStrategy = strategy;
-		minLength = minlength;
-		
-		if (interpolationStrategy == InterpolationStrategy.EqualArea || interpolationStrategy == InterpolationStrategy.EqualArea_Multiparameter) {
-			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
-			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
-		} else {
-			this.pointCharacteriserStrategy = new PointCharacteriserStrategy_LessSquares();
-			this.processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_LessSquares();				
-		}
-
 		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
 		
 		if(resultIntervalArray.size()>1) {
-			//LOG.debug("Filtered: YES");
-			resultIntervalArray = filterShortIntervals(resultIntervalArray);
+			resultIntervalArray = filterShortIntervals(originalGradePoints, resultIntervalArray, minLength, minPointsCount);
 			resultIntervalArray = filterTwoGrades(resultIntervalArray);
 		} else{
 			//LOG.debug("Filtered: NO");
 		}
-		//LOG.debug("After Filter: " + resultIntervalArray.size());
 		return resultIntervalArray;
 	}
+	
+	/** 
+	 * Filtra los casos de dos segmentos seguidos del tipo GRADE
+	 * uniéndolos en un único segmento
+	 * 
+	 * @param intervalArray TypeIntervalArray con los segmentos de puntos
+	 * caracterizados
+	 * 
+	 * @return TypeIntervalArray con los segemento de puntos sin dos 
+	 * segementos GRADE consecutivos
+	 */
 	private TypeIntervalArray filterTwoGrades(TypeIntervalArray intervalArray) {
 		TypeIntervalArray result = new TypeIntervalArray();
 
-		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
-		processIntervalArray.addAll(intervalArray);
+		TypeIntervalArray process = new TypeIntervalArray();
+		process.addAll(intervalArray);
 		boolean changes = true;
-		//int contador = 0;
 		while(changes) {
-			//contador++;
-			//System.out.println("Ronda filtro: " + contador);
-			//System.out.println(processIntervalArray.size());
 			changes = false;
 			result = new TypeIntervalArray();
-			result.add(processIntervalArray.get(0));
-			for(int i=1; i<processIntervalArray.size(); i++) {
-				TypeInterval current = processIntervalArray.get(i);
+			result.add(process.get(0));
+			for(int i=1; i<process.size(); i++) {
+				TypeInterval current = process.get(i);
 				TypeInterval previous = result.getLast();
 				if(previous.getPointType() == PointType.GRADE && current.getPointType() == PointType.GRADE) {					
 					result.getLast().setEnd(current.getEnd());
@@ -123,36 +131,40 @@ public class TypeIntervalArrayGenerator {
 					result.add(current);
 				}
 			}
-			processIntervalArray = new TypeIntervalArray();
-			processIntervalArray.addAll(result);
+			process = new TypeIntervalArray();
+			process.addAll(result);
 		}
 		return result;
 		
 	}
 	
-	// Filtra las alineaciones de longitud menor que la mínima
-	private TypeIntervalArray filterShortIntervals(TypeIntervalArray intervalArray) {
-		
-		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
-		processIntervalArray.addAll(intervalArray);
-		
+	/**
+	 * Filtra las alineaciones de longitud menor que la mínima o que están formadas
+	 * por menos de un número de puntos.
+	 * 
+	 * @param originalgpoints XYVectorFunction con los puntos originales de laspendientes. Los
+	 * necesita para calcular las longitudes de cada segemento
+	 * @param intervalArray TypeIntervalArray conlos segmentos de puntos caracterizados
+	 * @param minlength Longitud mínima quepueden tener los segmentos
+	 * @param minpointscount Número mínimo de puntos que puede tener un segmento
+	 * 
+	 * @return TypeIntervalArray con los segmentos filtrados. Puede pasar que algún segmento que cumpla las
+	 * condiciones de filtrado nose filtre, porque ni el anterior ni el siguiente son del mismo tipo
+	 */
+	private TypeIntervalArray filterShortIntervals(XYVectorFunction originalgpoints, TypeIntervalArray intervalArray, double minlength, int minpointscount) {
+		TypeIntervalArray process = new TypeIntervalArray();
+		process.addAll(intervalArray);
 		TypeIntervalArray result = new TypeIntervalArray();
-		
 		boolean changes = true;
-		//int contador = 0;
 		while(changes) {
-			//contador++;
-			//System.out.println("Ronda filtro: " + contador);
 			changes = false;
-			result = new TypeIntervalArray();
-			
-			// Primero trato de unir cada tramo corto con el anterior
-			result.add(processIntervalArray.get(0));
-			for(int i=1; i<processIntervalArray.size(); i++) {
-				TypeInterval current = processIntervalArray.get(i);
+			result = new TypeIntervalArray();			
+			result.add(process.get(0));
+			for(int i=1; i<process.size(); i++) {
+				TypeInterval current = process.get(i);
 				int numpoints = current.size();
-				double length = originalGradePoints.getX(current.getEnd()) - originalGradePoints.getX(current.getStart());
-				if(length<minLength || numpoints<5) {
+				double length = originalgpoints.getX(current.getEnd()) - originalgpoints.getX(current.getStart());
+				if(length<minlength || numpoints < minpointscount) {
 					TypeInterval previous = result.getLast();
 					if(previous.getPointType() == current.getPointType()) {
 						result.getLast().setEnd(current.getEnd());
@@ -164,55 +176,14 @@ public class TypeIntervalArrayGenerator {
 					result.add(current);
 				}
 			}
-			processIntervalArray = new TypeIntervalArray();
-			processIntervalArray.addAll(result);
-			
-			// Ahora trato de unir los cortos con el siguiente
-			result = new TypeIntervalArray();
-			result.add(processIntervalArray.get(0));
-			for(int i=1; i<processIntervalArray.size();i++) {
-				TypeInterval current = processIntervalArray.get(i);
-				TypeInterval previous = processIntervalArray.get(i);
-				double length = originalGradePoints.getX(previous.getEnd()) - originalGradePoints.getX(previous.getStart());
-				if(length < minLength) {
-					if(current.getPointType() == current.getPointType()) {
-						result.getLast().setEnd(current.getEnd());
-						changes = true;
-					} else {
-						result.add(current);
-					}
-				} else {
-					result.add(current);
-				}
-			}
-			processIntervalArray = new TypeIntervalArray();
-			processIntervalArray.addAll(result);
-		}
+			process = new TypeIntervalArray();
+			process.addAll(result);
+		}			
 		return result;
 	}
 	
-	
-	
-	// Getter -Setter
-	public XYVectorFunction getOriginalGradePoints() {
-		return originalGradePoints;
-	}
-
-
+	// Getter
 	public TypeIntervalArray getResultTypeIntervalArray() {
 		return resultIntervalArray;
 	}
-	
-	public int getMobileBaseSize() {
-		return mobileBaseSize;
-	}
-
-	public double getThresholdSlope() {
-		return thresholdSlope;
-	}
-	
-	
-	
-	
-	
 }

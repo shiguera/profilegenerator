@@ -2,9 +2,9 @@ package com.mlab.pg.reconstruction.strategy;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
-public class PointCharacteriserStrategy_EqualArea implements PointCharacteriserStrategy {
+public class PointCharacteriserStrategy_Multiparameter implements PointCharacteriserStrategy {
 
-	public PointCharacteriserStrategy_EqualArea() {
+	public PointCharacteriserStrategy_Multiparameter() {
 
 	}
 

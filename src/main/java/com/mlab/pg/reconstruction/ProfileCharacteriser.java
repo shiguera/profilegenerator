@@ -56,12 +56,12 @@ public class ProfileCharacteriser {
 		// Se caracterizan los puntos caracterizables, excluyendo los de los extremos
 		int first = mobileBaseSize-1;
 		int last = gpsample.size()-mobileBaseSize;
-		pointCharacteriser = new PointCharacteriser();
+		pointCharacteriser = new PointCharacteriser(strategy);
 		for(int i=first; i<=last; i++) {
 			if(i==-1) {
 				System.out.println(i);				
 			}
-			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope, strategy));
+			types.set(i, pointCharacteriser.characterise(gpsample, i, mobileBaseSize,thresholdSlope));
 		}
 		// El primer punto se caracteriza como BorderPoint
 		types.set(0, PointType.BORDER_POINT);

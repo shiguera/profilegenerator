@@ -25,6 +25,8 @@ public class TestTypeIntervalArrayGenerator {
 	
 	private final static Logger LOG = Logger.getLogger(TestTypeIntervalArrayGenerator.class);
 	double MIN_LENGTH = 40.0;
+	int MIN_POINTS_COUNT = 5;
+	
 	static InterpolationStrategy lessSquaresStrategy;
 	static InterpolationStrategy equalAreaSquaresStrategy;
 	static int mobileBaseSize;
@@ -58,8 +60,8 @@ public class TestTypeIntervalArrayGenerator {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator();
-		maker.processPoints(gp, mobileBaseSize, thresholdSlope, InterpolationStrategy.LessSquares, MIN_LENGTH);
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(InterpolationStrategy.LessSquares, MIN_LENGTH, MIN_POINTS_COUNT);
+		maker.processPoints(gp, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(maker.getResultTypeIntervalArray());
 //		for(TypeInterval interval: maker.getResultTypeIntervalArray()) {
 //			System.out.println(interval);
@@ -67,7 +69,7 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(1, maker.getResultTypeIntervalArray().size());
 		Assert.assertEquals(PointType.GRADE, maker.getResultTypeIntervalArray().get(0).getPointType());
 
-		maker.processPoints(gp, mobileBaseSize, thresholdSlope, InterpolationStrategy.LessSquares, MIN_LENGTH);
+		maker.processPoints(gp, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(maker.getResultTypeIntervalArray());
 		Assert.assertEquals(1, maker.getResultTypeIntervalArray().size());
 		Assert.assertEquals(PointType.GRADE, maker.getResultTypeIntervalArray().get(0).getPointType());
@@ -88,8 +90,8 @@ public class TestTypeIntervalArrayGenerator {
 		pts.add(new double[] {14.0, 0.00175});
 		XYVectorFunction gp = new XYVectorFunction(pts);
 		
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator();
-		TypeIntervalArray result = maker.processPoints(gp, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(gp, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(1, result.size());	
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(0).getPointType());
@@ -113,15 +115,15 @@ public class TestTypeIntervalArrayGenerator {
 		// El perfil tiene 4 alineaciones. Las dos VC tienenparámetros de 50000 (thSlope=2e-5) y 55000(thSlope=1.82e-5)
 		// Con pendiente límite 1e-5 no distingue entre las dos vertical curves
 		thresholdSlope = 1e-5;
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator();
-		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator( lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(3, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(2).getPointType());
 				
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(3, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -133,7 +135,7 @@ public class TestTypeIntervalArrayGenerator {
 		
 		// Con pendiente límite 1e-6 sí que distingue entre las dos vertical curves
 		thresholdSlope = 1e-6;
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -141,7 +143,7 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
 				
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -176,8 +178,8 @@ public class TestTypeIntervalArrayGenerator {
 		double space = 2.0;
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator();
-		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
 		System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -185,7 +187,8 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
 
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);		System.out.println(result);
+		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);		
+		System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
@@ -232,8 +235,8 @@ public class TestTypeIntervalArrayGenerator {
 		
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator();
-		TypeIntervalArray segments = maker.processPoints(gradesample, mobileBaseSize, thresholdSlope, lessSquaresStrategy, MIN_LENGTH);
+		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator( lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray segments = maker.processPoints(gradesample, mobileBaseSize, thresholdSlope);
 		
 		//System.out.println(segments);
 		
