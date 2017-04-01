@@ -53,9 +53,14 @@ public class TypeIntervalArrayGenerator {
 	PointCharacteriserStrategy pointCharacteriserStrategy;	
 	TypeIntervalArray resultIntervalArray;
 	
+	public TypeIntervalArrayGenerator() {
+		
+	}
+
 	/**
-	 * Construye una TypeIntervalArray a partir de una XYVectorFunction. La TypeIntervalArray resultado se
-	 * puede consultar en getResultTypeIntervalArray() y solo tiene segmentos del tipo Grade o VerticalCurve.
+	 * Construye una TypeIntervalArray a partir de una XYVectorFunction con los originalGradePoints. 
+	 * La TypeIntervalArray resultado se puede consultar en getResultTypeIntervalArray() 
+	 * y solo tiene segmentos del tipo Grade o VerticalCurve.
 	 * 
 	 * @param originalgradePoints
 	 * @param mobilebasesize
@@ -64,7 +69,7 @@ public class TypeIntervalArrayGenerator {
 	 * @param minlength Longitud mínima de los segmentos para que no intente filtrarlos
 	 * uniéndolos al anterior o siguiente, si son del mismo tipo
 	 */
-	public TypeIntervalArrayGenerator(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy, double minlength) {
+	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope, InterpolationStrategy strategy, double minlength) {	
 		originalGradePoints = originalgradePoints.clone();
 		mobileBaseSize = mobilebasesize;
 		if(originalGradePoints.size()<2*mobileBaseSize-1) {
@@ -92,17 +97,17 @@ public class TypeIntervalArrayGenerator {
 			//LOG.debug("Filtered: NO");
 		}
 		//LOG.debug("After Filter: " + resultIntervalArray.size());
+		return resultIntervalArray;
 	}
-
 	private TypeIntervalArray filterTwoGrades(TypeIntervalArray intervalArray) {
 		TypeIntervalArray result = new TypeIntervalArray();
 
 		TypeIntervalArray processIntervalArray = new TypeIntervalArray();
 		processIntervalArray.addAll(intervalArray);
 		boolean changes = true;
-		int contador = 0;
+		//int contador = 0;
 		while(changes) {
-			contador++;
+			//contador++;
 			//System.out.println("Ronda filtro: " + contador);
 			//System.out.println(processIntervalArray.size());
 			changes = false;
@@ -134,9 +139,9 @@ public class TypeIntervalArrayGenerator {
 		TypeIntervalArray result = new TypeIntervalArray();
 		
 		boolean changes = true;
-		int contador = 0;
+		//int contador = 0;
 		while(changes) {
-			contador++;
+			//contador++;
 			//System.out.println("Ronda filtro: " + contador);
 			changes = false;
 			result = new TypeIntervalArray();

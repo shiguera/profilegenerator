@@ -50,7 +50,6 @@ public class Reconstructor {
 	protected double startZ;
 	
 	protected InterpolationStrategy interpolationStrategy;
-	protected TypeIntervalArrayGenerator typeIntervalArrayGenerator;
 	protected TypeIntervalArray typeIntervalArray;
 	
 	protected VerticalGradeProfile resultGradeProfile;
@@ -84,7 +83,7 @@ public class Reconstructor {
 	}
 	
 	/**
-	 * Realiza un areconstarucción única para unos valores concretos 
+	 * Realiza una reconstrucción única para unos valores concretos 
 	 * de baseSize y thresholdSlope, recibidos en forma de 
 	 * una instancia de ReconstructionParameters
 	 * @param parameters
@@ -106,8 +105,8 @@ public class Reconstructor {
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
 		// Obtener array de segmentos de puntos caracterizados en GRADE y VERTICALCURVE
-		typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(originalGradePoints, baseSize, thresholdslope, interpolationStrategy, MIN_LENGTH);
-		typeIntervalArray = typeIntervalArrayGenerator.getResultTypeIntervalArray();
+		TypeIntervalArrayGenerator typeIntervalArrayGenerator = new TypeIntervalArrayGenerator();
+		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, baseSize, thresholdslope, interpolationStrategy, MIN_LENGTH);
 		
 		// Crear el diagrama de pendientes mediante una alineación para cada segemento de puntos
 		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, interpolationStrategy);
