@@ -83,7 +83,6 @@ public class ReconstructorByIntervals extends Reconstructor {
 		return verticalProfile;
 	}
 	private VAlignment integrate(GradeProfileAlignment galign, double startZ, double thresholdslope) {
-		this.thresholdSlope = thresholdslope;
 		VAlignment valign = null;
 		double s1 = galign.getStartS();
 		double g1 = galign.getStartZ();
