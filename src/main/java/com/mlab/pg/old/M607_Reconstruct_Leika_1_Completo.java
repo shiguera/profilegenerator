@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.old;
 
 import java.awt.BasicStroke;
 import java.io.File;
@@ -22,9 +22,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_Leika_2_Completo {
+public class M607_Reconstruct_Leika_1_Completo {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_Leika_2_Completo.class);
+	static Logger LOG = Logger.getLogger(M607_Reconstruct_Leika_1_Completo.class);
 	
 	static double startZ;
 	static double hmax;
@@ -45,10 +45,10 @@ public class M607_Reconstruct_Leika_2_Completo {
 	//static OPTION option= OPTION.UNIQUE;
 	//static OPTION option= OPTION.ShowVerticalProfile;
 	
-	static String graphTitle = "M-607 Descendente - GPSLeika";
+	static String graphTitle = "M-607 Ascendente - GPSLeika, traza completa";
 	static String sginfilename = "";
 	static String szinfilename = "";
-	static String outFileName = "M607_Leika_2_Completo.txt";
+	static String outFileName = "M607_Leika_1_Completo.txt";
 	static int baseSize = 6;
 	static double thresholdSlope = 1.25e-5;
 	static double SHORT_ALIGNMENT_LENGTH =50.0;
@@ -228,7 +228,7 @@ public class M607_Reconstruct_Leika_2_Completo {
 
 	private static XYVectorFunction readGradeData() {
 		LOG.debug("readGradeData()");
-		URL url = ClassLoader.getSystemResource("M607_trackLeika_2_ED50_SG.csv");
+		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SG.csv");
 		
 		File file = new File(url.getPath());
 		//File file = new File(sginfilename);
@@ -237,13 +237,13 @@ public class M607_Reconstruct_Leika_2_Completo {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(4000.0, 10300.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;
 	}
 
 	private static XYVectorFunction readOriginalVerticalProfile() {
 		LOG.debug("readOriginalVerticalProfile()");
-		URL url = ClassLoader.getSystemResource("M607_trackLeika_2_ED50_SZ.csv");		
+		URL url = ClassLoader.getSystemResource("M607_trackLeika_1_ED50_SZ.csv");		
 		File file = new File(url.getPath());
 		//File file = new File(szinfilename);
 		Assert.assertNotNull(file);
@@ -251,7 +251,7 @@ public class M607_Reconstruct_Leika_2_Completo {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(4000.0, 10300.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;		
 	}
 	

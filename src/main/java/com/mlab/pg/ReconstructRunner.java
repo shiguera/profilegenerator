@@ -5,12 +5,14 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
+import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.ReconstructorByIntervals;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
+import com.mlab.pg.valign.VerticalProfileWriter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
@@ -113,7 +115,8 @@ public class ReconstructRunner {
 	}
 	private void readOriginalVProfile() {
 		if(essayData.getSzFileName() != "") {
-			File file = new File(essayData.getSzFileName());
+			String filename = IOUtil.composeFileName(essayData.getInPath(), essayData.getSzFileName());
+			File file = new File(filename);
 			Assert.assertNotNull(file);
 			Assert.assertTrue(file.exists());
 			
@@ -147,13 +150,37 @@ public class ReconstructRunner {
 	}
 	private void selectDataInterval() {
 		if(essayData.getStartS() != -1.0 && essayData.getEndS() != -1.0) {
-			originalGradeData.extract(essayData.getStartS(), essayData.getEndS());
+			originalGradeData = originalGradeData.extract(essayData.getStartS(), essayData.getEndS());
 			if(originalVProfile != null) {
-				originalVProfile.extract(essayData.getStartS(), essayData.getEndS());
+				originalVProfile = originalVProfile.extract(essayData.getStartS(), essayData.getEndS());
 			}
 		}
 	}
 		
+	public void printReport() {
+		String filename = IOUtil.composeFileName(essayData.getInPath(), essayData.getReportFileName());
+		File file = new File(filename);
+		VerticalProfileWriter.writeVerticalProfile(file, getResultVProfile(), stringReport);
+
+	}
+	public void showReport() {
+		System.out.println(stringReport);
+	}
+
+	public void showProfiles() {
+		VerticalGradeProfile gp = getResultGProfile();
+		double x1 = gp.getStartS();
+		double x2 = gp.getEndS();
+		FunctionDisplayer displayer = new FunctionDisplayer();
+		String title= essayData.getGraphTitle() + "\n s="+Math.rint(x1)+" - "+Math.rint(x2);
+		displayer.showTwoFunctions(getvProfileFromGradeDataIntegration(), getResultVProfilePoints(), 
+				title, "Perfil longitudinal original", "Perfil longitudinal calculado", "S", "Z");
+		
+		XYVectorFunction originaldata = getOriginalGradeData().extract(x1, x2);
+		XYVectorFunction soldata = getResultGProfile().getSample(x1,x2,getSeparacionMedia(),true);
+		title= essayData.getGraphTitle() + "(Diagrama de pendientes) \n s="+Math.rint(x1)+" - "+Math.rint(x2);
+		displayer.showTwoFunctions(originaldata, soldata, title, "Pendientes originales", "Pendientes calculadas", "S",  "G");
+	}
 	public String getStringReport() {
 		StringBuffer cad = new StringBuffer();
 		cad.append("Reconstrucción de la geometría del perfil longitudinal: " + essayData.getEssayName() + "\n");
@@ -198,6 +225,12 @@ public class ReconstructRunner {
 	}
 	public XYVectorFunction getResultVProfilePoints() {
 		return resultVProfilePoints;
+	}
+	public XYVectorFunction getOriginalGradeData() {
+		return originalGradeData;
+	}
+	public double getSeparacionMedia() {
+		return reconstructor.getSeparacionMedia();
 	}
 
 }

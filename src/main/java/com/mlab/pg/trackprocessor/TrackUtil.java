@@ -43,7 +43,7 @@ public class TrackUtil {
 	 */
 	public static String generateSZFileFromXYZFile(String inpath, String xyzfilename, int infileHeadLines) {
 		String infilename = IOUtil.composeFileName(inpath, xyzfilename);
-		File infile = new File(inpath + xyzfilename);
+		File infile = new File(infilename);
 		if(!infile.exists()) {
 			return "";
 		}

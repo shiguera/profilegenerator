@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.old;
 
 import java.awt.BasicStroke;
 import java.io.File;
@@ -22,9 +22,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_Leika_2_Selec {
+public class M607_Reconstruct_Leika_2_Completo {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_Leika_2_Selec.class);
+	static Logger LOG = Logger.getLogger(M607_Reconstruct_Leika_2_Completo.class);
 	
 	static double startZ;
 	static double hmax;
@@ -45,10 +45,10 @@ public class M607_Reconstruct_Leika_2_Selec {
 	//static OPTION option= OPTION.UNIQUE;
 	//static OPTION option= OPTION.ShowVerticalProfile;
 	
-	static String graphTitle = "M-607 Descendente - GPSLeika, tramo entre s=0 y s=5000";
+	static String graphTitle = "M-607 Descendente - GPSLeika";
 	static String sginfilename = "";
 	static String szinfilename = "";
-	static String outFileName = "M607_Leika_2_Selec.txt";
+	static String outFileName = "M607_Leika_2_Completo.txt";
 	static int baseSize = 6;
 	static double thresholdSlope = 1.25e-5;
 	static double SHORT_ALIGNMENT_LENGTH =50.0;
@@ -237,7 +237,7 @@ public class M607_Reconstruct_Leika_2_Selec {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(0.0, 5000.0);
+		//data = data.extract(4000.0, 10300.0);
 		return data;
 	}
 
@@ -251,7 +251,7 @@ public class M607_Reconstruct_Leika_2_Selec {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(0.0, 5000.0);
+		//data = data.extract(4000.0, 10300.0);
 		return data;		
 	}
 	

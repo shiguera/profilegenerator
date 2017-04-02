@@ -13,7 +13,7 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class FunctionDisplayer {
 
-	float strokeWidth1=2.0f, strokeWidth2 = 2.0f;
+	float strokeWidth1=1.0f, strokeWidth2 = 2.0f;
 	Paint seriesPaint1 = Color.BLUE;
 	Paint seriesPaint2 = Color.RED;
 	
@@ -30,7 +30,7 @@ public class FunctionDisplayer {
             	JFrame frame = new JFrame("graphTitle");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		frame.setContentPane(charter.getChartPanel());
-        		charter.getChart().getXYPlot().getRangeAxis().setRange(data.getMinY(), data.getMaxY());
+        		charter.getChart().getXYPlot().getRangeAxis().setRange(getMinY(data), getMaxY(data));
         		
         		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(strokeWidth1));
 	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(0, seriesPaint1);
@@ -66,22 +66,50 @@ public class FunctionDisplayer {
 	    		frame.setVisible(true);	        		
 	        }
 		});
+	}	
+	private double getMinY(XYVectorFunction data) {
+		// TODO Falta resolver bien cuando ymin==0
+		double ymin = data.getMinY();
+		if(ymin>0) {
+			return ymin*0.97;
+		} else {
+			return ymin + 0.03*ymin;
+		} 
+	}
+	private double getMaxY(XYVectorFunction data) {
+		// TODO Falta resolver bien cuando ymax==0
+		double ymax = data.getMaxY();
+		if(ymax>0) {
+			return 1.03*ymax;
+		} else {
+			return ymax - 0.03*ymax;
+		}
 	}
 	private double getMinY(XYVectorFunction data1, XYVectorFunction data2) {
+		// TODO Falta resolver bien cuando ymin==0
 		double ymin = data1.getMinY();
 		double y2min = data2.getMinY();
 		if (y2min < ymin) {
 			ymin = y2min;
 		}
-		return ymin;
+		if(ymin>0) {
+			return ymin*0.97;
+		} else {
+			return ymin + 0.03*ymin;
+		}
 	}
 	private double getMaxY(XYVectorFunction data1, XYVectorFunction data2) {
+		// TODO Falta resolver bien cuando ymax==0
 		double ymax = data1.getMaxY();
 		double y2max = data2.getMaxY();
 		if (y2max > ymax) {
 			ymax = y2max;
 		}
-		return ymax;
+		if(ymax>0) {
+			return 1.03*ymax;
+		} else {
+			return ymax - 0.03*ymax;
+		}
 	}
 
 }
