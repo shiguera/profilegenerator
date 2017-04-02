@@ -19,27 +19,12 @@ public class TrackReporter {
 	
 	public TrackReporter(File csvXYZFile, int headlines) {
 		
-		double[][] track = IOUtil.read(csvXYZFile, ",", headlines);
+		TrackUtil.generateSGFileFromXYZFile(csvXYZFile.getParent(), csvXYZFile.getName(), headlines);
 		
-		String path = csvXYZFile.getParent();
+		String filename = TrackUtil.generateSZFileFromXYZFile(csvXYZFile.getParent(), csvXYZFile.getName(), headlines);
 		
-		String name = csvXYZFile.getName();
-		String namewithoutext = String.copyValueOf(name.toCharArray(), 0, name.length()-4);
-		
-
-		String sgfilename = path + "/" + namewithoutext + "_SG.csv";
-		System.out.println(sgfilename);
-		SGFileGenerator sggenerator = new SGFileGenerator();
-		sggenerator.generateSGFile(track, sgfilename);
-		
-		String szfilename = path + "/" + namewithoutext + "_SZ.csv";
-		System.out.println(szfilename);
-		SZFileGenerator szgenerator = new SZFileGenerator();
-		szgenerator.generateSZFile(track, szfilename);
-		
-		double[][] sz = IOUtil.read(new File(szfilename), ",", 0);
+		double[][] sz = IOUtil.read(new File(csvXYZFile.getParent(),filename), ",", 1);
 		functionsz = new XYVectorFunction(Arrays.asList(sz));
-		
 	}
 
 	public void printReport() {

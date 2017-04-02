@@ -1,7 +1,6 @@
 package com.mlab.pg.util;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
@@ -9,8 +8,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.mlab.pg.trackprocessor.TrackInverter;
 
 public class TestIoUtil {
 

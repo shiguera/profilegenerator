@@ -1,3 +1,5 @@
+
+
 package com.mlab.pg.util;
 
 import org.apache.log4j.Logger;
@@ -244,4 +246,18 @@ public class TestMathUtil {
 		Assert.assertEquals(-10, s, 0.0001);
 		
 	}
+
+	@Test
+	public void test_invert() {
+		LOG.debug("test_invert()");
+		double[][] d = new double[][]{{0.0,0.1},{1.0,1.1},{2.0,2.1}};
+		double[][] dd = MathUtil.invert(d);
+		Assert.assertEquals(2.0, dd[0][0],0.0001);
+		Assert.assertEquals(2.1, dd[0][1],0.0001);
+		Assert.assertEquals(1.0, dd[1][0],0.0001);
+		Assert.assertEquals(1.1, dd[1][1],0.0001);
+		Assert.assertEquals(0.0, dd[2][0],0.0001);
+		Assert.assertEquals(0.1, dd[2][1],0.0001);
+	}
+
 }

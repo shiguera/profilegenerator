@@ -1,9 +1,7 @@
 package com.mlab.pg.trackprocessor;
 
-import static org.junit.Assert.*;
 
 import java.io.File;
-import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -30,9 +28,8 @@ public class TestTrackAverage {
 		File file = new File(path + "M607_Desc_1.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "M607_Desc_1_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(path, "M607_Desc_1.csv", "M607_Desc_1_Inverted.csv", 1);
+		Assert.assertEquals("M607_Desc_1_Inverted.csv",resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -43,7 +40,7 @@ public class TestTrackAverage {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M607_Asc_Average_1.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 	}
 	@Test
@@ -53,9 +50,8 @@ public class TestTrackAverage {
 		File file = new File(path + "trackLeika_2_M607_ED50.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "trackLeika_2_M607_ED50_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(path, "trackLeika_2_M607_ED50.csv","trackLeika_2_M607_ED50_Inverted.csv",1);
+		Assert.assertEquals("trackLeika_2_M607_ED50_Inverted.csv", resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -66,7 +62,7 @@ public class TestTrackAverage {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "trackLeika_M607_Axis.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 	}
 	
@@ -80,9 +76,8 @@ public class TestTrackAverage {
 		File file = new File(path + "M607_Desc_1.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "M607_Desc_1_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(path, "M607_Desc_1.csv", "M607_Desc_1_Inverted.csv",1);
+		Assert.assertEquals("M607_Desc_1_Inverted.csv", resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -93,7 +88,7 @@ public class TestTrackAverage {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M607_Asc_Axis.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 		
 		file = new File(outfilename);
@@ -112,9 +107,8 @@ public class TestTrackAverage {
 		File file = new File(path + "M608_Desc_2017-03-09.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "M608_Desc_2017-03-09_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(file.getParent(), file.getName(), "M608_Desc_2017-03-09_Inverted.csv", 1);
+		Assert.assertEquals("M608_Desc_2017-03-09_Inverted.csv", resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -125,7 +119,7 @@ public class TestTrackAverage {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M608_Asc_2017-03-09_Axis.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 		
 		file = new File(outfilename);
@@ -145,14 +139,13 @@ public class TestTrackAverage {
 		File file = new File(path + "M608_Desc_2017-03-09.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "M608_Desc_2017-03-09_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String  resultname = TrackUtil.invert(file.getParent(), file.getName(), "M608_Desc_2017-03-09_Inverted.csv",1);
+		Assert.assertEquals("M608_Desc_2017-03-09_Inverted.csv", resultname);
 		file = new File(path + "M608_Desc_2017-03-10.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		result = inverter.invert(file, path + "M608_Desc_2017-03-10_Inverted.csv");
-		Assert.assertEquals(1, result);
+		resultname = TrackUtil.invert(file.getParent(), file.getName(), "M608_Desc_2017-03-10_Inverted.csv",1);
+		Assert.assertEquals("M608_Desc_2017-03-10_Inverted.csv", resultname);
 		
 		TrackAverage averager = new TrackAverage();
 		File file1 = new File(path + "M608_Desc_2017-03-09_Inverted.csv");
@@ -162,7 +155,7 @@ public class TestTrackAverage {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M608_Desc_Average.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 		
 		file = new File(outfilename);

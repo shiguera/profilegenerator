@@ -7,6 +7,17 @@ import com.mlab.pg.xyfunction.Polynom2;
 
 public class MathUtil {
 
+	public static double[][] invert(double[][] inarray) {
+		int length = inarray.length;
+		int width = inarray[0].length;
+		int count = 0;
+		double[][] outarray = new double[length][width];
+		for(int i=length-1; i>=0; i--) {
+			outarray[count] = inarray[i];
+			count++;
+		}
+		return outarray;
+	}
 	
 	// Error cuadratico medio
 	/**

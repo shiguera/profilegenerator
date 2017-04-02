@@ -27,11 +27,8 @@ public class TestTrackInverter {
 		File file = new File(url.getPath());
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		String outpath = file.getParent()+"/M607_Asc_1.csv";
-		System.out.println(outpath);
-		int result = inverter.invert(file, outpath);
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(file.getParent(), file.getName(),"M607_Desc_1_inverted.csv", 1);
+		Assert.assertEquals("M607_Desc_1_inverted.csv", resultname);
 	}
 
 }

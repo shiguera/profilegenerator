@@ -11,8 +11,8 @@ import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.trackprocessor.TrackAverage;
-import com.mlab.pg.trackprocessor.TrackInverter;
 import com.mlab.pg.trackprocessor.TrackReporter;
+import com.mlab.pg.trackprocessor.TrackUtil;
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
@@ -41,9 +41,8 @@ public class M633_CalculateAxis {
 		File file = new File(path + "20140219_115202_xyz.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "20140219_115202_xyz_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(path, "20140219_115202_xyz.csv", "20140219_115202_xyz_Inverted.csv",1);
+		Assert.assertEquals("20140219_115202_xyz.csv", resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -58,7 +57,7 @@ public class M633_CalculateAxis {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M633_RoadRecorder_Axis_1.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 		
 		File fileout = new File(outfilename);
@@ -73,9 +72,8 @@ public class M633_CalculateAxis {
 		File file = new File(path + "20140219_121352_xyz.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
-		TrackInverter inverter = new TrackInverter();
-		int result = inverter.invert(file, path + "20140219_121352_xyz_Inverted.csv");
-		Assert.assertEquals(1, result);
+		String resultname = TrackUtil.invert(path, "20140219_121352_xyz.csv", "20140219_121352_xyz_Inverted.csv", 1);
+		Assert.assertEquals("20140219_121352_xyz_Inverted.csv", resultname);
 
 		
 		TrackAverage averager = new TrackAverage();
@@ -90,7 +88,7 @@ public class M633_CalculateAxis {
 		double[][] resultTrack = averager.average(track1, track2);
 		Assert.assertEquals(track1.length, resultTrack.length);
 		String outfilename = path + "M633_RoadRecorder_Axis_2.csv";
-		result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
+		int result = IOUtil.write(outfilename, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 		
 		File fileout = new File(outfilename);
@@ -103,13 +101,15 @@ public class M633_CalculateAxis {
 	private static void processBarometerTrack() {
 		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-633/";
 		File file = new File(path + "20140219_121352_xyzbarom.csv");
+		Assert.assertTrue(file.exists());
 		TrackReporter reporter = new TrackReporter(file, 1);
 		reporter.printReport();
 		File file2 = new File(path + "20140219_121352_xyzbarom_SZ.csv");
-		XYVectorFunctionReader reader = new XYVectorFunctionCsvReader(file2, ',',false);
+		Assert.assertTrue(file2.exists());
+		XYVectorFunctionReader reader = new XYVectorFunctionCsvReader(file2, ',',true);
 		XYVectorFunction f1 = reader.read();
 		File file3 = new File(path + "M633_RoadRecorder_Axis_2_SZ.csv");
-		reader = new XYVectorFunctionCsvReader(file3, ',',false);
+		reader = new XYVectorFunctionCsvReader(file3, ',',true);
 		XYVectorFunction f2 = reader.read();
 
 		showPressureProfile(f1);
