@@ -153,7 +153,7 @@ public class PointCharacteriser {
 				// Añado los puntos de la recta anterior a la recsample
 				for(int k=first; k<i; k++) {
 					double xx = gradepoints.getX(k);
-					double yy = gradepoints.getY(k);
+					double yy = r1[0] + r1[1]*xx;
 					recsample.add(new double[]{xx, yy});
 				}
 				// Calculo la recta posterior
@@ -161,7 +161,7 @@ public class PointCharacteriser {
 				// Añado los puntos de la recta posterior a la recsample
 				for(int k=i; k<=last; k++) {
 					double xx = gradepoints.getX(k);
-					double yy = gradepoints.getY(k);
+					double yy = r2[0] + r2[1]*xx;
 					recsample.add(new double[]{xx, yy});
 				}
 				// Calculo y guardo el ecm

@@ -42,8 +42,8 @@ public class M607_Leika_Track1_Essay_1 {
 
 		
 		M607_Leika_Track1_Essay_1 essay = new M607_Leika_Track1_Essay_1();
-		essay.doIterative();
-		//essay.doMultiparameter();
+		//essay.doIterative();
+		essay.doMultiparameter();
 		
 		recRunner.showReport();
 		recRunner.printReport();

@@ -116,11 +116,11 @@ public class Reconstructor {
 		typeIntervalArray = new TypeIntervalArray(originalPointTypes);
 		
 		// Obtener array de segmentos de puntos caracterizados en GRADE y VERTICALCURVE
-		BorderIntervalsProcessor typeIntervalArrayGenerator = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, typeIntervalArray, baseSize, thresholdslope);
+		BorderIntervalsProcessor borderPointProcessor = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		typeIntervalArray = borderPointProcessor.processPoints(originalGradePoints, typeIntervalArray, baseSize, thresholdSlope);
 		
 		// Crear el diagrama de pendientes mediante una alineación para cada segemento de puntos
-		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, strategy);
+		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope);
 		
 		// Ajustar finales y principios de alineaciones
 		resultGradeProfile = adjustEndingsAndBeginnings(originalGradePoints, resultGradeProfile, startZ, thresholdSlope);
@@ -257,9 +257,11 @@ public class Reconstructor {
 	 * @param strategy Sirve para seleccionar la instancia de GradeProfileCreator
 	 * @return
 	 */
-	private VerticalGradeProfile createGradeProfile(XYVectorFunction originalgradepoints, TypeIntervalArray typeintervalarray, double thresholdslope, InterpolationStrategy strategy) {
+	private VerticalGradeProfile createGradeProfile(XYVectorFunction originalgradepoints, TypeIntervalArray typeintervalarray, double thresholdslope) {
 		GradeProfileCreator gradeProfileCreator = null;
 		if(strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea) {
+			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdslope);
+		} else if(strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea_Multiparameter) {
 			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdslope);
 		} else {
 			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
@@ -328,6 +330,8 @@ public class Reconstructor {
 	private VerticalGradeProfile adjustEndingsWithBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile profile, double thresholdslope) {
 		EndingsWithBeginnersAdjuster adjuster = null;
 		if(strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea) {
+			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalgpoints, thresholdslope);
+		} else if (strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea_Multiparameter) {
 			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalgpoints, thresholdslope);
 		} else {
 			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
