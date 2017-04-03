@@ -14,7 +14,7 @@ import org.junit.Assert;
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
 import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.valign.VerticalProfileWriter;
@@ -31,7 +31,7 @@ public class M607_Reconstruct_Garmin_1 {
 	static double hmin;
 
 	static Charter charter = null;
-	static InterpolationStrategy interpolationStrategy;
+	static InterpolationStrategyType interpolationStrategy;
 	
 	static XYVectorFunction gradeData;
 	static VerticalGradeProfile resultGProfile;
@@ -56,7 +56,7 @@ public class M607_Reconstruct_Garmin_1 {
 		PropertyConfigurator.configure("log4j.properties");	
 		LOG.debug("main()");
 		
-		interpolationStrategy = InterpolationStrategy.EqualArea;
+		interpolationStrategy = InterpolationStrategyType.EqualArea;
 		//interpolationStrategy = InterpolationStrategy.LessSquares;
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();

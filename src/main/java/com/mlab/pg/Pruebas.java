@@ -3,7 +3,7 @@ package com.mlab.pg;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.graphics.FunctionDisplayer;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
 import com.mlab.pg.util.IOUtil;
 
@@ -39,7 +39,7 @@ public class Pruebas {
 		essayData.setSgFileName("alignment2.csv");
 		essayData.setSzFileName("");
 		essayData.setReportFileName("alignment2.txt");
-		essayData.setInterpolationStrategy(InterpolationStrategy.EqualArea);
+		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		

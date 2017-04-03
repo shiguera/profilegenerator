@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,7 +13,6 @@ import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquare
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
-import junit.framework.Assert;
 
 public class TestTypeIntervalArray {
 	
@@ -35,7 +35,7 @@ private static Logger LOG = Logger.getLogger(TestTypeIntervalArray.class);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointCharacteriser characteriser = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
 		PointTypeArray typeArray = characteriser.characterise(data, 4, 1e-5);
 		Assert.assertNotNull(typeArray);
 		for(int i=0; i<typeArray.size(); i++) {

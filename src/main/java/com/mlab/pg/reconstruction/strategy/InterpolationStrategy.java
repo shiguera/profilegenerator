@@ -1,6 +1,9 @@
 package com.mlab.pg.reconstruction.strategy;
 
-public enum InterpolationStrategy {
+public interface InterpolationStrategy {
 
-	LessSquares, EqualArea, EqualArea_Multiparameter
+	InterpolationStrategyType getInterpolationStrategyType();
+	PointCharacteriserStrategy getPointCharacteriserStrategy();
+	ProcessBorderIntervalsStrategy getProcessBorderIntervalStrategy();
+	
 }

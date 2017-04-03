@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.mlab.pg.random.RandomProfileFactory;
 import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
 import com.mlab.pg.util.MathUtil;
@@ -151,18 +151,18 @@ public class EssayFactory {
 	
 	double[] maxd, mind, meand, desvd; 
 	
-	InterpolationStrategy interpolationStrategy;
+	InterpolationStrategyType interpolationStrategy;
 	
 	public EssayFactory(RandomProfileFactory profilefactory) {
 		this.profileFactory = profilefactory;
 	}
 	
 	public void doEssays() {
-		interpolationStrategy = InterpolationStrategy.LessSquares;
+		interpolationStrategy = InterpolationStrategyType.LessSquares;
 		doEssays(interpolationStrategy);
 	}
 	
-	public void doEssays(InterpolationStrategy strategy) {
+	public void doEssays(InterpolationStrategyType strategy) {
 		//LOG.debug("doEssays()");
 		
 		interpolationStrategy = strategy;

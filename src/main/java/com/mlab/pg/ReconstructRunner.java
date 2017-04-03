@@ -8,7 +8,7 @@ import org.junit.Assert;
 import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.ReconstructorByIntervals;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
@@ -23,7 +23,7 @@ public class ReconstructRunner {
 	
 	protected Reconstructor reconstructor;
 	protected ReconstructEssayData essayData;
-	protected InterpolationStrategy interpolationStrategy;
+	protected InterpolationStrategyType interpolationStrategy;
 	protected XYVectorFunction originalVProfile;
 	protected XYVectorFunction originalGradeData;
 	protected XYVectorFunction vProfileFromGradeDataIntegration;

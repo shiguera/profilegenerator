@@ -12,7 +12,7 @@ import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -25,14 +25,14 @@ public class ReconstructN403 {
 	
 	static Charter charter = null;
 	// Lo establece el método readData
-	static InterpolationStrategy interpolationStrategy;
+	static InterpolationStrategyType interpolationStrategy;
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");	
 
 		LOG.debug("main()");
 		
-		interpolationStrategy = InterpolationStrategy.EqualArea;
+		interpolationStrategy = InterpolationStrategyType.EqualArea;
 
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();
 		XYVectorFunction gradeData = readGradeData();

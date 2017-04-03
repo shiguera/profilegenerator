@@ -15,7 +15,7 @@ import com.mlab.pg.graphics.Charter;
 import com.mlab.pg.reconstruction.CheckEndingsWithBeginnings;
 import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.VProfileFilter_ShortAlignments;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.valign.VerticalProfileWriter;
@@ -32,7 +32,7 @@ public class N403_Reconstruct {
 	static double hmin;
 
 	static Charter charter = null;
-	static InterpolationStrategy interpolationStrategy;
+	static InterpolationStrategyType interpolationStrategy;
 	
 	static enum OPTION {ShowVerticalProfile, UNIQUE, ITERATIVE};
 	//static OPTION option= OPTION.ITERATIVE;
@@ -43,7 +43,7 @@ public class N403_Reconstruct {
 		PropertyConfigurator.configure("log4j.properties");	
 		LOG.debug("main()");
 		
-		interpolationStrategy = InterpolationStrategy.EqualArea;
+		interpolationStrategy = InterpolationStrategyType.EqualArea;
 		//interpolationStrategy = InterpolationStrategy.LessSquares;
 		
 		XYVectorFunction originalVProfile = readOriginalVerticalProfile();

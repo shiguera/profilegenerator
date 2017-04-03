@@ -2,14 +2,9 @@ package com.mlab.pg.reconstruction.strategy;
 
 import com.mlab.pg.reconstruction.ParameterIntervalArray;
 import com.mlab.pg.reconstruction.PointType;
-import com.mlab.pg.reconstruction.PointTypeArray;
-import com.mlab.pg.reconstruction.ProfileCharacteriser;
 import com.mlab.pg.reconstruction.TypeInterval;
 import com.mlab.pg.reconstruction.TypeIntervalArray;
 import com.mlab.pg.util.MathUtil;
-import com.mlab.pg.xyfunction.IntegerInterval;
-import com.mlab.pg.xyfunction.Parabole;
-import com.mlab.pg.xyfunction.Straight;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIntervalsStrategy {
@@ -26,17 +21,27 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 	}
 
 	@Override
-	public TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, int basesize,
-			double thresholdslope, PointCharacteriserStrategy strategy) {
+	public TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, TypeIntervalArray typeIntervalArray, int basesize,
+			double thresholdslope) {
 		this.originalGradePoints = originalgradepoints;
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
-		this.pointCharacteriserStrategy = strategy;
+		this.pointCharacteriserStrategy = new PointCharacteriserStrategy() {
+			
+			@Override
+			public double[] calculaRectaPosterior(XYVectorFunction function, int pointindex, int mobilesize) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public double[] calculaRectaAnterior(XYVectorFunction function, int pointindex, int mobilesize) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 		
-		ProfileCharacteriser characteriser = new ProfileCharacteriser(pointCharacteriserStrategy);
-		PointTypeArray originalPointTypes = characteriser.characterise(originalGradePoints, baseSize, thresholdSlope); 
-
-		originalIntervalArray = new TypeIntervalArray(originalPointTypes);
+		originalIntervalArray = typeIntervalArray;
 		
 		if(originalIntervalArray.hasNullSegments()) {
 			return null;			
@@ -90,7 +95,7 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 	
 	@Override
 	public TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints,
-			ParameterIntervalArray parameterarray, PointCharacteriserStrategy strategy) {
+			ParameterIntervalArray parameterarray) {
 		// No utilizable en esta estrategia
 		return null;
 	}

@@ -3,7 +3,7 @@ package com.mlab.pg;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.graphics.FunctionDisplayer;
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -32,7 +32,7 @@ public class M607_Leika_Track2_Essay_1 {
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setReportFileName("M607_Leika_2_1.txt");
-		essayData.setInterpolationStrategy(InterpolationStrategy.EqualArea);
+		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(1000.0);
 		//essayData.setEndS(5000.0);
 		

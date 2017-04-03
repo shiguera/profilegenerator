@@ -3,14 +3,6 @@ package com.mlab.pg.reconstruction;
 import org.apache.log4j.Logger;
 
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
-import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy;
-import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_EqualArea;
-import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
-import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_Multiparameter;
-import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy;
-import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_EqualArea;
-import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_LessSquares;
-import com.mlab.pg.reconstruction.strategy.ProcessBorderIntervalsStrategy_Multiparameter;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
 /** 
@@ -22,9 +14,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class TypeIntervalArrayGenerator {
+public class BorderIntervalsProcessor {
 	
-	Logger LOG = Logger.getLogger(TypeIntervalArrayGenerator.class);
+	Logger LOG = Logger.getLogger(BorderIntervalsProcessor.class);
 	
 	/**
 	 * Valores {si, gi} correspondientes a un perfil de pendientes que se quieren procesar.
@@ -50,31 +42,18 @@ public class TypeIntervalArrayGenerator {
 	protected double minLength;
 	protected int minPointsCount;
 	
-	protected ProcessBorderIntervalsStrategy processBorderIntervalsStrategy;
-	protected PointCharacteriserStrategy pointCharacteriserStrategy;	
 	protected TypeIntervalArray resultIntervalArray;
 	
-	public TypeIntervalArrayGenerator(InterpolationStrategy strategy, double minlength, int minpointscount) {
+	public BorderIntervalsProcessor(InterpolationStrategy strategy, double minlength, int minpointscount) {
 		interpolationStrategy = strategy;
 		minLength = minlength;
 		minPointsCount = minpointscount;
 
-		if (interpolationStrategy == InterpolationStrategy.EqualArea ) {
-			pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
-			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_EqualArea();	
-		} else if (interpolationStrategy == InterpolationStrategy.EqualArea_Multiparameter) {
-			pointCharacteriserStrategy = new PointCharacteriserStrategy_Multiparameter();
-			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_Multiparameter();
-		} else{
-			pointCharacteriserStrategy = new PointCharacteriserStrategy_LessSquares();
-			processBorderIntervalsStrategy = new ProcessBorderIntervalsStrategy_LessSquares();				
-		}
 	}
 
 	/**
 	 * Construye una TypeIntervalArray a partir de una XYVectorFunction con los originalGradePoints. 
-	 * La TypeIntervalArray resultado se puede consultar en getResultTypeIntervalArray() 
-	 * y solo tiene segmentos del tipo Grade o VerticalCurve.
+	 * La TypeIntervalArray resultado solo tiene segmentos del tipo Grade o VerticalCurve.
 	 * 
 	 * @param originalgradePoints
 	 * @param mobilebasesize
@@ -83,14 +62,16 @@ public class TypeIntervalArrayGenerator {
 	 * @param minlength Longitud mínima de los segmentos para que no intente filtrarlos
 	 * uniéndolos al anterior o siguiente, si son del mismo tipo
 	 */
-	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, int mobilebasesize, double thresholdslope) {	
+	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, TypeIntervalArray typeintervalArray, int mobilebasesize, double thresholdslope) {	
 		originalGradePoints = originalgradePoints.clone();
 		mobileBaseSize = mobilebasesize;
+		thresholdSlope = thresholdslope;
+		
 		if(originalGradePoints.size()<2*mobileBaseSize-1) {
 			return null;
 		}
-		thresholdSlope = thresholdslope;
-		resultIntervalArray = processBorderIntervalsStrategy.processBorderIntervals(originalGradePoints, mobileBaseSize, thresholdSlope, pointCharacteriserStrategy);
+		
+		resultIntervalArray = interpolationStrategy.getProcessBorderIntervalStrategy().processBorderIntervals(originalGradePoints, typeintervalArray, mobileBaseSize, thresholdSlope);
 		
 		if(resultIntervalArray.size()>1) {
 			resultIntervalArray = filterShortIntervals(originalGradePoints, resultIntervalArray, minLength, minPointsCount);

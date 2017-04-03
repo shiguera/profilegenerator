@@ -10,10 +10,12 @@ import org.jfree.ui.RefineryUtilities;
 import org.junit.Assert;
 
 import com.mlab.pg.graphics.Charter;
+import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.trackprocessor.TrackAverage;
 import com.mlab.pg.trackprocessor.TrackReporter;
 import com.mlab.pg.trackprocessor.TrackUtil;
 import com.mlab.pg.util.IOUtil;
+import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 import com.mlab.pg.xyfunction.XYVectorFunctionReader;
@@ -112,8 +114,24 @@ public class M633_CalculateAxis {
 		reader = new XYVectorFunctionCsvReader(file3, ',',true);
 		XYVectorFunction f2 = reader.read();
 
-		showPressureProfile(f1);
-		showAltitudeProfile(f2);
+		XYVectorFunction f3 = new XYVectorFunction();
+		for(int i=0; i<f1.size(); i++) {
+			double h = MathUtil.altitude(f1.get(i)[1]);
+			double[] d = new double[]{f1.get(i)[0], h};
+			f3.add(d);
+		}
+		XYVectorFunction f4 = new XYVectorFunction();
+		for(int i=0; i<f1.size(); i++) {
+			double h = f1.get(i)[1]+265.17;
+			double[] d = new double[]{f1.get(i)[0], h};
+			f4.add(d);
+		}
+		
+		//showPressureProfile(f1);
+		//showAltitudeProfile(f2);
+		//showAltitudeFromPressureProfile(f4);
+		FunctionDisplayer displayer = new FunctionDisplayer();
+		displayer.showTwoFunctions(f2, f4, "Prueba", "h", "h2", "S", "H");
 	}
 	private static void showAltitudeProfile(XYVectorFunction f1) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -141,6 +159,25 @@ public class M633_CalculateAxis {
         		Charter charter = new Charter("M-633: Pressure (MPA) (measured with RoadRecorder)", "S", "P (MPa)");
         		//charter.addXYVectorFunction(f1, "Presión barométrica");
         		charter.addXYVectorFunction(f1, "Pressure");        		
+        		
+        		
+            	JFrame frame = new JFrame("Charter");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        		frame.setContentPane(charter.getChartPanel());
+        		//charter.getChart().getXYPlot().getRangeAxis().setRange(700.0, 850.0);
+        		frame.pack();
+        		RefineryUtilities.centerFrameOnScreen(frame);
+        		frame.setVisible(true);
+        		        		
+            }
+        });
+		
+	}
+	private static void showAltitudeFromPressureProfile(XYVectorFunction f3) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+        		Charter charter = new Charter("M-633: Altitude from pressure", "S", "H");
+        		charter.addXYVectorFunction(f3, "AltitudePressure");        		
         		
         		
             	JFrame frame = new JFrame("Charter");

@@ -11,6 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyImplementation;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
+import com.mlab.pg.reconstruction.strategy.PointCharacteriserStrategy_LessSquares;
 import com.mlab.pg.valign.GradeAlignment;
 import com.mlab.pg.valign.VAlignFactory;
 import com.mlab.pg.valign.VerticalCurveAlignment;
@@ -27,16 +30,12 @@ public class TestTypeIntervalArrayGenerator {
 	double MIN_LENGTH = 40.0;
 	int MIN_POINTS_COUNT = 5;
 	
-	static InterpolationStrategy lessSquaresStrategy;
-	static InterpolationStrategy equalAreaSquaresStrategy;
 	static int mobileBaseSize;
 	static double thresholdSlope;
 	
 	@BeforeClass
 	public static void before() {
 		PropertyConfigurator.configure("log4j.properties");
-		lessSquaresStrategy = InterpolationStrategy.LessSquares;
-		equalAreaSquaresStrategy = InterpolationStrategy.EqualArea;
 		mobileBaseSize = 3;
 		thresholdSlope = 1e-5;
 	}
@@ -60,8 +59,13 @@ public class TestTypeIntervalArrayGenerator {
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
 		
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(InterpolationStrategy.LessSquares, MIN_LENGTH, MIN_POINTS_COUNT);
-		maker.processPoints(gp, mobileBaseSize, thresholdSlope);
+		PointCharacteriser charac = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointTypeArray typearray = charac.characterise(gp, mobileBaseSize, thresholdSlope);
+		TypeIntervalArray intervalarray = new TypeIntervalArray(typearray);
+		
+		InterpolationStrategy strategy = new InterpolationStrategyImplementation(InterpolationStrategyType.LessSquares);
+		BorderIntervalsProcessor maker = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		maker.processPoints(gp, intervalarray, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(maker.getResultTypeIntervalArray());
 //		for(TypeInterval interval: maker.getResultTypeIntervalArray()) {
 //			System.out.println(interval);
@@ -69,7 +73,7 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(1, maker.getResultTypeIntervalArray().size());
 		Assert.assertEquals(PointType.GRADE, maker.getResultTypeIntervalArray().get(0).getPointType());
 
-		maker.processPoints(gp, mobileBaseSize, thresholdSlope);
+		maker.processPoints(gp, intervalarray, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(maker.getResultTypeIntervalArray());
 		Assert.assertEquals(1, maker.getResultTypeIntervalArray().size());
 		Assert.assertEquals(PointType.GRADE, maker.getResultTypeIntervalArray().get(0).getPointType());
@@ -89,17 +93,19 @@ public class TestTypeIntervalArrayGenerator {
 		pts.add(new double[] {12.0, 0.0015});
 		pts.add(new double[] {14.0, 0.00175});
 		XYVectorFunction gp = new XYVectorFunction(pts);
-		
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		TypeIntervalArray result = maker.processPoints(gp, mobileBaseSize, thresholdSlope);
+
+		InterpolationStrategy strategy = new InterpolationStrategyImplementation(InterpolationStrategyType.LessSquares);
+		PointCharacteriser charac = new PointCharacteriser(strategy.getPointCharacteriserStrategy());
+		PointTypeArray typearray = charac.characterise(gp, mobileBaseSize, thresholdSlope);
+		TypeIntervalArray intervalarray = new TypeIntervalArray(typearray);
+
+		BorderIntervalsProcessor maker = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(gp, intervalarray, mobileBaseSize, thresholdSlope);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(1, result.size());	
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(0).getPointType());
 	}
 	
-
-	
-
 	@Test
 	public void testSampleProfileTypeV_1() {
 		LOG.debug("testSampleProfileTypeV_1");
@@ -115,27 +121,37 @@ public class TestTypeIntervalArrayGenerator {
 		// El perfil tiene 4 alineaciones. Las dos VC tienenparámetros de 50000 (thSlope=2e-5) y 55000(thSlope=1.82e-5)
 		// Con pendiente límite 1e-5 no distingue entre las dos vertical curves
 		thresholdSlope = 1e-5;
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator( lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
+		InterpolationStrategy strategy = new InterpolationStrategyImplementation(InterpolationStrategyType.LessSquares);
+		PointCharacteriser charac = new PointCharacteriser(strategy.getPointCharacteriserStrategy());
+		PointTypeArray typearray = charac.characterise(originalGradePoints, mobileBaseSize, thresholdSlope);
+		TypeIntervalArray intervalarray = new TypeIntervalArray(typearray);
+
+		BorderIntervalsProcessor maker = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(3, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(2).getPointType());
 				
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
+		result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(3, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(2).getPointType());
-		Reconstructor rec = new Reconstructor(originalGradePoints, vp.getAlign(0).getStartZ(), equalAreaSquaresStrategy);
+		InterpolationStrategy strategy2 = new InterpolationStrategyImplementation(InterpolationStrategyType.EqualArea);
+		Reconstructor rec = new Reconstructor(originalGradePoints, vp.getAlign(0).getStartZ(), strategy2.getInterpolationStrategyType());
 		rec.processUnique(3, thresholdSlope);
 		System.out.println(rec.getVerticalProfile().toString2());
 		
 		// Con pendiente límite 1e-6 sí que distingue entre las dos vertical curves
 		thresholdSlope = 1e-6;
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
+		charac = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		typearray = charac.characterise(originalGradePoints, mobileBaseSize, thresholdSlope);
+		intervalarray = new TypeIntervalArray(typearray);
+
+		result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -143,14 +159,14 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
 				
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
+		result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);
 		//System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(1).getPointType());
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
-		rec = new Reconstructor(originalGradePoints, vp.getAlign(0).getStartZ(), equalAreaSquaresStrategy);
+		rec = new Reconstructor(originalGradePoints, vp.getAlign(0).getStartZ(), strategy2.getInterpolationStrategyType());
 		rec.processUnique(3, thresholdSlope);
 		System.out.println(rec.getVerticalProfile().toString());
 		
@@ -178,8 +194,13 @@ public class TestTypeIntervalArrayGenerator {
 		double space = 2.0;
 		XYVectorFunction originalGradePoints = gradeProfile.getSample(starts, ends, space, true);
 
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator(lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		TypeIntervalArray result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);
+		InterpolationStrategy strategy = new InterpolationStrategyImplementation(InterpolationStrategyType.LessSquares);
+		PointCharacteriser charac = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointTypeArray typearray = charac.characterise(originalGradePoints, mobileBaseSize, thresholdSlope);
+		TypeIntervalArray intervalarray = new TypeIntervalArray(typearray);
+
+		BorderIntervalsProcessor maker = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);
 		System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -187,7 +208,7 @@ public class TestTypeIntervalArrayGenerator {
 		Assert.assertEquals(PointType.VERTICAL_CURVE, result.get(2).getPointType());
 		Assert.assertEquals(PointType.GRADE, result.get(3).getPointType());
 
-		result = maker.processPoints(originalGradePoints, mobileBaseSize, thresholdSlope);		
+		result = maker.processPoints(originalGradePoints, intervalarray, mobileBaseSize, thresholdSlope);		
 		System.out.println(result);
 		Assert.assertEquals(4, result.size());
 		Assert.assertEquals(PointType.GRADE, result.get(0).getPointType());
@@ -235,8 +256,14 @@ public class TestTypeIntervalArrayGenerator {
 		
 		int mobileBaseSize = 3;
 		double thresholdSlope = 1e-5;
-		TypeIntervalArrayGenerator maker = new TypeIntervalArrayGenerator( lessSquaresStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		TypeIntervalArray segments = maker.processPoints(gradesample, mobileBaseSize, thresholdSlope);
+		
+		InterpolationStrategy strategy = new InterpolationStrategyImplementation(InterpolationStrategyType.LessSquares);
+		PointCharacteriser charac = new PointCharacteriser(new PointCharacteriserStrategy_LessSquares());
+		PointTypeArray typearray = charac.characterise(gradesample, mobileBaseSize, thresholdSlope);
+		TypeIntervalArray intervalarray = new TypeIntervalArray(typearray);
+
+		BorderIntervalsProcessor maker = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		TypeIntervalArray segments = maker.processPoints(gradesample, intervalarray, mobileBaseSize, thresholdSlope);
 		
 		//System.out.println(segments);
 		

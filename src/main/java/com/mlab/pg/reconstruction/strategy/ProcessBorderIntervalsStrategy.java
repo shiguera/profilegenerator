@@ -6,8 +6,8 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 
 public interface ProcessBorderIntervalsStrategy {
 	
-	TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, int basesize, double thresholdslope, PointCharacteriserStrategy strategy);
-	TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, ParameterIntervalArray parameterarray , PointCharacteriserStrategy strategy);
+	TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, TypeIntervalArray typeIntervalArray, int basesize, double thresholdslope);
+	TypeIntervalArray processBorderIntervals(XYVectorFunction originalgradepoints, ParameterIntervalArray parameterarray);
 
 	
 	TypeIntervalArray getOriginalTypeIntervalArray();

@@ -437,5 +437,14 @@ public class MathUtil {
 		return dest;
 	}
 
+	static 	public double altitude(double pressure) {
+		double p = pressure*100.0;
+		double aux = Math.log(p/101325.0) / 5.256;
+		aux = Math.exp(aux);
+		aux = 288.15 *(1 - aux)/0.0065;
+		return aux;
+	}
+	
+
 
 }

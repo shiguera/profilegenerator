@@ -260,4 +260,9 @@ public class TestMathUtil {
 		Assert.assertEquals(0.1, dd[2][1],0.0001);
 	}
 
+	@Test
+	public void test_altitude() {
+		LOG.debug("test_altitude()");
+		System.out.println(MathUtil.altitude(898.0));
+	}
 }

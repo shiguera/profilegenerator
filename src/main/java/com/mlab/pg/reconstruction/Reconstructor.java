@@ -10,6 +10,8 @@ import com.mlab.pg.reconstruction.strategy.GradeProfileCreator;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_EqualArea;
 import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_LessSquares;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyImplementation;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VAlignment;
@@ -50,7 +52,7 @@ public class Reconstructor {
 	protected double thresholdSlope;
 	protected double startZ;
 	
-	protected InterpolationStrategy interpolationStrategy;
+	protected InterpolationStrategy strategy;
 	protected TypeIntervalArray typeIntervalArray;
 	
 	protected VerticalGradeProfile resultGradeProfile;
@@ -70,10 +72,11 @@ public class Reconstructor {
 	protected double ecm;
 	protected double varianza;
 	
-	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategy strategy) {
+	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategyType strategyType) {
 		originalGradePoints = originalgradePoints.clone();
 		startZ = startz;
-		interpolationStrategy = strategy;
+
+		strategy = new InterpolationStrategyImplementation(strategyType);
 		
 		startX = originalGradePoints.getStartX();
 		endX = originalGradePoints.getEndX();
@@ -105,15 +108,22 @@ public class Reconstructor {
 		// Obtener originalVerticalProfilePoints mediante integración de originalGradePoints
 		originalVerticalProfilePoints = originalGradePoints.integrate(startZ);
 		
+		// Caracterizar los puntos
+		PointCharacteriser characteriser = new PointCharacteriser(strategy.getPointCharacteriserStrategy());
+		PointTypeArray originalPointTypes = characteriser.characterise(originalGradePoints, baseSize, thresholdSlope); 
+
+		// Agrupar en segmentos de puntos del mismo tipo
+		typeIntervalArray = new TypeIntervalArray(originalPointTypes);
+		
 		// Obtener array de segmentos de puntos caracterizados en GRADE y VERTICALCURVE
-		TypeIntervalArrayGenerator typeIntervalArrayGenerator = new TypeIntervalArrayGenerator(interpolationStrategy, MIN_LENGTH, MIN_POINTS_COUNT);
-		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, baseSize, thresholdslope);
+		BorderIntervalsProcessor typeIntervalArrayGenerator = new BorderIntervalsProcessor(strategy, MIN_LENGTH, MIN_POINTS_COUNT);
+		typeIntervalArray = typeIntervalArrayGenerator.processPoints(originalGradePoints, typeIntervalArray, baseSize, thresholdslope);
 		
 		// Crear el diagrama de pendientes mediante una alineación para cada segemento de puntos
-		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, interpolationStrategy);
+		resultGradeProfile = createGradeProfile(originalGradePoints, typeIntervalArray, thresholdSlope, strategy);
 		
 		// Ajustar finales y principios de alineaciones
-		resultGradeProfile = adjustEndingsAndBeginnings(originalGradePoints, resultGradeProfile, startZ, thresholdSlope, interpolationStrategy);
+		resultGradeProfile = adjustEndingsAndBeginnings(originalGradePoints, resultGradeProfile, startZ, thresholdSlope);
 		
 		// Obtener el perfil de pendientes mediante integración del diagrama de pendientes
 		resultVerticalProfile = resultGradeProfile.integrate(startZ, thresholdSlope);
@@ -125,14 +135,14 @@ public class Reconstructor {
 		
 
 	}
-	private VerticalGradeProfile adjustEndingsAndBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile gprofile, double startz, double thresholdslope, InterpolationStrategy strategy) {
+	private VerticalGradeProfile adjustEndingsAndBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile gprofile, double startz, double thresholdslope) {
 		boolean changes = true;
 		VerticalGradeProfile process = new VerticalGradeProfile();
 		process.addAll(gprofile);
 		
 		while(changes) {
 			changes=false;
-			process = adjustEndingsWithBeginnings(originalgpoints, process, thresholdslope, strategy);
+			process = adjustEndingsWithBeginnings(originalgpoints, process, thresholdslope);
 			VerticalProfile verticalProfile = process.integrate(startz, thresholdslope);
 			
 			for(int i=1; i<verticalProfile.size(); i++) {
@@ -249,7 +259,7 @@ public class Reconstructor {
 	 */
 	private VerticalGradeProfile createGradeProfile(XYVectorFunction originalgradepoints, TypeIntervalArray typeintervalarray, double thresholdslope, InterpolationStrategy strategy) {
 		GradeProfileCreator gradeProfileCreator = null;
-		if(strategy == InterpolationStrategy.EqualArea) {
+		if(strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea) {
 			gradeProfileCreator = new GradeProfileCreator_EqualArea(thresholdslope);
 		} else {
 			gradeProfileCreator = new GradeProfileCreator_LessSquares();	
@@ -315,9 +325,9 @@ public class Reconstructor {
 		}
 		return count;
 	}
-	private VerticalGradeProfile adjustEndingsWithBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile profile, double thresholdslope, InterpolationStrategy strategy) {
+	private VerticalGradeProfile adjustEndingsWithBeginnings(XYVectorFunction originalgpoints, VerticalGradeProfile profile, double thresholdslope) {
 		EndingsWithBeginnersAdjuster adjuster = null;
-		if(strategy == InterpolationStrategy.EqualArea) {
+		if(strategy.getInterpolationStrategyType() == InterpolationStrategyType.EqualArea) {
 			adjuster = new EndingsWithBeginnersAdjuster_EqualArea(originalgpoints, thresholdslope);
 		} else {
 			adjuster = new EndingsWithBeginnersAdjuster_LessSquares();
@@ -414,7 +424,7 @@ public class Reconstructor {
 	}
 
 	public InterpolationStrategy getInterpolationStrategy() {
-		return interpolationStrategy;
+		return strategy;
 	}
 
 	public VerticalProfile getResultVerticalProfile() {

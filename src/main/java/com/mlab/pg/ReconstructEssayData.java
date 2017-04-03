@@ -1,6 +1,6 @@
 package com.mlab.pg;
 
-import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
+import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 
 public class ReconstructEssayData {
 
@@ -16,7 +16,7 @@ public class ReconstructEssayData {
 	
 	double startS=-1.0, endS=-1.0, startZ=0.0;
 	
-	InterpolationStrategy interpolationStrategy;
+	InterpolationStrategyType interpolationStrategy;
 	double SHORT_ALIGNMENT_LENGTH =50.0;
 
 	
@@ -81,11 +81,11 @@ public class ReconstructEssayData {
 		this.xyzFileName = xyzFileName;
 	}
 
-	public InterpolationStrategy getInterpolationStrategy() {
+	public InterpolationStrategyType getInterpolationStrategy() {
 		return interpolationStrategy;
 	}
 
-	public void setInterpolationStrategy(InterpolationStrategy interpolationStrategy) {
+	public void setInterpolationStrategy(InterpolationStrategyType interpolationStrategy) {
 		this.interpolationStrategy = interpolationStrategy;
 	}
 
