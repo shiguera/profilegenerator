@@ -5,35 +5,35 @@ Longitud del track (m) : 3049.56
 Número de puntos       : 210
 Separación media   (m) : 14.59
 --------------------------------------------------------------------------
-Rectas Interpolación (Puntos) : 8
-Rectas Interpolación (m)      : 116.73
-Pendiente límite              : 1.0E-4
+Rectas Interpolación (Puntos) : 16
+Rectas Interpolación (m)      : 233.46
+Pendiente límite              : 1.75E-5
 --------------------------------------------------------------------------
 Número de alineaciones : 10
-    Grades             : 5
-    Vertical curves    : 5
+    Grades             : 3
+    Vertical curves    : 7
     Cuasi grades       : 0
     Short alignments   : 1
     Two grades         : 0
 --------------------------------------------------------------------------
-Valor absoluto del Error (media)  (m)   : 1.0713984853069676
-Valor absoluto del Error (máximo) (m)   : 3.2535536631937703
-Valor absoluto del Error (varianza)     : 0.7240783512749482
-Error Cuadrático Medio ECM              : 1.8719730655930127
+Valor absoluto del Error (media)  (m)   : 1.0792756979091083
+Valor absoluto del Error (máximo) (m)   : 3.418151861130468
+Valor absoluto del Error (varianza)     : 0.81841504451279
+Error Cuadrático Medio ECM              : 1.964362971118459
 --------------------------------------------------------------------------
 
           SE           ZE           PE            L          K
 ----------------------------------------------------------------------------------
-    5,949624   969,200000    -0,000432   524,511734          - GRADE 
-  530,461358   968,973410    -0,000432   134,956098     2992,8 VERTICAL CURVE 
-  665,417456   971,957980     0,044662   111,337780          - GRADE 
-  776,755236   976,930576     0,044662   197,900841    -4488,5 VERTICAL CURVE 
-  974,656077   981,406518     0,000572   920,126903          - GRADE 
- 1894,782980   981,932778     0,000572    52,898750     5777,4 VERTICAL CURVE 
- 1947,681730   982,205209     0,009728   516,977801          - GRADE 
- 2464,659531   987,234436     0,009728    35,109023     1878,8 VERTICAL CURVE 
- 2499,768554   987,904023     0,028415   395,315421          - GRADE 
- 2895,083975   999,136960     0,028415   160,424278    -1980,0 VERTICAL CURVE 
+    5,949624   969,200000     0,004141   597,389713          - GRADE 
+  603,339337   971,673686     0,004141    43,359456    31607,4 VERTICAL CURVE 
+  646,698793   971,882971     0,005513    61,244384     1302,2 VERTICAL CURVE 
+  707,943177   973,660829     0,052545   161,221777    -5486,3 VERTICAL CURVE 
+  869,164954   979,763401     0,023159   105,491123    -3862,1 VERTICAL CURVE 
+  974,656077   980,765722    -0,004156   297,828316          - GRADE 
+ 1272,484393   979,527974    -0,004156   367,474298    30310,5 VERTICAL CURVE 
+ 1639,958691   980,228352     0,007968   712,730270          - GRADE 
+ 2352,688961   985,907215     0,007968   164,881810     4581,0 VERTICAL CURVE 
+ 2517,570771   990,188232     0,043961   537,937482    -8611,0 VERTICAL CURVE 
 ----------------------------------------------------------------------------------
 SE=Abscisa entrada; ZE=Cota entrada; PE=Pendiente entrada; L=Longitud; K=Parámetro 
 

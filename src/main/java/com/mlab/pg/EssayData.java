@@ -2,10 +2,12 @@ package com.mlab.pg;
 
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 
-public class ReconstructEssayData {
+public class EssayData {
 
 	
 	String essayName;
+	String carretera;
+	String sentido;
 	String graphTitle;
 	String inPath;
 	String outPath;
@@ -20,7 +22,7 @@ public class ReconstructEssayData {
 	double SHORT_ALIGNMENT_LENGTH =50.0;
 
 	
-	public ReconstructEssayData() {
+	public EssayData() {
 	
 	}
 
@@ -127,6 +129,22 @@ public class ReconstructEssayData {
 
 	public void setSHORT_ALIGNMENT_LENGTH(double sHORT_ALIGNMENT_LENGTH) {
 		SHORT_ALIGNMENT_LENGTH = sHORT_ALIGNMENT_LENGTH;
+	}
+
+	public String getCarretera() {
+		return carretera;
+	}
+
+	public void setCarretera(String carretera) {
+		this.carretera = carretera;
+	}
+
+	public String getSentido() {
+		return sentido;
+	}
+
+	public void setSentido(String sentido) {
+		this.sentido = sentido;
 	}
 
 }

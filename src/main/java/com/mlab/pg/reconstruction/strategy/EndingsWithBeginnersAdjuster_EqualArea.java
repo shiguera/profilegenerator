@@ -2,7 +2,6 @@ package com.mlab.pg.reconstruction.strategy;
 
 import org.apache.log4j.Logger;
 
-import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.xyfunction.Straight;
@@ -34,7 +33,7 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 	 * conseguir el mismo area
 	 */
 	@Override
-	public VerticalGradeProfile adjustEndingsWithBeginnings( VerticalGradeProfile gradeprofile) {
+	public VerticalGradeProfile adjustEndingsWithBeginnings(VerticalGradeProfile gradeprofile) {
 		//LOG.debug("adjustEndingsWithBeginnings");
 		VerticalGradeProfile process  = new VerticalGradeProfile();
 		process.addAll(gradeprofile);
@@ -61,7 +60,8 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 					double s2 = previous.getEndS();
 					double s3 = current.getEndS();
 					double g3 = current.getEndZ();
-					double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+					//double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+					double area = originalGradePoints.areaEncerrada(s1, s3); 
 					double newg2, newg3;
 					
 					double slope1 = Math.abs(previous.getSlope());
@@ -95,6 +95,7 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 					process.set(i-1, new GradeProfileAlignment(newr1, s1,s2));
 					Straight newr2 = new Straight(new double[]{s2, newg2}, new double[]{s3, newg3});
 					process.set(i, new GradeProfileAlignment(newr2, s2,s3));	
+					
 				}	
 			}
 		}
@@ -120,7 +121,6 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 		//LOG.debug("filterTwoGrades()");
 		VerticalGradeProfile process = new VerticalGradeProfile();
 		process.addAll(profile);
-		//System.out.println("Before filter: " + process.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
 		boolean changes = true;
 		while(changes) {
@@ -135,13 +135,14 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 				if(Math.abs(slope1)<thresholdSlope && Math.abs(slope2)<thresholdSlope) {
 					// Si las dos rectas son horizontales las cambio por una sola de igual area
 					double s1 = previous.getStartS();
-					double g1 = previous.getStartZ();
-					double s2 = previous.getEndS();
-					double g21 = previous.getEndZ();
-					double g22 = current.getStartZ();
+					//double g1 = previous.getStartZ();
+					//double s2 = previous.getEndS();
+					//double g21 = previous.getEndZ();
+					//double g22 = current.getStartZ();
 					double s3 = current.getEndS();
-					double g3 = current.getEndZ();
-					double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+					//double g3 = current.getEndZ();
+					//double area = 0.5*(g1+g21)*(s2-s1) + 0.5*(g22+g3)*(s3-s2);
+					double area = originalGradePoints.areaEncerrada(s1, s3);
 					double newg1 = area/(s3-s1);
 					Straight straight = new Straight(new double[]{s1, newg1}, new double[]{s3,newg1});
 					GradeProfileAlignment align = new GradeProfileAlignment(straight, s1, s3);
@@ -155,8 +156,6 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 			process = new VerticalGradeProfile();
 			process.addAll(result);
 		}
-
-		//System.out.println("After filter: " + result.size());
 		return result;
 	}
 	private VerticalGradeProfile adjustFirsAlignment(VerticalGradeProfile profile) {
@@ -165,7 +164,7 @@ public class EndingsWithBeginnersAdjuster_EqualArea implements EndingsWithBeginn
 		double ends = currentAlignment.getEndS();
 		double area0 = originalGradePoints.areaEncerrada(starts, ends);
 		double A1 = currentAlignment.getPolynom2().getA1();
-		double newA0 = area0/(ends -starts) -  A1 * (starts + ends) / 2;
+		double newA0 = area0/(ends -starts) -  A1 * (starts + ends) / 2.0;
 		Straight newr = new Straight(newA0, A1);
 		profile.set(0, new GradeProfileAlignment(newr, starts,ends));
 		return profile;

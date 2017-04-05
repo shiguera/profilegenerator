@@ -237,7 +237,7 @@ public class M607_Reconstruct_Leika_1_Selec {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(4000.0, 10300.0);
+		data = data.extract(7500.0, 9700.0);
 		return data;
 	}
 
@@ -251,7 +251,7 @@ public class M607_Reconstruct_Leika_1_Selec {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(4000.0, 10300.0);
+		data = data.extract(7500.0, 9700.0);
 		return data;		
 	}
 	

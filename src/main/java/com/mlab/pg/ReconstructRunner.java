@@ -22,7 +22,7 @@ public class ReconstructRunner {
 	Logger LOG = Logger.getLogger(ReconstructRunner.class);
 	
 	protected Reconstructor reconstructor;
-	protected ReconstructEssayData essayData;
+	protected EssayData essayData;
 	protected InterpolationStrategyType interpolationStrategy;
 	protected XYVectorFunction originalVProfile;
 	protected XYVectorFunction originalGradeData;
@@ -40,18 +40,16 @@ public class ReconstructRunner {
 	protected int verticalCurveCount, gradeCount, cuasiGradeCount, shortAlignmentCount, twoGradeCount;
 	protected String stringReport;
 
-	public ReconstructRunner(ReconstructEssayData essaydata) {
+	public ReconstructRunner(EssayData essaydata) {
 		this.essayData = essaydata;
 		interpolationStrategy = essayData.getInterpolationStrategy();
 		
 		readOriginalVProfile();
 		readOriginalGradeData();
-		setZLimits();
 		selectDataInterval();
+		setZLimits();
 		
 		integrateGradeData();
-		
-		
 		
 	}
 	private void getResults() {
@@ -183,7 +181,13 @@ public class ReconstructRunner {
 	}
 	public String getStringReport() {
 		StringBuffer cad = new StringBuffer();
-		cad.append("Reconstrucción de la geometría del perfil longitudinal: " + essayData.getEssayName() + "\n");
+		cad.append("Reconstrucción de la geometría del perfil longitudinal: \n");
+		cad.append(essayData.getEssayName() + "\n");
+		String tramo = "Traza completa";
+		if(essayData.getStartS() != -1.0) {
+			tramo = essayData.getStartS() + " - " + essayData.getEndS();
+		}
+		cad.append("Tramo : " + tramo + "\n");
 		cad.append("--------------------------------------------------------------------------" + "\n");
 		cad.append("--------------------------------------------------------------------------" + "\n");
 		cad.append("Longitud del track (m) : " + Math.round(reconstructor.getTrackLength()*100.0)/100.0 + "\n");

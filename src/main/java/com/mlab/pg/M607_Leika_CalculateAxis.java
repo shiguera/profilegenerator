@@ -38,7 +38,7 @@ public class M607_Leika_CalculateAxis {
 		TrackAverage averager = new TrackAverage();
 		double[][] resultTrack = averager.average(track1, track2);
 		
-		String outfilenamecomplete = IOUtil.composeFileName(path, "trackLeika_M607_Axis.csv");
+		String outfilenamecomplete = IOUtil.composeFileName(path, "M607_Leika_Axis_xyz.csv");
 		int result = IOUtil.write(outfilenamecomplete, resultTrack, 12, 6, ',');
 		Assert.assertEquals(1, result);
 	}

@@ -233,7 +233,7 @@ public class M607_Reconstruct_Leika_Axis {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(9786.0, 10651.0);
+		//data = data.extract(9786.0, 10651.0);
 		return data;
 	}
 
@@ -245,7 +245,7 @@ public class M607_Reconstruct_Leika_Axis {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		data = data.extract(9786.0, 10651.0);
+		//data = data.extract(9786.0, 10651.0);
 		return data;		
 	}
 	

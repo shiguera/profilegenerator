@@ -7,31 +7,31 @@ import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
- * Ensayo: M-607, track Leika, Ascendente, track completo
+ * Ensayo: M-607, track Leika, Ascendente, track entre s=6600 y s=9800
  * @author shiguera
  *
  */
-public class M607_Leika_Track1_Essay_1 {
+public class Essay_2_M607_Leika_Asc {
 
 	
-	static ReconstructEssayData essayData;
+	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M607_Leika_Track1_Essay_1() {
+	public Essay_2_M607_Leika_Asc() {
 		
-		essayData = new ReconstructEssayData();
-		essayData.setEssayName("M-607 - GPS LEika - Ascendente 1");
-		essayData.setGraphTitle("M-607 - GPS LEika - Ascendente 1");
+		essayData = new EssayData();
+		essayData.setEssayName("M-607 - GPS LEika - Ascendente 2");
+		essayData.setGraphTitle("M-607 - GPS LEika - Ascendente 2");
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
 		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
 		essayData.setXyzFileName("M607_Leika_1_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M607_Leika_1_1.txt");
+		essayData.setReportFileName("M607_Leika_1_2.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(1000.0);
-		//essayData.setEndS(5000.0);
+		essayData.setStartS(6600.0);
+		essayData.setEndS(9800.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -41,14 +41,13 @@ public class M607_Leika_Track1_Essay_1 {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M607_Leika_Track1_Essay_1 essay = new M607_Leika_Track1_Essay_1();
-		//essay.doIterative();
-		essay.doMultiparameter();
+		Essay_2_M607_Leika_Asc essay = new Essay_2_M607_Leika_Asc();
+		essay.doIterative();
+		//essay.doMultiparameter();
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	

@@ -26,20 +26,7 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 		this.originalGradePoints = originalgradepoints;
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
-		this.pointCharacteriserStrategy = new PointCharacteriserStrategy() {
-			
-			@Override
-			public double[] calculaRectaPosterior(XYVectorFunction function, int pointindex, int mobilesize) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public double[] calculaRectaAnterior(XYVectorFunction function, int pointindex, int mobilesize) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
+		this.pointCharacteriserStrategy = new PointCharacteriserStrategy_EqualArea();
 		
 		originalIntervalArray = typeIntervalArray;
 		
@@ -50,22 +37,23 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 		resultIntervalArray = new TypeIntervalArray();
 		
 		for(int i=0; i<originalIntervalArray.size(); i++) {			
+			TypeInterval currentInterval = originalIntervalArray.get(i);
 			// El primer y último segmento los añado como están
 			// Más adelante, si son Border, los procesaré
 			if(i==0 || i==originalIntervalArray.size()-1) {
-				resultIntervalArray.add(originalIntervalArray.get(i));
+				resultIntervalArray.add(currentInterval);
 				continue;
 			}
 			
 			// Los segmentos que no son BORDER los añado como están
-			if (originalIntervalArray.get(i).getPointType()!=PointType.BORDER_POINT) {
-				resultIntervalArray.add(originalIntervalArray.get(i));
+			if (currentInterval.getPointType() != PointType.BORDER_POINT) {
+				resultIntervalArray.add(currentInterval);
 				continue;
 			}
 			
 			// Los intervalos con puntos BorderPoint los proceso
-			if(originalIntervalArray.get(i).getPointType()==PointType.BORDER_POINT) {
-				if(originalIntervalArray.get(i).size() == 1) {	
+			if(currentInterval.getPointType() == PointType.BORDER_POINT) {
+				if(currentInterval.size() == 1) {	
 					// Si el border segment tiene solo un punto, lo añado al final del previousSegment y al inicio del followingSegment
 					processBorderIntervalWithOnePoint(originalIntervalArray, i, resultIntervalArray);
 				} else {
@@ -77,17 +65,16 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 		}
 		//System.out.println(resultIntervalArray.size());
 		if(resultIntervalArray.size()>1) {			
-			// Si el primer segmento ha quedado del tipo BORDER, le asigno del tipo del siguiente
+			// Si el primer segmento ha quedado del tipo BORDER, lo proceso
 			TypeInterval firstInterval = resultIntervalArray.get(0); 
 			if(firstInterval.getPointType() == PointType.BORDER_POINT) {
 				processFirstSegmentAsBorder();
 			}
 			
-			// Si el último segmento ha quedado del tipo BORDER, le asigno el tipo del anterior
+			// Si el último segmento ha quedado del tipo BORDER, lo proceso
 			int last = resultIntervalArray.size()-1;
 			if(resultIntervalArray.get(last).getPointType() == PointType.BORDER_POINT) {
-				resultIntervalArray.get(last-1).setEnd(resultIntervalArray.get(last).getEnd());
-				resultIntervalArray.remove(last);
+				processLastSegmentAsBorder();
 			}
 		}
 		return resultIntervalArray;
@@ -99,23 +86,25 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 		// No utilizable en esta estrategia
 		return null;
 	}
-
+	
 	private void processFirstSegmentAsBorder() {
-		if(resultIntervalArray.get(0).size()<4) {
-			// Si tiene menos de cuatro puntos se lo asigno al siguiente
-			resultIntervalArray.get(1).setStart(0);
+		TypeInterval segment0 = resultIntervalArray.get(0);
+		TypeInterval segment1 = resultIntervalArray.get(1);
+		
+		if(segment0.size()<2) {
+			// Si tiene menos de dos puntos se lo asigno al siguiente
+			segment1.setStart(0);
 			resultIntervalArray.remove(0);
 			return;
 		}
 		
-		int last = resultIntervalArray.get(0).getEnd();
+		int last = segment0.getEnd();
 		double[] rr = originalGradePoints.rectaPosteriorEqualArea(0, last);
-		TypeInterval nextSegment =resultIntervalArray.get(1);
-		if(rr[1]<=thresholdSlope) {
+		if(Math.abs(rr[1])<=thresholdSlope) {
 			// La recta es horizontal = grade
-			if(nextSegment.getPointType()==PointType.GRADE) {
+			if(segment1.getPointType()==PointType.GRADE) {
 				// Si el siguiente es recta, los uno en uno solo
-				nextSegment.setStart(0);
+				segment1.setStart(0);
 				resultIntervalArray.remove(0);
 			} else {
 				// Si el siguiente es VC, el primero lo convierto en recta
@@ -123,14 +112,50 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 			}
 		} else {
 			// Caso aproxima mejor la parábola
-			if(nextSegment.getPointType()==PointType.GRADE) {
+			if(segment1.getPointType()==PointType.GRADE) {
 				// Si el siguiente es recta, el primero lo convierto en VC
 				resultIntervalArray.get(0).setPointType(PointType.VERTICAL_CURVE);
 			} else {
 				// Si el siguiente es VC las uno en una sola 
 				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
-				nextSegment.setStart(1);
+				segment1.setStart(0);
 				resultIntervalArray.remove(0);
+			}
+		}
+	}
+	private void processLastSegmentAsBorder() {
+		TypeInterval lastsegment = resultIntervalArray.getLast();
+		int lastindex = resultIntervalArray.size()-1;
+		TypeInterval previous = resultIntervalArray.get(lastindex - 1);
+		if(lastsegment.size()<2) {
+			// Si tiene menos de dos puntos se lo asigno al siguiente
+			previous.setEnd(lastsegment.getEnd());
+			resultIntervalArray.remove(lastindex);
+			return;
+		}
+		
+		int first = lastsegment.getStart();
+		double[] rr = originalGradePoints.rectaAnteriorEqualArea(first, lastindex);
+		if(Math.abs(rr[1])<=thresholdSlope) {
+			// La recta es horizontal = grade
+			if(previous.getPointType()==PointType.GRADE) {
+				// Si el anterior es recta, los uno en uno solo
+				previous.setEnd(lastsegment.getEnd());
+				resultIntervalArray.remove(lastindex);
+			} else {
+				// Si el anterior es VC, el último lo convierto en recta
+				resultIntervalArray.get(lastindex).setPointType(PointType.GRADE);
+			}
+		} else {
+			// Caso aproxima mejor la parábola
+			if(previous.getPointType()==PointType.GRADE) {
+				// Si el anterior es recta, el último lo convierto en VC
+				resultIntervalArray.get(lastindex).setPointType(PointType.VERTICAL_CURVE);
+			} else {
+				// Si el anterior es VC las uno en una sola 
+				// TODO Quizás habría que comprobar si aproxima mejor con una sola o con dos independientes
+				previous.setEnd(lastsegment.getEnd());
+				resultIntervalArray.remove(lastindex);
 			}
 		}
 	}
@@ -144,22 +169,23 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 	 */
 	private TypeIntervalArray processBorderIntervalWithOnePoint(TypeIntervalArray originalIntervalArray, int i, TypeIntervalArray resultIntervalArray) {
 		TypeInterval currentSegment = originalIntervalArray.get(i);
-		TypeInterval lastSegmentAdded = resultIntervalArray.get(resultIntervalArray.size()-1); 
+		TypeInterval lastSegmentAdded = resultIntervalArray.getLast(); 
 		lastSegmentAdded.setEnd(currentSegment.getStart());
-		TypeInterval followingSegment = originalIntervalArray.get(i+1).copy();
+		TypeInterval followingSegment = originalIntervalArray.get(i+1);
 		resultIntervalArray.add(followingSegment);
-		lastSegmentAdded = resultIntervalArray.get(resultIntervalArray.size()-1);
+		lastSegmentAdded = resultIntervalArray.getLast();
 		lastSegmentAdded.setStart(currentSegment.getEnd());
 		return resultIntervalArray;
 	}
 	private void processBorderIntervalWithMoreThanOnePoint(XYVectorFunction originalGradePoints, TypeIntervalArray originalIntervalArray, int index, TypeIntervalArray resultIntervalArray) {
-		TypeInterval currentBorderSegment = originalIntervalArray.get(index).copy();
-		TypeInterval followingSegment = originalIntervalArray.get(index+1).copy();
+		TypeInterval currentBorderSegment = originalIntervalArray.get(index);
+		TypeInterval followingSegment = originalIntervalArray.get(index+1);
 		
 		// Si el border segment tiene más de un punto busco
 		// el que mejor ajuste da por ecm y prolongo 
 		// los segmentos anterior y posterior hasta él
-		TypeInterval previousSegment = originalIntervalArray.get(index-1).copy();
+		//TypeInterval previousSegment = originalIntervalArray.get(index-1).copy();
+		TypeInterval previousSegment = resultIntervalArray.getLast();
 		XYVectorFunction originalpoints = originalGradePoints.subList(previousSegment.getStart(), followingSegment.getEnd());
 		double[] originalY = originalpoints.getYValues();
 				
@@ -198,10 +224,8 @@ public class ProcessBorderIntervalsStrategy_EqualArea implements ProcessBorderIn
 				}
 			}
 		}
-		//LOG.debug("ecm = " + ecmmin);
-		//LOG.debug("ecmmin_index = " + ecmmin_index);
 		resultIntervalArray.getLast().setEnd(ecmmin_index);
-		resultIntervalArray.add(followingSegment.copy());
+		resultIntervalArray.add(followingSegment);
 		resultIntervalArray.getLast().setStart(ecmmin_index);
 	}
 	@Override

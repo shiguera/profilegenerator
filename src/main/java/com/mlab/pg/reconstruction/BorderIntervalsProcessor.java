@@ -63,7 +63,7 @@ public class BorderIntervalsProcessor {
 	 * uniéndolos al anterior o siguiente, si son del mismo tipo
 	 */
 	public TypeIntervalArray processPoints(XYVectorFunction originalgradePoints, TypeIntervalArray typeintervalArray, int mobilebasesize, double thresholdslope) {	
-		originalGradePoints = originalgradePoints.clone();
+		originalGradePoints = originalgradePoints;
 		mobileBaseSize = mobilebasesize;
 		thresholdSlope = thresholdslope;
 		

@@ -58,14 +58,11 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 
 	private VerticalGradeProfile filterGrades(VerticalGradeProfile gprofile) {
 		//LOG.debug("filterGrades()");
-		//System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
-		int counter = 0;
+
 		for(int i=0; i<gprofile.size(); i++) {
 			GradeProfileAlignment current = gprofile.get(i);
 			if(Math.abs(current.getSlope())<thresholdSlope) {
-				//System.out.println("Filtering..." + i);
-				counter++;
 				double s1 = current.getStartS();
 				int i1 = originalGradePoints.getNearestIndex(s1);
 				double s2 = current.getEndS();
@@ -78,8 +75,6 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 				result.add(current);
 			}
 		}
-		//System.out.println("Filtered: " + counter);
-		//System.out.println("After filter: " + result.size());
 		return result;
 	}
 
@@ -87,16 +82,11 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 	// y si es así las une en una única y horizontal
 	private VerticalGradeProfile filterTwoGrades(VerticalGradeProfile gprofile) {
 		//LOG.debug("filterTwoGrades()");
-		//System.out.println("Before: " + gprofile.size());
 		VerticalGradeProfile result = new VerticalGradeProfile();
 		VerticalGradeProfile processGP = new VerticalGradeProfile();
 		processGP.addAll(gprofile);
 		boolean changes = true;
-		int counter = 0;
-		int filteredCounter = 0;
 		while(changes) {
-			counter++;
-			//System.out.println("Ronda filtro: " + counter);
 			changes = false;
 			result = new VerticalGradeProfile();
 			result.add(processGP.get(0));
@@ -104,8 +94,6 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 				GradeProfileAlignment current = processGP.get(i);
 				GradeProfileAlignment previous = result.getLastAlign();
 				if(Math.abs(current.getSlope())<thresholdSlope && Math.abs(previous.getSlope()) < thresholdSlope) {
-					//System.out.println("Filtering...");
-					filteredCounter++;
 					double s1 = previous.getStartS();
 					int i1 = originalGradePoints.getNearestIndex(s1);
 					double s2 = current.getEndS();
@@ -123,8 +111,6 @@ public class GradeProfileCreator_EqualArea implements GradeProfileCreator {
 			processGP = new VerticalGradeProfile();
 			processGP.addAll(result);
 		}
-		//System.out.println("Filtered: " + filteredCounter);
-		//System.out.println("After: " + result.size());
 		return result;
 	}
 

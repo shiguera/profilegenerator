@@ -172,7 +172,7 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	 * @param x2 Valor de la x del extremo derecho del intervalo
 	 * @return XYVectorFunction comprendida en el intervalo
 	 */
-	public XYVectorFunction extract(double x1, double x2) {
+	public XYVectorFunction extract_old(double x1, double x2) {
 		if(x1>x2 || x1>getEndX() || x2<getStartX()) {
 			return new XYVectorFunction();
 		}
@@ -184,6 +184,15 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		if (x2 < getEndX()) {
 			i2 = followingIndex(x2);
 		}
+		XYVectorFunction sublist = subList(i1,i2);
+		return sublist;
+	}
+	public XYVectorFunction extract(double x1, double x2) {
+		if(x1>x2 || x1>getEndX() || x2<getStartX()) {
+			return new XYVectorFunction();
+		}
+		int i1 = getNearestIndex(x1);
+		int i2 = getNearestIndex(x2);
 		XYVectorFunction sublist = subList(i1,i2);
 		return sublist;
 	}

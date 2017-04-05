@@ -10,7 +10,7 @@ import com.mlab.pg.util.IOUtil;
 public class Pruebas {
 
 	
-	static ReconstructEssayData essayData;
+	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
@@ -30,7 +30,7 @@ public class Pruebas {
 
 	public Pruebas() {
 		
-		essayData = new ReconstructEssayData();
+		essayData = new EssayData();
 		essayData.setEssayName("M-607 - GPS LEika - Ascendente 1");
 		essayData.setGraphTitle("M-607 - GPS LEika - Ascendente 1");
 		essayData.setInPath("/home/shiguera/ownCloud/workspace/roads/ProfileGenerator");
