@@ -265,4 +265,46 @@ public class TestMathUtil {
 		LOG.debug("test_altitude()");
 		System.out.println(MathUtil.altitude(898.0));
 	}
+
+	@Test
+	public void test_distanceTwoPoints() {
+		LOG.debug("test_distanceTwoPoints()");
+		double[] P1 = new double[]{0.0,0.0};
+		double[] P2 = new double[]{1.0,1.0};
+		Assert.assertEquals(Math.sqrt(2.0), MathUtil.distanceTwoPoints(P1, P2), 0.001);
+		P1 = new double[]{-1.0,-1.0};
+		P2 = new double[]{1.0,1.0};
+		Assert.assertEquals(2*Math.sqrt(2.0), MathUtil.distanceTwoPoints(P1, P2), 0.001);
+	}
+
+	@Test
+	public void test_distancePointToStraight() {
+		LOG.debug("test_distancePointToStraight()");
+		double[] P1 = new double[]{2.0,-1.0};
+		double[] r = new double[]{0.0, -3.0/4.0};
+		Assert.assertEquals(0.4, MathUtil.distancePointToStraight(P1, r), 0.001);
+		P1 = new double[]{0.0,0.0};
+		r = new double[]{25.0/4.0, 3.0/4.0};
+		Assert.assertEquals(5.0, MathUtil.distancePointToStraight(P1, r), 0.001);
+	}
+
+	@Test
+	public void test_distancePointToPoliline() {
+		LOG.debug("test_distancePointToPoliline()");
+		double[] P1 = new double[]{3.5,0.0};
+		double[][] p = new double[][]{{0.0,0.0},{1.0,1.0},{2.0,1.0},{3.0,1.0},{4.0,1.0}};
+		Assert.assertEquals(1.0, MathUtil.distancePointToPoliline(P1, p), 0.001);
+		P1 = new double[]{6.0,0.0};
+		Assert.assertEquals(1.0, MathUtil.distancePointToPoliline(P1, p), 0.001);
+		
+		p = new double[][]{{0.0,0.0},{1.0,1.0},{2.0,2.0},{3.0,3.0},{4.0,4.0}};
+		P1 = new double[] {1.0,0.0};
+		double[] r = new double[]{0.0,1.0};
+		double d = MathUtil.distancePointToStraight(P1, r);
+		Assert.assertEquals(d, MathUtil.distancePointToPoliline(P1, p), 0.001);
+		
+		
+		
+	}
+
 }

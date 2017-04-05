@@ -7,6 +7,79 @@ import com.mlab.pg.xyfunction.Polynom2;
 
 public class MathUtil {
 
+	/**
+	 * Calcula la distancia de un punto a una polilinea 
+	 * @param P Coordenadas (x, y) del punto
+	 * @param poliline Polilinea (xi, yi)
+	 * 
+	 * @return distancia
+	 */
+	public static double distancePointToPoliline(double[] P, double[][] poliline) {
+		double[] P0 = poliline[0];
+		double d1 = distanceTwoPoints(P, P0);
+		int index1 =0;
+		double[] P1 = poliline[1];
+		int index2 = 1;
+		double d2 = distanceTwoPoints(P, P1);
+		if(d2<d1) {
+			double aux = d1;
+			d1 = d2;
+			d2 = aux;
+			index1 = 1;
+			index2 = 0;
+		}
+		for(int i=1; i< poliline.length; i++) {
+			double d = distanceTwoPoints(P, poliline[i]);
+			if(d < d1) {
+				d2 = d1;
+				index2 = index1;
+				d1 = d;
+				index1 = i;
+			} else if(d < d2) {
+				d2 = d;
+				index2 = i;
+			}
+		}
+		double[] Pmin1 = poliline[index1];
+		double[] Pmin2 = poliline[index2];
+		double[] r = MathUtil.rectaPorDosPuntos(Pmin1, Pmin2);
+		double d = distancePointToStraight(P, r);
+		return d;	
+	}
+	/**
+	 * Distancia de punto a recta
+	 * 
+	 * @param P Coordenadas (x,y) del punto
+	 * @param straight recta en la forma y= r[0] + r[1]*x
+	 * 
+	 * @return distancia
+	 */
+	public static double distancePointToStraight(double[] P, double[] r) {
+		double d = Math.abs(r[1]*P[0] - P[1] + r[0])/Math.sqrt(r[1]*r[1] + 1);
+		return d;
+	}
+	
+	/**
+	 * Calcula la distancia entre dos puntos
+	 * 
+	 * @param P1 Coodenadas (x, y) del primer punto
+	 * @param P2 Coodenadas (x, y) del segundo punto
+	 * 
+	 * @return distancia
+	 */
+	public static double distanceTwoPoints(double[] P1, double[] P2) {
+		double x1 = P1[0];
+		double x2 = P2[0];
+		double y1 = P1[1];
+		double y2 = P2[1];
+		double d = Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+		return d;
+	}
+	/**
+	 * Invierte un array de doubles
+	 * @param inarray
+	 * @return
+	 */
 	public static double[][] invert(double[][] inarray) {
 		int length = inarray.length;
 		int width = inarray[0].length;

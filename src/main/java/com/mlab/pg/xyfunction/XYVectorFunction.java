@@ -522,7 +522,7 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 
 	public int nearestInFunction2(int indexInFunction1, XYVectorFunction f2) {
-		double[][] track1 = this.getValuesAsArray();
+		double[][] track1 = getValuesAsArray();
 		double[][] track2 = f2.getValuesAsArray();
 		double x1 = track1[indexInFunction1][0];
 		double y1 = track1[indexInFunction1][1];
