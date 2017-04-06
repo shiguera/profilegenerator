@@ -231,7 +231,7 @@ public class Reconstructor {
 		int contador = 0;
 		for (int i=3; i<=maxBaseSize; i++) {
 			for (int j=0; j<thresholdSlopes.length; j++) {
-				//System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
+				System.out.println("Test: " + contador + " BaseSize: " + i + ", thresholdSlope: " + thresholdSlopes[j]);
 				processUnique( i, thresholdSlopes[j]);
 				VerticalGradeProfile gradeProfile = getGradeProfile();
 				if(gradeProfile == null || gradeProfile.size()<1) {
@@ -270,7 +270,7 @@ public class Reconstructor {
 			//maxBaseSize = 10;
 		//}
 		double sep = separacionMedia;
-		int num = (int)Math.rint(200.0/sep);
+		int num = (int)Math.rint(100.0/sep);
 		return num+2;
 //		int maxBaseSize = 200;
 //		int maxbysize = originalGradePoints.size() / 2;

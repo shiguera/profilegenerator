@@ -2,6 +2,8 @@ package com.mlab.pg.trackprocessor;
 
 import java.io.File;
 
+import org.jfree.util.Log;
+
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.util.MathUtil;
 
@@ -19,6 +21,7 @@ public class TrackUtil {
 		String infilename = IOUtil.composeFileName(inpath, xyzfilename);
 		File infile = new File(infilename);
 		if(!infile.exists()) {
+			Log.error("File doesn't exist");
 			return "";
 		}
 		double[][] intrack = readXYZTrack(infile, infileHeadLines);

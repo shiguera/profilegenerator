@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.old;
 
 import java.awt.BasicStroke;
 import java.io.File;
@@ -21,9 +21,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_Leika_Axis {
+public class M608_Reconstruct_Garmin_OneTrack {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_Leika_Axis.class);
+	static Logger LOG = Logger.getLogger(M608_Reconstruct_Garmin_OneTrack.class);
 	
 	static double startZ;
 	static double hmax;
@@ -44,10 +44,10 @@ public class M607_Reconstruct_Leika_Axis {
 	//static OPTION option= OPTION.UNIQUE;
 	//static OPTION option= OPTION.ShowVerticalProfile;
 	
-	static String graphTitle = "M-607 Eje promediado - GPSLeika";
-	static String sginfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/trackLeika_M607_Axis_SG.csv";
-	static String szinfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/trackLeika_M607_Axis_SZ.csv";
-	static String outFileName = "M607_Leika_Axis.txt";
+	static String graphTitle = "M-608- Axis from one track Garmin ";
+	static String sginfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_SG.csv";
+	static String szinfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_SZ.csv";
+	static String outFileName = "M608_trackGarmin_OneTrack.txt";
 	static int baseSize = 6;
 	static double thresholdSlope = 1.25e-5;
 	static double SHORT_ALIGNMENT_LENGTH =50.0;
@@ -177,7 +177,7 @@ public class M607_Reconstruct_Leika_Axis {
 		System.out.println(getStringReport());
 	}
 	private static void printFile() {		
-		String filepath = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksLeika/" + outFileName;
+		String filepath = "/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/" + outFileName;
 		File file = new File(filepath);
 		VerticalProfileWriter.writeVerticalProfile(file, resultVProfile, getStringReport());
 
@@ -227,13 +227,14 @@ public class M607_Reconstruct_Leika_Axis {
 
 	private static XYVectorFunction readGradeData() {
 		LOG.debug("readGradeData()");
+		
 		File file = new File(sginfilename);
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());		
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(9786.0, 10651.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;
 	}
 
@@ -245,7 +246,7 @@ public class M607_Reconstruct_Leika_Axis {
 		XYVectorFunctionCsvReader reader = new XYVectorFunctionCsvReader(file, ',', true);
 		XYVectorFunction data = reader.read();
 		Assert.assertNotNull(data);
-		//data = data.extract(9786.0, 10651.0);
+		//data = data.extract(3500.0, 5800.0);
 		return data;		
 	}
 	

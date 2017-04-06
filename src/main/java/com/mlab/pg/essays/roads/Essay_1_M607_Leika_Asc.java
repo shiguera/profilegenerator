@@ -1,40 +1,41 @@
-package com.mlab.pg;
+package com.mlab.pg.essays.roads;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import com.mlab.pg.graphics.FunctionDisplayer;
+import com.mlab.pg.EssayData;
+import com.mlab.pg.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
-import com.mlab.pg.valign.VerticalGradeProfile;
-import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
 /**
- * Ensayo: M-607, track Leika, Ascendente, eje promediado
+ * Ensayo: M-607, track Leika, Ascendente, track completo
  * @author shiguera
  *
  */
-public class Essay_4_M607_Leika_Asc_Axis {
+public class Essay_1_M607_Leika_Asc {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_4_M607_Leika_Asc_Axis() {
+	public Essay_1_M607_Leika_Asc() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 Ascendente - GPS LEika - Eje promediado");
-		essayData.setGraphTitle("M-607 Ascendente - GPS LEika - Eje promediado");
+		essayData.setEssayName("Ensayo 1: M-607 - GPS LEika - Ascendente 1");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Ascendente");
+		essayData.setGraphTitle("M-607 - GPS LEika - Ascendente 1");
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
 		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
-		essayData.setXyzFileName("M607_Leika_Axis_xyz.csv");
+		essayData.setXyzFileName("M607_Leika_1_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M607_Leika_Axis_4.txt");
+		essayData.setReportFileName("M607_Leika_1_1.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(4000.0);
-		essayData.setEndS(10000.0);
+		//essayData.setStartS(1000.0);
+		//essayData.setEndS(5000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -44,7 +45,7 @@ public class Essay_4_M607_Leika_Asc_Axis {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_4_M607_Leika_Asc_Axis essay = new Essay_4_M607_Leika_Asc_Axis();
+		Essay_1_M607_Leika_Asc essay = new Essay_1_M607_Leika_Asc();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

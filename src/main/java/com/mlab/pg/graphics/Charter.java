@@ -1,8 +1,6 @@
 package com.mlab.pg.graphics;
 
-import java.awt.BasicStroke;
-
-import javax.swing.JFrame;
+import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -11,7 +9,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -66,6 +63,7 @@ public class Charter {
 		
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 500));
+		chartPanel.setDefaultDirectoryForSaveAs(new File("/home/shiguera/ownCloud/tesis/2016-2017/TesisMain/img/reconstruccion"));
 		return chartPanel; 
 	}
 	

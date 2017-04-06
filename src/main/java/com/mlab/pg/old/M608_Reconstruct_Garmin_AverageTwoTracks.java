@@ -1,4 +1,4 @@
-package com.mlab.pg;
+package com.mlab.pg.old;
 
 import java.awt.BasicStroke;
 import java.io.File;
@@ -21,9 +21,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 
 
-public class M607_Reconstruct_RoadRecorder {
+public class M608_Reconstruct_Garmin_AverageTwoTracks {
 
-	static Logger LOG = Logger.getLogger(M607_Reconstruct_RoadRecorder.class);
+	static Logger LOG = Logger.getLogger(M608_Reconstruct_Garmin_AverageTwoTracks.class);
 	
 	static double startZ;
 	static double hmax;
@@ -44,10 +44,10 @@ public class M607_Reconstruct_RoadRecorder {
 	//static OPTION option= OPTION.UNIQUE;
 	//static OPTION option= OPTION.ShowVerticalProfile;
 	
-	static String graphTitle = "M-607 - Axis running RoadRecorder over an smartphone";
-	static String sginfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis_SG.csv";
-	static String szinfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/M607_Asc_Axis_SZ.csv";
-	static String outFileName = "M607_Axis_RoadRecorder.txt";
+	static String graphTitle = "M-608- Axis as Average from two tracks Garmin ";
+	static String sginfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_Average_SG.csv";
+	static String szinfilename = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_Average_SZ.csv";
+	static String outFileName = "M608_trackGarmin_AverageTwoTracks.txt";
 	static int baseSize = 6;
 	static double thresholdSlope = 1.25e-5;
 	static double SHORT_ALIGNMENT_LENGTH =50.0;
@@ -177,7 +177,7 @@ public class M607_Reconstruct_RoadRecorder {
 		System.out.println(getStringReport());
 	}
 	private static void printFile() {		
-		String filepath = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/tracksRoadRecorder/" + outFileName;
+		String filepath = "/home/shiguera/ownCloud/workspace/roads/ProfileGenerator/src/main/resources/" + outFileName;
 		File file = new File(filepath);
 		VerticalProfileWriter.writeVerticalProfile(file, resultVProfile, getStringReport());
 

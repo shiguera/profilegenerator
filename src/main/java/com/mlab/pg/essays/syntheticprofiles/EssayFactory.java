@@ -1,4 +1,4 @@
-package com.mlab.pg.essays;
+package com.mlab.pg.essays.syntheticprofiles;
 
 import java.util.ArrayList;
 import java.util.List;
