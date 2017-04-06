@@ -20,6 +20,36 @@ public class TestMathUtil {
 		LOG.debug("beforeClass()");
 	}
 
+	
+	@Test
+	public void test_doubleToString() {
+		LOG.debug("test_doubleToString()");
+		double d = 12.37;
+		Assert.assertEquals("12.3700", MathUtil.doubleToString(d, 12, 4,false));
+		Assert.assertEquals("12.37", MathUtil.doubleToString(d, 12, 4,true));
+	}
+	
+	/**
+	 * Quita los ceros del final de un número decimal, excepto el último
+	 */
+	@Test
+	public void test_trimTrailingZeros() {
+		LOG.debug("test_trimTrailingZeros()");
+		String d = "2.0030";
+		Assert.assertEquals("2.003", MathUtil.trimTrailingZeros(d));
+		d = "2,003000";
+		Assert.assertEquals("2,003", MathUtil.trimTrailingZeros(d));
+		d = "2003000";
+		Assert.assertEquals("2003000", MathUtil.trimTrailingZeros(d));
+		d = "2003.0003";
+		Assert.assertEquals("2003.0003", MathUtil.trimTrailingZeros(d));
+		d = "2003.000";
+		Assert.assertEquals("2003.0", MathUtil.trimTrailingZeros(d));
+		d = "23,0";
+		Assert.assertEquals("23,0", MathUtil.trimTrailingZeros(d));
+
+
+	}
 	@Test
 	public void testEcm() {
 		LOG.debug("testEcm()");

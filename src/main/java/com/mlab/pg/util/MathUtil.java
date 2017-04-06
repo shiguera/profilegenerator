@@ -8,6 +8,43 @@ import com.mlab.pg.xyfunction.Polynom2;
 public class MathUtil {
 
 	/**
+	 * double to string con punto decimal en lugar de coma,
+	 * y sin espacios delante
+	 * @param d
+	 * @param width
+	 * @param decimals
+	 * @return
+	 */
+	public static String doubleToString(double d, int width, int decimals, boolean trimtrailingzeros) {
+		String cadformat = String.format("%%%d.%df", width, decimals);
+		String cad = String.format(cadformat,d).trim().replace(',', '.');
+		if(trimtrailingzeros) {
+			cad = MathUtil.trimTrailingZeros(cad);
+		}
+		return cad;
+	}
+	/**
+	 * Suprime los ceros finales a la derecha de la coma
+	 * @param number
+	 * @return
+	 */
+	public static String trimTrailingZeros(String number) {
+		if(number.contains(".")  || number.contains(",")) {
+			boolean changes = true;
+			while(changes) {
+				changes = false;
+				if(number.charAt(number.length()-1) == '0') {
+					number = number.substring(0, number.length()-1);
+					changes = true;
+				} else if(number.charAt(number.length()-1) == '.' || number.charAt(number.length()-1) == ',') {
+					number = number + "0" ;
+				}
+			}
+		}
+		return number;
+	}
+	
+	/**
 	 * Calcula la distancia de un punto a una polilinea 
 	 * @param P Coordenadas (x, y) del punto
 	 * @param poliline Polilinea (xi, yi)
@@ -510,6 +547,11 @@ public class MathUtil {
 		return dest;
 	}
 
+	/**
+	 * Ecuación barométrica en pruebas (necesita ser comprobada)
+	 * @param pressure
+	 * @return
+	 */
 	static 	public double altitude(double pressure) {
 		double p = pressure*100.0;
 		double aux = Math.log(p/101325.0) / 5.256;
@@ -517,6 +559,7 @@ public class MathUtil {
 		aux = 288.15 *(1 - aux)/0.0065;
 		return aux;
 	}
+	
 	
 
 

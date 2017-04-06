@@ -1,5 +1,7 @@
 package com.mlab.pg.xyfunction;
 
+import com.mlab.pg.util.MathUtil;
+
 /**
  * Representa un polinomio de grado 2 en la forma :
  * y = a0 + a1*x + a2*x² 
@@ -88,5 +90,21 @@ public class Polynom2 implements XYFunction {
 	@Override
 	public Polynom2 clone() throws CloneNotSupportedException {
 		return new Polynom2(a0, a1, a2);
+	}
+
+	public String asXml() {
+		StringBuffer buf =  new StringBuffer();
+		buf.append("<polynom2>");
+		buf.append("<a0>");
+		buf.append(MathUtil.doubleToString(a0, 14,  8,  true));
+		buf.append("</a0>");
+		buf.append("<a1>");
+		buf.append(MathUtil.doubleToString(a1, 14,  8,  true));
+		buf.append("</a1>");
+		buf.append("<a2>");
+		buf.append(MathUtil.doubleToString(a2, 14,  8,  true));
+		buf.append("</a2>");
+		buf.append("</polynom2>");
+		return buf.toString();
 	}
 }
