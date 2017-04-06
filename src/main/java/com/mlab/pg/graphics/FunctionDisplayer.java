@@ -46,19 +46,19 @@ public class FunctionDisplayer {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
 	    		Charter charter = new Charter(graphTitle, xlabel, ylabel);
-	    		charter.addXYVectorFunction(data1, series1Title);
 	    		charter.addXYVectorFunction(data2, series2Title);
+	    		charter.addXYVectorFunction(data1, series1Title);
 	    		
 	        	JFrame frame = new JFrame("Charter");
 	            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    		frame.setContentPane(charter.getChartPanel());
         		charter.getChart().getXYPlot().getRangeAxis().setRange(getMinY(data1, data2), getMaxY(data1, data2));
 	    		
-        		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(strokeWidth1));
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(0, seriesPaint1);
+        		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(strokeWidth2));
+	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(0, seriesPaint2);
 	    		
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(1, new BasicStroke(strokeWidth2));
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(1, seriesPaint2);
+	    		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(1, new BasicStroke(strokeWidth1));
+	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(1, seriesPaint1);
 
 	    		frame.setPreferredSize(new Dimension(1400, 750));
 	    		frame.pack();

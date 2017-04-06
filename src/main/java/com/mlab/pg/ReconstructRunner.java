@@ -236,5 +236,26 @@ public class ReconstructRunner {
 	public double getSeparacionMedia() {
 		return reconstructor.getSeparacionMedia();
 	}
+	public double getStartZ() {
+		return startZ;
+	}
+	public void setStartZ(double startZ) {
+		this.startZ = startZ;
+	}
+	public double getzMax() {
+		return zMax;
+	}
+	public void setzMax(double zMax) {
+		this.zMax = zMax;
+	}
+	public double getzMin() {
+		return zMin;
+	}
+	public void setzMin(double zMin) {
+		this.zMin = zMin;
+	}
+	public XYVectorFunction getOriginalVProfile() {
+		return originalVProfile;
+	}
 
 }

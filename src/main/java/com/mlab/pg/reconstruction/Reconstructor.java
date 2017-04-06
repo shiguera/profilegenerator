@@ -73,7 +73,7 @@ public class Reconstructor {
 	protected double varianza;
 	
 	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategyType strategyType) {
-		originalGradePoints = originalgradePoints.clone();
+		originalGradePoints = originalgradePoints;
 		startZ = startz;
 
 		strategy = new InterpolationStrategyImplementation(strategyType);
