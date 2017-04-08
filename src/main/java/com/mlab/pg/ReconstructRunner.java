@@ -10,6 +10,7 @@ import com.mlab.pg.reconstruction.Reconstructor;
 import com.mlab.pg.reconstruction.ReconstructorByIntervals;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.util.IOUtil;
+import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.VerticalGradeProfile;
 import com.mlab.pg.valign.VerticalProfile;
 import com.mlab.pg.valign.VerticalProfileWriter;
@@ -20,6 +21,7 @@ import com.mlab.pg.xyfunction.XYVectorFunctionCsvReader;
 public class ReconstructRunner {
 
 	Logger LOG = Logger.getLogger(ReconstructRunner.class);
+	protected double SHORT_ALIGNMENT_LENGTH = 50.0;
 	
 	protected Reconstructor reconstructor;
 	protected EssayData essayData;
@@ -33,7 +35,6 @@ public class ReconstructRunner {
 	protected double zMin;
 	protected int baseSize;
 	protected double thresholdSlope;
-	protected double SHORT_ALIGNMENT_LENGTH = 50.0;
 	protected VerticalGradeProfile resultGProfile;
 	protected VerticalProfile resultVProfile;
 	protected XYVectorFunction resultVProfilePoints;
@@ -170,7 +171,7 @@ public class ReconstructRunner {
 		double x1 = gp.getStartS();
 		double x2 = gp.getEndS();
 		FunctionDisplayer displayer = new FunctionDisplayer();
-		String title= essayData.getGraphTitle() + "\n s="+Math.rint(x1)+" - "+Math.rint(x2);
+		String title= essayData.getGraphTitle() + " (Perfil longitudinal)\n s="+MathUtil.doubleToString(x1, 12, 2, true) + " - " + MathUtil.doubleToString(x2, 12, 2, true);
 		displayer.showTwoFunctions(getvProfileFromGradeDataIntegration(), getResultVProfilePoints(), 
 				title, "Perfil longitudinal original", "Perfil longitudinal calculado", "S", "Z");
 		
@@ -181,35 +182,46 @@ public class ReconstructRunner {
 	}
 	public String getStringReport() {
 		StringBuffer cad = new StringBuffer();
-		cad.append("Reconstrucción de la geometría del perfil longitudinal: \n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("RoadGRUB (Road Geometry Reconstruction Utility Basic) \n");
+		cad.append("RECONSTRUCCIÓN DE LA GEOMETRÍA DEL PERFIL LONGITUDINAL \n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append(essayData.getEssayName() + "\n");
 		String tramo = "Traza completa";
 		if(essayData.getStartS() != -1.0) {
 			tramo = essayData.getStartS() + " - " + essayData.getEndS();
 		}
 		cad.append("Tramo : " + tramo + "\n");
-		cad.append("--------------------------------------------------------------------------" + "\n");
-		cad.append("--------------------------------------------------------------------------" + "\n");
-		cad.append("Longitud del track (m) : " + Math.round(reconstructor.getTrackLength()*100.0)/100.0 + "\n");
-		cad.append("Número de puntos       : " + reconstructor.getPointsCount() + "\n");
-		cad.append("Separación media   (m) : " + Math.round(reconstructor.getSeparacionMedia()*100.0)/100.0 + "\n");
-		cad.append("--------------------------------------------------------------------------" + "\n");
-		cad.append("Rectas Interpolación (Puntos) : " + baseSize + "\n");
-		cad.append("Rectas Interpolación (m)      : " + Math.round(baseSize*reconstructor.getSeparacionMedia()*100.0)/100.0 + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("DATOS DE LA TRAZA:\n");
+		cad.append("Número de puntos     : " + reconstructor.getPointsCount() + "\n");
+		cad.append("Longitud         (m) : " + MathUtil.doubleToString(reconstructor.getTrackLength(), 12, 2, true) + "\n");
+		cad.append("Separación media (m) : " + MathUtil.doubleToString(reconstructor.getSeparacionMedia(),12,2,true) + "\n");
+		cad.append("Altitud máxima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMaxY(),12,2,true) + "\n");
+		cad.append("Altitud media    (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMeanY(),12,2,true) + "\n");
+		cad.append("Altitud mínima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMinY(),12,2,true) + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("PARÁMETROS USADOS EN LA RECONSTRUCCIÓN:\n");
 		cad.append("Pendiente límite              : " + thresholdSlope + "\n");
-		cad.append("--------------------------------------------------------------------------" + "\n");
-		cad.append("Número de alineaciones : " + reconstructor.getAlignmentCount() + "\n");
-		cad.append("    Grades             : " + gradeCount + "\n");
-		cad.append("    Vertical curves    : " + verticalCurveCount + "\n");
-		cad.append("    Cuasi grades       : " + cuasiGradeCount + "\n");
-		cad.append("    Short alignments   : " + shortAlignmentCount + "\n");
-		cad.append("    Two grades         : " + twoGradeCount + "\n");
-		cad.append("--------------------------------------------------------------------------" + "\n");
-		cad.append("Valor absoluto del Error (media)  (m)   : " + reconstructor.getMeanError() + "\n");
-		cad.append("Valor absoluto del Error (máximo) (m)   : " + reconstructor.getMaxError() + "\n");
-		cad.append("Valor absoluto del Error (varianza)     : " + reconstructor.getVarianza() + "\n");
-		cad.append("Error Cuadrático Medio ECM              : " + reconstructor.getEcm() + "\n");			
-		cad.append("--------------------------------------------------------------------------" + "\n");
+		cad.append("Rectas Interpolación (Puntos) : " + baseSize + "\n");
+		cad.append("Rectas Interpolación (m)      : " + MathUtil.doubleToString(reconstructor.getSeparacionMedia()*(baseSize-1),12,2,true) + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("RESULTADO: ERRORES\n");
+		cad.append("Error Cuadrático Medio ECM              : " + MathUtil.doubleToString(reconstructor.getEcm(),12,6,true) + "\n");			
+		cad.append("Valor absoluto del Error (media)  (m)   : " + MathUtil.doubleToString(reconstructor.getMeanError(),12,6,true) + "\n");
+		cad.append("Valor absoluto del Error (máximo) (m)   : " + MathUtil.doubleToString(reconstructor.getMaxError(),12,6,true) + "\n");
+		cad.append("Valor absoluto del Error (varianza)     : " + MathUtil.doubleToString(reconstructor.getVarianza(),12,6,true) + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("RESULTADO: PERFIL LONGITUDINAL RECONSTRUIDO\n");
+		cad.append("Número Total de alineaciones       : " + reconstructor.getAlignmentCount() + "\n");
+		cad.append("    Grades                         : " + gradeCount + "\n");
+		cad.append("    Vertical curves                : " + verticalCurveCount + "\n");
+		cad.append("    Cuasi grades                   : " + cuasiGradeCount + "\n");
+		cad.append("    Short alignments  (L<" + MathUtil.doubleToString(getSHORT_ALIGNMENT_LENGTH(),6,2,false) + " m)  : " + shortAlignmentCount + "\n");
+		cad.append("    Two consecutive grades         : " + twoGradeCount + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
+		cad.append("------------------------------------------------------------------------------" + "\n");
 		return cad.toString();
 	}
 	public double getSHORT_ALIGNMENT_LENGTH() {

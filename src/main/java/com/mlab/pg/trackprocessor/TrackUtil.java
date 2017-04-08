@@ -124,6 +124,10 @@ public class TrackUtil {
 		}
 	}
 
+	public static double[][] readXYZTrack(File infile, int infileHeadLines) {
+		double[][] d = IOUtil.read(infile, "," , infileHeadLines);
+		return d;
+	}
 	/**
 	 * Genera el track SZ a partir del track XYZ
 	 * @param trackXYZ
@@ -144,10 +148,6 @@ public class TrackUtil {
 			sz[i] = new double[]{s,z2};
 		}
 		return sz;
-	}
-	private static double[][] readXYZTrack(File infile, int infileHeadLines) {
-		double[][] d = IOUtil.read(infile, "," , 1);
-		return d;
 	}
 	
 	/**

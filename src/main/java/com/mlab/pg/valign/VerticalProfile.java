@@ -98,6 +98,7 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 	}
 
 	
+	
 	public XYVectorFunction getSample(double starts, double ends, double space, boolean includeLastPoint) {
 		if(starts>getEndS() || ends<getStartS()) {
 			return null;

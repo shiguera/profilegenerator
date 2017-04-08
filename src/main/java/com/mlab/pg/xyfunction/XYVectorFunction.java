@@ -23,7 +23,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	private static final long serialVersionUID = 1L;
 	private static Logger LOG = Logger.getLogger(XYVectorFunction.class);
 	private double separacionMedia = Double.NaN;
-	
+	private double maxY = Double.NaN;
+	private double minY = Double.NaN;
+	private double meanY = Double.NaN;
 	/**
 	 * Crea una XYVectorFunction vacía
 	 */
@@ -43,6 +45,9 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 		if(size()>0 && e[0] <= getX(size()-1)) {
 			return false;
 		} else {
+			minY = Double.NaN;
+			maxY = Double.NaN;
+			meanY = Double.NaN;
 			return super.add(e);			
 		}
 	}
@@ -503,24 +508,39 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	}
 
 	public double getMaxY() {
-		double max = getY(0);
-		for(int i=1; i<size(); i++) {
-			if(getY(i)>max) {
-				max = getY(i);
+		if (Double.isNaN(maxY) && size()>0) {
+			maxY = getY(0);
+			for(int i=1; i<size(); i++) {
+				if(getY(i)>maxY) {
+					maxY = getY(i);
+				}
 			}
 		}
-		return max;
+		return maxY;
 	}
 	public double getMinY() {
-		double min = getY(0);
-		for(int i=1; i<size(); i++) {
-			if(getY(i)<min) {
-				min = getY(i);
+		if(Double.isNaN(minY) && size()>0) {
+			minY = getY(0);
+			for(int i=1; i<size(); i++) {
+				if(getY(i)<minY) {
+					minY = getY(i);
+				}
 			}
 		}
-		return min;
+		return minY;			
 	}
 
+	public double getMeanY() {
+		if(Double.isNaN(meanY) && size()>0) {
+			double suma = getY(0);
+			for(int i=0; i<size(); i++) {
+				suma += getY(i);
+			}
+			meanY=suma/size();
+		}
+		return meanY;
+	}
+	
 	public int nearestInFunction2(int indexInFunction1, XYVectorFunction f2) {
 		double[][] track1 = getValuesAsArray();
 		double[][] track2 = f2.getValuesAsArray();
