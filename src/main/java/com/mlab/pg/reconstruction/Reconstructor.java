@@ -458,4 +458,8 @@ public class Reconstructor {
 	public void setThresholdSlope(double thresholdSlope) {
 		this.thresholdSlope = thresholdSlope;
 	}
+
+	public VerticalGradeProfile getResultGradeProfile() {
+		return resultGradeProfile;
+	}
 }

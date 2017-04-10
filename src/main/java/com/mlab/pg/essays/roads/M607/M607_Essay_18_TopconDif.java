@@ -1,14 +1,11 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.ReconstructRunner;
-import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
-import com.mlab.pg.valign.VerticalGradeProfile;
-import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
 /**
@@ -16,27 +13,29 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class Essay_4_M607_Leika_Asc_Axis {
+public class M607_Essay_18_TopconDif {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_4_M607_Leika_Asc_Axis() {
+	public M607_Essay_18_TopconDif() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 Ascendente - GPS LEika - Eje promediado");
-		essayData.setGraphTitle("M-607 Ascendente - GPS LEika - Eje promediado");
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
-		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
-		essayData.setXyzFileName("M607_Leika_Axis_xyz.csv");
+		essayData.setEssayName("M-607 Ensayo 18 - GPS Diferencial");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Asscendente");
+		essayData.setGraphTitle(essayData.getEssayName());
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TrackDiferencial");
+		essayData.setOutPath(essayData.getInPath());
+		essayData.setXyzFileName("track1_selec1_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M607_Leika_Axis_4.txt");
+		essayData.setReportFileName("M-607-Ensayo_18.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4000.0);
-		//essayData.setEndS(10000.0);
+		//essayData.setStartS(2500.0);
+		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -46,14 +45,14 @@ public class Essay_4_M607_Leika_Asc_Axis {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_4_M607_Leika_Asc_Axis essay = new Essay_4_M607_Leika_Asc_Axis();
-		essay.doIterative();
+		M607_Essay_18_TopconDif essay = new M607_Essay_18_TopconDif();
+		//essay.doIterative();
 		//essay.doMultiparameter();
+		essay.doUnique(34, 1.0e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	
@@ -65,5 +64,8 @@ public class Essay_4_M607_Leika_Asc_Axis {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }

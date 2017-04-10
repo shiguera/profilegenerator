@@ -196,4 +196,17 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		return gprofile;
 	}
 
+	public double getKGlobal() {
+		double k = 0.0;
+		for (int i=0; i<size(); i++) {
+			VAlignment align = getAlign(i);
+			double ki = Math.abs(align.getPolynom2().getKv());
+			if(!Double.isNaN(ki)) {
+				k = k + ki; //*align.getLength();
+			}
+			k = k/size(); //(getEndS() - getStartS());
+		}
+		return k;
+	}
+
 }

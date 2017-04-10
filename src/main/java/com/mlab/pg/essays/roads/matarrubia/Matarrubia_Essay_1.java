@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.matarrubia;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,29 +13,29 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_23_M325_Asc_Topcon {
+public class Matarrubia_Essay_1 {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_23_M325_Asc_Topcon() {
+	public Matarrubia_Essay_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 23.- M-325 Ascendente - GPS Topcon ");
-		essayData.setCarretera("M-513");
-		essayData.setSentido("Ascendente");
+		essayData.setEssayName("Camino de Matarrubia Ensayo 1: (Madrid) - GPS Garmin");
+		essayData.setCarretera("Camino Matarrubia");
+		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/CaminoMatarrubia");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M325_ETRS89.csv");
+		essayData.setXyzFileName("CaminoMatarrubia_Subida.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_23_M325_Asc_Topcon.txt");
+		essayData.setReportFileName("Matarrubia-Ensayo_1.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(0.0);
-		essayData.setEndS(8300.0);
+		//essayData.setStartS(2500.0);
+		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -45,16 +45,14 @@ public class Essay_23_M325_Asc_Topcon {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_23_M325_Asc_Topcon essay = new Essay_23_M325_Asc_Topcon();
-		//essay.doIterative();
+		Matarrubia_Essay_1 essay = new Matarrubia_Essay_1();
+		essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(104, 1.75e-5);
+		//essay.doUnique(104, 1.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-		System.out.println(recRunner.getzMin() + ", " + recRunner.getzMax());
-		System.out.println(recRunner.getOriginalVProfile().getY(2.0));
 	}
 
 	

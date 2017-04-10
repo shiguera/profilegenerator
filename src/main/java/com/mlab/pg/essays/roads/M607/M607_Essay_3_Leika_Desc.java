@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -16,14 +16,14 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
  * @author shiguera
  *
  */
-public class Essay_3_M607_Leika_Desc {
+public class M607_Essay_3_Leika_Desc {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_3_M607_Leika_Desc() {
+	public M607_Essay_3_Leika_Desc() {
 		
 		essayData = new EssayData();
 		essayData.setEssayName("M-607 - GPS LEika - Descendente 1");
@@ -46,7 +46,7 @@ public class Essay_3_M607_Leika_Desc {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_3_M607_Leika_Desc essay = new Essay_3_M607_Leika_Desc();
+		M607_Essay_3_Leika_Desc essay = new M607_Essay_3_Leika_Desc();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

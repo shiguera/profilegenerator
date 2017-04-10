@@ -156,6 +156,7 @@ public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 		return verticalProfile;
 	}
 	
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

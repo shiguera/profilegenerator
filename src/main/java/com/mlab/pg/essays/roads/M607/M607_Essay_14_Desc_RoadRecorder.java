@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,24 +13,26 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_13_M607_Asc_RoadRecorder {
+public class M607_Essay_14_Desc_RoadRecorder {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_13_M607_Asc_RoadRecorder() {
+	public M607_Essay_14_Desc_RoadRecorder() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 13.- M-607 Ascendente - RoadRecorder - Traza completa");
+		essayData.setEssayName("Ensayo 14.- M-607 Descendente - RoadRecorder - Traza completa");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Descendente");
 		essayData.setGraphTitle(essayData.getEssayName());
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksRoadRecorder");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M607_Asc_1.csv");
+		essayData.setXyzFileName("M607_Desc_1.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_13_M607_Asc_RoadRecorder.txt");
+		essayData.setReportFileName("Essay_14_M607_Desc_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(4300.0);
 		//essayData.setEndS(8000.0);
@@ -43,7 +45,7 @@ public class Essay_13_M607_Asc_RoadRecorder {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_13_M607_Asc_RoadRecorder essay = new Essay_13_M607_Asc_RoadRecorder();
+		M607_Essay_14_Desc_RoadRecorder essay = new M607_Essay_14_Desc_RoadRecorder();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

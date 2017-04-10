@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,24 +13,24 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_10_M607_Garmin_Axis_1 {
+public class M607_Essay_13_Asc_RoadRecorder {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_10_M607_Garmin_Axis_1() {
+	public M607_Essay_13_Asc_RoadRecorder() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 10.- M-607 Descendente - GPS Garmin - Eje promediado dos trazas");
-		essayData.setGraphTitle("Ensayo 10.- M-607 Descendente - GPS Garmin - Eje promediado dos trazas");
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setXyzFileName("M607_Garmin_2017-03-09_Axis.csv");
+		essayData.setEssayName("Ensayo 13.- M-607 Ascendente - RoadRecorder - Traza completa");
+		essayData.setGraphTitle(essayData.getEssayName());
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksRoadRecorder");
+		essayData.setOutPath(essayData.getInPath());
+		essayData.setXyzFileName("M607_Asc_1.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_10_M607_Garmin_Axis.txt");
+		essayData.setReportFileName("Essay_13_M607_Asc_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(4300.0);
 		//essayData.setEndS(8000.0);
@@ -43,7 +43,7 @@ public class Essay_10_M607_Garmin_Axis_1 {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_10_M607_Garmin_Axis_1 essay = new Essay_10_M607_Garmin_Axis_1();
+		M607_Essay_13_Asc_RoadRecorder essay = new M607_Essay_13_Asc_RoadRecorder();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

@@ -1,11 +1,14 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
+import com.mlab.pg.valign.VerticalGradeProfile;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
 /**
@@ -13,27 +16,27 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_12_M607_Garmin_Axis {
+public class M607_Essay_5_Leika_Asc_Axis {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_12_M607_Garmin_Axis() {
+	public M607_Essay_5_Leika_Asc_Axis() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 12.- M-607 Descendente - GPS Garmin - Eje promediado 4 trazas");
-		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setXyzFileName("M607_Garmin_4T_Axis.csv");
+		essayData.setEssayName("M-607 Ascendente - GPS LEika - Eje promediado");
+		essayData.setGraphTitle("M-607 Ascendente - GPS LEika - Eje promediado");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
+		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
+		essayData.setXyzFileName("M607_Leika_Axis_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_12_M607_Garmin_Axis.txt");
+		essayData.setReportFileName("M607_Leika_Axis_5.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4300.0);
-		//essayData.setEndS(8000.0);
+		essayData.setStartS(4000.0);
+		essayData.setEndS(10000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -43,7 +46,7 @@ public class Essay_12_M607_Garmin_Axis {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_12_M607_Garmin_Axis essay = new Essay_12_M607_Garmin_Axis();
+		M607_Essay_5_Leika_Asc_Axis essay = new M607_Essay_5_Leika_Asc_Axis();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,24 +13,24 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_6_M607_Garmin_Asc {
+public class M607_Essay_12_Garmin_Axis {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_6_M607_Garmin_Asc() {
+	public M607_Essay_12_Garmin_Axis() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 6.- M-607 Ascendente - GPS Garmin - Traza completa");
-		essayData.setGraphTitle("Ensayo 6.- M-607 Ascendente - GPS Garmin - Traza completa");
+		essayData.setEssayName("Ensayo 12.- M-607 Descendente - GPS Garmin - Eje promediado 4 trazas");
+		essayData.setGraphTitle(essayData.getEssayName());
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
 		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setXyzFileName("M607_Asc_2017-03-10.csv");
+		essayData.setXyzFileName("M607_Garmin_4T_Axis.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_6_M607_Asc_Garmin.txt");
+		essayData.setReportFileName("Essay_12_M607_Garmin_Axis.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(4300.0);
 		//essayData.setEndS(8000.0);
@@ -43,7 +43,7 @@ public class Essay_6_M607_Garmin_Asc {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_6_M607_Garmin_Asc essay = new Essay_6_M607_Garmin_Asc();
+		M607_Essay_12_Garmin_Axis essay = new M607_Essay_12_Garmin_Axis();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

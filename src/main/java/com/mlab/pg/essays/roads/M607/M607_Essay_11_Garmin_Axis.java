@@ -5,6 +5,7 @@ import org.apache.log4j.PropertyConfigurator;
 import com.mlab.pg.EssayData;
 import com.mlab.pg.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
+import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
@@ -12,29 +13,27 @@ import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
  * @author shiguera
  *
  */
-public class M607_Essay_16 {
+public class M607_Essay_11_Garmin_Axis {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M607_Essay_16() {
+	public M607_Essay_11_Garmin_Axis() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 Ensayo 16: PK 8+630 al 58+380 (Madrid) - Pendientes MFOM");
-		essayData.setCarretera("M-607");
-		essayData.setSentido("Asscendente");
-		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/PdtesMFOM");
-		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("");
-		essayData.setSgFileName("M607_SG.csv");
-		essayData.setSzFileName("M607_SZ.csv");
-		essayData.setReportFileName("M-607-Ensayo_16.txt");
+		essayData.setEssayName("Ensayo 11.- M-607 Descendente - GPS Garmin - Eje promediado dos trazas");
+		essayData.setGraphTitle("Ensayo 11.- M-607 Descendente - GPS Garmin - Eje promediado dos trazas");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
+		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
+		essayData.setXyzFileName("M607_Garmin_2017-03-10_Axis.csv");
+		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setReportFileName("Essay_11_M607_Garmin_Axis.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(2500.0);
-		//essayData.setEndS(7000.0);
+		//essayData.setStartS(4300.0);
+		//essayData.setEndS(8000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -44,14 +43,14 @@ public class M607_Essay_16 {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M607_Essay_16 essay = new M607_Essay_16();
+		M607_Essay_11_Garmin_Axis essay = new M607_Essay_11_Garmin_Axis();
 		essay.doIterative();
 		//essay.doMultiparameter();
-		//essay.doUnique(104, 1.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
+
 	}
 
 	
@@ -63,8 +62,5 @@ public class M607_Essay_16 {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	private void doUnique(int base, double th) {
-		recRunner.doUniqueReconstruction(base, th);
-		stringReport = recRunner.getStringReport();
-	}
+	
 }

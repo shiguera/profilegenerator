@@ -1,11 +1,10 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
-import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
@@ -13,29 +12,29 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_15_M607_Axis_RoadRecorder {
+public class M607_Essay_17_PdtesMFOM {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_15_M607_Axis_RoadRecorder() {
+	public M607_Essay_17_PdtesMFOM() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 15.- M-607 Ascendente - RoadRecorder - Eje promediado 2 trazas");
+		essayData.setEssayName("M-607 Ensayo 17: PK 36+000 al 48+300 (Madrid) - Pendientes MFOM");
 		essayData.setCarretera("M-607");
-		essayData.setSentido("Ascendente");
+		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksRoadRecorder");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/PdtesMFOM");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M607_RoadRecorder_Axis_2T.csv");
-		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_15_M607_Axis_RoadRecorder.txt");
+		essayData.setXyzFileName("");
+		essayData.setSgFileName("M607_SG.csv");
+		essayData.setSzFileName("M607_SZ.csv");
+		essayData.setReportFileName("M-607-Ensayo_17.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4300.0);
-		//essayData.setEndS(8000.0);
+		essayData.setStartS(27370.0);
+		essayData.setEndS(39670.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -45,14 +44,14 @@ public class Essay_15_M607_Axis_RoadRecorder {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_15_M607_Axis_RoadRecorder essay = new Essay_15_M607_Axis_RoadRecorder();
-		essay.doIterative();
+		M607_Essay_17_PdtesMFOM essay = new M607_Essay_17_PdtesMFOM();
+		//essay.doIterative();
 		//essay.doMultiparameter();
+		essay.doUnique(5, 1.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	
@@ -64,5 +63,8 @@ public class Essay_15_M607_Axis_RoadRecorder {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }

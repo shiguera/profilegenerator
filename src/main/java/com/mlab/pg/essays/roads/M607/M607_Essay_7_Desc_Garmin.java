@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,14 +13,14 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_7_M607_Desc_Garmin {
+public class M607_Essay_7_Desc_Garmin {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_7_M607_Desc_Garmin() {
+	public M607_Essay_7_Desc_Garmin() {
 		
 		essayData = new EssayData();
 		essayData.setEssayName("Ensayo 7.- M-607 Descendente - GPS Garmin - Traza completa");
@@ -43,7 +43,7 @@ public class Essay_7_M607_Desc_Garmin {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_7_M607_Desc_Garmin essay = new Essay_7_M607_Desc_Garmin();
+		M607_Essay_7_Desc_Garmin essay = new M607_Essay_7_Desc_Garmin();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		

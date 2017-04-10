@@ -201,6 +201,7 @@ public class ReconstructRunner {
 		cad.append("Altitud máxima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMaxY(),12,2,true) + "\n");
 		cad.append("Altitud media    (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMeanY(),12,2,true) + "\n");
 		cad.append("Altitud mínima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMinY(),12,2,true) + "\n");
+		cad.append("K global (m)         : " + MathUtil.doubleToString(reconstructor.getResultVerticalProfile().getKGlobal(), 12,8,true) + "\n");
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("PARÁMETROS USADOS EN LA RECONSTRUCCIÓN:\n");
 		cad.append("Pendiente límite              : " + thresholdSlope + "\n");

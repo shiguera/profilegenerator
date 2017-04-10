@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M325;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -9,31 +9,33 @@ import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
- * Ensayo: M-607, track Leika, Ascendente, track entre s=6600 y s=9800
+ * Ensayo: M-607, track Leika, Ascendente, eje promediado
  * @author shiguera
  *
  */
-public class Essay_2_M607_Leika_Asc {
+public class Essay_23_M325_Asc_Topcon {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_2_M607_Leika_Asc() {
+	public Essay_23_M325_Asc_Topcon() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 - GPS LEika - Ascendente 2");
-		essayData.setGraphTitle("M-607 - GPS LEika - Ascendente 2");
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
-		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksLeikaMaria");
-		essayData.setXyzFileName("M607_Leika_1_xyz.csv");
+		essayData.setEssayName("Ensayo 23.- M-325 Ascendente - GPS Topcon ");
+		essayData.setCarretera("M-513");
+		essayData.setSentido("Ascendente");
+		essayData.setGraphTitle(essayData.getEssayName());
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
+		essayData.setOutPath(essayData.getInPath());
+		essayData.setXyzFileName("M325_ETRS89.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M607_Leika_1_2.txt");
+		essayData.setReportFileName("Essay_23_M325_Asc_Topcon.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(6600.0);
-		essayData.setEndS(9800.0);
+		essayData.setStartS(0.0);
+		essayData.setEndS(8300.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -43,13 +45,16 @@ public class Essay_2_M607_Leika_Asc {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_2_M607_Leika_Asc essay = new Essay_2_M607_Leika_Asc();
-		essay.doIterative();
+		Essay_23_M325_Asc_Topcon essay = new Essay_23_M325_Asc_Topcon();
+		//essay.doIterative();
 		//essay.doMultiparameter();
+		essay.doUnique(104, 1.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
+		System.out.println(recRunner.getzMin() + ", " + recRunner.getzMax());
+		System.out.println(recRunner.getOriginalVProfile().getY(2.0));
 	}
 
 	
@@ -61,5 +66,8 @@ public class Essay_2_M607_Leika_Asc {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }

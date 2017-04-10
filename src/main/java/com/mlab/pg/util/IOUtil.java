@@ -145,19 +145,27 @@ public class IOUtil {
 		//LOG.info("write()");
 		BufferedWriter writer;
 		String line="";	
+		String cad ="";
 		try {
 			writer = new BufferedWriter(new FileWriter(filename));
 			writer.write(firstColumnHeader + String.valueOf(separator) + secondColumnHeader + "\n");
 			for(int i=0; i< d.length; i++) {
 				line="";
 				for(int j=0; j<d[i].length; j++) {
-					line += doubleToString(d[i][j], width, precission).trim();
+					System.out.println(i + ", " + j);
+					cad = doubleToString(d[i][j], width, precission).trim();
+					if(cad=="") {
+						break;
+					}
+					line += cad;
 					if(j != d[i].length-1) {
 						line += String.valueOf(separator);
 					}
 				}
 				//LOG.info(line);
-				writer.write(line+"\n");
+				if(cad!="") {
+					writer.write(line+"\n");
+				}
 			}
 			writer.close();
 		} catch (FileNotFoundException fe) {
@@ -211,7 +219,8 @@ public class IOUtil {
 	public static String doubleToString(double value, int digits, int decimals) {
 		// System.out.println(value);
 		if(Double.isNaN(value) || Double.isInfinite(value) || digits <= 0 || decimals <0) {
-			throw new IllegalArgumentException();
+			return "";
+			//throw new IllegalArgumentException();
 		}
 		StringBuilder builder = new StringBuilder();
 		builder.append("%");
