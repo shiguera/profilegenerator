@@ -37,7 +37,7 @@ public class M607_Essay_16_PdtesMFOM {
 		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(30.0);
 	}
 
 	public static void main(String[] args) {
@@ -47,7 +47,7 @@ public class M607_Essay_16_PdtesMFOM {
 		M607_Essay_16_PdtesMFOM essay = new M607_Essay_16_PdtesMFOM();
 		//essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(5, 1.75e-5);
+		essay.doUnique(5, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();

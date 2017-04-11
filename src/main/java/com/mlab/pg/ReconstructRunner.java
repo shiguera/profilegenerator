@@ -22,6 +22,7 @@ public class ReconstructRunner {
 
 	Logger LOG = Logger.getLogger(ReconstructRunner.class);
 	protected double SHORT_ALIGNMENT_LENGTH = 50.0;
+	protected double MIN_LENGTH = 50.0;
 	
 	protected Reconstructor reconstructor;
 	protected EssayData essayData;
@@ -87,12 +88,13 @@ public class ReconstructRunner {
 	public void doUniqueReconstruction(int basesize, double thresholdslope) {
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
-		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy);
+		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
+		
 		reconstructor.processUnique(baseSize, thresholdSlope);
 		getResults();
 	}
 	public void doIterativeReconstruction() {
-		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy);
+		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
 		reconstructor.processIterative();
 		
 		int bestTest = reconstructor.getBestTest();
@@ -201,7 +203,9 @@ public class ReconstructRunner {
 		cad.append("Altitud máxima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMaxY(),12,2,true) + "\n");
 		cad.append("Altitud media    (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMeanY(),12,2,true) + "\n");
 		cad.append("Altitud mínima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMinY(),12,2,true) + "\n");
+		cad.append("Pendiente media      : " + MathUtil.doubleToString(reconstructor.getResultVerticalProfile().getMeanSlope(),12,4,true) + "\n");
 		cad.append("K global (m)         : " + MathUtil.doubleToString(reconstructor.getResultVerticalProfile().getKGlobal(), 12,8,true) + "\n");
+		
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("PARÁMETROS USADOS EN LA RECONSTRUCCIÓN:\n");
 		cad.append("Pendiente límite              : " + thresholdSlope + "\n");
@@ -230,6 +234,12 @@ public class ReconstructRunner {
 	}
 	public void setSHORT_ALIGNMENT_LENGTH(double sHORT_ALIGNMENT_LENGTH) {
 		SHORT_ALIGNMENT_LENGTH = sHORT_ALIGNMENT_LENGTH;
+	}
+	public double getMinLength() {
+		return MIN_LENGTH;
+	}
+	public void setMinLength(double minlength) {
+		MIN_LENGTH = minlength;
 	}
 	public XYVectorFunction getvProfileFromGradeDataIntegration() {
 		return vProfileFromGradeDataIntegration;

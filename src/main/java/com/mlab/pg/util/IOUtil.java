@@ -68,6 +68,7 @@ public class IOUtil {
 		BufferedReader reader;
 		String line="";	
 		int numcolumns=0;
+		int counter =0;
 		double d[];
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -78,10 +79,16 @@ public class IOUtil {
 				}
 			}
 			while((line=reader.readLine()) != null) {
+				counter++;
 				String[] arr=line.split(delimiter);
 				d = new double[arr.length];
 				for(int i=0; i<d.length; i++) {
-					d[i]=Double.parseDouble(arr[i].trim());
+					String cad = arr[i].trim();
+					double dd = 0.0;
+					if(cad.length()>0) {
+						dd = Double.parseDouble(cad); 						
+					} 
+					d[i]=dd;
 				}
 				arrvpoint.add(d);
 				numcolumns=d.length; //
@@ -89,12 +96,15 @@ public class IOUtil {
 			reader.close();
 		} catch (FileNotFoundException fe) {
 			LOG.info("File "+file.getPath()+" not found.\n"+fe.getMessage());
+			System.out.println("Counter: " + counter);
 			return null;
 		} catch (NumberFormatException ne) {
 			LOG.info("Number format error. "+ne.getMessage());
+			System.out.println("Counter: " + counter);
 			return null;
 		} catch (Exception e) {
 			LOG.info("Unidentified error. "+e.getMessage());
+			System.out.println("Counter: " + counter);
 			return null;
 		}
 		double[][] result= new double[arrvpoint.size()][numcolumns];

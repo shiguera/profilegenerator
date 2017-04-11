@@ -209,4 +209,26 @@ public class VerticalProfile extends ArrayList<VAlignment>  {
 		return k;
 	}
 
+	public double getMeanSlope() {
+		return (getLastAlign().getEndZ() - getFirstAlign().getStartZ()) / (getLastAlign().getEndS() - getFirstAlign().getStartS());
+	}
+	public int getGradesCount() {
+		int counter = 0;
+		for(int i=0; i<size(); i++) {
+			if(get(i).getClass().isAssignableFrom(GradeAlignment.class)) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+	public int getVerticalCurvesCount() {
+		int counter = 0;
+		for(int i=0; i<size(); i++) {
+			if(get(i).getClass().isAssignableFrom(VerticalCurveAlignment.class)) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+
 }

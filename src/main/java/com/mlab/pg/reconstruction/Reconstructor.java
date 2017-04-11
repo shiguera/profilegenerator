@@ -39,10 +39,10 @@ public class Reconstructor {
 	 * tramos menores de esa longitud. Si el anterior o el siguiente son del
 	 * mismo tipo, TypeIntervalArrayGenerator los une
 	 */
-	double MIN_LENGTH = 0.0; // Lo utiliza el TypeIntervalArrayGenerator
+	double MIN_LENGTH = 30.0; // Lo utiliza el TypeIntervalArrayGenerator
 	protected int MIN_POINTS_COUNT = 0; // Lo utiliza el TypeIntervalArrayGenerator
-	double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
-	//double[] thresholdSlopes = new double[] {1.0e-4}; 
+	//double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+	double[] thresholdSlopes = new double[] {2.0e-4, 1.0e-4, 7.5e-5, 5e-5}; 
 
 	
 	protected XYVectorFunction originalGradePoints;
@@ -71,12 +71,30 @@ public class Reconstructor {
 	protected double maxError;
 	protected double ecm;
 	protected double varianza;
-	
+
 	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategyType strategyType) {
 		originalGradePoints = originalgradePoints;
 		startZ = startz;
 
 		strategy = new InterpolationStrategyImplementation(strategyType);
+		
+		
+		startX = originalGradePoints.getStartX();
+		endX = originalGradePoints.getEndX();
+		separacionMedia = originalGradePoints.separacionMedia();
+		trackLength = originalGradePoints.getLast()[0] - originalGradePoints.getX(0);
+		integralVerticalProfilePoints = originalGradePoints.integrate(startz);
+
+	}
+
+	
+	public Reconstructor(XYVectorFunction originalgradePoints, double startz, InterpolationStrategyType strategyType, double minlength) {
+		originalGradePoints = originalgradePoints;
+		startZ = startz;
+
+		strategy = new InterpolationStrategyImplementation(strategyType);
+		
+		MIN_LENGTH = minlength;
 		
 		startX = originalGradePoints.getStartX();
 		endX = originalGradePoints.getEndX();

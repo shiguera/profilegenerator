@@ -3,8 +3,11 @@ package com.mlab.pg.essays.roads.M607;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
+import com.mlab.pg.PruebaProyecto;
 import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.graphics.FunctionDisplayer;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
+import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
 /**
@@ -37,7 +40,7 @@ public class M607_Essay_17_PdtesMFOM {
 		essayData.setEndS(39670.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(80.0);
 	}
 
 	public static void main(String[] args) {
@@ -47,11 +50,17 @@ public class M607_Essay_17_PdtesMFOM {
 		M607_Essay_17_PdtesMFOM essay = new M607_Essay_17_PdtesMFOM();
 		//essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(5, 1.75e-5);
+		essay.doUnique(3, 5e-5);
 		
 		recRunner.showReport();
-		recRunner.printReport();
-		recRunner.showProfiles();
+		//recRunner.printReport();
+		//recRunner.showProfiles();
+		
+		FunctionDisplayer fd = new FunctionDisplayer();
+		XYVectorFunction f1 = recRunner.getOriginalVProfile();
+		PruebaProyecto pp = new PruebaProyecto();
+		XYVectorFunction f2 = PruebaProyecto.getVProfilePoints();
+		fd.showTwoFunctions(f1, f2, "Comparación con el proyecto", "Calculado", "Proyecto", "S", "Z");
 	}
 
 	

@@ -38,7 +38,7 @@ public class M607_Essay_18_TopconDif {
 		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(30.0);
 	}
 
 	public static void main(String[] args) {
@@ -48,7 +48,7 @@ public class M607_Essay_18_TopconDif {
 		M607_Essay_18_TopconDif essay = new M607_Essay_18_TopconDif();
 		//essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(34, 1.0e-5);
+		essay.doUnique(10, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
