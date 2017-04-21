@@ -3,7 +3,7 @@ package com.mlab.pg.essays.roads.M633;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
-import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
 
@@ -34,11 +34,11 @@ public class M633_Essay_1 {
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setReportFileName("M633-Ensayo_1.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(2500.0);
-		essayData.setEndS(7000.0);
+		essayData.setStartS(1500.0);
+		essayData.setEndS(7500.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(0.0);
 	}
 
 	public static void main(String[] args) {

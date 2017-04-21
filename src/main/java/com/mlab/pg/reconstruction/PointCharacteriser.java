@@ -93,7 +93,7 @@ public class PointCharacteriser {
 		int last = gpsample.size()-mobileBaseSize;
 		for(int i=first; i<=last; i++) {
 			if(i==-1) {
-				System.out.println(i);				
+				LOG.warn(i);				
 			}
 			types.set(i, characterise(gpsample, i, mobileBaseSize,thresholdSlope));
 		}

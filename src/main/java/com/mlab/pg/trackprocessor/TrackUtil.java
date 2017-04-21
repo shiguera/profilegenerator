@@ -38,7 +38,25 @@ public class TrackUtil {
 		}
 		return outfilename;
 	}
-
+	public static String generateSGFileFromXYZFile(File xyzfile, int infileHeadLines) {
+		if(!xyzfile.exists()) {
+			Log.error("File doesn't exist");
+			return "";
+		}
+		double[][] intrack = readXYZTrack(xyzfile, infileHeadLines);
+		if(intrack == null || intrack.length == 0) {
+			return "";
+		}
+		double[][] sgtrack = generateSGTrack(intrack);
+		
+		String outfilename = IOUtil.removeExtension(xyzfile.getName()) + "_SG.csv";
+		String outfilecompletename = IOUtil.composeFileName(xyzfile.getParent(), outfilename);
+		int result = IOUtil.write(outfilecompletename, "S", "G", sgtrack, 12, 6, ',');
+		if (result==-1) {
+			return "";
+		}
+		return outfilename;
+	}
 	/**
 	 * Genera el fichero SZ a partir del fichero XYZ
 	 * 
@@ -59,6 +77,24 @@ public class TrackUtil {
 		
 		String outfilename = IOUtil.removeExtension(xyzfilename) + "_SZ.csv";
 		String outfilecompletename = IOUtil.composeFileName(inpath, outfilename);
+		int result = IOUtil.write(outfilecompletename, "S", "Z", sztrack, 12, 6, ',');
+		if (result==-1) {
+			return "";
+		}
+		return outfilename;
+	}
+	public static String generateSZFileFromXYZFile(File xyzfile, int infileHeadLines) {
+		if(!xyzfile.exists()) {
+			return "";
+		}
+		double[][] intrack = readXYZTrack(xyzfile, infileHeadLines);
+		if(intrack == null || intrack.length == 0) {
+			return "";
+		}
+		double[][] sztrack = generateSZTrack(intrack);
+		
+		String outfilename = IOUtil.removeExtension(xyzfile.getName()) + "_SZ.csv";
+		String outfilecompletename = IOUtil.composeFileName(xyzfile.getParent(), outfilename);
 		int result = IOUtil.write(outfilecompletename, "S", "Z", sztrack, 12, 6, ',');
 		if (result==-1) {
 			return "";
@@ -117,6 +153,38 @@ public class TrackUtil {
 		double[][] outtrack = MathUtil.invert(intrack);
 		String outfilenamecomplete = IOUtil.composeFileName(path, outfilename);
 		int result = IOUtil.write(outfilenamecomplete, firstheader, secondheader, outtrack, 12, 6, ',');
+		if(result == 1){
+			return outfilename;
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Invierte un fichero con un double[][3] y lo escribe en un fichero de salida, 
+	 * escribiendo cabeceras de columna
+	 * @param path Ruta del fichero de entrada
+	 * @param firstheader Cabecera de la primera columna
+	 * @param secondheader Cabecera de la segunda columna
+	 * @param thirdheader Cabecera de la tercera columna del fichero de salida
+	 * @param infilename nombre sin extensión del fichero de entrada
+	 * @param outfilename nombre sin extensión del fichero de salida
+	 * @param headerLineCount lineas de cabecera
+	 * 
+	 * @return nombre sin extension del fichero de salida
+	 */
+	public static String invert(String path, String firstheader, String secondheader, String thirdheader, String infilename, String outfilename, int headerLineCount) {
+		File infile = new File(IOUtil.composeFileName(path, infilename));
+		if(!infile.exists()) {
+			return "";
+		}
+		double[][] intrack = IOUtil.read(infile, ",", headerLineCount);
+		if(intrack == null || intrack.length == 0) {
+			return "";
+		}
+		double[][] outtrack = MathUtil.invert(intrack);
+		String outfilenamecomplete = IOUtil.composeFileName(path, outfilename);
+		int result = IOUtil.write(outfilenamecomplete, firstheader, secondheader, thirdheader, outtrack, 12, 6, ',');
 		if(result == 1){
 			return outfilename;
 		} else {

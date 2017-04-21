@@ -150,6 +150,17 @@ public class IOUtil {
 		}
 		return 1;
 	}
+	/**
+	 * Escribe un fichero de salida con dos columnas
+	 * @param filename
+	 * @param firstColumnHeader
+	 * @param secondColumnHeader
+	 * @param d
+	 * @param width
+	 * @param precission
+	 * @param separator
+	 * @return
+	 */
 	static public int write(String filename, String firstColumnHeader, String secondColumnHeader, double[][] d, 
 			int width, int precission, char separator) {
 		//LOG.info("write()");
@@ -162,7 +173,7 @@ public class IOUtil {
 			for(int i=0; i< d.length; i++) {
 				line="";
 				for(int j=0; j<d[i].length; j++) {
-					System.out.println(i + ", " + j);
+					//System.out.println(i + ", " + j);
 					cad = doubleToString(d[i][j], width, precission).trim();
 					if(cad=="") {
 						break;
@@ -190,6 +201,59 @@ public class IOUtil {
 		}
 		return 1;
 	}
+	/**
+	 * Escribe un fichero de salida con tres columnas
+	 * @param filename
+	 * @param firstColumnHeader
+	 * @param secondColumnHeader
+	 * @param thirdColumnHeader
+	 * @param d
+	 * @param width
+	 * @param precission
+	 * @param separator
+	 * @return
+	 */
+	static public int write(String filename, String firstColumnHeader, String secondColumnHeader, String thirdColumnHeader, double[][] d, 
+			int width, int precission, char separator) {
+		//LOG.info("write()");
+		BufferedWriter writer;
+		String line="";	
+		String cad ="";
+		try {
+			writer = new BufferedWriter(new FileWriter(filename));
+			writer.write(firstColumnHeader + String.valueOf(separator) + secondColumnHeader + String.valueOf(separator) + thirdColumnHeader + "\n");
+			for(int i=0; i< d.length; i++) {
+				line="";
+				for(int j=0; j<d[i].length; j++) {
+					//System.out.println(i + ", " + j);
+					cad = doubleToString(d[i][j], width, precission).trim();
+					if(cad=="") {
+						break;
+					}
+					line += cad;
+					if(j != d[i].length-1) {
+						line += String.valueOf(separator);
+					}
+				}
+				//LOG.info(line);
+				if(cad!="") {
+					writer.write(line+"\n");
+				}
+			}
+			writer.close();
+		} catch (FileNotFoundException fe) {
+			LOG.info("File "+filename+" not found.\n"+fe.getMessage());
+			return -1;
+		} catch (NumberFormatException ne) {
+			LOG.info("Number format error. "+ne.getMessage());
+			return -2;
+		} catch (Exception e) {
+			LOG.info("Unidentified error. "+e.getMessage());
+			return -3;
+		}
+		return 1;
+	}
+
 	/**
 	 * Escribe una cadena de texto en un fichero
 	 * @param filename String Nombre del fichero

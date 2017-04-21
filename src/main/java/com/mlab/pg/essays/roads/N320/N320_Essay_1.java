@@ -3,7 +3,7 @@ package com.mlab.pg.essays.roads.N320;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
-import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 
 

@@ -1,13 +1,12 @@
-package com.mlab.pg;
+package com.mlab.pg.reconstruction;
 
 import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
+import com.mlab.pg.EssayData;
 import com.mlab.pg.graphics.FunctionDisplayer;
-import com.mlab.pg.reconstruction.Reconstructor;
-import com.mlab.pg.reconstruction.ReconstructorByIntervals;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.util.MathUtil;
@@ -23,6 +22,7 @@ public class ReconstructRunner {
 	Logger LOG = Logger.getLogger(ReconstructRunner.class);
 	protected double SHORT_ALIGNMENT_LENGTH = 50.0;
 	protected double MIN_LENGTH = 50.0;
+	protected double MAX_BASE_LENGTH = 300;
 	
 	protected Reconstructor reconstructor;
 	protected EssayData essayData;
@@ -89,12 +89,13 @@ public class ReconstructRunner {
 		this.baseSize = basesize;
 		this.thresholdSlope = thresholdslope;
 		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
-		
+		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
 		reconstructor.processUnique(baseSize, thresholdSlope);
 		getResults();
 	}
 	public void doIterativeReconstruction() {
 		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
+		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
 		reconstructor.processIterative();
 		
 		int bestTest = reconstructor.getBestTest();
@@ -106,6 +107,7 @@ public class ReconstructRunner {
 	}
 	public void doMultiparameterReconstruction() {
 		reconstructor = new ReconstructorByIntervals(originalGradeData, startZ, interpolationStrategy);
+		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
 		reconstructor.processIterative();
 		getResults();
 	}
@@ -152,6 +154,9 @@ public class ReconstructRunner {
 	private void selectDataInterval() {
 		if(essayData.getStartS() != -1.0 && essayData.getEndS() != -1.0) {
 			originalGradeData = originalGradeData.extract(essayData.getStartS(), essayData.getEndS());
+			if(originalGradeData.size()==0) {
+				LOG.error("selectDataInterval() ERROR: GradeData size = 0");
+			}
 			if(originalVProfile != null) {
 				originalVProfile = originalVProfile.extract(essayData.getStartS(), essayData.getEndS());
 			}
@@ -209,6 +214,7 @@ public class ReconstructRunner {
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("PARÁMETROS USADOS EN LA RECONSTRUCCIÓN:\n");
 		cad.append("Pendiente límite              : " + thresholdSlope + "\n");
+		cad.append("Kv límite                     : " + MathUtil.doubleToString(1.0/thresholdSlope, 12,0,true) + "\n");
 		cad.append("Rectas Interpolación (Puntos) : " + baseSize + "\n");
 		cad.append("Rectas Interpolación (m)      : " + MathUtil.doubleToString(reconstructor.getSeparacionMedia()*(baseSize-1),12,2,true) + "\n");
 		cad.append("------------------------------------------------------------------------------" + "\n");
@@ -217,6 +223,7 @@ public class ReconstructRunner {
 		cad.append("Valor absoluto del Error (media)  (m)   : " + MathUtil.doubleToString(reconstructor.getMeanError(),12,6,true) + "\n");
 		cad.append("Valor absoluto del Error (máximo) (m)   : " + MathUtil.doubleToString(reconstructor.getMaxError(),12,6,true) + "\n");
 		cad.append("Valor absoluto del Error (varianza)     : " + MathUtil.doubleToString(reconstructor.getVarianza(),12,6,true) + "\n");
+		cad.append("Valor absoluto del Error (Desv. Típica) : " + MathUtil.doubleToString(Math.sqrt(reconstructor.getVarianza()),12,6,true) + "\n");
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("RESULTADO: PERFIL LONGITUDINAL RECONSTRUIDO\n");
 		cad.append("Número Total de alineaciones       : " + reconstructor.getAlignmentCount() + "\n");
@@ -279,6 +286,12 @@ public class ReconstructRunner {
 	}
 	public XYVectorFunction getOriginalVProfile() {
 		return originalVProfile;
+	}
+	public double getMAX_BASE_LENGTH() {
+		return MAX_BASE_LENGTH;
+	}
+	public void setMAX_BASE_LENGTH(double mAX_BASE_LENGTH) {
+		MAX_BASE_LENGTH = mAX_BASE_LENGTH;
 	}
 
 }

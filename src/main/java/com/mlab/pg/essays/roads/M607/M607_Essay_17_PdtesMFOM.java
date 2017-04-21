@@ -4,8 +4,8 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.PruebaProyecto;
-import com.mlab.pg.ReconstructRunner;
 import com.mlab.pg.graphics.FunctionDisplayer;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -32,12 +32,12 @@ public class M607_Essay_17_PdtesMFOM {
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/PdtesMFOM");
 		essayData.setOutPath(essayData.getInPath());
 		essayData.setXyzFileName("");
-		essayData.setSgFileName("M607_SG.csv");
-		essayData.setSzFileName("M607_SZ.csv");
+		essayData.setSgFileName("M607_2_SG.csv");
+		essayData.setSzFileName("M607_2_SZ.csv");
 		essayData.setReportFileName("M-607-Ensayo_17.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(27370.0);
-		essayData.setEndS(39670.0);
+		//essayData.setStartS(27370.0);
+		//essayData.setEndS(39670.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		recRunner.setMinLength(80.0);

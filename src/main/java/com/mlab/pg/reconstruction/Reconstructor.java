@@ -40,9 +40,10 @@ public class Reconstructor {
 	 * mismo tipo, TypeIntervalArrayGenerator los une
 	 */
 	double MIN_LENGTH = 30.0; // Lo utiliza el TypeIntervalArrayGenerator
+	double MAX_BASE_LENGTH = 300;
 	protected int MIN_POINTS_COUNT = 0; // Lo utiliza el TypeIntervalArrayGenerator
-	//double[] thresholdSlopes = new double[] {1.0e-4, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
-	double[] thresholdSlopes = new double[] {2.0e-4, 1.0e-4, 7.5e-5, 5e-5}; 
+	//double[] thresholdSlopes = new double[] {1.0e-4, 7e-5, 6.5e-5, 6e-5, 5.5e-5, 5e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+	double[] thresholdSlopes = new double[] {7e-5, 6.5e-5, 6.45e-5, 6.4e-5, 6e-5}; 
 
 	
 	protected XYVectorFunction originalGradePoints;
@@ -283,25 +284,9 @@ public class Reconstructor {
 
 	}
 	private int calculateMaxBaseSize() {
-		//int maxBaseSize = (int)Math.rint(MIN_LENGTH / separacionMedia);
-		//if(maxBaseSize < 3) {
-			//maxBaseSize = 10;
-		//}
 		double sep = separacionMedia;
-		int num = (int)Math.rint(100.0/sep);
+		int num = (int)Math.rint(MAX_BASE_LENGTH/separacionMedia);
 		return num+2;
-//		int maxBaseSize = 200;
-//		int maxbysize = originalGradePoints.size() / 2;
-//		if(!MathUtil.isEven(originalGradePoints.size())) {
-//			maxbysize = maxbysize + 1;
-//		}
-//		if(maxbysize < maxBaseSize) {
-//			maxBaseSize = maxbysize;
-//		}
-//		if(maxBaseSize<3) {
-//			System.out.println("Aquí");
-//		}
-//		return maxBaseSize;
 	}
 	
 	/**
@@ -479,5 +464,15 @@ public class Reconstructor {
 
 	public VerticalGradeProfile getResultGradeProfile() {
 		return resultGradeProfile;
+	}
+
+
+	public double getMAX_BASE_LENGTH() {
+		return MAX_BASE_LENGTH;
+	}
+
+
+	public void setMAX_BASE_LENGTH(double mAX_BASE_LENGTH) {
+		MAX_BASE_LENGTH = mAX_BASE_LENGTH;
 	}
 }

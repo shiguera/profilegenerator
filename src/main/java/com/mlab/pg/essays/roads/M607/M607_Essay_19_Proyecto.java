@@ -4,7 +4,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.PruebaProyecto;
-import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.valign.VerticalProfile;
 
@@ -24,7 +24,7 @@ public class M607_Essay_19_Proyecto {
 	public M607_Essay_19_Proyecto() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 Ensayo 19 - Perfil de proyecto");
+		essayData.setEssayName("M-607 - Perfil de proyecto");
 		essayData.setCarretera("M-607");
 		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
@@ -41,6 +41,9 @@ public class M607_Essay_19_Proyecto {
 		recRunner = new ReconstructRunner(essayData);		
 		
 		recRunner.setMinLength(30.0);
+		recRunner.setMinLength(10.0);
+		recRunner.setMAX_BASE_LENGTH(10.0);
+
 	}
 
 	public static void main(String[] args) {
@@ -50,7 +53,7 @@ public class M607_Essay_19_Proyecto {
 		M607_Essay_19_Proyecto essay = new M607_Essay_19_Proyecto();
 		//essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(10, 5.0e-5);
+		essay.doUnique(4, 6.5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();

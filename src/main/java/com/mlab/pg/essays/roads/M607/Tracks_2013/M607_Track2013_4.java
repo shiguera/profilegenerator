@@ -1,9 +1,9 @@
-package com.mlab.pg.essays.roads.M607;
+package com.mlab.pg.essays.roads.M607.Tracks_2013;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
-import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
 
@@ -13,44 +13,46 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class M607_Essay_9_Desc_Garmin {
+public class M607_Track2013_4 {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M607_Essay_9_Desc_Garmin() {
+	public M607_Track2013_4() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 9.- M-607 Descendente - GPS Garmin - Traza completa");
-		essayData.setGraphTitle("Ensayo 9.- M-607 Descendente - GPS Garmin - Traza completa");
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setOutPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksGarmin");
-		essayData.setXyzFileName("M607_Desc_2017-03-09.csv");
+		essayData.setEssayName("M-607 Asc Traza 2013_4 - GPS Samsung");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Ascendente");
+		essayData.setGraphTitle(essayData.getEssayName());
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TracksRoadRecorder/2013");
+		essayData.setOutPath(essayData.getInPath());
+		essayData.setXyzFileName("20130621_110614_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_9_M607_Desc_Garmin.txt");
+		essayData.setReportFileName("20130621_110614.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4300.0);
-		//essayData.setEndS(8000.0);
+		//essayData.setStartS(2500.0);
+		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(0.0);
 	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M607_Essay_9_Desc_Garmin essay = new M607_Essay_9_Desc_Garmin();
+		M607_Track2013_4 essay = new M607_Track2013_4();
 		essay.doIterative();
 		//essay.doMultiparameter();
+		//essay.doUnique(10, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	
@@ -62,5 +64,8 @@ public class M607_Essay_9_Desc_Garmin {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }

@@ -2,6 +2,8 @@ package com.mlab.pg.valign;
 
 import java.util.ArrayList;
 
+import org.jfree.util.Log;
+
 import com.mlab.pg.xyfunction.XYVector;
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -91,7 +93,7 @@ public class VerticalGradeProfile extends ArrayList<GradeProfileAlignment> {
 		for(x=starts; x<=ends; x+=space) {
 			align = getAlign(x);
 			if(align==null) {
-				System.out.println("wwww");
+				Log.warn("align=null");
 			}
 			sample.add(new double[]{x, align.getY(x)});
 		}

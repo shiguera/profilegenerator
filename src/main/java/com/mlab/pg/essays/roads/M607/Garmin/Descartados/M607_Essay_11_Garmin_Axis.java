@@ -1,9 +1,9 @@
-package com.mlab.pg.essays.roads.M607;
+package com.mlab.pg.essays.roads.M607.Garmin.Descartados;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
-import com.mlab.pg.ReconstructRunner;
+import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
 
@@ -36,7 +36,8 @@ public class M607_Essay_11_Garmin_Axis {
 		//essayData.setEndS(8000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(58.0);
+		recRunner.setMAX_BASE_LENGTH(300.0);
 	}
 
 	public static void main(String[] args) {
