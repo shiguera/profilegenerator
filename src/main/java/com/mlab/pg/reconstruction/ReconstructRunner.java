@@ -23,6 +23,7 @@ public class ReconstructRunner {
 	protected double SHORT_ALIGNMENT_LENGTH = 50.0;
 	protected double MIN_LENGTH = 50.0;
 	protected double MAX_BASE_LENGTH = 300;
+	protected double[] thresholdSlopes = {1.0e-4, 7e-5, 6e-5, 5e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
 	
 	protected Reconstructor reconstructor;
 	protected EssayData essayData;
@@ -90,12 +91,14 @@ public class ReconstructRunner {
 		this.thresholdSlope = thresholdslope;
 		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
 		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
+		reconstructor.setThresholdSlopes(thresholdSlopes);
 		reconstructor.processUnique(baseSize, thresholdSlope);
 		getResults();
 	}
 	public void doIterativeReconstruction() {
 		reconstructor = new Reconstructor(originalGradeData, startZ, interpolationStrategy, MIN_LENGTH);
 		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
+		reconstructor.setThresholdSlopes(thresholdSlopes);
 		reconstructor.processIterative();
 		
 		int bestTest = reconstructor.getBestTest();
@@ -108,6 +111,7 @@ public class ReconstructRunner {
 	public void doMultiparameterReconstruction() {
 		reconstructor = new ReconstructorByIntervals(originalGradeData, startZ, interpolationStrategy);
 		reconstructor.setMAX_BASE_LENGTH(MAX_BASE_LENGTH);
+		reconstructor.setThresholdSlopes(thresholdSlopes);
 		reconstructor.processIterative();
 		getResults();
 	}
@@ -220,10 +224,10 @@ public class ReconstructRunner {
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("RESULTADO: ERRORES\n");
 		cad.append("Error Cuadrático Medio ECM              : " + MathUtil.doubleToString(reconstructor.getEcm(),12,6,true) + "\n");			
-		cad.append("Valor absoluto del Error (media)  (m)   : " + MathUtil.doubleToString(reconstructor.getMeanError(),12,6,true) + "\n");
-		cad.append("Valor absoluto del Error (máximo) (m)   : " + MathUtil.doubleToString(reconstructor.getMaxError(),12,6,true) + "\n");
 		cad.append("Valor absoluto del Error (varianza)     : " + MathUtil.doubleToString(reconstructor.getVarianza(),12,6,true) + "\n");
 		cad.append("Valor absoluto del Error (Desv. Típica) : " + MathUtil.doubleToString(Math.sqrt(reconstructor.getVarianza()),12,6,true) + "\n");
+		cad.append("Valor absoluto del Error (media)  (m)   : " + MathUtil.doubleToString(reconstructor.getMeanError(),12,6,true) + "\n");
+		cad.append("Valor absoluto del Error (máximo) (m)   : " + MathUtil.doubleToString(reconstructor.getMaxError(),12,6,true) + "\n");
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("RESULTADO: PERFIL LONGITUDINAL RECONSTRUIDO\n");
 		cad.append("Número Total de alineaciones       : " + reconstructor.getAlignmentCount() + "\n");
@@ -294,4 +298,10 @@ public class ReconstructRunner {
 		MAX_BASE_LENGTH = mAX_BASE_LENGTH;
 	}
 
+	public double[] getThresholdSlopes() {
+		return this.thresholdSlopes;
+	}
+	public void setThresholdSlopes(double[] thresholdslopes) {
+		this.thresholdSlopes = thresholdslopes;
+	}
 }

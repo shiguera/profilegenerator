@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads.M633;
+package com.mlab.pg.essays.roads.M633.Descartados;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,39 +13,41 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class M633_Essay_3 {
+public class M633_Essay_1 {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M633_Essay_3() {
+	public M633_Essay_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("m-633 Ensayo 3.-  Ascendente - GPS RoadRecorder");
+		essayData.setEssayName("m-633 Ensayo 1.-  Ascendente - GPS Trimble");
 		essayData.setCarretera("M-633");
-		essayData.setSentido("Descendente");
+		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M633/TracksRoadRecorder");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M633/TracksTrimble");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("20140219_113213_xyz.csv");
+		essayData.setXyzFileName("M633-Cabanillas_Valdemanco_1.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M633-Ensayo_3.txt");
+		essayData.setReportFileName("M633-Ensayo_1.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(1333.0);
-		essayData.setEndS(6548.0);
+		essayData.setStartS(1500.0);
+		essayData.setEndS(7500.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		recRunner.setMinLength(10.0);
-	}
+		recRunner.setMinLength(0.0);
+		recRunner.setMAX_BASE_LENGTH(300.0);
+		double[] thresholdSlopes = new double[] {1.0e-4,9e5,8e-5, 7e-5, 6e-5, 5e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M633_Essay_3 essay = new M633_Essay_3();
+		M633_Essay_1 essay = new M633_Essay_1();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		//essay.doUnique(104, 1.75e-5);

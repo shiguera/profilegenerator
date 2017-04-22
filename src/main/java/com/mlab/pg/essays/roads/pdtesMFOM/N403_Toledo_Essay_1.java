@@ -1,11 +1,10 @@
-package com.mlab.pg.essays.roads.M633;
+package com.mlab.pg.essays.roads.pdtesMFOM;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
-import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
@@ -13,39 +12,42 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class M633_Essay_2 {
+public class N403_Toledo_Essay_1 {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M633_Essay_2() {
+	public N403_Toledo_Essay_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("m-633 Ensayo 2.-  Descendente - GPS Trimble");
-		essayData.setCarretera("M-633");
-		essayData.setSentido("Descendente");
+		essayData.setEssayName("N-403 Tramo Toledo-Rielves (Toledo) - PK 5+000 al 20+000 - Pendientes MFOM");
+		essayData.setCarretera("N-403");
+		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M633/TracksTrimble");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/N-403");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M633-Valdemanco_Cabanillas_2.csv");
-		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M633-Ensayo_2.txt");
+		essayData.setXyzFileName("");
+		essayData.setSgFileName("N-403_Toledo_SG.csv");
+		essayData.setSzFileName("N-403_Toledo_SZ.csv");
+		essayData.setReportFileName("N-403-Toledo.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(2500.0);
 		//essayData.setEndS(7000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(50.0);
+		recRunner.setMAX_BASE_LENGTH(300.0);
+		double[] thresholdSlopes = new double[] {1.0e-4,1e-5,1e-6, 5e-7, 1e-7, 5e-8, 1e-8}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);
 	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M633_Essay_2 essay = new M633_Essay_2();
+		N403_Toledo_Essay_1 essay = new N403_Toledo_Essay_1();
 		essay.doIterative();
 		//essay.doMultiparameter();
 		//essay.doUnique(104, 1.75e-5);
@@ -53,8 +55,6 @@ public class M633_Essay_2 {
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-		System.out.println(recRunner.getzMin() + ", " + recRunner.getzMax());
-		System.out.println(recRunner.getOriginalVProfile().getY(2.0));
 	}
 
 	

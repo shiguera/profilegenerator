@@ -12,7 +12,6 @@ import com.mlab.pg.reconstruction.strategy.GradeProfileCreator_LessSquares;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategy;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyImplementation;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
-import com.mlab.pg.util.MathUtil;
 import com.mlab.pg.valign.GradeProfileAlignment;
 import com.mlab.pg.valign.VAlignment;
 import com.mlab.pg.valign.VerticalGradeProfile;
@@ -42,9 +41,9 @@ public class Reconstructor {
 	double MIN_LENGTH = 30.0; // Lo utiliza el TypeIntervalArrayGenerator
 	double MAX_BASE_LENGTH = 300;
 	protected int MIN_POINTS_COUNT = 0; // Lo utiliza el TypeIntervalArrayGenerator
-	//double[] thresholdSlopes = new double[] {1.0e-4, 7e-5, 6.5e-5, 6e-5, 5.5e-5, 5e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
-	double[] thresholdSlopes = new double[] {7e-5, 6.5e-5, 6.45e-5, 6.4e-5, 6e-5}; 
-
+	double[] thresholdSlopes = new double[] {1.0e-4, 7e-5, 6.5e-5, 6e-5, 5.5e-5, 5e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1.0e-5, 1.75e-6, 1.5e-6, 1.25e-6, 1.0e-6, 1.75e-7, 1.5e-7, 1.25e-7, 1.0e-7}; 
+	//double[] thresholdSlopes = new double[] {7e-5, 6.5e-5, 6.45e-5, 6.4e-5, 6e-5}; 
+	
 	
 	protected XYVectorFunction originalGradePoints;
 	protected XYVectorFunction originalVerticalProfilePoints;
@@ -398,6 +397,10 @@ public class Reconstructor {
 	public double getThresholdSlope() {
 		return thresholdSlope;
 	}
+	public void setThresholdSlope(double thresholdSlope) {
+		this.thresholdSlope = thresholdSlope;
+	}
+
 	public int getAlignmentCount() {
 		return resultVerticalProfile.size();
 	}
@@ -458,9 +461,6 @@ public class Reconstructor {
 		return endX;
 	}
 
-	public void setThresholdSlope(double thresholdSlope) {
-		this.thresholdSlope = thresholdSlope;
-	}
 
 	public VerticalGradeProfile getResultGradeProfile() {
 		return resultGradeProfile;
