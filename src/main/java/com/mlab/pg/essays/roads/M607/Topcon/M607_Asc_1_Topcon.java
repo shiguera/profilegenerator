@@ -1,10 +1,11 @@
-package com.mlab.pg.essays.roads.pdtesMFOM;
+package com.mlab.pg.essays.roads.M607.Topcon;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.mlab.pg.EssayData;
 import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
+import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
@@ -12,35 +13,35 @@ import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
  * @author shiguera
  *
  */
-public class N403_Avila_PdtesMFOM {
+public class M607_Asc_1_Topcon {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public N403_Avila_PdtesMFOM() {
+	public M607_Asc_1_Topcon() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("N-403 Tramo Casas del Burguillo - ElBarraco (PK 96+000 al 108+000) (Ávila) - Pendientes MFOM");
-		essayData.setCarretera("N-403");
+		essayData.setEssayName("M-607 Descendente - GPS Topcon");
+		essayData.setCarretera("M-607");
 		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/N-403");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/GPS_LuisIglesias");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("");
-		essayData.setSgFileName("N-403_Avila_SG.csv");
-		essayData.setSzFileName("N-403_Avila_SZ.csv");
-		essayData.setReportFileName("N-403-Avila.txt");
+		essayData.setXyzFileName("M607_topcon_2.csv");
+		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setReportFileName("M-607_Desc_topcon.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(0.0);
-		essayData.setEndS(2000.0);
+		essayData.setStartS(14360.0);
+		essayData.setEndS(18075.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		recRunner.setMinLength(30.0);
-		recRunner.setMAX_BASE_LENGTH(300.0);
-		double[] thresholdSlopes = new double[] {1.0e-4,9e-5,8e-5, 7e-5, 6e-5, 5e-5, 4.5e-5, 4e-5, 3.75e-5, 3.5e-5, 3.25e-5, 3e-5, 2e-5, 1e-5, 1e-6 }; 
-		recRunner.setThresholdSlopes(thresholdSlopes);
+		recRunner.setMinLength(48.0);
+		recRunner.setMAX_BASE_LENGTH(200.0);
+		double[] thresholdSlopes = new double[] {1.0e-4, 3e-5, 2e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1e-5, 1.5e-6}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);	
 
 	}
 
@@ -48,10 +49,10 @@ public class N403_Avila_PdtesMFOM {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		N403_Avila_PdtesMFOM essay = new N403_Avila_PdtesMFOM();
+		M607_Asc_1_Topcon essay = new M607_Asc_1_Topcon();
 		essay.doIterative();
 		//essay.doMultiparameter();
-		//essay.doUnique(15, 3.75e-5);
+		//essay.doUnique(10, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();

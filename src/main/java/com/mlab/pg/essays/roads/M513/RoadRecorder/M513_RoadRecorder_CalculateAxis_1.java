@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M513.RoadRecorder;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ public class M513_RoadRecorder_CalculateAxis_1 {
 		File file3 = new File(path,invertedname);
 		
 		double[][] track1 = IOUtil.read(file1, ",", 1);
-		double[][] track2 = IOUtil.read(file3, ",",0);
+		double[][] track2 = IOUtil.read(file2, ",",1);
 		TrackAverage averager = new TrackAverage();
 		double[][] resultTrack = averager.average(track1, track2);
 		

@@ -188,7 +188,7 @@ public class ReconstructRunner {
 		
 		XYVectorFunction originaldata = getOriginalGradeData().extract(x1, x2);
 		XYVectorFunction soldata = getResultGProfile().getSample(x1,x2,getSeparacionMedia(),true);
-		title= essayData.getGraphTitle() + "(Diagrama de pendientes) \n s="+Math.rint(x1)+" - "+Math.rint(x2);
+		title= essayData.getGraphTitle() + " (Diagrama de pendientes) \n s="+Math.rint(x1)+" - "+Math.rint(x2);
 		displayer.showTwoFunctions(originaldata, soldata, title, "Pendientes originales", "Pendientes calculadas", "S",  "G");
 	}
 	public String getStringReport() {

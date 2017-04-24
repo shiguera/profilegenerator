@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads.M325;
+package com.mlab.pg.essays.roads.M607.Topcon;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -6,62 +6,57 @@ import com.mlab.pg.EssayData;
 import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
 import com.mlab.pg.trackprocessor.TrackUtil;
-import com.mlab.pg.xyfunction.XYVectorFunction;
 
 
 /**
-  * @author shiguera
+ * Ensayo: M-607, track Leika, Ascendente, eje promediado
+ * @author shiguera
  *
  */
-public class Essay_24_M325_Asc_Topcon {
+public class M607_Asc_2_Topcon {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_24_M325_Asc_Topcon() {
+	public M607_Asc_2_Topcon() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 24.- M-325 Ascendente - GPS Topcon - Puntos a 2 m");
-		essayData.setCarretera("M-513");
-		essayData.setSentido("Ascendente");
+		essayData.setEssayName("M-607 Descendente - GPS Topcon");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/GPS_LuisIglesias");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M325_ETRS89.csv");
-
-		double space = 1.0;
-		String sgfilename = "M325_ETRS89_" + String.format("%02.0fm", space)+ "_SG.csv";
-		essayData.setSgFileName(sgfilename);
-		String szfilename = "M325_ETRS89_" + String.format("%02.0fm", space)+ "_SG.csv";
-		essayData.setSzFileName(szfilename);
-		essayData.setReportFileName("Essay_24_M325_Asc_Topcon" + String.format("%02.0fm", space)+ ".txt");
+		essayData.setXyzFileName("M607_topcon_2.csv");
+		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setReportFileName("M-607_Desc_topcon.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-
-		essayData.setStartS(space);
-		essayData.setEndS(4750-space);
-		
+		essayData.setStartS(18206.0);
+		essayData.setEndS(19277.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		//recRunner.setStartZ();
-		//recRunner.setzMin(586.873);
-		//recRunner.setzMax(715.685);
+		recRunner.setMinLength(65.0);
+		recRunner.setMAX_BASE_LENGTH(200.0);
+		double[] thresholdSlopes = new double[] {1.0e-4, 3e-5, 2e-5, 1.75e-5, 1.5e-5, 1.25e-5, 1e-5, 1.5e-6}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);	
+
 	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_24_M325_Asc_Topcon essay = new Essay_24_M325_Asc_Topcon();
+		M607_Asc_2_Topcon essay = new M607_Asc_2_Topcon();
 		essay.doIterative();
 		//essay.doMultiparameter();
-		//essay.doUnique(29, 1.0e-4);
+		//essay.doUnique(10, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	

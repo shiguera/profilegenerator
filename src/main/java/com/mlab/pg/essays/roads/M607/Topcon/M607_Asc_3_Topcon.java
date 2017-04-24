@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.M607.Topcon;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,46 +13,50 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_22_M513_Axis_RoadRecorder {
+public class M607_Asc_3_Topcon {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_22_M513_Axis_RoadRecorder() {
+	public M607_Asc_3_Topcon() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 22.- M-613 - Eje promedio 4 trazas - RoadRecorder");
-		essayData.setCarretera("M-513");
-		essayData.setSentido("Ascendente");
+		essayData.setEssayName("M-607 Descendente - GPS Topcon");
+		essayData.setCarretera("M-607");
+		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M513");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-607/GPS_LuisIglesias");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("M513_RoadRecorder_2013-06-27_Axis_3.csv");
+		essayData.setXyzFileName("M607_topcon_2.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_22_M513_Axis_RoadRecorder.txt");
+		essayData.setReportFileName("M-607_Desc_topcon.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4300.0);
-		//essayData.setEndS(8000.0);
+		essayData.setStartS(22241.0);
+		essayData.setEndS(25325.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		
+		recRunner.setMinLength(65.0);
+		recRunner.setMAX_BASE_LENGTH(200.0);
+		double[] thresholdSlopes = new double[] {5e-4, 3e-4,  1.0e-4, 9e-5, 8e-5, 3e-5, 2e-5, 1.75e-5, 1.5e-5, 1.25e-5}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);	
+
 	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_22_M513_Axis_RoadRecorder essay = new Essay_22_M513_Axis_RoadRecorder();
+		M607_Asc_3_Topcon essay = new M607_Asc_3_Topcon();
 		essay.doIterative();
 		//essay.doMultiparameter();
+		//essay.doUnique(10, 5e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
 	}
 
 	
@@ -64,5 +68,8 @@ public class Essay_22_M513_Axis_RoadRecorder {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }

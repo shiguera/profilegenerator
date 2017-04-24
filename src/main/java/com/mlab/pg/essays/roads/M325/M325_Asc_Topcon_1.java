@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads.M607.Topcon;
+package com.mlab.pg.essays.roads.M325;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,46 +13,52 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class M607_Essay_18_TopconDif {
+public class M325_Asc_Topcon_1 {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public M607_Essay_18_TopconDif() {
+	public M325_Asc_Topcon_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 Ensayo 18 - GPS Diferencial");
-		essayData.setCarretera("M-607");
-		essayData.setSentido("Asscendente");
+		essayData.setEssayName("M-325 Ascendente - GPS Topcon");
+		essayData.setCarretera("M-325");
+		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M607/TrackDiferencial");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("track1_selec1_xyz.csv");
+		essayData.setXyzFileName("M325_ETRS89_xyz.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M-607-Ensayo_18.txt");
+		essayData.setReportFileName("M325_Asc_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(2500.0);
-		//essayData.setEndS(7000.0);
+		essayData.setStartS(400.0);
+		essayData.setEndS(4126.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
-		recRunner.setMinLength(30.0);
+		recRunner.setMinLength(50.0);
+		recRunner.setMAX_BASE_LENGTH(100.0);
+		double[] thresholdSlopes = new double[] {1.5e-4, 1.0e-4, 1.5e-5, 1e-5, 1e-6, 1e-7}; 
+		recRunner.setThresholdSlopes(thresholdSlopes);	
+		
+		
 	}
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		M607_Essay_18_TopconDif essay = new M607_Essay_18_TopconDif();
-		//essay.doIterative();
+		M325_Asc_Topcon_1 essay = new M325_Asc_Topcon_1();
+		essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(10, 5e-5);
+		//essay.doUnique(10, 1e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
+
 	}
 
 	

@@ -1,4 +1,4 @@
-package com.mlab.pg.essays.roads;
+package com.mlab.pg.essays.roads.Descartados.M325;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -13,29 +13,29 @@ import com.mlab.pg.trackprocessor.TrackUtil;
  * @author shiguera
  *
  */
-public class Essay_19_M513_Desc_RoadRecorder {
+public class Essay_23_M325_Asc_Topcon {
 
 	
 	static EssayData essayData;
 	static ReconstructRunner recRunner;
 	static String stringReport;
 	
-	public Essay_19_M513_Desc_RoadRecorder() {
+	public Essay_23_M325_Asc_Topcon() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 19.- M-613 Descendente - RoadRecorder");
+		essayData.setEssayName("Ensayo 23.- M-325 Ascendente - GPS Topcon ");
 		essayData.setCarretera("M-513");
 		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());
-		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M513");
+		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
 		essayData.setOutPath(essayData.getInPath());
-		essayData.setXyzFileName("20130627_135105.csv");
+		essayData.setXyzFileName("M325_ETRS89.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_19_M513_Desc_RoadRecorder.txt");
+		essayData.setReportFileName("Essay_23_M325_Asc_Topcon.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(4300.0);
-		//essayData.setEndS(8000.0);
+		essayData.setStartS(0.0);
+		essayData.setEndS(8300.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		
@@ -45,14 +45,16 @@ public class Essay_19_M513_Desc_RoadRecorder {
 		PropertyConfigurator.configure("log4j.properties");
 
 		
-		Essay_19_M513_Desc_RoadRecorder essay = new Essay_19_M513_Desc_RoadRecorder();
-		essay.doIterative();
+		Essay_23_M325_Asc_Topcon essay = new Essay_23_M325_Asc_Topcon();
+		//essay.doIterative();
 		//essay.doMultiparameter();
+		essay.doUnique(104, 1.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();
 		recRunner.showProfiles();
-
+		System.out.println(recRunner.getzMin() + ", " + recRunner.getzMax());
+		System.out.println(recRunner.getOriginalVProfile().getY(2.0));
 	}
 
 	
@@ -64,5 +66,8 @@ public class Essay_19_M513_Desc_RoadRecorder {
 		recRunner.doMultiparameterReconstruction();
 		stringReport = recRunner.getStringReport();
 	}
-	
+	private void doUnique(int base, double th) {
+		recRunner.doUniqueReconstruction(base, th);
+		stringReport = recRunner.getStringReport();
+	}
 }
