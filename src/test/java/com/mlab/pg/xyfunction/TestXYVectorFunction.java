@@ -224,8 +224,8 @@ public class TestXYVectorFunction {
 
 		f = vector.extract(-3.0, -1.4);
 		Assert.assertEquals(-2.0,f.getStartX(), 0.001);
-		Assert.assertEquals(0.0,f.getEndX(), 0.001);
-		Assert.assertEquals(3,f.size());
+		Assert.assertEquals(-1.5,f.getEndX(), 0.001);
+		Assert.assertEquals(2,f.size());
 		
 		
 

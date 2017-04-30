@@ -102,6 +102,12 @@ public class XYVectorFunction extends XYVector implements XYFunction, InInterval
 	 * @return indice cuya abscisa es la más proxima a x
 	 */
 	public int getNearestIndex(double x) {
+		if(x<getX(0)) {
+			return 0;
+		}
+		if(x>getX(size()-1)) {
+			return size()-1;
+		}
 		int previous = previousIndex(x);
 		double previousx = getX(previous);
 		int following = followingIndex(x);

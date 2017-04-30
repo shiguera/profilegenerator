@@ -32,7 +32,7 @@ public class M607_Axis_RoadRecorder {
 		essayData.setXyzFileName("M607_RoadRecorder_Axis_2T.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_15_M607_Axis_RoadRecorder.txt");
+		essayData.setReportFileName("M607_Axis_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(4300.0);
 		//essayData.setEndS(8000.0);

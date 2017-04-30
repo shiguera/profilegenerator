@@ -32,7 +32,7 @@ public class M607_Asc_3_Topcon {
 		essayData.setXyzFileName("M607_topcon_2.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("M-607_Desc_topcon.txt");
+		essayData.setReportFileName("M-607_Desc_topcon_3.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		essayData.setStartS(22241.0);
 		essayData.setEndS(25325.0);

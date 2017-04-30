@@ -32,7 +32,7 @@ public class M607_Proyecto {
 		essayData.setXyzFileName("");
 		essayData.setSgFileName("M607_Proyecto_SG.csv");
 		essayData.setSzFileName("M607_Proyecto_SZ.csv");
-		essayData.setReportFileName("M-607-Ensayo_19.txt");
+		essayData.setReportFileName("M-607-PerfilProyecto.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(2500.0);
 		//essayData.setEndS(7000.0);

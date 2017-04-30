@@ -2,14 +2,14 @@ package com.mlab.pg.trackprocessor;
 
 import java.io.File;
 
-import org.jfree.util.Log;
+import org.apache.log4j.Logger;
 
 import com.mlab.pg.util.IOUtil;
 import com.mlab.pg.util.MathUtil;
 
 public class TrackUtil {
 
-
+	static Logger LOG = Logger.getLogger(TrackUtil.class);
 	
 	/**
 	 * Genera el fichero SG a partir del fichero XYZ
@@ -21,7 +21,7 @@ public class TrackUtil {
 		String infilename = IOUtil.composeFileName(inpath, xyzfilename);
 		File infile = new File(infilename);
 		if(!infile.exists()) {
-			Log.error("File doesn't exist");
+			LOG.error("File doesn't exist");
 			return "";
 		}
 		double[][] intrack = readXYZTrack(infile, infileHeadLines);
@@ -40,7 +40,7 @@ public class TrackUtil {
 	}
 	public static String generateSGFileFromXYZFile(File xyzfile, int infileHeadLines) {
 		if(!xyzfile.exists()) {
-			Log.error("File doesn't exist");
+			LOG.error("File doesn't exist");
 			return "";
 		}
 		double[][] intrack = readXYZTrack(xyzfile, infileHeadLines);

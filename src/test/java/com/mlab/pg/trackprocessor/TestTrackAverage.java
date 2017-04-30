@@ -103,7 +103,7 @@ public class TestTrackAverage {
 	public void testAverage_M608() {
 		LOG.debug("testAverage_M608()");
 		
-		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/";
+		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/";
 		File file = new File(path + "M608_Desc_2017-03-09.csv");
 		Assert.assertNotNull(file);
 		Assert.assertTrue(file.exists());
@@ -134,7 +134,7 @@ public class TestTrackAverage {
 	public void testAverage_M608_FourTracks() {
 		LOG.debug("testAverage_M608_FourTracks()");
 		
-		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/";
+		String path = "/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/";
 		// Track Descendente
 		File file = new File(path + "M608_Desc_2017-03-09.csv");
 		Assert.assertNotNull(file);

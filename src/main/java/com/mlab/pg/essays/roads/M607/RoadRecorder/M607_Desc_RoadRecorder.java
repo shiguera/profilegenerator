@@ -23,7 +23,7 @@ public class M607_Desc_RoadRecorder {
 	public M607_Desc_RoadRecorder() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 14.- M-607 Descendente - RoadRecorder - Traza completa");
+		essayData.setEssayName("M-607 Descendente - RoadRecorder - Traza completa");
 		essayData.setCarretera("M-607");
 		essayData.setSentido("Descendente");
 		essayData.setGraphTitle(essayData.getEssayName());
@@ -32,7 +32,7 @@ public class M607_Desc_RoadRecorder {
 		essayData.setXyzFileName("M607_Desc_1.csv");
 		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
 		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setReportFileName("Essay_14_M607_Desc_RoadRecorder.txt");
+		essayData.setReportFileName("M607_Desc_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		//essayData.setStartS(4300.0);
 		//essayData.setEndS(8000.0);

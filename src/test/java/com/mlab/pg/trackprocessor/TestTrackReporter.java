@@ -56,11 +56,11 @@ public class TestTrackReporter {
 	@Test
 	public void testTracReporter_M608Axis() {
 		LOG.debug("testTracReporter_M608Axis()");
-		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09.csv");
+		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Asc_2017-03-09.csv");
 		Assert.assertTrue(file1.exists());
-		File file2 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Desc_2017-03-09_Inverted.csv");
+		File file2 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Desc_2017-03-09_Inverted.csv");
 		Assert.assertTrue(file2.exists());
-		File file3 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-09_Axis.csv");
+		File file3 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Asc_2017-03-09_Axis.csv");
 		Assert.assertTrue(file3.exists());
 		
 		TrackReporter reporter = new TrackReporter(file1, 1);
@@ -73,15 +73,15 @@ public class TestTrackReporter {
 	@Test
 	public void testTracReporter_M608Axis2() {
 		LOG.debug("testTracReporter_M608Axis2()");
-		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_2017-03-10.csv");
+		File file1 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Asc_2017-03-10.csv");
 		Assert.assertTrue(file1.exists());
-		File file2 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Desc_2017-03-10_Inverted.csv");
+		File file2 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Desc_2017-03-10_Inverted.csv");
 		Assert.assertTrue(file2.exists());
-		File file3 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Asc_Average.csv");
+		File file3 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Asc_Average.csv");
 		Assert.assertTrue(file3.exists());
-		File file4 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_Desc_Average.csv");
+		File file4 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_Desc_Average.csv");
 		Assert.assertTrue(file4.exists());
-		File file5 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M607/TracksGarmin/M608_FourTracks_Axis.csv");
+		File file5 = new File("/home/shiguera/ownCloud/tesis/2016-2017/Datos/M-608/M608_FourTracks_Axis.csv");
 		Assert.assertTrue(file5.exists());
 		
 		TrackReporter reporter = new TrackReporter(file1, 1);
