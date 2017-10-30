@@ -25,7 +25,8 @@ public class M607_PdtesMFOM_Tramo12km {
 	public M607_PdtesMFOM_Tramo12km() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607: PK 36+000 al 48+300 (Madrid) - Pendientes MFOM");
+		//essayData.setEssayName("M-607: PK 36+000 to 48+300 (Madrid) \n Data from clinometer");
+		essayData.setEssayName("M-607: Zoom PK 41+500 to 44+000 (Madrid) \n Data from clinometer");
 		essayData.setCarretera("M-607");
 		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());
@@ -36,8 +37,8 @@ public class M607_PdtesMFOM_Tramo12km {
 		essayData.setSzFileName("M607_2_SZ.csv");
 		essayData.setReportFileName("M-607_PdtesMFOM_Tramo12km.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		//essayData.setStartS(27370.0);
-		//essayData.setEndS(39670.0);
+		//essayData.setStartS(45000.0);
+		//essayData.setEndS(48000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		recRunner.setMinLength(81.0);
@@ -52,9 +53,9 @@ public class M607_PdtesMFOM_Tramo12km {
 
 		
 		M607_PdtesMFOM_Tramo12km essay = new M607_PdtesMFOM_Tramo12km();
-		//essay.doIterative();
+		essay.doIterative();
 		//essay.doMultiparameter();
-		essay.doUnique(13, 3e-5);
+		//essay.doUnique(13, 3e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();

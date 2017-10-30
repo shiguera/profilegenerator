@@ -23,7 +23,7 @@ public class M633_Ascendente_1 {
 	public M633_Ascendente_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("m-633 -  Ascendente - GPS RoadRecorder");
+		essayData.setEssayName("M-633 -  Ascendente - GPS RoadRecorder");
 		essayData.setCarretera("M-633");
 		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());

@@ -23,7 +23,7 @@ public class Essay_22_M513_Axis_RoadRecorder {
 	public Essay_22_M513_Axis_RoadRecorder() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("Ensayo 22.- M-613 - Eje promedio 4 trazas - RoadRecorder");
+		essayData.setEssayName("M-513 - Eje promedio 4 trazas - RoadRecorder");
 		essayData.setCarretera("M-513");
 		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());

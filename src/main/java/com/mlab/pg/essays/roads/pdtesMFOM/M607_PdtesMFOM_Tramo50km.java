@@ -22,7 +22,7 @@ public class M607_PdtesMFOM_Tramo50km {
 	public M607_PdtesMFOM_Tramo50km() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-607 PK 8+630 al 58+380 (Madrid) - Pendientes MFOM");
+		essayData.setEssayName("M-607 PK 8+630 al 58+380 (Madrid)");
 		essayData.setCarretera("M-607");
 		essayData.setSentido("Asscendente");
 		essayData.setGraphTitle(essayData.getEssayName());

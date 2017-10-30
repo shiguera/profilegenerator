@@ -182,20 +182,22 @@ public class ReconstructRunner {
 		double x1 = gp.getStartS();
 		double x2 = gp.getEndS();
 		FunctionDisplayer displayer = new FunctionDisplayer();
-		String title= essayData.getGraphTitle() + " (Perfil longitudinal)\n s="+MathUtil.doubleToString(x1, 12, 2, true) + " - " + MathUtil.doubleToString(x2, 12, 2, true);
+		//String title= essayData.getGraphTitle() + " (Vertical Profile)\n s="+MathUtil.doubleToString(x1, 12, 2, true) + " - " + MathUtil.doubleToString(x2, 12, 2, true);
+		String title= essayData.getGraphTitle() + " (Vertical profile)";
+		
 		displayer.showTwoFunctions(getvProfileFromGradeDataIntegration(), getResultVProfilePoints(), 
-				title, "Perfil longitudinal original", "Perfil longitudinal calculado", "S", "Z");
+				title, "Original", "Reconstructed", "S(m)", "Z(m)");
 		
 		XYVectorFunction originaldata = getOriginalGradeData().extract(x1, x2);
 		XYVectorFunction soldata = getResultGProfile().getSample(x1,x2,getSeparacionMedia(),true);
-		title= essayData.getGraphTitle() + " (Diagrama de pendientes) \n s="+Math.rint(x1)+" - "+Math.rint(x2);
-		displayer.showTwoFunctions(originaldata, soldata, title, "Pendientes originales", "Pendientes calculadas", "S",  "G");
+		//title= essayData.getGraphTitle() + " (Slope Diagram) \n s="+Math.rint(x1)+" - "+Math.rint(x2);
+		title= essayData.getGraphTitle() + " (Grade profile)";
+
+		displayer.showTwoFunctions(originaldata, soldata, title, "Original", "Reconstructed", "S(m)",  "G");
 	}
 	public String getStringReport() {
 		StringBuffer cad = new StringBuffer();
 		cad.append("------------------------------------------------------------------------------" + "\n");
-		cad.append("------------------------------------------------------------------------------" + "\n");
-		cad.append("RoadGRUB (Road Geometry Reconstruction Utility Basic) \n");
 		cad.append("RECONSTRUCCIÓN DE LA GEOMETRÍA DEL PERFIL LONGITUDINAL \n");
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append(essayData.getEssayName() + "\n");
@@ -213,7 +215,6 @@ public class ReconstructRunner {
 		cad.append("Altitud media    (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMeanY(),12,2,true) + "\n");
 		cad.append("Altitud mínima   (m) : " + MathUtil.doubleToString(reconstructor.getIntegralVerticalProfilePoints().getMinY(),12,2,true) + "\n");
 		cad.append("Pendiente media      : " + MathUtil.doubleToString(reconstructor.getResultVerticalProfile().getMeanSlope(),12,4,true) + "\n");
-		cad.append("K global (m)         : " + MathUtil.doubleToString(reconstructor.getResultVerticalProfile().getKGlobal(), 12,8,true) + "\n");
 		
 		cad.append("------------------------------------------------------------------------------" + "\n");
 		cad.append("PARÁMETROS USADOS EN LA RECONSTRUCCIÓN:\n");

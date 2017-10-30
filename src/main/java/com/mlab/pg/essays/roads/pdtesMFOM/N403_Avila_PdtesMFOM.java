@@ -33,8 +33,8 @@ public class N403_Avila_PdtesMFOM {
 		essayData.setSzFileName("N-403_Avila_SZ.csv");
 		essayData.setReportFileName("N-403-Avila.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
-		essayData.setStartS(0.0);
-		essayData.setEndS(2000.0);
+		//essayData.setStartS(0.0);
+		//essayData.setEndS(2000.0);
 		
 		recRunner = new ReconstructRunner(essayData);		
 		recRunner.setMinLength(30.0);
@@ -49,9 +49,9 @@ public class N403_Avila_PdtesMFOM {
 
 		
 		N403_Avila_PdtesMFOM essay = new N403_Avila_PdtesMFOM();
-		essay.doIterative();
+		//essay.doIterative();
 		//essay.doMultiparameter();
-		//essay.doUnique(15, 3.75e-5);
+		essay.doUnique(15, 3.75e-5);
 		
 		recRunner.showReport();
 		recRunner.printReport();

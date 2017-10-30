@@ -1,5 +1,6 @@
 package com.mlab.pg.graphics;
 
+import java.awt.Font;
 import java.io.File;
 
 import org.apache.log4j.Logger;
@@ -7,8 +8,10 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RectangleEdge;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
 
@@ -16,6 +19,8 @@ public class Charter {
 	
 	private static Logger LOG = Logger.getLogger(Charter.class);
 	
+	//private String DEFAULT_DIRECTORY = "/home/shiguera/ownCloud/tesis/2016-2017/TesisMain/img/reconstruccion";
+	private String DEFAULT_DIRECTORY = "/home/shiguera/Dropbox/Tesis_SHiguera/Tesis/Articles/ReconstruccionVertical/CACAIE/VersionJulio2017/Latex";
 	
 	XYSeriesCollection seriesCollection;
 	String name, xLabel, yLabel;
@@ -49,11 +54,22 @@ public class Charter {
 				yLabel, // y axis label
 				seriesCollection, // data
 				PlotOrientation.VERTICAL,
-				true, // include legend
+				false, // include legend
 				true, // tooltips
 				false // urls		
 		);
 		
+		Font font = new Font("Dialog", Font.PLAIN, 15);
+        chart.getXYPlot().getDomainAxis().setTickLabelFont(font);
+        chart.getXYPlot().getRangeAxis().setTickLabelFont(font);
+
+        LegendTitle legend = new LegendTitle(chart.getXYPlot().getRenderer());
+        Font font3 = new Font("Dialog", Font.PLAIN, 20); 
+        legend.setItemFont(font3); 
+        legend.setPosition(RectangleEdge.BOTTOM); 
+        chart.addLegend(legend); 
+
+
 		//XYPlot plot = chart.getXYPlot();
 		
 		// Cuando activo estas dos siguientes líneas, parece no hacer nada
@@ -63,7 +79,8 @@ public class Charter {
 		
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 500));
-		chartPanel.setDefaultDirectoryForSaveAs(new File("/home/shiguera/ownCloud/tesis/2016-2017/TesisMain/img/reconstruccion"));
+		//chartPanel.setDefaultDirectoryForSaveAs(new File(DEFAULT_DIRECTORY));
+		chartPanel.setDefaultDirectoryForSaveAs(new File(DEFAULT_DIRECTORY));
 		return chartPanel; 
 	}
 	

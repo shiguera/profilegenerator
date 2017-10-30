@@ -3,10 +3,15 @@ package com.mlab.pg.graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Paint;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import javax.swing.JFrame;
 
+import org.jfree.chart.axis.Axis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.ui.RefineryUtilities;
 
 import com.mlab.pg.xyfunction.XYVectorFunction;
@@ -14,8 +19,9 @@ import com.mlab.pg.xyfunction.XYVectorFunction;
 public class FunctionDisplayer {
 
 	float strokeWidth1=1.0f, strokeWidth2 = 2.0f;
-	Paint seriesPaint1 = Color.BLUE;
-	Paint seriesPaint2 = Color.RED;
+	Paint seriesPaint1 = Color.BLACK;
+	Paint seriesPaint2 = Color.black;
+	Paint rangeAxisFontColor = Color.BLACK;
 	
 	public FunctionDisplayer() {
 
@@ -54,12 +60,13 @@ public class FunctionDisplayer {
 	    		frame.setContentPane(charter.getChartPanel());
         		charter.getChart().getXYPlot().getRangeAxis().setRange(getMinY(data1, data2), getMaxY(data1, data2));
 	    		
-        		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(strokeWidth2));
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(0, seriesPaint2);
+        		setBackgroundColor(charter);
+        		setAxisFont(charter);
+        		
+        		setSeriesStroke(charter);
+        		setDashedLineInSeries(charter);
+	    		setAxisDecimalFormat(charter);
 	    		
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(1, new BasicStroke(strokeWidth1));
-	    		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(1, seriesPaint1);
-
 	    		frame.setPreferredSize(new Dimension(1400, 750));
 	    		frame.pack();
 	    		RefineryUtilities.centerFrameOnScreen(frame);
@@ -67,6 +74,49 @@ public class FunctionDisplayer {
 	        }
 		});
 	}	
+	private void setDashedLineInSeries(Charter charter) {
+		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(
+	            1, 
+	            new BasicStroke(
+	                1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 
+	                1.0f, new float[] {2.0f, 2.0f}, 0.0f
+	            )
+	        );
+	}
+	private void setAxisFont(Charter charter) {
+	    Axis axis = charter.getChart().getXYPlot().getRangeAxis();
+		axis.setLabelPaint(rangeAxisFontColor);
+	    axis.setTickLabelPaint(rangeAxisFontColor);
+	    Axis axis2 = charter.getChart().getXYPlot().getDomainAxis();
+		axis2.setLabelPaint(rangeAxisFontColor);
+	    axis2.setTickLabelPaint(rangeAxisFontColor);
+	    Font font = new Font("Dialog", Font.PLAIN, 12);
+        axis2.setTickLabelFont(font);
+	}
+	private void setSeriesStroke(Charter charter) {
+		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(strokeWidth2));
+		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(0, seriesPaint2);
+		
+		charter.getChart().getXYPlot().getRenderer().setSeriesStroke(1, new BasicStroke(strokeWidth1));
+		charter.getChart().getXYPlot().getRenderer().setSeriesPaint(1, seriesPaint1);
+
+	}
+	private void setBackgroundColor(Charter charter) {
+		charter.getChart().getXYPlot().setBackgroundPaint(Color.white);
+	}
+	private void setAxisDecimalFormat(Charter charter) {
+		NumberAxis na1 = (NumberAxis)charter.getChart().getXYPlot().getRangeAxis();
+		NumberAxis na2 = (NumberAxis)charter.getChart().getXYPlot().getDomainAxis();
+        DecimalFormat df = new DecimalFormat("#0");
+        DecimalFormatSymbols custom=new DecimalFormatSymbols();
+        custom.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(custom);
+        na1.setNumberFormatOverride(df);
+        DecimalFormat df2 = new DecimalFormat("#0");
+        df2.setDecimalFormatSymbols(custom);
+        na2.setNumberFormatOverride(df2);
+	}
+
 	private double getMinY(XYVectorFunction data) {
 		// TODO Falta resolver bien cuando ymin==0
 		double ymin = data.getMinY();

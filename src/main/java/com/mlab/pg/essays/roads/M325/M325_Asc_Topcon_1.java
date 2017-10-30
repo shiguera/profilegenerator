@@ -5,7 +5,6 @@ import org.apache.log4j.PropertyConfigurator;
 import com.mlab.pg.EssayData;
 import com.mlab.pg.reconstruction.ReconstructRunner;
 import com.mlab.pg.reconstruction.strategy.InterpolationStrategyType;
-import com.mlab.pg.trackprocessor.TrackUtil;
 
 
 /**
@@ -23,15 +22,18 @@ public class M325_Asc_Topcon_1 {
 	public M325_Asc_Topcon_1() {
 		
 		essayData = new EssayData();
-		essayData.setEssayName("M-325 Ascendente - GPS Topcon");
+		essayData.setEssayName("M-325 - Zoom from PK 1+050 to PK 1+750");
 		essayData.setCarretera("M-325");
 		essayData.setSentido("Ascendente");
 		essayData.setGraphTitle(essayData.getEssayName());
 		essayData.setInPath("/home/shiguera/ownCloud/tesis/2016-2017/Datos/EnsayosTesis/M325");
 		essayData.setOutPath(essayData.getInPath());
 		essayData.setXyzFileName("M325_ETRS89_xyz.csv");
-		essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
-		essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		//essayData.setSgFileName(TrackUtil.generateSGFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		//essayData.setSzFileName(TrackUtil.generateSZFileFromXYZFile(essayData.getInPath(), essayData.getXyzFileName(), 1));
+		essayData.setSgFileName("M325_ETRS89_xyz_SG.csv");
+		essayData.setSzFileName("M325_ETRS89_xyz_SZ.csv");
+
 		essayData.setReportFileName("M325_Asc_RoadRecorder.txt");
 		essayData.setInterpolationStrategy(InterpolationStrategyType.EqualArea);
 		essayData.setStartS(400.0);
@@ -51,9 +53,9 @@ public class M325_Asc_Topcon_1 {
 
 		
 		M325_Asc_Topcon_1 essay = new M325_Asc_Topcon_1();
-		essay.doIterative();
+		//essay.doIterative();
 		//essay.doMultiparameter();
-		//essay.doUnique(10, 1e-5);
+		essay.doUnique(26, 1.0e-4);
 		
 		recRunner.showReport();
 		recRunner.printReport();
